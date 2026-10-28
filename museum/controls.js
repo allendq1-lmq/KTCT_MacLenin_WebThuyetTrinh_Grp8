@@ -1,4 +1,4 @@
-// museum/controls.js - Tương tác chuột, Teleport nhân vật đồng bộ cho cả Click và Nút bấm
+// museum/controls.js - Tương tác chuột, Teleport nhân vật và D-pad đồng bộ icon SVG
 window.MuseumControls = (() => {
   let raycaster, mouse;
   let pointerDownPos = { x: 0, y: 0 };
@@ -56,7 +56,6 @@ window.MuseumControls = (() => {
     },
   ];
 
-  // Đưa sinh viên UIT đứng ngay trước camera và quay mặt nhìn vào hiện vật
   function teleportAvatarToExhibit(camX, camZ, lookX, lookZ) {
     if (window.MuseumAvatar) {
       const avatar = window.MuseumAvatar.getAvatar();
@@ -64,7 +63,6 @@ window.MuseumControls = (() => {
         const dirX = lookX - camX;
         const dirZ = lookZ - camZ;
         const len = Math.hypot(dirX, dirZ) || 1;
-        // Đặt avatar đứng trước camera 0.8m theo hướng ngắm
         avatar.position.set(
           camX + (dirX / len) * 0.8,
           0,
@@ -134,6 +132,7 @@ window.MuseumControls = (() => {
     }
   }
 
+  // Cụm D-pad đồng bộ 4 icon tam giác SVG màu trắng phẳng
   function setupMobileControls(keys) {
     if (document.getElementById("virtual-dpad")) return;
     const container = document.getElementById("webgl-container");
@@ -143,11 +142,21 @@ window.MuseumControls = (() => {
     dpad.id = "virtual-dpad";
     dpad.className = "virtual-dpad-container";
     dpad.innerHTML = `
-      <div class="dpad-row"><button class="dpad-btn" data-key="w">▲</button></div>
       <div class="dpad-row">
-        <button class="dpad-btn" data-key="a">◀</button>
-        <button class="dpad-btn" data-key="s">▼</button>
-        <button class="dpad-btn" data-key="d">▶</button>
+        <button class="dpad-btn" data-key="w" title="Đi lên">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="pointer-events: none;"><path d="M12 5L4 19h16z"/></svg>
+        </button>
+      </div>
+      <div class="dpad-row">
+        <button class="dpad-btn" data-key="a" title="Sang trái">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="pointer-events: none;"><path d="M5 12l14 8V4z"/></svg>
+        </button>
+        <button class="dpad-btn" data-key="s" title="Đi xuống">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="pointer-events: none;"><path d="M12 19L20 5H4z"/></svg>
+        </button>
+        <button class="dpad-btn" data-key="d" title="Sang phải">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="pointer-events: none;"><path d="M19 12L5 4v16z"/></svg>
+        </button>
       </div>
     `;
     container.appendChild(dpad);
@@ -183,7 +192,7 @@ window.MuseumControls = (() => {
     mouse = new THREE.Vector2();
 
     domElement.addEventListener("pointerdown", (e) => {
-      window.focus(); // Lấy focus bàn phím ngay lập tức
+      window.focus();
       isPointerDown = true;
       pointerDownPos.x = e.clientX;
       pointerDownPos.y = e.clientY;
@@ -254,7 +263,7 @@ window.MuseumControls = (() => {
       });
     });
 
-    // 2. Nút mốc thời gian Phòng 1 (Teleport đồng bộ cả Camera và Avatar)
+    // 2. Nút mốc thời gian Phòng 1
     const r1NavButtons = document.querySelectorAll(".r1-nav-btn");
     const btnR1Reasons = document.getElementById("btn-r1-reasons");
 
@@ -296,7 +305,7 @@ window.MuseumControls = (() => {
       });
     });
 
-    // 3. Nút Phòng 3 (Teleport đồng bộ sang Mảng Tối hoặc Mảng Sáng)
+    // 3. Nút Phòng 3
     const btnViewDark = document.getElementById("btn-view-dark");
     const btnViewLight = document.getElementById("btn-view-light");
     if (btnViewDark) {
@@ -345,7 +354,7 @@ window.MuseumControls = (() => {
       });
     }
 
-    // Bắt sự kiện phím trong iframe
+    // Bắt sự kiện bàn phím
     window.addEventListener("keydown", (e) => {
       const k = e.key.toLowerCase();
       if (k === "w" || k === "arrowup") keys.w = true;

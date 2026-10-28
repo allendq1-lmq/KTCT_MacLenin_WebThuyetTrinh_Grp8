@@ -48,12 +48,18 @@ Toàn bộ project được chia thành **2 phân vùng độc lập tuyệt đ�
 
 ## 3. Hướng dẫn Test & Quy trình phối hợp trên Git
 
+### QUY TẮC BẮT BUỘC CHO TẤT CẢ THÀNH VIÊN
+
+- Mỗi ngày khi bắt đầu mở VS Code lên làm việc, việc đầu tiên phải làm là chạy: `git pull origin main`
+- Tuyệt đối không bắt đầu code khi chưa pull
+
 ### Cách test độc lập dành cho 3 thành viên làm 3D
 
 - Các bạn không cần quan tâm đến web chính. Khi mở VS Code, chỉ cần:
-  1. Mở file `museum/index.html`.
-  2. Chuột phải chọn **Open with Live Server**
-  3. Tại đây, toàn bộ không gian 3D, nhân vật, nút bấm và xoay chuột hoạt động 100%. Mọi thay đổi trong `museum/` sẽ cập nhật ngay lập tức.
+  1. Chạy `git pull origin main` để lấy code mới nhất.
+  2. Mở file `museum/index.html`.
+  3. Chuột phải chọn **Open with Live Server**
+  4. Tại đây, toàn bộ không gian 3D, nhân vật, nút bấm và xoay chuột hoạt động 100%. Mọi thay đổi trong `museum/` sẽ cập nhật ngay lập tức.
 
 ### Quy trình đẩy code lên GitHub
 

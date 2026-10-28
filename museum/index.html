@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Không Gian Triển Lãm 3D</title>
+    <!-- Tailwind CSS & Three.js CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <link rel="stylesheet" href="museum.css" />
+  </head>
+  <body
+    class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden select-none m-0 p-0 font-sans"
+  >
+    <!-- Thanh điều khiển chuyển phòng trên đỉnh -->
+    <header
+      class="absolute top-3 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none"
+    >
+      <div class="pointer-events-auto flex items-center space-x-2">
+        <span
+          class="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm shadow"
+          >3D</span
+        >
+        <h2
+          class="text-base sm:text-lg font-bold text-white tracking-tight drop-shadow"
+        >
+          Bảo Tàng Không Gian Lý Luận
+        </h2>
+      </div>
+
+      <div
+        class="pointer-events-auto flex items-center space-x-1.5 bg-slate-900/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-700/60 shadow-lg"
+      >
+        <button
+          class="room-btn active px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg"
+          data-room="1"
+        >
+          Phòng 1: Thời Gian
+        </button>
+        <button
+          class="room-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 hover:text-white"
+          data-room="2"
+        >
+          Phòng 2: 5 Cột Trụ
+        </button>
+        <button
+          class="room-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 hover:text-white"
+          data-room="3"
+        >
+          Phòng 3: Thể Chế
+        </button>
+        <button
+          id="btn-reset-cam"
+          class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
+        >
+          Góc Chuẩn
+        </button>
+      </div>
+    </header>
+
+    <!-- Canvas Three.js -->
+    <div id="webgl-container" class="w-full h-full"></div>
+
+    <!-- Nút điều khiển nhanh cho Phòng 1 -->
+    <div
+      id="room1-controls"
+      class="room-overlay absolute bottom-4 left-4 right-4 flex flex-wrap justify-center gap-2 z-10 pointer-events-auto"
+    >
+      <button
+        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
+        data-target="0"
+      >
+        Trước 1986
+      </button>
+      <button
+        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
+        data-target="1"
+      >
+        Đại hội VI (1986)
+      </button>
+      <button
+        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
+        data-target="2"
+      >
+        Đại hội IX (2001)
+      </button>
+      <button
+        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
+        data-target="3"
+      >
+        Đại hội XII - XIII
+      </button>
+      <button
+        id="btn-r1-reasons"
+        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-amber-500 bg-amber-950/90 text-amber-300 hover:border-amber-300"
+        data-target="4"
+      >
+        3 Lý Do Tất Yếu (1/3)
+      </button>
+    </div>
+
+    <!-- Nút điều khiển nhanh cho Phòng 3 -->
+    <div
+      id="room3-controls"
+      class="room-overlay hidden absolute top-16 left-4 z-10 flex gap-2 pointer-events-auto"
+    >
+      <button
+        id="btn-view-dark"
+        class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-red-800 bg-red-950/80 text-red-200 hover:bg-red-900 shadow"
+      >
+        5 Hạn Chế (Mảng Tối)
+      </button>
+      <button
+        id="btn-view-light"
+        class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-cyan-800 bg-cyan-950/80 text-cyan-200 hover:bg-cyan-900 shadow"
+      >
+        4 Giải Pháp (Mảng Sáng)
+      </button>
+    </div>
+
+    <!-- Thẻ HUD thông tin hiện vật (Glassmorphism) -->
+    <div
+      id="museum-hud"
+      class="absolute top-16 right-4 max-w-sm sm:max-w-md w-full bg-white/45 hover:bg-white/85 backdrop-blur-md border border-white/40 rounded-2xl p-4 sm:p-5 shadow-xl transition-all duration-300 pointer-events-auto z-20 text-slate-900"
+    >
+      <div
+        class="flex items-center justify-between border-b border-slate-300/40 pb-2 mb-2"
+      >
+        <span
+          class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-700 block"
+          >Hiện vật triển lãm</span
+        >
+        <button
+          id="hud-toggle-btn"
+          class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-900/10 hover:bg-slate-900/20 text-slate-800 font-bold text-sm transition"
+          title="Thu nhỏ / Mở rộng"
+        >
+          −
+        </button>
+      </div>
+      <div id="hud-content-body">
+        <h4
+          id="hud-title"
+          class="text-base sm:text-lg font-bold text-slate-900 leading-snug"
+        >
+          Hành Lang Tiến Trình Nhận Thức
+        </h4>
+        <p
+          id="hud-desc"
+          class="text-xs sm:text-sm text-slate-800 mt-2 leading-relaxed"
+        >
+          Dùng phím W-A-S-D (hoặc cụm phím ảo trên điện thoại) để điều khiển
+          sinh viên UIT bước đi. Nhấp chuột vào tranh trên tường để áp sát góc
+          nhìn.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bộ scripts thành phần của 3D -->
+    <script src="data.js"></script>
+    <script src="avatar.js"></script>
+    <script src="room1.js"></script>
+    <script src="room2.js"></script>
+    <script src="room3.js"></script>
+    <script src="controls.js"></script>
+    <script src="engine.js"></script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#webgl-container {
+  position: relative;
+  touch-action: none;
+}
+
+#webgl-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+}
+
+.room-btn.active {
+  background-color: #f59e0b !important;
+  color: #ffffff !important;
+}
+
+#museum-hud {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Cụm phím ảo Virtual D-Pad cho Mobile */
+.virtual-dpad-container {
+  position: absolute;
+  bottom: 64px;
+  left: 16px;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 4px;
+}
+
+.dpad-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.dpad-btn:active {
+  background-color: #f59e0b;
+  color: #000000;
+  transform: scale(0.92);
+}

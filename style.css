@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tab điều hướng đang active */
+.nav-tab.active {
+  background-color: #f59e0b !important;
+  color: #ffffff !important;
+}
+
+/* Nút hồ sơ Tòa án đang chọn */
+.court-dossier-btn.active {
+  background-color: #fef3c7 !important;
+  border-color: #f59e0b !important;
+  color: #78350f !important;
+}
+
+/* Thanh cuộn mảnh tối giản */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Hiệu ứng kéo thẻ bài Reigns */
+#reigns-card {
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  cursor: grab;
+}
+
+#reigns-card.swiping {
+  transition: none !important;
+  cursor: grabbing !important;
+}
+
+#reigns-card.reset-anim {
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.stat-dot {
+  display: inline-block;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.stat-dot.active {
+  opacity: 1 !important;
+  transform: scale(1.3);
+}
+
+.choice-pill {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+#reigns-gameover-modal,
+#reigns-victory-modal {
+  background-color: #ffffff !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}

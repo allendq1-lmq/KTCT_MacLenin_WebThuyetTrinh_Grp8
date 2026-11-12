@@ -185,7 +185,7 @@ window.MuseumEngine = (() => {
     ctx.fillStyle = "rgba(245, 158, 11, 0.9)";
     ctx.font = "bold 34px 'Segoe UI', Tahoma, sans-serif";
     ctx.fillText(
-      "★ NHẤP VÀO TRANH ĐỂ MỞ BẢNG THÔNG TIN HIỆN VẬT (HOẶC BẬT CHẾ ĐỘ THUYẾT TRÌNH)",
+      "NHẤP VÀO TRANH ĐỂ MỞ BẢNG THÔNG TIN HIỆN VẬT (HOẶC BẬT CHẾ ĐỘ THUYẾT TRÌNH)",
       145,
       1310,
     );

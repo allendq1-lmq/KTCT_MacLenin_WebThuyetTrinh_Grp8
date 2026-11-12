@@ -1,6 +1,7 @@
 // museum/controls.js - Điều khiển Chế độ Thuyết trình Toàn màn hình & Camera 3D Shift-Lock chuẩn Roblox (PC + Mobile đa chạm)
 window.MuseumControls = (() => {
   let raycaster, mouse;
+  let isInitialized = false;
   let currentMode = "presentation"; // "presentation" | "explore"
   let currentSlideIndex = 0;
   let currentExhibitData = null;
@@ -31,10 +32,14 @@ window.MuseumControls = (() => {
       const r = parseInt(b.getAttribute("data-room"), 10);
       if (r === roomNumber) {
         b.classList.add("active");
-        b.classList.remove("text-slate-300");
+        b.classList.remove("text-slate-300", "text-slate-700");
       } else {
         b.classList.remove("active");
-        b.classList.add("text-slate-300");
+        if (b.closest("#pres-top-bar")) {
+          b.classList.add("text-slate-700");
+        } else {
+          b.classList.add("text-slate-300");
+        }
       }
     });
   }
@@ -80,7 +85,7 @@ window.MuseumControls = (() => {
     if (body) {
       body.innerHTML =
         data.fullHtml ||
-        `<p class="text-slate-200 leading-relaxed">${data.desc || ""}</p>`;
+        `<p class="text-slate-800 leading-relaxed">${data.desc || ""}</p>`;
       body.scrollTop = 0;
     }
     if (modal) modal.classList.remove("hidden");
@@ -120,7 +125,7 @@ window.MuseumControls = (() => {
     });
   }
 
-  // Render danh sách thẻ ý chính nổi bật cho giao diện trình chiếu toàn màn hình
+  // Render danh sách thẻ ý chính nổi bật cho giao diện trình chiếu nền sáng cố định
   function renderPresentationSlideUI(slide, clampedIdx, totalSlides) {
     const badgeEl = document.getElementById("pres-slide-badge");
     const roomTagEl = document.getElementById("pres-room-tag");
@@ -153,18 +158,18 @@ window.MuseumControls = (() => {
       progressEl.style.width = `${((clampedIdx + 1) / totalSlides) * 100}%`;
     }
 
-    // Hiển thị các thẻ ý chính (key points) rõ ràng, chữ lớn chuẩn máy chiếu
+    // Hiển thị các thẻ ý chính (key points) rõ ràng trên nền sáng độ tương phản cao
     if (keyPointsEl) {
       const lines = Array.isArray(slide.lines) ? slide.lines : [];
       keyPointsEl.innerHTML = lines
         .map((line, i) => {
           const cleanText = String(line).replace(/^[•\-\s]+/, "");
           return `
-            <div class="pres-key-card flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl bg-slate-950 border border-slate-800 shadow-sm">
-              <span class="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 font-black text-base flex items-center justify-center shrink-0 mt-0.5">
+            <div class="pres-key-card flex items-start gap-2.5 shadow-sm">
+              <span class="w-6 h-6 rounded-md bg-amber-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
                 ${i + 1}
               </span>
-              <p class="text-base sm:text-lg md:text-xl font-semibold text-slate-100 leading-snug">
+              <p class="font-semibold text-slate-900">
                 ${cleanText}
               </p>
             </div>
@@ -173,48 +178,23 @@ window.MuseumControls = (() => {
         .join("");
     }
 
-    // Nếu là Slide Bảng so sánh 6 tiêu chí ở Phòng 3 (r3-table), mở rộng toàn chiều ngang để bảng 6 tiêu chí hiển thị cực lớn
+    // Cân đối tỷ lệ cột ngang cho Bảng so sánh 6 tiêu chí (r3-table) và các slide tiêu chuẩn để tuyệt đối không cuộn dọc
     if (summaryCol && detailCol) {
       if (slide.id === "r3-table") {
         summaryCol.className =
-          "lg:col-span-12 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-4";
+          "lg:col-span-3 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col justify-between";
         detailCol.className =
-          "lg:col-span-12 bg-slate-900 border-2 border-amber-500/50 rounded-2xl p-5 sm:p-7 shadow-xl";
+          "lg:col-span-9 bg-white border-2 border-amber-500 rounded-xl shadow-sm flex flex-col min-h-0";
       } else {
         summaryCol.className =
-          "lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-4";
+          "lg:col-span-4 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col justify-between";
         detailCol.className =
-          "lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-7 shadow-lg";
+          "lg:col-span-8 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col min-h-0";
       }
     }
 
     if (bodyEl) {
-      let htmlContent = slide.fullHtml || `<p>${slide.desc || ""}</p>`;
-
-      // Ở các slide thuộc Phòng 3 (ngoài r3-table), đính kèm nút mở nhanh hoặc hiển thị Bảng đối chiếu 6 tiêu chí
-      if (
-        slide.room === 3 &&
-        slide.id !== "r3-table" &&
-        window.MuseumData &&
-        window.MuseumData.room3 &&
-        window.MuseumData.room3.comparisonTableHtml
-      ) {
-        htmlContent += `
-          <div class="mt-6 pt-5 border-t border-slate-800">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <h4 class="text-amber-400 font-extrabold text-lg sm:text-xl">
-                📊 Bảng So Sánh Đối Chiếu 6 Tiêu Chí (KTTT TBCN vs. KTTT ĐHXHCN Việt Nam)
-              </h4>
-              <span class="text-xs font-bold uppercase px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                Tổng hợp Phòng 3
-              </span>
-            </div>
-            ${window.MuseumData.room3.comparisonTableHtml}
-          </div>
-        `;
-      }
-
-      bodyEl.innerHTML = htmlContent;
+      bodyEl.innerHTML = slide.fullHtml || `<p>${slide.desc || ""}</p>`;
     }
 
     if (mainScrollEl) {
@@ -236,9 +216,9 @@ window.MuseumControls = (() => {
       window.MuseumEngine.getCurrentRoom() !== slide.room
     ) {
       window.MuseumEngine.setRoom(slide.room);
-      syncRoomButtons(slide.room);
-      renderExploreQuickNav(slide.room);
     }
+    syncRoomButtons(slide.room);
+    renderExploreQuickNav(slide.room);
 
     // Đồng bộ ngầm nhân vật sinh viên UIT và camera Shift-Lock tới đúng hiện vật tương ứng trong 3D
     if (slide.camPos && slide.lookPos && window.MuseumEngine) {
@@ -352,7 +332,6 @@ window.MuseumControls = (() => {
           currentSlideIndex = foundIdx;
           renderPresentationSlideUI(exhibitData, foundIdx, playlist.length);
         }
-        // Chỉ cập nhật HUD và mở bảng chi tiết hiện vật, giữ nguyên vị trí camera Shift-Lock trên vai nhân vật
         updateHUD(exhibitData);
         openDetailDrawer(exhibitData);
       }
@@ -452,6 +431,7 @@ window.MuseumControls = (() => {
     selectEl.addEventListener("change", () => {
       const idx = parseInt(selectEl.value, 10);
       if (!isNaN(idx)) focusExhibitByIndex(idx);
+      selectEl.blur();
     });
   }
 
@@ -469,8 +449,16 @@ window.MuseumControls = (() => {
   }
 
   function init(camera, domElement, keys) {
-    raycaster = new THREE.Raycaster();
-    mouse = new THREE.Vector2();
+    if (isInitialized) return;
+    isInitialized = true;
+
+    raycaster = window.THREE ? new THREE.Raycaster() : null;
+    mouse = window.THREE ? new THREE.Vector2() : { x: 0, y: 0 };
+    domElement =
+      domElement ||
+      document.getElementById("webgl-container") ||
+      document.body;
+    keys = keys || { w: false, a: false, s: false, d: false };
 
     setupMobileControls(keys);
     populateSlideDropdown();
@@ -499,7 +487,6 @@ window.MuseumControls = (() => {
     window.addEventListener("mousemove", (e) => {
       if (currentMode !== "explore") return;
 
-      // Nếu đang bật khóa trỏ chuột (Pointer Lock bằng phím Shift)
       if (document.pointerLockElement === domElement) {
         const dx = e.movementX || 0;
         const dy = e.movementY || 0;
@@ -509,7 +496,6 @@ window.MuseumControls = (() => {
         return;
       }
 
-      // Nếu đang nhấn giữ chuột trái hoặc phải để kéo xoay camera
       if (isMouseDragging) {
         const dx = e.clientX - lastMousePos.x;
         const dy = e.clientY - lastMousePos.y;
@@ -523,9 +509,8 @@ window.MuseumControls = (() => {
         return;
       }
 
-      // Đổi con trỏ chuột khi trỏ vào tranh
       const rect = domElement.getBoundingClientRect();
-      if (rect.width > 0 && rect.height > 0) {
+      if (rect.width > 0 && rect.height > 0 && raycaster && camera) {
         mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
@@ -542,13 +527,12 @@ window.MuseumControls = (() => {
       isMouseDragging = false;
       domElement.style.cursor = "grab";
 
-      // Nếu chỉ bấm chuột trái vào tranh (không kéo xoay góc nhìn) -> mở bảng thông tin hiện vật
       if (totalMouseDragDist < 6 && e.button === 0) {
         onItemClicked(e, camera);
       }
     });
 
-    // Mobile đa chạm: Nửa màn hình bên phải chạm và vuốt để xoay góc nhìn đồng thời khi đang bấm D-pad bên trái
+    // Mobile đa chạm trong chế độ Khám phá 3D: Nửa màn hình bên phải chạm và vuốt để xoay góc nhìn
     domElement.addEventListener(
       "touchstart",
       (e) => {
@@ -556,7 +540,6 @@ window.MuseumControls = (() => {
         const rect = domElement.getBoundingClientRect();
         for (let i = 0; i < e.changedTouches.length; i++) {
           const t = e.changedTouches[i];
-          // Ưu tiên nửa phải màn hình cho xoay camera (hoặc bất kỳ điểm chạm nào trên canvas ngoài cụm D-pad)
           const isRightHalf = t.clientX >= rect.left + rect.width * 0.4;
           if (
             activeLookTouchId === null &&
@@ -617,6 +600,42 @@ window.MuseumControls = (() => {
       passive: true,
     });
 
+    // Vuốt ngang (touchstart / touchend) trên #presentation-panel để chuyển slide trên điện thoại/màn hình cảm ứng
+    const presPanel = document.getElementById("presentation-panel");
+    let presTouchStartX = 0;
+    let presTouchStartY = 0;
+
+    if (presPanel) {
+      presPanel.addEventListener(
+        "touchstart",
+        (e) => {
+          if (currentMode !== "presentation" || !e.changedTouches.length)
+            return;
+          presTouchStartX = e.changedTouches[0].clientX;
+          presTouchStartY = e.changedTouches[0].clientY;
+        },
+        { passive: true },
+      );
+
+      presPanel.addEventListener(
+        "touchend",
+        (e) => {
+          if (currentMode !== "presentation" || !e.changedTouches.length)
+            return;
+          const dx = e.changedTouches[0].clientX - presTouchStartX;
+          const dy = e.changedTouches[0].clientY - presTouchStartY;
+          if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy)) {
+            if (dx < 0) {
+              focusExhibitByIndex(currentSlideIndex + 1);
+            } else {
+              focusExhibitByIndex(currentSlideIndex - 1);
+            }
+          }
+        },
+        { passive: true },
+      );
+    }
+
     // Cập nhật giao diện khi bật/tắt khóa trỏ chuột Shift-Lock
     const shiftLockBtn = document.getElementById("btn-shiftlock-status");
     const shiftLockLabel = document.getElementById("shiftlock-state-label");
@@ -655,35 +674,6 @@ window.MuseumControls = (() => {
       btnExplore.addEventListener("click", () => setMode("explore"));
     if (btnPresToExplore)
       btnPresToExplore.addEventListener("click", () => setMode("explore"));
-
-    // Nút đổi Nền Tối / Nền Sáng có độ tương phản cao trong chế độ thuyết trình
-    const btnThemeToggle = document.getElementById("btn-pres-theme-toggle");
-    const presPanel = document.getElementById("presentation-panel");
-    const themeIcon = document.getElementById("pres-theme-icon");
-    const themeLabel = document.getElementById("pres-theme-label");
-
-    if (btnThemeToggle && presPanel) {
-      btnThemeToggle.addEventListener("click", () => {
-        const isLight = presPanel.classList.toggle("pres-light-theme");
-        if (themeIcon) themeIcon.textContent = isLight ? "🌙" : "☀️";
-        if (themeLabel)
-          themeLabel.textContent = isLight ? "Nền Tối" : "Nền Sáng";
-      });
-    }
-
-    // Nút điều hướng Slide trước / Tiếp theo
-    const btnPrevSlide = document.getElementById("btn-prev-slide");
-    const btnNextSlide = document.getElementById("btn-next-slide");
-    if (btnPrevSlide) {
-      btnPrevSlide.addEventListener("click", () =>
-        focusExhibitByIndex(currentSlideIndex - 1),
-      );
-    }
-    if (btnNextSlide) {
-      btnNextSlide.addEventListener("click", () =>
-        focusExhibitByIndex(currentSlideIndex + 1),
-      );
-    }
 
     // Chuyển phòng trên Header
     const roomButtons = document.querySelectorAll(".room-btn");
@@ -758,6 +748,15 @@ window.MuseumControls = (() => {
       }
 
       if (currentMode === "presentation") {
+        // Bỏ qua khi đang mở / focus vào dropdown chọn slide
+        const activeTag =
+          document.activeElement && document.activeElement.tagName
+            ? document.activeElement.tagName.toUpperCase()
+            : "";
+        if (activeTag === "SELECT") {
+          return;
+        }
+
         if (k === "arrowright" || k === " ") {
           e.preventDefault();
           focusExhibitByIndex(currentSlideIndex + 1);
@@ -800,10 +799,23 @@ window.MuseumControls = (() => {
 
   return {
     init,
-    setMode,
-    focusExhibitByIndex,
+    onItemClicked,
     updateHUD,
     openDetailDrawer,
     closeDetailDrawer,
+    focusExhibitByIndex,
+    setMode,
+    getCurrentMode: () => currentMode,
+    getCurrentSlideIndex: () => currentSlideIndex,
   };
 })();
+
+if (typeof window.THREE === "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.MuseumControls) window.MuseumControls.init();
+    });
+  } else if (window.MuseumControls) {
+    window.MuseumControls.init();
+  }
+}

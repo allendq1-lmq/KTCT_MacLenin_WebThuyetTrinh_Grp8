@@ -7,6 +7,89 @@ document.addEventListener("DOMContentLoaded", () => {
   const labelFullscreen = document.getElementById("label-fullscreen-btn");
   const museumWrapper = document.getElementById("museum-wrapper");
 
+  // Thành phần Modal Mã QR Toàn Màn Hình
+  const btnQrModal = document.getElementById("btn-qr-modal");
+  const qrModal = document.getElementById("qr-modal");
+  const qrContainer = document.getElementById("qr-code-container");
+  const btnCloseQrModal = document.getElementById("btn-close-qr-modal");
+  const QR_TARGET_URL =
+    "https://allendq1-lmq.github.io/KTCT_MacLenin_WebThuyetTrinh_Grp8/";
+  let qrRendered = false;
+
+  function renderQrCodeIfNeeded() {
+    if (qrRendered || !qrContainer) return;
+    if (typeof QRCode !== "undefined") {
+      qrContainer.innerHTML = "";
+      new QRCode(qrContainer, {
+        text: QR_TARGET_URL,
+        width: 600,
+        height: 600,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+      qrRendered = true;
+    }
+  }
+
+  function isQrModalOpen() {
+    return qrModal && !qrModal.classList.contains("hidden");
+  }
+
+  async function openQrModal() {
+    if (!qrModal) return;
+
+    // Nếu đang bật Fullscreen của phần tử con (ví dụ khung Bảo tàng 3D), tự động thoát trước để không che khuất bảng QR
+    if (document.fullscreenElement && document.exitFullscreen) {
+      try {
+        await document.exitFullscreen();
+      } catch (_) {}
+    } else if (
+      document.webkitFullscreenElement &&
+      document.webkitExitFullscreen
+    ) {
+      try {
+        document.webkitExitFullscreen();
+      } catch (_) {}
+    }
+
+    renderQrCodeIfNeeded();
+    qrModal.classList.remove("hidden");
+    qrModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    if (btnQrModal) {
+      btnQrModal.setAttribute("aria-expanded", "true");
+    }
+    if (btnCloseQrModal) {
+      btnCloseQrModal.focus();
+    }
+  }
+
+  function closeQrModal() {
+    if (!qrModal || qrModal.classList.contains("hidden")) return;
+    qrModal.classList.add("hidden");
+    qrModal.classList.remove("flex");
+    document.body.style.overflow = "";
+    if (btnQrModal) {
+      btnQrModal.setAttribute("aria-expanded", "false");
+      btnQrModal.focus();
+    }
+  }
+
+  if (btnQrModal) {
+    btnQrModal.addEventListener("click", () => {
+      if (isQrModalOpen()) {
+        closeQrModal();
+      } else {
+        openQrModal();
+      }
+    });
+  }
+
+  if (btnCloseQrModal) {
+    btnCloseQrModal.addEventListener("click", closeQrModal);
+  }
+
   function switchTab(targetTab) {
     tabButtons.forEach((btn) => {
       if (btn.getAttribute("data-tab") === targetTab) {
@@ -116,6 +199,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Tự động chuyển tiếp các phím W-A-S-D, Mũi tên, Space, Shift từ trang ngoài vào iframe 3D
   window.addEventListener("keydown", (e) => {
+    if (isQrModalOpen()) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeQrModal();
+      }
+      return;
+    }
+
     const idea2 = document.getElementById("section-idea2");
     if (idea2 && !idea2.classList.contains("hidden")) {
       const k = e.key.toLowerCase();

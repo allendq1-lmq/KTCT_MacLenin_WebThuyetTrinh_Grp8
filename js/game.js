@@ -567,6 +567,11 @@ window.ReignsGame = (() => {
     } catch (_) {}
   }
 
+  const SOUND_ON_SVG =
+    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>';
+  const SOUND_OFF_SVG =
+    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6m0-6l6 6"></path></svg>';
+
   function toggleSound() {
     soundEnabled = !soundEnabled;
     if (!soundEnabled) {
@@ -576,7 +581,7 @@ window.ReignsGame = (() => {
     const icon = document.getElementById("game-sound-icon");
     const label = document.getElementById("game-sound-label");
     if (btn) btn.setAttribute("aria-pressed", String(soundEnabled));
-    if (icon) icon.textContent = soundEnabled ? "🔊" : "🔇";
+    if (icon) icon.innerHTML = soundEnabled ? SOUND_ON_SVG : SOUND_OFF_SVG;
     if (label)
       label.textContent = soundEnabled ? "Âm thanh: BẬT" : "Âm thanh: TẮT";
   }
@@ -795,7 +800,7 @@ window.ReignsGame = (() => {
         banner.className =
           "w-full mb-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-center bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-sm";
         banner.textContent =
-          "✓ Quyết sách hợp lý: Cân bằng vĩ mô & Tác động tích cực!";
+          "Quyết sách hợp lý: Cân bằng vĩ mô & Tác động tích cực!";
       }
     } else {
       card.classList.add("card-wrong-shake");
@@ -803,7 +808,7 @@ window.ReignsGame = (() => {
         banner.className =
           "w-full mb-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-center bg-rose-50 text-rose-700 border border-rose-300 shadow-sm";
         banner.textContent =
-          "⚠ Cảnh báo: Quyết sách gây mất cân bằng hoặc đẩy chỉ số vào vùng nguy hiểm!";
+          "Cảnh báo: Quyết sách gây mất cân bằng hoặc đẩy chỉ số vào vùng nguy hiểm!";
       }
     }
 

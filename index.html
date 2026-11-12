@@ -8,6 +8,8 @@
     </title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- QRCode.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body
@@ -110,6 +112,33 @@
             </button>
           </nav>
 
+          <!-- Nút Mã QR truy cập nhanh phục vụ thuyết trình -->
+          <button
+            id="btn-qr-modal"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="qr-modal"
+            title="Hiển thị Mã QR truy cập trang web"
+            class="px-2.5 sm:px-3.5 py-2 rounded-xl bg-slate-800/90 hover:bg-white text-slate-100 hover:text-slate-950 border border-slate-700 hover:border-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+          >
+            <svg
+              class="w-4 h-4 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
+              ></path>
+            </svg>
+            <span>Mã QR</span>
+          </button>
+
           <!-- Nút Toàn màn hình (Fullscreen) phục vụ trình chiếu trên lớp -->
           <button
             id="btn-fullscreen-museum"
@@ -205,7 +234,21 @@
               title="Trộn ngẫu nhiên 10 thẻ từ bộ 30 tình huống cho nhiệm kỳ 10 năm"
               class="game-filter-btn active px-4 py-2.5 rounded-xl border-2 text-xs sm:text-sm font-extrabold transition flex items-center gap-2 shadow-sm"
             >
-              <span>🎲 NGẪU NHIÊN</span>
+              <svg
+                class="w-4 h-4 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
+              </svg>
+              <span>NGẪU NHIÊN</span>
               <span
                 class="text-[11px] px-2 py-0.5 rounded-full bg-slate-900/15 font-mono font-bold"
                 >10 năm / 30 thẻ</span
@@ -219,7 +262,22 @@
               title="Bật / Tắt hiệu ứng âm thanh trong Game"
               class="px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm"
             >
-              <span id="game-sound-icon" class="text-base">🔊</span>
+              <span id="game-sound-icon" class="inline-flex items-center justify-center w-4 h-4">
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
+                  ></path>
+                </svg>
+              </span>
               <span id="game-sound-label">Âm thanh: BẬT</span>
             </button>
           </div>
@@ -255,7 +313,7 @@
               class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 text-slate-700 leading-relaxed"
             >
               <strong class="text-emerald-800 block mb-1 font-bold"
-                >🎯 1. Mục tiêu nhiệm kỳ 10 năm:</strong
+                >1. Mục tiêu nhiệm kỳ 10 năm:</strong
               >
               Duy trì cả <strong>4 chỉ số vĩ mô</strong> (<em>Tăng trưởng, Công bằng, Môi trường, Ổn định</em>) luôn nằm trong <strong>khoảng an toàn (20 – 80)</strong> qua đủ 10 năm nhiệm kỳ để giành chiến thắng.
             </div>
@@ -264,7 +322,7 @@
               class="p-3 rounded-xl bg-rose-50/70 border border-rose-200 text-slate-700 leading-relaxed"
             >
               <strong class="text-rose-800 block mb-1 font-bold"
-                >⚠️ 2. Điều kiện thua ngay lập tức:</strong
+                >2. Điều kiện thua ngay lập tức:</strong
               >
               Nếu bất kỳ chỉ số nào <strong>chạm mức 0</strong> (suy sụp, khủng hoảng) hoặc <strong>chạm mức 100</strong> (phát triển quá nóng, cào bằng cực đoan) thì <strong>thua ngay lập tức</strong>. Dưới 20 hoặc trên 80 là vùng nguy hiểm!
             </div>
@@ -273,7 +331,7 @@
               class="p-3 rounded-xl bg-sky-50/70 border border-sky-200 text-slate-700 leading-relaxed"
             >
               <strong class="text-sky-800 block mb-1 font-bold"
-                >🎮 3. Cách ra quyết sách:</strong
+                >3. Cách ra quyết sách:</strong
               >
               <strong>Kéo thẻ bài</strong> sang Trái/Phải, hoặc <strong>bấm 2 nút phương án</strong> bên dưới, hoặc nhấn phím mũi tên <strong>[←] / [→]</strong>. Chấm tròn vàng trên đỉnh cột báo trước chỉ số sẽ biến động.
             </div>
@@ -702,7 +760,7 @@
               </div>
               <span
                 class="text-xs md:text-sm font-bold uppercase tracking-wider text-emerald-600 block mb-1"
-                >🎉 Nhiệm Kỳ Hoàn Thành Xuất Sắc</span
+                >Nhiệm Kỳ Hoàn Thành Xuất Sắc</span
               >
               <h3
                 id="victory-title-years"
@@ -1250,6 +1308,84 @@
         </div>
       </section>
     </main>
+
+    <!-- Modal Mã QR Trình Chiếu Toàn Màn Hình (100% Viewport, tương phản tối đa phục vụ quét từ xa) -->
+    <div
+      id="qr-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="qr-modal-title"
+      class="fixed inset-0 w-screen h-screen z-[100] hidden flex-col items-center justify-center bg-white text-slate-950 p-4 sm:p-8 overflow-hidden select-none animate-fade-in"
+    >
+      <!-- Nút Đóng (Esc) nổi bật ở góc trên bên phải -->
+      <button
+        id="btn-close-qr-modal"
+        type="button"
+        aria-label="Đóng giao diện Mã QR (Esc)"
+        title="Đóng (Esc)"
+        class="fixed top-4 right-4 sm:top-6 sm:right-8 z-10 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-base flex items-center gap-2 shadow-lg transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-500"
+      >
+        <svg
+          class="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+        <span>Đóng (Esc)</span>
+      </button>
+
+      <!-- Khối nội dung trung tâm: Tiêu đề + Mã QR siêu lớn + Đường dẫn URL -->
+      <div
+        class="w-full max-w-5xl flex flex-col items-center justify-center text-center gap-3 sm:gap-5 my-auto"
+      >
+        <div class="space-y-1 sm:space-y-2 max-w-3xl px-2">
+          <span
+            class="inline-block text-[11px] sm:text-sm font-black uppercase tracking-widest text-amber-800 bg-amber-100 border-2 border-amber-300 px-3.5 py-1 rounded-full"
+          >
+            Học phần KTCT Mác - Lênin • Nhóm 8
+          </span>
+          <h2
+            id="qr-modal-title"
+            class="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight"
+          >
+            Quét Mã QR Để Trải Nghiệm Trực Tiếp
+          </h2>
+          <p class="text-xs sm:text-base md:text-xl font-semibold text-slate-600">
+            Mở camera điện thoại để truy cập Bảo Tàng 3D &amp; Game Thể Chế
+          </p>
+        </div>
+
+        <!-- Vùng viền trắng an toàn (Quiet Zone) bao quanh mã QR siêu lớn -->
+        <div
+          id="qr-quiet-zone"
+          class="p-4 sm:p-6 bg-white rounded-3xl border-4 border-slate-950 shadow-[0_12px_40px_rgba(0,0,0,0.12)] flex items-center justify-center shrink-0"
+        >
+          <div
+            id="qr-code-container"
+            class="flex items-center justify-center bg-white"
+            aria-label="Mã QR dẫn tới https://allendq1-lmq.github.io/KTCT_MacLenin_WebThuyetTrinh_Grp8/"
+          ></div>
+        </div>
+
+        <!-- Đường dẫn URL rõ nét dễ đọc từ khoảng cách xa -->
+        <a
+          href="https://allendq1-lmq.github.io/KTCT_MacLenin_WebThuyetTrinh_Grp8/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="max-w-full bg-slate-100 hover:bg-amber-50 border-2 border-slate-900 rounded-2xl px-4 sm:px-7 py-2 sm:py-3 text-xs sm:text-lg md:text-2xl font-mono font-black text-slate-950 break-all transition-colors select-all shadow-sm"
+        >
+          https://allendq1-lmq.github.io/KTCT_MacLenin_WebThuyetTrinh_Grp8/
+        </a>
+      </div>
+    </div>
 
     <!-- Scripts -->
     <script src="js/game.js"></script>

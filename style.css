@@ -12,6 +12,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#app-header {
+  height: 5rem;
+}
+
 /* Tab điều hướng đang active */
 .nav-tab.active {
   background-color: #f59e0b !important;
@@ -250,3 +262,23 @@ body {
 .animate-fade-in {
   animation: fadeIn 0.25s ease-out forwards;
 }
+
+/* Khung Mã QR trình chiếu toàn màn hình: render 600x600px, tự co giãn bằng clamp(280px, 56vmin, 600px) */
+#qr-code-container {
+  width: clamp(280px, 56vmin, 600px);
+  height: clamp(280px, 56vmin, 600px);
+}
+
+#qr-code-container img,
+#qr-code-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  margin: 0 auto;
+}
+

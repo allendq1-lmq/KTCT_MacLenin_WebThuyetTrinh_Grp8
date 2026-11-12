@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Kinh Tế Thị Trường Định Hướng XHCN và Giới Hạn Lịch Sử Của CNTB
+      Bảo Tàng 3D & Mô Phỏng Thể Chế: KTTT Định Hướng XHCN Việt Nam
     </title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,723 +15,277 @@
   >
     <!-- Header & Điều hướng -->
     <header
-      class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200"
+      id="app-header"
+      class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white h-20 flex items-center"
     >
       <div
-        class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between"
+        class="max-w-[1600px] w-full mx-auto px-3 sm:px-6 flex items-center justify-between gap-2"
       >
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-3 min-w-0">
           <div
-            class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-lg shrink-0"
+            class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-lg shrink-0 shadow-md shadow-amber-500/20"
           >
-            K
+            8
           </div>
-          <div>
+          <div class="truncate">
             <span
-              class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-              >Học phần: KTCT Mác - Lênin</span
+              class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-amber-400 block"
+              >Học phần: KTCT Mác - Lênin • Nhóm 8</span
             >
             <h1
-              class="text-base sm:text-lg font-bold text-slate-900 tracking-tight"
+              class="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight truncate"
             >
-              KTTT Định Hướng XHCN vs Giới Hạn Lịch Sử CNTB
+              KTTT Định Hướng XHCN &amp; Giới Hạn Lịch Sử CNTB
             </h1>
           </div>
         </div>
 
-        <nav class="hidden lg:flex space-x-1.5">
-          <button
-            data-tab="idea1"
-            class="nav-tab active px-4 py-2.5 rounded-lg text-sm md:text-base font-semibold transition-colors"
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <nav
+            class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/80 space-x-1"
+            aria-label="Điều hướng chính"
           >
-            Bàn Cân So Sánh
-          </button>
-          <button
-            data-tab="idea2"
-            class="nav-tab px-4 py-2.5 rounded-lg text-sm md:text-base font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            Bảo Tàng 3D
-          </button>
-          <button
-            data-tab="idea3"
-            class="nav-tab px-4 py-2.5 rounded-lg text-sm md:text-base font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            Tòa Án Lý Luận
-          </button>
-          <button
-            data-tab="game"
-            class="nav-tab px-4 py-2.5 rounded-lg text-sm md:text-base font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            Game Thể Chế
-          </button>
-          <button
-            data-tab="members"
-            class="nav-tab px-4 py-2.5 rounded-lg text-sm md:text-base font-semibold text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            Nhóm Tác Giả
-          </button>
-        </nav>
-      </div>
+            <button
+              data-tab="idea2"
+              class="nav-tab active px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all whitespace-nowrap flex items-center gap-1.5"
+            >
+              <svg
+                class="w-4 h-4 hidden sm:inline-block"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                ></path>
+              </svg>
+              <span>Bảo Tàng 3D</span>
+            </button>
+            <button
+              data-tab="game"
+              class="nav-tab px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all whitespace-nowrap flex items-center gap-1.5"
+            >
+              <svg
+                class="w-4 h-4 hidden sm:inline-block"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span>Game Thể Chế</span>
+            </button>
+            <button
+              data-tab="members"
+              class="nav-tab px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all whitespace-nowrap flex items-center gap-1.5"
+            >
+              <svg
+                class="w-4 h-4 hidden sm:inline-block"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+              </svg>
+              <span>Nhóm Tác Giả</span>
+            </button>
+          </nav>
 
-      <!-- Mobile Scroll Nav -->
-      <div
-        class="lg:hidden flex overflow-x-auto border-t border-slate-200 px-4 py-2.5 bg-white space-x-2"
-      >
-        <button
-          data-tab="idea1"
-          class="nav-tab active px-3.5 py-1.5 text-xs sm:text-sm whitespace-nowrap rounded font-semibold"
-        >
-          Bàn Cân
-        </button>
-        <button
-          data-tab="idea2"
-          class="nav-tab px-3.5 py-1.5 text-xs sm:text-sm whitespace-nowrap rounded font-semibold text-slate-600"
-        >
-          Bảo Tàng 3D
-        </button>
-        <button
-          data-tab="idea3"
-          class="nav-tab px-3.5 py-1.5 text-xs sm:text-sm whitespace-nowrap rounded font-semibold text-slate-600"
-        >
-          Tòa Án
-        </button>
-        <button
-          data-tab="game"
-          class="nav-tab px-3.5 py-1.5 text-xs sm:text-sm whitespace-nowrap rounded font-semibold text-slate-600"
-        >
-          Game Thể Chế
-        </button>
-        <button
-          data-tab="members"
-          class="nav-tab px-3.5 py-1.5 text-xs sm:text-sm whitespace-nowrap rounded font-semibold text-slate-600"
-        >
-          Nhóm Tác Giả
-        </button>
+          <!-- Nút Toàn màn hình (Fullscreen) phục vụ trình chiếu trên lớp -->
+          <button
+            id="btn-fullscreen-museum"
+            type="button"
+            title="Toàn màn hình trình chiếu (Phím F)"
+            class="px-2.5 sm:px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 border border-amber-500/40 text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <svg
+              id="icon-fullscreen-enter"
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+              ></path>
+            </svg>
+            <span class="hidden md:inline" id="label-fullscreen-btn"
+              >Toàn Màn Hình</span
+            >
+          </button>
+        </div>
       </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8">
-      <!-- ================= TAB 1: BÀN CÂN SO SÁNH ================= -->
-      <section id="section-idea1" class="tab-content block space-y-8">
-        <div class="border-b border-slate-200 pb-6">
-          <div class="flex items-center space-x-3 mb-2">
-            <span
-              class="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm"
-              >1</span
-            >
-            <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
-              Bàn Cân Đối Chiếu Trực Diện 5 Trụ Cột
-            </h2>
-          </div>
-          <p
-            class="text-slate-600 text-base md:text-lg max-w-4xl leading-relaxed"
-          >
-            So sánh có hệ thống giữa Mô hình Kinh tế Thị trường Tự do Tư bản Chủ
-            nghĩa và Mô hình Kinh tế Thị trường Định hướng Xã hội Chủ nghĩa Việt
-            Nam qua 5 trục thể chế bản chất.
-          </p>
-        </div>
-
-        <div class="space-y-6">
-          <!-- Trụ Cột 1 -->
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 md:p-8 shadow-sm"
-          >
-            <div class="flex items-center space-x-4 mb-6">
-              <div
-                class="w-12 h-12 rounded-full bg-amber-500 text-white font-bold text-xl flex items-center justify-center shrink-0"
-              >
-                1
-              </div>
-              <div>
-                <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                  Mục Tiêu Phát Triển Nền Kinh Tế
-                </h3>
-                <p class="text-sm md:text-base text-slate-500 mt-0.5">
-                  Mục đích tối thượng của phương thức sản xuất và định hướng giá
-                  trị xã hội
-                </p>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 block mb-2"
-                  >KTTT Tự Do TBCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Tối đa hóa lợi nhuận tư bản chủ nghĩa
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-700 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Tất cả
-                    hoạt động sản xuất kinh doanh đều phục vụ mục tiêu tích lũy
-                    tư bản và chiếm đoạt giá trị thặng dư.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Tăng
-                    trưởng kinh tế tách rời mục tiêu phát triển con người toàn
-                    diện.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Chấp
-                    nhận đánh đổi tài nguyên và bất bình đẳng xã hội để tối ưu
-                    hóa tỷ suất lợi nhuận.
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="bg-amber-50/60 rounded-xl p-5 border border-amber-200"
-              >
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block mb-2"
-                  >KTTT Định Hướng XHCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Thúc đẩy LLSX, "Dân giàu, nước mạnh, dân chủ, công bằng, văn
-                  minh"
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-800 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Sử dụng
-                    kinh tế thị trường làm phương tiện kỹ thuật để giải phóng và
-                    phát triển sức sản xuất.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Xây dựng
-                    cơ sở vật chất - kỹ thuật cho chủ nghĩa xã hội, nâng cao
-                    thực chất đời sống nhân dân.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Con
-                    người vừa là mục tiêu, vừa là động lực trung tâm của quá
-                    trình phát triển kinh tế.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Trụ Cột 2 -->
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 md:p-8 shadow-sm"
-          >
-            <div class="flex items-center space-x-4 mb-6">
-              <div
-                class="w-12 h-12 rounded-full bg-amber-500 text-white font-bold text-xl flex items-center justify-center shrink-0"
-              >
-                2
-              </div>
-              <div>
-                <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                  Quan Hệ Sở Hữu và Thành Phần Kinh Tế
-                </h3>
-                <p class="text-sm md:text-base text-slate-500 mt-0.5">
-                  Cấu trúc quan hệ sở hữu đối với các tư liệu sản xuất chủ yếu
-                  trong xã hội
-                </p>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 block mb-2"
-                  >KTTT Tự Do TBCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Đề cao tuyệt đối sở hữu tư nhân tư bản
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-700 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Bảo vệ
-                    bất khả xâm phạm quyền tư hữu về tư liệu sản xuất chủ yếu.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Tích tụ
-                    và tập trung tư bản tất yếu dẫn tới sự chi phối của các tập
-                    đoàn độc quyền tài chính.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Kinh tế
-                    nhà nước tư sản chỉ đóng vai trò hỗ trợ khi thị trường gặp
-                    trục trặc cục bộ.
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="bg-amber-50/60 rounded-xl p-5 border border-amber-200"
-              >
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block mb-2"
-                  >KTTT Định Hướng XHCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Đa dạng sở hữu: Nhà nước Chủ Đạo, Tư nhân Động Lực
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-800 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Nhiều
-                    hình thức sở hữu, nhiều thành phần kinh tế cùng bình đẳng và
-                    cạnh tranh lành mạnh theo pháp luật.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Kinh tế
-                    Nhà nước nắm giữ huyết mạch, giữ vai trò chủ đạo làm công cụ
-                    định hướng và điều tiết vĩ mô.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Kinh tế
-                    Tư nhân được giải phóng toàn diện, là một động lực quan
-                    trọng của nền kinh tế.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Trụ Cột 3 -->
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 md:p-8 shadow-sm"
-          >
-            <div class="flex items-center space-x-4 mb-6">
-              <div
-                class="w-12 h-12 rounded-full bg-amber-500 text-white font-bold text-xl flex items-center justify-center shrink-0"
-              >
-                3
-              </div>
-              <div>
-                <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                  Quan Hệ Quản Lý và Cơ Chế Vận Hành
-                </h3>
-                <p class="text-sm md:text-base text-slate-500 mt-0.5">
-                  Mối quan hệ giữa quy luật thị trường và sự can thiệp, định
-                  hướng của nhà nước
-                </p>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 block mb-2"
-                  >KTTT Tự Do TBCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Bàn tay vô hình, can thiệp nhà nước ở mức tối thiểu
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-700 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Phó mặc
-                    toàn bộ quá trình phân bổ nguồn lực xã hội cho cơ chế giá cả
-                    tự do điều tiết.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Nhà nước
-                    chỉ can thiệp hạn chế theo học thuyết thị trường tự do, dễ
-                    rơi vào thế bị động khi khủng hoảng nổ ra.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Chính
-                    sách công dễ bị chi phối bởi các nhóm lợi ích vận động hành
-                    lang của giới tư bản.
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="bg-amber-50/60 rounded-xl p-5 border border-amber-200"
-              >
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block mb-2"
-                  >KTTT Định Hướng XHCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Nhà nước pháp quyền XHCN quản lý dưới sự lãnh đạo của Đảng
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-800 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Vận hành
-                    đầy đủ, đồng bộ theo các quy luật khách quan của kinh tế thị
-                    trường.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Nhà nước
-                    định hướng, điều tiết vĩ mô bằng pháp luật, chiến lược, quy
-                    hoạch nhằm khắc phục thất bại thị trường.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Đảng
-                    Cộng sản lãnh đạo đảm bảo mọi quyết sách kinh tế luôn kiên
-                    định mục tiêu phục vụ đại đa số nhân dân.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Trụ Cột 4 -->
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 md:p-8 shadow-sm"
-          >
-            <div class="flex items-center space-x-4 mb-6">
-              <div
-                class="w-12 h-12 rounded-full bg-amber-500 text-white font-bold text-xl flex items-center justify-center shrink-0"
-              >
-                4
-              </div>
-              <div>
-                <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                  Quan Hệ Phân Phối Lợi Ích Kinh Tế
-                </h3>
-                <p class="text-sm md:text-base text-slate-500 mt-0.5">
-                  Nguyên tắc phân chia của cải vật chất làm ra trong xã hội
-                </p>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 block mb-2"
-                  >KTTT Tự Do TBCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Phân phối theo vốn và sức mạnh thị trường
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-700 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Ai nắm
-                    nhiều vốn và tư liệu sản xuất sẽ nhận phần lớn của cải xã
-                    hội dưới hình thức lợi nhuận, lợi tức.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Người
-                    lao động chỉ nhận phần tiền lương phản ánh giá trị sức lao
-                    động, không tương xứng với thặng dư tạo ra.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Khoảng
-                    cách giàu nghèo tích lũy theo thế hệ theo quy luật tích lũy
-                    tư bản.
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="bg-amber-50/60 rounded-xl p-5 border border-amber-200"
-              >
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block mb-2"
-                  >KTTT Định Hướng XHCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Theo lao động, hiệu quả và qua hệ thống an sinh xã hội
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-800 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Phân
-                    phối chủ yếu theo kết quả lao động và hiệu quả kinh tế, xóa
-                    bỏ tư tưởng cào bằng bình quân.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Kết hợp
-                    phân phối theo mức đóng góp vốn và các nguồn lực hợp pháp
-                    khác.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Tái phân
-                    phối thông qua phúc lợi công cộng và an sinh xã hội để bảo
-                    trợ người yếu thế.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Trụ Cột 5 -->
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 md:p-8 shadow-sm"
-          >
-            <div class="flex items-center space-x-4 mb-6">
-              <div
-                class="w-12 h-12 rounded-full bg-amber-500 text-white font-bold text-xl flex items-center justify-center shrink-0"
-              >
-                5
-              </div>
-              <div>
-                <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                  Gắn Tăng Trưởng Với Tiến Bộ và Công Bằng Xã Hội
-                </h3>
-                <p class="text-sm md:text-base text-slate-500 mt-0.5">
-                  Mối tương quan giữa mở rộng quy mô kinh tế và chất lượng phát
-                  triển xã hội
-                </p>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 block mb-2"
-                  >KTTT Tự Do TBCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Chấp nhận phân hóa sâu sắc, khắc phục sau
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-700 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Chấp
-                    nhận sự phân hóa xã hội như một cái giá tất yếu để đạt được
-                    hiệu quả thị trường.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Các
-                    chính sách an sinh thường mang tính chữa cháy hoặc xoa dịu
-                    mâu thuẫn giai cấp.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-500 mr-2 font-bold">•</span>Tư bản
-                    hóa dịch vụ y tế, giáo dục làm hạn chế cơ hội tiếp cận của
-                    người có thu nhập thấp.
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="bg-amber-50/60 rounded-xl p-5 border border-amber-200"
-              >
-                <span
-                  class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block mb-2"
-                  >KTTT Định Hướng XHCN</span
-                >
-                <p class="font-bold text-slate-900 text-base md:text-lg mb-3">
-                  Tiến bộ và công bằng xã hội trong từng chính sách
-                </p>
-                <ul
-                  class="space-y-2.5 text-base md:text-lg text-slate-800 leading-relaxed"
-                >
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Không
-                    chờ kinh tế đạt trình độ cao rồi mới thực hiện công bằng xã
-                    hội, mà lồng ghép ngay trong từng bước đi.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Không hy
-                    sinh tiến bộ, công bằng xã hội và môi trường để chạy theo
-                    tăng trưởng kinh tế đơn thuần.
-                  </li>
-                  <li class="flex items-start">
-                    <span class="text-amber-600 mr-2 font-bold">•</span>Bảo đảm
-                    mọi người dân đều được thụ hưởng thành quả phát triển thông
-                    qua an sinh bao trùm.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+    <!-- Main Container: mặc định mở tab Bảo Tàng 3D full-bleed -->
+    <main id="main-container" class="flex-1 w-full museum-mode-main">
+      <!-- ================= TAB 1: BẢO TÀNG 3D (ACTIVE MẶC ĐỊNH) ================= -->
+      <section id="section-idea2" class="tab-content block w-full h-full">
+        <div
+          id="museum-wrapper"
+          class="relative w-full h-[calc(100vh-5rem)] bg-slate-950 overflow-hidden"
+        >
+          <iframe
+            id="museum-frame"
+            src="museum/index.html"
+            title="Bảo Tàng 3D Kinh Tế Chính Trị Mác - Lênin"
+            class="w-full h-full border-0 block bg-slate-950"
+            allow="fullscreen"
+            allowfullscreen
+          ></iframe>
         </div>
       </section>
 
-      <!-- ================= TAB 2: BẢO TÀNG 3D ================= -->
-      <section id="section-idea2" class="tab-content hidden space-y-4">
-        <iframe
-          id="museum-frame"
-          src="museum/index.html"
-          class="w-full h-[680px] rounded-2xl border border-slate-200 shadow-sm bg-slate-900"
-          frameborder="0"
-        ></iframe>
-      </section>
+      <!-- ================= TAB 2: TRÒ CHƠI THỂ CHẾ (REIGNS - 30 THẺ NGẪU NHIÊN 10 NĂM) ================= -->
+      <section
+        id="section-game"
+        class="tab-content hidden max-w-6xl mx-auto p-4 sm:p-6 md:p-8 space-y-6 relative"
+      >
+        <!-- Lớp phủ chớp đỏ màn hình khi Thua (Game Over) -->
+        <div
+          id="game-red-flash-overlay"
+          class="pointer-events-none fixed inset-0 z-40 opacity-0"
+        ></div>
 
-      <!-- ================= TAB 3: TÒA ÁN LÝ LUẬN ================= -->
-      <section id="section-idea3" class="tab-content hidden space-y-8">
-        <div class="border-b border-slate-200 pb-6">
-          <div class="flex items-center space-x-3 mb-2">
+        <!-- Canvas hiệu ứng pháo giấy (Confetti) khi Thắng ( vượt qua 10 năm ) -->
+        <canvas
+          id="game-confetti-canvas"
+          class="pointer-events-none fixed inset-0 z-40 hidden w-full h-full"
+        ></canvas>
+
+        <!-- Tiêu đề & Thanh công cụ góc trên (Chế độ NGẪU NHIÊN duy nhất + Nút Bật/Tắt Âm thanh) -->
+        <div
+          class="border-b border-slate-200 pb-4 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div class="text-center md:text-left">
             <span
-              class="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm"
-              >3</span
+              class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-600 block mb-1"
+              >Mô Phỏng Hoạch Định Thể Chế • 30 Tình Huống Thực Tiễn</span
             >
             <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
-              Tòa Án Lý Luận: Phiên Điều Trần Biện Chứng
+              Chiếc Ghế Thể Chế: Cân Bằng Thị Trường &amp; Định Hướng XHCN
             </h2>
-          </div>
-          <p
-            class="text-slate-600 text-base md:text-lg max-w-4xl leading-relaxed"
-          >
-            Cấu trúc tranh tụng 3 giai đoạn: Thẩm tra bản cáo trạng về giới hạn
-            lịch sử của CNTB, kiểm chứng 3 hồ sơ bằng chứng về mô hình Việt Nam,
-            và tuyên án lịch sử.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm"
-          >
-            <div class="space-y-4">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-rose-600 block"
-                >Giai đoạn 01</span
-              >
-              <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                Bản Cáo Trạng: Giới Hạn Lịch Sử CNTB
-              </h3>
-              <p class="text-sm md:text-base text-slate-700 leading-relaxed">
-                KTTT TBCN dù đạt trình độ phát triển cao nhưng xây dựng trên nền
-                tảng chiếm hữu tư nhân và cơ chế bàn tay vô hình, tạo ra những
-                mâu thuẫn không thể tự dung hòa:
-              </p>
-              <ul
-                class="space-y-2.5 text-sm md:text-base text-slate-700 leading-relaxed"
-              >
-                <li class="flex items-start">
-                  <span class="text-rose-500 mr-2 font-bold">•</span>Mâu thuẫn
-                  giữa tính chất xã hội hóa của LLSX với chế độ chiếm hữu tư
-                  nhân tư bản.
-                </li>
-                <li class="flex items-start">
-                  <span class="text-rose-500 mr-2 font-bold">•</span>Phân hóa
-                  giàu nghèo sâu sắc, quy luật tích lũy làm của cải dồn về thiểu
-                  số tư bản.
-                </li>
-                <li class="flex items-start">
-                  <span class="text-rose-500 mr-2 font-bold">•</span>Khủng hoảng
-                  thừa có tính chu kỳ và tình trạng tàn phá môi trường sinh
-                  thái.
-                </li>
-              </ul>
-            </div>
-            <div class="mt-6 pt-4 border-t border-slate-100">
-              <span class="text-xs md:text-sm font-bold text-slate-900 block"
-                >KẾT LUẬN QUY LUẬT:</span
-              >
-              <span class="text-sm md:text-base text-slate-700 mt-1 block"
-                >Nhân loại tất yếu không thể dừng lại ở mô hình KTTT TBCN.</span
-              >
-            </div>
+            <p class="text-slate-600 text-sm md:text-base mt-1">
+              Quyết định chính sách qua từng năm nhiệm kỳ. Giữ 4 chỉ số vĩ mô
+              trong vùng an toàn suốt 10 năm!
+            </p>
           </div>
 
+          <!-- Cụm nút góc trên: Duy nhất 1 nút chế độ NGẪU NHIÊN + Nút Bật/Tắt âm thanh -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm"
+            id="game-category-filters"
+            class="flex flex-wrap items-center justify-center gap-2.5 shrink-0"
           >
-            <div class="space-y-4">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-cyan-600 block"
-                >Giai đoạn 02</span
-              >
-              <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                Hồ Sơ Chứng Minh: Mô Hình Việt Nam
-              </h3>
-              <p class="text-sm md:text-base text-slate-700">
-                Bấm mở từng hồ sơ chứng cứ để thẩm tra cơ chế giải quyết giới
-                hạn:
-              </p>
-              <div class="space-y-2.5">
-                <button
-                  class="court-dossier-btn active w-full text-left p-3.5 rounded-xl border border-amber-300 bg-amber-50/70 text-slate-900 text-sm md:text-base font-semibold transition"
-                  data-dossier="A"
-                >
-                  Hồ Sơ A: Quan Hệ Sở Hữu
-                </button>
-                <button
-                  class="court-dossier-btn w-full text-left p-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-sm md:text-base font-semibold hover:border-slate-300 transition"
-                  data-dossier="B"
-                >
-                  Hồ Sơ B: Quan Hệ Phân Phối
-                </button>
-                <button
-                  class="court-dossier-btn w-full text-left p-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-sm md:text-base font-semibold hover:border-slate-300 transition"
-                  data-dossier="C"
-                >
-                  Hồ Sơ C: Mục Tiêu Xã Hội
-                </button>
-              </div>
-              <div
-                id="dossier-summary"
-                class="p-4 rounded-xl border border-slate-200 bg-slate-50 text-sm md:text-base text-slate-700 leading-relaxed min-h-[100px]"
-              >
-                <span class="font-bold text-slate-900 block mb-1"
-                  >Thẩm tra Hồ sơ A:</span
-                >
-                Kinh tế Nhà nước nắm giữ huyết mạch giữ vai trò chủ đạo, làm
-                công cụ vật chất để định hướng và điều tiết nền kinh tế vì lợi
-                ích toàn dân, triệt tiêu sự lũng đoạn của tài phiệt.
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 flex flex-col justify-between shadow-sm"
-          >
-            <div class="space-y-4">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Giai đoạn 03</span
-              >
-              <h3 class="text-xl md:text-2xl font-bold text-slate-900">
-                Bản Án Thực Tiễn & Phán Quyết
-              </h3>
-              <div
-                class="space-y-3.5 text-sm md:text-base text-slate-700 leading-relaxed"
-              >
-                <p>
-                  <strong class="text-slate-900">Tuyên án:</strong> KTTT định
-                  hướng XHCN không phủ nhận kinh tế thị trường mà kế thừa thành
-                  tựu của nhân loại, sử dụng cơ chế thị trường để xây dựng cơ sở
-                  vật chất cho CNXH.
-                </p>
-                <p>
-                  <strong class="text-slate-900">Điều kiện:</strong> Mô hình này
-                  không tự phát sinh hiệu quả nếu không tiếp tục kiên trì hoàn
-                  thiện 4 nhóm giải pháp thể chế kinh tế.
-                </p>
-              </div>
-            </div>
             <button
-              id="btn-stamp-verdict"
-              class="w-full mt-6 py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm md:text-base uppercase tracking-wider rounded-xl transition shadow-sm"
+              id="btn-game-mode-random"
+              type="button"
+              data-category="all"
+              title="Trộn ngẫu nhiên 10 thẻ từ bộ 30 tình huống cho nhiệm kỳ 10 năm"
+              class="game-filter-btn active px-4 py-2.5 rounded-xl border-2 text-xs sm:text-sm font-extrabold transition flex items-center gap-2 shadow-sm"
             >
-              Xác Nhận Phán Quyết Lịch Sử
+              <span>🎲 NGẪU NHIÊN</span>
+              <span
+                class="text-[11px] px-2 py-0.5 rounded-full bg-slate-900/15 font-mono font-bold"
+                >10 năm / 30 thẻ</span
+              >
+            </button>
+
+            <button
+              id="btn-game-sound-toggle"
+              type="button"
+              aria-pressed="true"
+              title="Bật / Tắt hiệu ứng âm thanh trong Game"
+              class="px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm"
+            >
+              <span id="game-sound-icon" class="text-base">🔊</span>
+              <span id="game-sound-label">Âm thanh: BẬT</span>
             </button>
           </div>
         </div>
-      </section>
 
-      <!-- ================= TAB 4: TRÒ CHƠI THỂ CHẾ (REIGNS) ================= -->
-      <section id="section-game" class="tab-content hidden space-y-6">
+        <!-- Khung Giải Thích Luật Chơi rõ ràng, dễ đọc ngay trong tab Game Thể Chế -->
         <div
-          class="border-b border-slate-200 pb-4 text-center max-w-2xl mx-auto"
+          id="game-rules-box"
+          class="bg-white rounded-2xl border border-amber-200/90 p-4 sm:p-5 shadow-sm"
         >
-          <span
-            class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-600 block mb-1"
-            >Mô Phỏng Hoạch Định Thể Chế</span
+          <div
+            class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5 mb-3"
           >
-          <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
-            Chiếc Ghế Thể Chế: 10 Năm Cân Bằng Thị Trường
-          </h2>
-          <p class="text-slate-600 text-sm md:text-base mt-1">
-            Kéo thẻ sang trái hoặc phải để quyết định chính sách. Giữ 4 chỉ số
-            không chạm 0 và không chạm 100 trong 10 năm.
-          </p>
+            <h3
+              class="text-sm sm:text-base font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-2"
+            >
+              <span
+                class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center text-xs font-black"
+                >?</span
+              >
+              <span>Giải Thích Luật Chơi &amp; Nguyên Tắc Điều Tiết Vĩ Mô</span>
+            </h3>
+            <span
+              id="game-mode-subtitle"
+              class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full"
+            >
+              Chế độ: NGẪU NHIÊN (10 năm / 30 thẻ bài)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sm:text-sm">
+            <div
+              class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 text-slate-700 leading-relaxed"
+            >
+              <strong class="text-emerald-800 block mb-1 font-bold"
+                >🎯 1. Mục tiêu nhiệm kỳ 10 năm:</strong
+              >
+              Duy trì cả <strong>4 chỉ số vĩ mô</strong> (<em>Tăng trưởng, Công bằng, Môi trường, Ổn định</em>) luôn nằm trong <strong>khoảng an toàn (20 – 80)</strong> qua đủ 10 năm nhiệm kỳ để giành chiến thắng.
+            </div>
+
+            <div
+              class="p-3 rounded-xl bg-rose-50/70 border border-rose-200 text-slate-700 leading-relaxed"
+            >
+              <strong class="text-rose-800 block mb-1 font-bold"
+                >⚠️ 2. Điều kiện thua ngay lập tức:</strong
+              >
+              Nếu bất kỳ chỉ số nào <strong>chạm mức 0</strong> (suy sụp, khủng hoảng) hoặc <strong>chạm mức 100</strong> (phát triển quá nóng, cào bằng cực đoan) thì <strong>thua ngay lập tức</strong>. Dưới 20 hoặc trên 80 là vùng nguy hiểm!
+            </div>
+
+            <div
+              class="p-3 rounded-xl bg-sky-50/70 border border-sky-200 text-slate-700 leading-relaxed"
+            >
+              <strong class="text-sky-800 block mb-1 font-bold"
+                >🎮 3. Cách ra quyết sách:</strong
+              >
+              <strong>Kéo thẻ bài</strong> sang Trái/Phải, hoặc <strong>bấm 2 nút phương án</strong> bên dưới, hoặc nhấn phím mũi tên <strong>[←] / [→]</strong>. Chấm tròn vàng trên đỉnh cột báo trước chỉ số sẽ biến động.
+            </div>
+          </div>
         </div>
 
         <div
+          id="game-board-container"
           class="max-w-md md:max-w-lg mx-auto bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col items-center select-none relative overflow-hidden"
         >
           <!-- 4 Thanh chỉ số HUD -->
-          <div class="w-full grid grid-cols-4 gap-2 mb-6 text-center">
+          <div class="w-full grid grid-cols-4 gap-2 mb-5 text-center">
             <div class="flex flex-col items-center stat-hud" data-stat="growth">
               <span
                 class="stat-dot w-2 h-2 rounded-full bg-amber-500 opacity-0 mb-1"
@@ -912,15 +466,21 @@
             >
             <span
               id="game-year-display"
-              class="text-amber-600 bg-amber-50 px-3 py-1 rounded-full font-mono text-xs md:text-sm font-bold"
+              class="text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full font-mono text-xs md:text-sm font-bold"
               >Năm thứ 1 / 10</span
             >
           </div>
 
+          <!-- Thông báo phản hồi nhanh Chọn Đúng / Chọn Sai -->
+          <div
+            id="card-feedback-banner"
+            class="hidden w-full mb-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-center transition-all"
+          ></div>
+
           <!-- Khung Kéo Thẻ -->
           <div id="game-play-area" class="w-full flex flex-col items-center">
             <div
-              class="relative w-full h-[400px] flex items-center justify-center mb-4"
+              class="relative w-full min-h-[430px] flex items-center justify-center mb-4"
             >
               <div
                 class="absolute w-[92%] h-[92%] bg-slate-100 rounded-2xl border border-slate-200 translate-y-2 pointer-events-none"
@@ -928,37 +488,52 @@
 
               <div
                 id="reigns-card"
-                class="relative w-full h-full bg-white rounded-2xl border-2 border-slate-300 p-5 sm:p-6 shadow-md flex flex-col justify-between cursor-grab touch-none"
+                class="relative w-full min-h-[430px] bg-white rounded-2xl border-2 border-slate-300 p-4 sm:p-6 shadow-md flex flex-col justify-between cursor-grab touch-none"
               >
                 <div
                   id="choice-pill-left"
-                  class="choice-pill absolute top-4 left-4 bg-slate-900 text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full opacity-0 pointer-events-none transition-opacity shadow-lg max-w-[220px] truncate"
+                  class="choice-pill absolute top-4 left-4 bg-slate-900 text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full opacity-0 pointer-events-none transition-opacity shadow-lg max-w-[230px] truncate z-10"
                 >
                   LỰA CHỌN TRÁI
                 </div>
                 <div
                   id="choice-pill-right"
-                  class="choice-pill absolute top-4 right-4 bg-amber-600 text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full opacity-0 pointer-events-none transition-opacity shadow-lg max-w-[220px] truncate"
+                  class="choice-pill absolute top-4 right-4 bg-amber-600 text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full opacity-0 pointer-events-none transition-opacity shadow-lg max-w-[230px] truncate z-10"
                 >
                   LỰA CHỌN PHẢI
                 </div>
 
-                <div class="text-center">
+                <!-- Nhãn tên nhóm chủ đề & nhân vật -->
+                <div class="text-center space-y-1">
+                  <div class="flex items-center justify-center gap-1.5">
+                    <span
+                      id="card-topic-badge"
+                      class="inline-block text-[11px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-900 text-amber-400"
+                    >
+                      Nhóm 1: Sở hữu &amp; Thành phần kinh tế
+                    </span>
+                    <span
+                      id="card-id-badge"
+                      class="inline-block text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200"
+                    >
+                      #01
+                    </span>
+                  </div>
                   <h3
                     id="card-speaker-title"
-                    class="text-xs sm:text-sm font-bold text-amber-600 uppercase tracking-wider"
+                    class="text-xs sm:text-sm font-bold text-amber-600 uppercase tracking-wider pt-1"
                   >
-                    Hiệp Hội Doanh Nghiệp
+                    Ủy ban Quản lý vốn Nhà nước
                   </h3>
                   <span
                     id="card-speaker-name"
-                    class="text-base sm:text-lg font-bold text-slate-800"
-                    >Trịnh Bá Khôi</span
+                    class="text-base sm:text-lg font-bold text-slate-800 block"
+                    >Trần Đình Nam</span
                   >
                 </div>
 
                 <div
-                  class="w-32 h-32 mx-auto rounded-2xl bg-slate-900 border-2 border-slate-800 flex items-center justify-center p-2 shadow-inner overflow-hidden relative"
+                  class="w-24 h-24 sm:w-28 sm:h-28 mx-auto my-2 rounded-2xl bg-slate-900 border-2 border-slate-800 flex items-center justify-center p-2 shadow-inner overflow-hidden relative shrink-0"
                 >
                   <svg
                     id="card-avatar-svg"
@@ -1004,8 +579,7 @@
                     id="card-dialogue"
                     class="text-sm md:text-base text-slate-700 leading-relaxed font-medium"
                   >
-                    Tập đoàn bán lẻ muốn thâu tóm toàn bộ chuỗi cung ứng nông
-                    sản để tối ưu hóa logistics. Ngài có chấp thuận không?
+                    Đang tải tình huống hoạch định chính sách...
                   </p>
                 </div>
               </div>
@@ -1014,6 +588,7 @@
             <div class="w-full grid grid-cols-2 gap-3 mb-2">
               <button
                 id="btn-reigns-left"
+                type="button"
                 class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 text-left transition flex flex-col justify-between"
               >
                 <span
@@ -1023,11 +598,12 @@
                 <span
                   id="btn-label-left"
                   class="text-xs sm:text-sm md:text-base font-bold text-slate-800 leading-tight"
-                  >Cho Phép Thâu Tóm</span
+                  >Phương án A</span
                 >
               </button>
               <button
                 id="btn-reigns-right"
+                type="button"
                 class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/70 hover:bg-amber-100/70 hover:border-amber-300 text-left transition flex flex-col justify-between"
               >
                 <span
@@ -1037,7 +613,7 @@
                 <span
                   id="btn-label-right"
                   class="text-xs sm:text-sm md:text-base font-bold text-slate-800 leading-tight"
-                  >Chống Độc Quyền</span
+                  >Phương án B</span
                 >
               </button>
             </div>
@@ -1049,7 +625,7 @@
           <!-- Modal Game Over -->
           <div
             id="reigns-gameover-modal"
-            class="hidden w-full bg-white rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-center text-center animate-fade-in z-30"
+            class="hidden w-full bg-white rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-center text-center animate-fade-in z-30 border-2 border-rose-300"
           >
             <div class="w-full">
               <div
@@ -1071,17 +647,17 @@
               </div>
               <span
                 class="text-xs md:text-sm font-bold uppercase tracking-wider text-rose-600 block mb-1"
-                >Thể Chế Sụp Đổ</span
+                >Thể Chế Mất Cân Bằng</span
               >
               <h3
                 id="gameover-title"
                 class="text-xl md:text-2xl font-bold text-slate-900 mb-3"
               >
-                Nhiệm Kỳ Kết Thúc
+                Nhiệm Kỳ Kết Thúc Sớm
               </h3>
               <p
                 id="gameover-cause"
-                class="text-sm md:text-base text-slate-700 leading-relaxed bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200 text-left"
+                class="text-sm md:text-base text-slate-700 leading-relaxed bg-rose-50/60 p-4 sm:p-5 rounded-xl border border-rose-200 text-left"
               ></p>
             </div>
             <div class="w-full space-y-3 mt-5">
@@ -1093,6 +669,7 @@
               </div>
               <button
                 id="btn-reigns-retry"
+                type="button"
                 class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm md:text-base uppercase tracking-wider rounded-xl transition"
               >
                 Bắt Đầu Nhiệm Kỳ Mới
@@ -1103,7 +680,7 @@
           <!-- Modal Victory -->
           <div
             id="reigns-victory-modal"
-            class="hidden w-full bg-white rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-center text-center animate-fade-in z-30"
+            class="hidden w-full bg-white rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-center text-center animate-fade-in z-30 border-2 border-emerald-400"
           >
             <div class="w-full overflow-y-auto max-h-[420px] pr-1">
               <div
@@ -1125,17 +702,21 @@
               </div>
               <span
                 class="text-xs md:text-sm font-bold uppercase tracking-wider text-emerald-600 block mb-1"
-                >Nhiệm Kỳ Hoàn Thành Xuất Sắc</span
+                >🎉 Nhiệm Kỳ Hoàn Thành Xuất Sắc</span
               >
-              <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-2">
-                Vượt Qua 10 Năm Thử Thách
+              <h3
+                id="victory-title-years"
+                class="text-xl md:text-2xl font-bold text-slate-900 mb-2"
+              >
+                Vượt Qua Đủ 10 Năm Nhiệm Kỳ!
               </h3>
               <p
-                class="text-sm md:text-base text-slate-700 leading-relaxed bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200 text-left mb-3"
+                class="text-sm md:text-base text-slate-700 leading-relaxed bg-emerald-50/60 p-4 sm:p-5 rounded-xl border border-emerald-200 text-left mb-3"
               >
-                Ngài đã dẫn dắt nền kinh tế vượt qua các đợt khủng hoảng thừa,
-                kiểm soát độc quyền tư bản và giữ gìn môi trường sinh thái. Cả 4
-                chỉ số đều được duy trì trong vùng cân bằng an toàn.
+                Ngài đã dẫn dắt nền kinh tế vượt qua các cú sốc thị trường, kiểm
+                soát độc quyền tư bản, bảo đảm an sinh xã hội và giữ gìn môi
+                trường sinh thái. Cả 4 chỉ số vĩ mô đều duy trì trong vùng cân
+                bằng an toàn suốt 10 năm!
               </p>
               <div
                 class="bg-amber-50/80 p-4 sm:p-5 rounded-xl border border-amber-200 text-left text-sm md:text-base text-slate-800 leading-relaxed"
@@ -1144,15 +725,16 @@
                   >Kết luận lý luận:</span
                 >
                 Mô hình Kinh tế Thị trường Định hướng Xã hội Chủ nghĩa chứng
-                minh tính vượt trội: Không phó mặc xã hội cho "Bàn tay vô hình"
-                của thị trường tự do, nhưng cũng không triệt tiêu động lực cạnh
-                tranh.
+                minh tính ưu việt: Không phó mặc xã hội cho "Bàn tay vô hình" tự
+                phát của thị trường tư bản, nhưng cũng không dùng mệnh lệnh hành
+                chính triệt tiêu động lực cạnh tranh và đổi mới sáng tạo.
               </div>
             </div>
             <div class="w-full pt-4">
               <button
                 id="btn-reigns-win-restart"
-                class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm md:text-base uppercase tracking-wider rounded-xl transition"
+                type="button"
+                class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm md:text-base uppercase tracking-wider rounded-xl transition shadow-md"
               >
                 Chơi Lại Mô Phỏng
               </button>
@@ -1161,16 +743,19 @@
         </div>
       </section>
 
-      <!-- ================= TAB 5: NHÓM TÁC GIẢ (16 THÀNH VIÊN - NHÓM 8) ================= -->
-      <section id="section-members" class="tab-content hidden space-y-8">
+      <!-- ================= TAB 3: NHÓM TÁC GIẢ (16 THÀNH VIÊN - NHÓM 8) ================= -->
+      <section
+        id="section-members"
+        class="tab-content hidden max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-8"
+      >
         <div class="border-b border-slate-200 pb-6">
           <div class="flex items-center space-x-3 mb-2">
             <span
               class="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm"
-              >5</span
+              >8</span
             >
             <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
-              Nhóm Tác Giả & Phân Công Nhiệm Vụ (Nhóm 8)
+              Nhóm Tác Giả &amp; Phân Công Nhiệm Vụ (Nhóm 8)
             </h2>
           </div>
           <p
@@ -1666,8 +1251,7 @@
       </section>
     </main>
 
-    <!-- Nạp trực tiếp các script của Leader -->
-    <script src="js/court.js"></script>
+    <!-- Scripts -->
     <script src="js/game.js"></script>
     <script src="js/app.js"></script>
   </body>

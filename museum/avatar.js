@@ -1,17 +1,18 @@
-// museum/avatar.js - Mô hình & chuyển động mượt mà của Sinh viên UIT
+// museum/avatar.js - Mô hình Sinh viên UIT & Điều khiển di chuyển khóa hướng nhìn Shift-Lock chuẩn Roblox
 window.MuseumAvatar = (() => {
   let avatarGroup = null;
   let leftArmGroup, rightArmGroup, leftLegGroup, rightLegGroup;
   let walkCycle = 0;
-  const moveSpeed = 0.09; // Tốc độ di chuyển tiêu chuẩn
+  const moveSpeed = 0.095; // Tốc độ di chuyển tiêu chuẩn
 
+  // Giới hạn di chuyển của nhân vật bên trong 4 bức tường từng phòng
   const roomBounds = {
-    1: { minX: -6.8, maxX: 6.8, minZ: -4.8, maxZ: 4.8 },
-    2: { minX: -6.8, maxX: 6.8, minZ: -5.8, maxZ: 5.8 },
-    3: { minX: -7.8, maxX: 7.8, minZ: -4.8, maxZ: 4.8 },
+    1: { minX: -8.0, maxX: 8.0, minZ: -6.0, maxZ: 6.0 },
+    2: { minX: -8.0, maxX: 8.0, minZ: -6.5, maxZ: 6.5 },
+    3: { minX: -9.0, maxX: 9.0, minZ: -6.0, maxZ: 6.0 },
   };
 
-  function createUITShirtTexture() {
+  function createUITFrontShirtTexture() {
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -20,7 +21,7 @@ window.MuseumAvatar = (() => {
     ctx.fillStyle = "#005baa";
     ctx.fillRect(0, 0, 512, 512);
 
-    // Cổ áo trắng
+    // Cổ áo trắng phía trước ngực
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
     ctx.moveTo(180, 0);
@@ -30,7 +31,7 @@ window.MuseumAvatar = (() => {
     ctx.fill();
 
     // Dây đeo thẻ sinh viên UIT
-    ctx.strokeStyle = "#0284c7";
+    ctx.strokeStyle = "#38bdf8";
     ctx.lineWidth = 14;
     ctx.beginPath();
     ctx.moveTo(210, 0);
@@ -49,10 +50,44 @@ window.MuseumAvatar = (() => {
 
     // Logo chữ UIT ngực áo
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 88px Arial, sans-serif";
+    ctx.font = "bold 82px Arial, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("UIT", 256, 380);
+    ctx.fillText("UIT", 256, 390);
+
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  function createUITBackShirtTexture() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#005baa";
+    ctx.fillRect(0, 0, 512, 512);
+
+    // Cổ áo polo trắng phía sau gáy
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(150, 0, 212, 34);
+
+    // Viền vai thể thao
+    ctx.fillStyle = "#0284c7";
+    ctx.fillRect(0, 48, 512, 14);
+
+    // Dòng chữ sau lưng áo sinh viên UIT (hiển thị rõ trước camera Shift-Lock)
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "900 108px Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("UIT", 256, 195);
+
+    ctx.fillStyle = "#bae6fd";
+    ctx.font = "bold 36px Arial, sans-serif";
+    ctx.fillText("SINH VIÊN ĐHQG-HCM", 256, 285);
+
+    ctx.fillStyle = "#fbbf24";
+    ctx.fillRect(156, 325, 200, 8);
 
     return new THREE.CanvasTexture(canvas);
   }
@@ -61,13 +96,36 @@ window.MuseumAvatar = (() => {
     const avatar = new THREE.Group();
 
     const torsoGeo = new THREE.BoxGeometry(0.56, 0.72, 0.32);
-    const shirtTex = createUITShirtTexture();
-    const torsoMat = new THREE.MeshStandardMaterial({
-      map: shirtTex,
+    const frontShirtTex = createUITFrontShirtTexture();
+    const backShirtTex = createUITBackShirtTexture();
+    const sideShirtMat = new THREE.MeshStandardMaterial({
+      color: 0x005baa,
       roughness: 0.5,
       metalness: 0.1,
     });
-    const torso = new THREE.Mesh(torsoGeo, torsoMat);
+    const frontShirtMat = new THREE.MeshStandardMaterial({
+      map: frontShirtTex,
+      roughness: 0.5,
+      metalness: 0.1,
+    });
+    const backShirtMat = new THREE.MeshStandardMaterial({
+      map: backShirtTex,
+      roughness: 0.5,
+      metalness: 0.1,
+    });
+
+    // Trong hệ tọa độ local của nhân vật:
+    // -Z là mặt trước (hướng nhìn của nhân vật), +Z là sau lưng (quay về phía camera Shift-Lock)
+    const torsoMaterials = [
+      sideShirtMat, // +X (Vai phải)
+      sideShirtMat, // -X (Vai trái)
+      sideShirtMat, // +Y (Trên)
+      sideShirtMat, // -Y (Dưới)
+      backShirtMat, // +Z (Lưng áo - quay về phía camera)
+      frontShirtMat, // -Z (Ngực áo có thẻ SV - hướng về phía trước)
+    ];
+
+    const torso = new THREE.Mesh(torsoGeo, torsoMaterials);
     torso.position.y = 1.05;
     torso.castShadow = true;
     avatar.add(torso);
@@ -82,14 +140,38 @@ window.MuseumAvatar = (() => {
     head.castShadow = true;
     avatar.add(head);
 
-    const hairGeo = new THREE.BoxGeometry(0.35, 0.14, 0.35);
     const hairMat = new THREE.MeshStandardMaterial({
       color: 0x1e1b18,
       roughness: 0.9,
     });
-    const hair = new THREE.Mesh(hairGeo, hairMat);
-    hair.position.y = 1.76;
-    avatar.add(hair);
+
+    // Tóc đỉnh đầu
+    const topHairGeo = new THREE.BoxGeometry(0.35, 0.13, 0.35);
+    const topHair = new THREE.Mesh(topHairGeo, hairMat);
+    topHair.position.set(0, 1.76, 0);
+    avatar.add(topHair);
+
+    // Tóc sau gáy (+Z) để nhìn từ phía sau thấy rõ nhân vật đang quay lưng lại
+    const backHairGeo = new THREE.BoxGeometry(0.34, 0.24, 0.08);
+    const backHair = new THREE.Mesh(backHairGeo, hairMat);
+    backHair.position.set(0, 1.63, 0.14);
+    avatar.add(backHair);
+
+    // Tóc mai hai bên
+    const sideHairGeo = new THREE.BoxGeometry(0.35, 0.14, 0.22);
+    const sideHair = new THREE.Mesh(sideHairGeo, hairMat);
+    sideHair.position.set(0, 1.68, 0.04);
+    avatar.add(sideHair);
+
+    // Mắt ở mặt trước (-Z)
+    const eyeMat = new THREE.MeshStandardMaterial({ color: 0x0f172a });
+    const eyeGeo = new THREE.BoxGeometry(0.045, 0.045, 0.02);
+    const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+    leftEye.position.set(-0.07, 1.63, -0.162);
+    const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+    rightEye.position.set(0.07, 1.63, -0.162);
+    avatar.add(leftEye);
+    avatar.add(rightEye);
 
     const limbMat = new THREE.MeshStandardMaterial({
       color: 0x005baa,
@@ -108,7 +190,7 @@ window.MuseumAvatar = (() => {
       roughness: 0.3,
     });
 
-    // Tay trái
+    // Tay trái (-X)
     leftArmGroup = new THREE.Group();
     leftArmGroup.position.set(-0.36, 1.35, 0);
     const armGeo = new THREE.BoxGeometry(0.14, 0.55, 0.14);
@@ -122,7 +204,7 @@ window.MuseumAvatar = (() => {
     leftArmGroup.add(leftHand);
     avatar.add(leftArmGroup);
 
-    // Tay phải
+    // Tay phải (+X)
     rightArmGroup = new THREE.Group();
     rightArmGroup.position.set(0.36, 1.35, 0);
     const rightArm = new THREE.Mesh(armGeo, limbMat);
@@ -134,7 +216,7 @@ window.MuseumAvatar = (() => {
     rightArmGroup.add(rightHand);
     avatar.add(rightArmGroup);
 
-    // Chân trái
+    // Chân trái (-X) - Mũi giày hướng về phía trước (-Z)
     leftLegGroup = new THREE.Group();
     leftLegGroup.position.set(-0.16, 0.7, 0);
     const legGeo = new THREE.BoxGeometry(0.18, 0.65, 0.18);
@@ -144,12 +226,12 @@ window.MuseumAvatar = (() => {
     leftLegGroup.add(leftLeg);
     const shoeGeo = new THREE.BoxGeometry(0.19, 0.12, 0.28);
     const leftShoe = new THREE.Mesh(shoeGeo, shoesMat);
-    leftShoe.position.set(0, -0.65, 0.04);
+    leftShoe.position.set(0, -0.65, -0.045);
     leftShoe.castShadow = true;
     leftLegGroup.add(leftShoe);
     avatar.add(leftLegGroup);
 
-    // Chân phải
+    // Chân phải (+X) - Mũi giày hướng về phía trước (-Z)
     rightLegGroup = new THREE.Group();
     rightLegGroup.position.set(0.16, 0.7, 0);
     const rightLeg = new THREE.Mesh(legGeo, pantsMat);
@@ -157,89 +239,110 @@ window.MuseumAvatar = (() => {
     rightLeg.castShadow = true;
     rightLegGroup.add(rightLeg);
     const rightShoe = new THREE.Mesh(shoeGeo, shoesMat);
-    rightShoe.position.set(0, -0.65, 0.04);
+    rightShoe.position.set(0, -0.65, -0.045);
     rightShoe.castShadow = true;
     rightLegGroup.add(rightShoe);
     avatar.add(rightLegGroup);
 
-    avatar.position.set(0, 0, 1.5);
+    avatar.position.set(0, 0, 2.2);
     avatarGroup = avatar;
     return avatar;
   }
 
-  function updateWalking(camera, controls, keys, currentRoom) {
-    if (!controls || !camera || !avatarGroup) return;
+  function updateWalking(yaw, keys, currentRoom) {
+    if (!avatarGroup) return;
 
-    // Khi người dùng bấm di chuyển, ngắt ngay tiến trình lia camera tự động để tránh giật
-    if (keys.w || keys.a || keys.s || keys.d) {
-      if (window.MuseumEngine && window.MuseumEngine.cancelTransition) {
-        window.MuseumEngine.cancelTransition();
-      }
-    }
+    const bounds = roomBounds[currentRoom] || roomBounds[1];
 
-    const bounds = roomBounds[currentRoom] || {
-      minX: -6.5,
-      maxX: 6.5,
-      minZ: -4.5,
-      maxZ: 4.5,
-    };
+    // Nhân vật sinh viên UIT LUÔN xoay lưng về phía camera và hướng mặt theo đúng góc nhìn ngang (yaw) của camera
+    avatarGroup.rotation.y = -yaw;
 
-    // Hướng nhìn ngang mặt sàn của Camera
-    const forward = new THREE.Vector3();
-    camera.getWorldDirection(forward);
-    forward.y = 0;
-    forward.normalize();
+    // Vector hướng trước mặt nhân vật (forward) và hướng ngang bên phải (right) theo góc yaw
+    const forwardX = Math.sin(yaw);
+    const forwardZ = -Math.cos(yaw);
+    const rightX = Math.cos(yaw);
+    const rightZ = Math.sin(yaw);
 
-    const right = new THREE.Vector3();
-    right.crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+    let moveX = 0;
+    let moveZ = 0;
+    let isMoving = false;
 
-    let moved = false;
-    const moveDelta = new THREE.Vector3();
-
+    // W: đi thẳng về phía trước mặt camera
     if (keys.w) {
-      moveDelta.addScaledVector(forward, moveSpeed);
-      moved = true;
+      moveX += forwardX;
+      moveZ += forwardZ;
+      isMoving = true;
     }
+    // S: đi lùi (vẫn giữ hướng mặt về phía trước)
     if (keys.s) {
-      moveDelta.addScaledVector(forward, -moveSpeed);
-      moved = true;
+      moveX -= forwardX;
+      moveZ -= forwardZ;
+      isMoving = true;
     }
+    // A: đi ngang sang trái (strafe left)
     if (keys.a) {
-      moveDelta.addScaledVector(right, -moveSpeed);
-      moved = true;
+      moveX -= rightX;
+      moveZ -= rightZ;
+      isMoving = true;
     }
+    // D: đi ngang sang phải (strafe right)
     if (keys.d) {
-      moveDelta.addScaledVector(right, moveSpeed);
-      moved = true;
+      moveX += rightX;
+      moveZ += rightZ;
+      isMoving = true;
     }
 
-    if (moved) {
-      const nextX = THREE.MathUtils.clamp(
-        avatarGroup.position.x + moveDelta.x,
+    if (isMoving) {
+      const len = Math.hypot(moveX, moveZ);
+      if (len > 0.0001) {
+        moveX = (moveX / len) * moveSpeed;
+        moveZ = (moveZ / len) * moveSpeed;
+      }
+
+      let nextX = THREE.MathUtils.clamp(
+        avatarGroup.position.x + moveX,
         bounds.minX,
         bounds.maxX,
       );
-      const nextZ = THREE.MathUtils.clamp(
-        avatarGroup.position.z + moveDelta.z,
+      let nextZ = THREE.MathUtils.clamp(
+        avatarGroup.position.z + moveZ,
         bounds.minZ,
         bounds.maxZ,
       );
 
-      const actualDeltaX = nextX - avatarGroup.position.x;
-      const actualDeltaZ = nextZ - avatarGroup.position.z;
+      // Tránh đi xuyên bệ trưng bày trung tâm ở Phòng 2 và Phòng 3
+      if (currentRoom === 2) {
+        const dx = nextX - 0;
+        const dz = nextZ - -0.8;
+        const dist = Math.hypot(dx, dz);
+        if (dist < 1.65 && dist > 0.001) {
+          nextX = (dx / dist) * 1.65;
+          nextZ = -0.8 + (dz / dist) * 1.65;
+        }
+      } else if (currentRoom === 3) {
+        const dx = nextX - 0;
+        const dz = nextZ - 1.6;
+        const dist = Math.hypot(dx, dz);
+        if (dist < 1.45 && dist > 0.001) {
+          nextX = (dx / dist) * 1.45;
+          nextZ = 1.6 + (dz / dist) * 1.45;
+        }
+      }
 
-      avatarGroup.position.x = nextX;
-      avatarGroup.position.z = nextZ;
+      avatarGroup.position.x = THREE.MathUtils.clamp(
+        nextX,
+        bounds.minX,
+        bounds.maxX,
+      );
+      avatarGroup.position.z = THREE.MathUtils.clamp(
+        nextZ,
+        bounds.minZ,
+        bounds.maxZ,
+      );
 
-      // Xoay nhân vật mượt mà theo góc di chuyển
-      const targetAngle = Math.atan2(moveDelta.x, moveDelta.z);
-      let diff = targetAngle - avatarGroup.rotation.y;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      avatarGroup.rotation.y += diff * 0.25;
-
-      // Vung tay chân theo nhịp bước
-      walkCycle += 0.22;
+      // Hoạt ảnh vung tay chân theo nhịp bước (nếu chỉ đi lùi thì đảo nhịp bước tự nhiên)
+      const stepDir = keys.s && !keys.w ? -1 : 1;
+      walkCycle += 0.22 * stepDir;
       const legAngle = Math.sin(walkCycle) * 0.45;
       const armAngle = -Math.sin(walkCycle) * 0.4;
 
@@ -247,18 +350,12 @@ window.MuseumAvatar = (() => {
       if (rightLegGroup) rightLegGroup.rotation.x = -legAngle;
       if (leftArmGroup) leftArmGroup.rotation.x = armAngle;
       if (rightArmGroup) rightArmGroup.rotation.x = -armAngle;
-
-      // Camera bám theo bước đi của nhân vật
-      camera.position.x += actualDeltaX;
-      camera.position.z += actualDeltaZ;
-      controls.target.x += actualDeltaX;
-      controls.target.z += actualDeltaZ;
     } else {
-      // Dừng lại thì đứng thẳng
-      if (leftLegGroup) leftLegGroup.rotation.x = 0;
-      if (rightLegGroup) rightLegGroup.rotation.x = 0;
-      if (leftArmGroup) leftArmGroup.rotation.x = 0;
-      if (rightArmGroup) rightArmGroup.rotation.x = 0;
+      // Đứng yên: đưa tay chân về tư thế đứng thẳng
+      if (leftLegGroup) leftLegGroup.rotation.x *= 0.7;
+      if (rightLegGroup) rightLegGroup.rotation.x *= 0.7;
+      if (leftArmGroup) leftArmGroup.rotation.x *= 0.7;
+      if (rightArmGroup) rightArmGroup.rotation.x *= 0.7;
     }
   }
 
@@ -266,5 +363,9 @@ window.MuseumAvatar = (() => {
     return avatarGroup;
   }
 
-  return { create, updateWalking, getAvatar };
+  function getRoomBounds(roomNumber) {
+    return roomBounds[roomNumber] || roomBounds[1];
+  }
+
+  return { create, updateWalking, getAvatar, getRoomBounds };
 })();

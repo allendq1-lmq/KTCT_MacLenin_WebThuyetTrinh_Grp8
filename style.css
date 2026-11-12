@@ -3,7 +3,8 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial,
+    sans-serif;
   background-color: #f8fafc;
   color: #1e293b;
   margin: 0;
@@ -14,14 +15,43 @@ body {
 /* Tab điều hướng đang active */
 .nav-tab.active {
   background-color: #f59e0b !important;
-  color: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
 }
 
-/* Nút hồ sơ Tòa án đang chọn */
-.court-dossier-btn.active {
-  background-color: #fef3c7 !important;
-  border-color: #f59e0b !important;
-  color: #78350f !important;
+/* Bộ lọc chủ đề Game đang active */
+.game-filter-btn.active {
+  background-color: #f59e0b !important;
+  border-color: #d97706 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
+/* Tối ưu khung hiển thị 3D toàn vùng nhìn */
+#main-container.museum-mode-main {
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: calc(100vh - 5rem);
+  overflow: hidden;
+}
+
+#museum-wrapper {
+  width: 100%;
+  height: calc(100vh - 5rem);
+}
+
+#museum-wrapper:fullscreen,
+#museum-wrapper:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+#museum-frame {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  border: none;
 }
 
 /* Thanh cuộn mảnh tối giản */
@@ -42,11 +72,14 @@ body {
 
 /* Hiệu ứng kéo thẻ bài Reigns */
 #reigns-card {
-  will-change: transform;
+  will-change: transform, box-shadow, border-color;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
   cursor: grab;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 #reigns-card.swiping {
@@ -56,6 +89,130 @@ body {
 
 #reigns-card.reset-anim {
   transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* 1. Hiệu ứng Chọn Đúng: Thẻ phát sáng xanh lá + nảy nhẹ */
+@keyframes cardBounceCorrect {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  30% {
+    transform: scale(1.035) translateY(-10px);
+  }
+  60% {
+    transform: scale(0.99) translateY(3px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+#reigns-card.card-correct-glow {
+  border-color: #10b981 !important;
+  box-shadow:
+    0 0 0 3px rgba(16, 185, 129, 0.35),
+    0 0 32px rgba(16, 185, 129, 0.7) !important;
+  animation: cardBounceCorrect 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+
+/* 2. Hiệu ứng Chọn Sai: Thẻ viền đỏ cảnh báo + rung lắc (shake) */
+@keyframes cardShakeWrong {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  15% {
+    transform: translateX(-11px) rotate(-2deg);
+  }
+  30% {
+    transform: translateX(11px) rotate(2deg);
+  }
+  45% {
+    transform: translateX(-9px) rotate(-1.5deg);
+  }
+  60% {
+    transform: translateX(9px) rotate(1.5deg);
+  }
+  75% {
+    transform: translateX(-5px) rotate(-0.8deg);
+  }
+  90% {
+    transform: translateX(5px) rotate(0.8deg);
+  }
+}
+
+#reigns-card.card-wrong-shake {
+  border-color: #ef4444 !important;
+  box-shadow:
+    0 0 0 3px rgba(239, 68, 68, 0.35),
+    0 0 32px rgba(239, 68, 68, 0.75) !important;
+  animation: cardShakeWrong 0.52s ease-in-out forwards !important;
+}
+
+/* 3. Hiệu ứng Thua (Game Over): Chớp đỏ màn hình & Rung khung thông báo */
+@keyframes redScreenFlash {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.65;
+  }
+  45% {
+    opacity: 0.15;
+  }
+  70% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#game-red-flash-overlay.active-red-flash {
+  background: radial-gradient(
+    circle,
+    rgba(239, 68, 68, 0.45) 0%,
+    rgba(185, 28, 28, 0.8) 100%
+  );
+  animation: redScreenFlash 0.85s ease-out forwards;
+}
+
+@keyframes gameOverModalShake {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  12% {
+    transform: translate(-14px, -4px) rotate(-1.5deg);
+  }
+  25% {
+    transform: translate(14px, 4px) rotate(1.5deg);
+  }
+  37% {
+    transform: translate(-12px, 3px) rotate(-1deg);
+  }
+  50% {
+    transform: translate(12px, -3px) rotate(1deg);
+  }
+  65% {
+    transform: translate(-7px, 2px) rotate(-0.5deg);
+  }
+  80% {
+    transform: translate(7px, -2px) rotate(0.5deg);
+  }
+}
+
+#reigns-gameover-modal.gameover-modal-shake {
+  animation: gameOverModalShake 0.65s ease-in-out forwards !important;
+}
+
+/* Cảnh báo thanh chỉ số khi vào vùng nguy hiểm (< 20 hoặc > 80) */
+.stat-bar-danger {
+  background-color: #ef4444 !important;
+}
+
+.stat-val-danger {
+  color: #dc2626 !important;
 }
 
 .stat-dot {

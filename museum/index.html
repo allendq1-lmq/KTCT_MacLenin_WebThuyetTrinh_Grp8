@@ -3,157 +3,484 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Không Gian Triển Lãm 3D</title>
-    <!-- Tailwind CSS & Three.js CDN -->
+    <title>Bảo Tàng 3D Kinh Tế Chính Trị Mác - Lênin</title>
+    <!-- Tailwind CSS & Three.js CDN (Hệ thống Camera 3D Shift-Lock góc nhìn thứ ba qua vai) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <link rel="stylesheet" href="museum.css" />
   </head>
   <body
-    class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden select-none m-0 p-0 font-sans"
+    class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden select-none m-0 p-0 font-sans"
   >
-    <!-- Thanh điều khiển chuyển phòng trên đỉnh -->
+    <!-- ================= HEADER KHÁM PHÁ TỰ DO: CHUYỂN CHẾ ĐỘ & CHỌN PHÒNG ================= -->
     <header
-      class="absolute top-3 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none"
+      id="museum-top-bar"
+      class="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-4 sm:right-4 z-30 flex flex-wrap items-center justify-between gap-2 pointer-events-none"
     >
-      <div class="pointer-events-auto flex items-center space-x-2">
-        <span
-          class="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm shadow"
-          >3D</span
-        >
-        <h2
-          class="text-base sm:text-lg font-bold text-white tracking-tight drop-shadow"
-        >
-          Bảo Tàng Không Gian Lý Luận
-        </h2>
-      </div>
-
+      <!-- Cụm Nút Gạt Chế Độ: Thuyết Trình vs. Khám Phá Tự Do -->
       <div
-        class="pointer-events-auto flex items-center space-x-1.5 bg-slate-900/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-700/60 shadow-lg"
+        class="pointer-events-auto flex items-center bg-slate-900/95 backdrop-blur-md p-1 rounded-xl border border-slate-700/80 shadow-xl"
       >
         <button
-          class="room-btn active px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg"
+          id="mode-btn-presentation"
+          type="button"
+          class="mode-switch-btn active px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5"
+        >
+          <svg
+            class="w-4 h-4 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+            ></path>
+          </svg>
+          <span>Chế độ Thuyết trình</span>
+        </button>
+        <button
+          id="mode-btn-explore"
+          type="button"
+          class="mode-switch-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5"
+        >
+          <svg
+            class="w-4 h-4 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+            ></path>
+          </svg>
+          <span>Khám phá tự do</span>
+        </button>
+      </div>
+
+      <!-- Cụm Nút Chọn Phòng 3D, Shift-Lock & Góc Chuẩn -->
+      <div
+        class="pointer-events-auto flex items-center space-x-1 sm:space-x-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
+      >
+        <button
+          type="button"
+          class="room-btn active px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition"
           data-room="1"
         >
-          Phòng 1: Thời Gian
+          <span class="sm:hidden">Phòng 1</span>
+          <span class="hidden sm:inline">Phòng 1: Tổng Quan</span>
         </button>
         <button
-          class="room-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 hover:text-white"
+          type="button"
+          class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
           data-room="2"
         >
-          Phòng 2: 5 Cột Trụ
+          <span class="sm:hidden">Phòng 2</span>
+          <span class="hidden sm:inline">Phòng 2: 5 Đặc Trưng</span>
         </button>
         <button
-          class="room-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 hover:text-white"
+          type="button"
+          class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
           data-room="3"
         >
-          Phòng 3: Thể Chế
+          <span class="sm:hidden">Phòng 3</span>
+          <span class="hidden sm:inline">Phòng 3: Giới Hạn &amp; Giải Pháp</span>
+        </button>
+        <button
+          id="btn-shiftlock-status"
+          type="button"
+          title="Bấm phím Shift để khóa/mở khóa trỏ chuột xoay góc nhìn (Shift-Lock)"
+          class="hidden md:flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-amber-300 border border-amber-500/30 hover:bg-slate-700 transition"
+        >
+          <span>🔒 Shift-Lock:</span>
+          <span id="shiftlock-state-label">Giữ chuột / Phím Shift</span>
         </button>
         <button
           id="btn-reset-cam"
-          class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
+          type="button"
+          title="Đưa nhân vật và góc nhìn về vị trí chuẩn giữa phòng"
+          class="px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-slate-800 text-slate-200 hover:text-white hover:bg-slate-700 transition"
         >
           Góc Chuẩn
         </button>
       </div>
     </header>
 
-    <!-- Canvas Three.js -->
+    <!-- ================= CANVAS THREE.JS ================= -->
     <div id="webgl-container" class="w-full h-full"></div>
 
-    <!-- Nút điều khiển nhanh cho Phòng 1 -->
+    <!-- Tâm ngắm nhỏ giữa màn hình khi bật khóa chuột Shift-Lock -->
     <div
-      id="room1-controls"
-      class="room-overlay absolute bottom-4 left-4 right-4 flex flex-wrap justify-center gap-2 z-10 pointer-events-auto"
-    >
-      <button
-        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
-        data-target="0"
-      >
-        Trước 1986
-      </button>
-      <button
-        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
-        data-target="1"
-      >
-        Đại hội VI (1986)
-      </button>
-      <button
-        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
-        data-target="2"
-      >
-        Đại hội IX (2001)
-      </button>
-      <button
-        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400"
-        data-target="3"
-      >
-        Đại hội XII - XIII
-      </button>
-      <button
-        id="btn-r1-reasons"
-        class="r1-nav-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-amber-500 bg-amber-950/90 text-amber-300 hover:border-amber-300"
-        data-target="4"
-      >
-        3 Lý Do Tất Yếu (1/3)
-      </button>
-    </div>
-
-    <!-- Nút điều khiển nhanh cho Phòng 3 -->
-    <div
-      id="room3-controls"
-      class="room-overlay hidden absolute top-16 left-4 z-10 flex gap-2 pointer-events-auto"
-    >
-      <button
-        id="btn-view-dark"
-        class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-red-800 bg-red-950/80 text-red-200 hover:bg-red-900 shadow"
-      >
-        5 Hạn Chế (Mảng Tối)
-      </button>
-      <button
-        id="btn-view-light"
-        class="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-cyan-800 bg-cyan-950/80 text-cyan-200 hover:bg-cyan-900 shadow"
-      >
-        4 Giải Pháp (Mảng Sáng)
-      </button>
-    </div>
-
-    <!-- Thẻ HUD thông tin hiện vật (Glassmorphism) -->
-    <div
-      id="museum-hud"
-      class="absolute top-16 right-4 max-w-sm sm:max-w-md w-full bg-white/45 hover:bg-white/85 backdrop-blur-md border border-white/40 rounded-2xl p-4 sm:p-5 shadow-xl transition-all duration-300 pointer-events-auto z-20 text-slate-900"
+      id="shiftlock-crosshair"
+      class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none"
     >
       <div
-        class="flex items-center justify-between border-b border-slate-300/40 pb-2 mb-2"
+        class="w-3.5 h-3.5 rounded-full border-2 border-amber-400/90 bg-slate-950/40 shadow-[0_0_8px_rgba(245,158,11,0.8)]"
+      ></div>
+    </div>
+
+    <!-- ================= CHẾ ĐỘ THUYẾT TRÌNH TOÀN MÀN HÌNH (FULL-SCREEN PRESENTATION MODE) ================= -->
+    <section
+      id="presentation-panel"
+      aria-label="Giao diện Trình chiếu Toàn màn hình"
+      class="fixed inset-0 z-40 bg-slate-950 text-slate-100 flex flex-col justify-between overflow-hidden pointer-events-auto"
+    >
+      <!-- 1. THANH TIÊU ĐỀ TRÊN CÙNG (TOP BAR) -->
+      <div
+        id="pres-top-bar"
+        class="w-full bg-slate-900 border-b-2 border-slate-800 px-3 sm:px-6 py-2.5 sm:py-3.5 shrink-0 shadow-md"
+      >
+        <div
+          class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-4"
+        >
+          <!-- Cụm trái: Tên phòng, Mã mục, Tiến độ Slide X / 20 -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
+            <span
+              id="pres-room-tag"
+              class="text-xs sm:text-sm md:text-base font-extrabold text-slate-950 bg-amber-400 px-3 py-1 rounded-lg shadow-sm whitespace-nowrap"
+            >
+              Phòng 1: Tổng quan KTTT ĐHXHCN
+            </span>
+            <span
+              id="pres-slide-badge"
+              class="text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-400/40 whitespace-nowrap"
+            >
+              Mục 1.1a
+            </span>
+            <span
+              id="slide-counter-badge"
+              class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-600 text-amber-300 font-mono font-extrabold text-xs sm:text-sm md:text-base whitespace-nowrap"
+            >
+              Slide 1 / 20
+            </span>
+          </div>
+
+          <!-- Cụm phải: Menu chọn nhanh slide, Nút đổi nền Tối/Sáng & Nút chuyển sang Khám phá tự do -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <!-- Chọn nhanh phòng trong chế độ thuyết trình -->
+            <div
+              class="hidden xl:flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 space-x-1"
+            >
+              <button
+                type="button"
+                class="room-btn active px-2.5 py-1 text-xs font-bold rounded-lg transition"
+                data-room="1"
+              >
+                Phòng 1
+              </button>
+              <button
+                type="button"
+                class="room-btn px-2.5 py-1 text-xs font-bold rounded-lg text-slate-300 hover:text-white transition"
+                data-room="2"
+              >
+                Phòng 2
+              </button>
+              <button
+                type="button"
+                class="room-btn px-2.5 py-1 text-xs font-bold rounded-lg text-slate-300 hover:text-white transition"
+                data-room="3"
+              >
+                Phòng 3
+              </button>
+            </div>
+
+            <!-- Menu chọn nhanh 20 Slide -->
+            <select
+              id="slide-select-dropdown"
+              aria-label="Chọn nhanh Slide thuyết trình"
+              class="bg-slate-800 text-white border border-slate-600 hover:border-amber-400 rounded-xl px-3 py-2 text-xs sm:text-sm md:text-base font-bold max-w-[180px] sm:max-w-[280px] md:max-w-[360px] truncate focus:outline-none focus:border-amber-400 transition cursor-pointer"
+            ></select>
+
+            <!-- Nút đổi Nền Tối / Nền Sáng độ tương phản cao cho máy chiếu -->
+            <button
+              id="btn-pres-theme-toggle"
+              type="button"
+              title="Đổi giao diện Nền Tối / Nền Sáng độ tương phản cao cho máy chiếu"
+              class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-600 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 whitespace-nowrap"
+            >
+              <span id="pres-theme-icon">☀️</span>
+              <span class="hidden md:inline" id="pres-theme-label"
+                >Nền Sáng</span
+              >
+            </button>
+
+            <!-- Nút chuyển sang Khám phá tự do (3D) -->
+            <button
+              id="btn-pres-to-explore"
+              type="button"
+              class="px-3.5 sm:px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs sm:text-sm md:text-base shadow-lg shadow-amber-500/20 transition flex items-center gap-2 whitespace-nowrap"
+            >
+              <svg
+                class="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                ></path>
+              </svg>
+              <span>Khám phá tự do (3D)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Thanh tiến độ ngang 20 slides -->
+        <div
+          class="max-w-[1600px] mx-auto mt-2.5 w-full bg-slate-800 h-1.5 rounded-full overflow-hidden"
+        >
+          <div
+            id="pres-progress-bar"
+            class="bg-amber-400 h-full transition-all duration-300"
+            style="width: 5%"
+          ></div>
+        </div>
+      </div>
+
+      <!-- 2. VÙNG NỘI DUNG CHÍNH Ở GIỮA (SLIDE BODY - CỠ CHỮ LỚN MÁY CHIẾU) -->
+      <div
+        id="pres-main-scroll"
+        class="flex-1 overflow-y-auto px-4 sm:px-8 md:px-12 py-5 sm:py-8 select-text"
+      >
+        <div class="max-w-[1520px] mx-auto space-y-6">
+          <!-- Khối tiêu đề lớn của Slide -->
+          <div
+            id="pres-title-banner"
+            class="p-5 sm:p-7 rounded-2xl bg-slate-900 border-l-8 border-amber-400 border border-slate-800 shadow-lg"
+          >
+            <h2
+              id="pres-slide-title"
+              class="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-black text-white leading-tight tracking-tight"
+            >
+              1.1a. Kinh Tế Thị Trường Nói Chung
+            </h2>
+            <p
+              id="pres-slide-subtitle"
+              class="text-base sm:text-lg md:text-xl lg:text-2xl text-amber-300 font-semibold mt-2"
+            >
+              Thành tựu phát triển chung của văn minh nhân loại
+            </p>
+          </div>
+
+          <!-- Bố cục nội dung Slide: Tóm tắt luận điểm chính + Phân tích chi tiết / Bảng đối chiếu -->
+          <div
+            id="pres-content-grid"
+            class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+          >
+            <!-- Cột Trái: Các thẻ ý chính tóm tắt nhanh (4 Luận điểm cốt lõi) -->
+            <div
+              id="pres-summary-col"
+              class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-4"
+            >
+              <div
+                class="flex items-center justify-between border-b border-slate-800 pb-3"
+              >
+                <h3
+                  class="text-base sm:text-lg md:text-xl font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-2"
+                >
+                  <span>📌 Trọng Tâm Luận Điểm</span>
+                </h3>
+                <span
+                  class="text-xs font-mono uppercase px-2.5 py-1 rounded bg-slate-800 text-slate-300"
+                  >Tóm tắt nhanh</span
+                >
+              </div>
+              <div id="pres-key-points" class="space-y-3"></div>
+              <div
+                id="pres-summary-desc-box"
+                class="p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-slate-200 text-base sm:text-lg leading-relaxed"
+              >
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-sky-400 block mb-1"
+                  >Khái quát nội dung:</span
+                >
+                <p id="pres-slide-desc"></p>
+              </div>
+            </div>
+
+            <!-- Cột Phải: Nội dung chi tiết, Số liệu thực tiễn & Bảng đối chiếu 6 tiêu chí -->
+            <div
+              id="pres-detail-col"
+              class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-7 shadow-lg"
+            >
+              <div
+                class="flex items-center justify-between border-b border-slate-800 pb-3 mb-5"
+              >
+                <h3
+                  class="text-base sm:text-lg md:text-xl font-extrabold uppercase tracking-wider text-emerald-400 flex items-center gap-2"
+                >
+                  <span>📖 Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn</span>
+                </h3>
+                <span
+                  id="pres-sync-indicator"
+                  class="text-xs font-semibold text-emerald-300 bg-emerald-950/80 border border-emerald-700/60 px-2.5 py-1 rounded-full hidden sm:inline-block"
+                >
+                  ✓ Đã đồng bộ vị trí 3D
+                </span>
+              </div>
+              <div
+                id="pres-slide-body"
+                class="pres-projector-content text-lg sm:text-xl md:text-[21px] text-slate-100 leading-relaxed space-y-5"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. THANH ĐIỀU KHIỂN DƯỚI CÙNG (BOTTOM CONTROL BAR) -->
+      <div
+        id="presentation-bottom-bar"
+        class="w-full bg-slate-900 border-t-2 border-slate-800 px-4 sm:px-8 py-3 sm:py-4 shrink-0 shadow-2xl"
+      >
+        <div
+          class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3"
+        >
+          <button
+            id="btn-prev-slide"
+            type="button"
+            class="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-sm sm:text-base md:text-lg border border-slate-600 transition flex items-center gap-2 shadow"
+          >
+            <span>←</span>
+            <span>Slide trước</span>
+          </button>
+
+          <div class="hidden md:flex flex-col items-center text-center">
+            <span class="text-sm font-bold text-slate-200">
+              Sử dụng phím mũi tên
+              <kbd
+                class="px-2 py-0.5 rounded bg-slate-800 border border-slate-600 text-amber-300 font-mono text-xs"
+                >←</kbd
+              >
+              <kbd
+                class="px-2 py-0.5 rounded bg-slate-800 border border-slate-600 text-amber-300 font-mono text-xs"
+                >→</kbd
+              >
+              hoặc phím
+              <kbd
+                class="px-2 py-0.5 rounded bg-slate-800 border border-slate-600 text-amber-300 font-mono text-xs"
+                >Space</kbd
+              >
+              để chuyển slide
+            </span>
+            <span class="text-xs text-slate-400 mt-0.5">
+              Nhân vật sinh viên UIT trong phòng 3D luôn tự động di chuyển tới
+              đúng hiện vật của slide hiện tại
+            </span>
+          </div>
+
+          <button
+            id="btn-next-slide"
+            type="button"
+            class="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm sm:text-base md:text-lg shadow-lg shadow-amber-500/25 transition flex items-center gap-2"
+          >
+            <span>Tiếp theo</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHẾ ĐỘ KHÁM PHÁ TỰ DO: NÚT NHẢY NHANH THEO PHÒNG ================= -->
+    <div
+      id="explore-quick-nav"
+      class="hidden absolute bottom-3 left-20 right-3 sm:left-4 sm:right-4 z-10 flex flex-wrap justify-center gap-1.5 pointer-events-none"
+    ></div>
+
+    <!-- ================= CHẾ ĐỘ KHÁM PHÁ TỰ DO: THẺ HUD GÓC PHẢI / BOTTOM SHEET MOBILE ================= -->
+    <div
+      id="museum-hud"
+      class="hidden absolute top-16 right-4 max-w-sm sm:max-w-md w-full bg-slate-900/90 hover:bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-2xl transition-all duration-300 pointer-events-auto z-20 text-slate-100"
+    >
+      <div
+        class="flex items-center justify-between border-b border-slate-700/70 pb-2 mb-2.5"
       >
         <span
-          class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-700 block"
+          id="hud-badge"
+          class="text-xs font-bold uppercase tracking-wider text-amber-400 block truncate pr-2"
           >Hiện vật triển lãm</span
         >
         <button
           id="hud-toggle-btn"
-          class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-900/10 hover:bg-slate-900/20 text-slate-800 font-bold text-sm transition"
-          title="Thu nhỏ / Mở rộng"
+          type="button"
+          class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold text-sm transition shrink-0"
+          title="Thu gọn / Mở rộng thẻ thông tin"
         >
           −
         </button>
       </div>
-      <div id="hud-content-body">
+      <div id="hud-content-body" class="space-y-2.5">
         <h4
           id="hud-title"
-          class="text-base sm:text-lg font-bold text-slate-900 leading-snug"
+          class="text-base sm:text-lg font-bold text-white leading-snug"
         >
-          Hành Lang Tiến Trình Nhận Thức
+          Phòng 1: Tổng Quan Về KTTT Định Hướng XHCN
         </h4>
         <p
           id="hud-desc"
-          class="text-xs sm:text-sm text-slate-800 mt-2 leading-relaxed"
+          class="text-xs sm:text-sm text-slate-300 leading-relaxed"
         >
-          Dùng phím W-A-S-D (hoặc cụm phím ảo trên điện thoại) để điều khiển
-          sinh viên UIT bước đi. Nhấp chuột vào tranh trên tường để áp sát góc
-          nhìn.
+          Dùng phím W-A-S-D (hoặc D-pad bên trái) để bước đi. Kéo chuột hoặc bấm
+          phím Shift để xoay góc nhìn qua vai (Shift-Lock). Nhấp vào tranh để
+          mở bảng thông tin chi tiết.
         </p>
+        <button
+          id="btn-open-detail-drawer"
+          type="button"
+          class="w-full mt-2 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-1.5"
+        >
+          <span>📄 Xem đầy đủ nội dung</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= MODAL / NGĂN KÉO XEM ĐẦY ĐỦ NỘI DUNG (CHẾ ĐỘ KHÁM PHÁ) ================= -->
+    <div
+      id="detail-drawer-modal"
+      class="hidden fixed inset-0 z-40 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 pointer-events-auto"
+    >
+      <div
+        class="bg-slate-900 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden animate-fade-in"
+      >
+        <div
+          class="p-4 sm:p-5 bg-slate-800/90 border-b border-slate-700 flex items-start justify-between gap-3"
+        >
+          <div>
+            <span
+              id="drawer-badge"
+              class="text-xs font-bold uppercase tracking-wider text-amber-400 block mb-1"
+              >Chi tiết hiện vật</span
+            >
+            <h3
+              id="drawer-title"
+              class="text-lg sm:text-2xl font-extrabold text-white"
+            >
+              Tiêu đề hiện vật
+            </h3>
+            <p
+              id="drawer-subtitle"
+              class="text-xs sm:text-sm text-slate-300 italic mt-0.5"
+            ></p>
+          </div>
+          <button
+            id="btn-close-detail-drawer"
+            type="button"
+            class="px-3 py-1.5 rounded-xl bg-slate-700 hover:bg-rose-600 text-white font-bold text-xs sm:text-sm transition shrink-0"
+          >
+            ✕ Đóng
+          </button>
+        </div>
+        <div
+          id="drawer-body"
+          class="p-4 sm:p-6 overflow-y-auto text-sm sm:text-base md:text-lg text-slate-100 leading-relaxed space-y-4 select-text"
+        ></div>
       </div>
     </div>
 

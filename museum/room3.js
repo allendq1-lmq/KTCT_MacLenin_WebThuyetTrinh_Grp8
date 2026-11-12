@@ -1,72 +1,140 @@
-// museum/room3.js - Dựng Phòng 3
+// museum/room3.js - Phòng 3: Giới hạn CNTB, Khả năng khắc phục, Bảng đối chiếu 6 tiêu chí, Hạn chế/Giải pháp & Phán quyết
 window.MuseumRoom3 = (() => {
   function build(scene) {
-    window.MuseumEngine.createArchitecturalRoom(18, 12, 4.2);
-    window.MuseumEngine.createBench(0, 0.5);
+    window.MuseumEngine.createArchitecturalRoom(20, 14, 4.5);
+    window.MuseumEngine.createBench(-3.2, 0.2);
+    window.MuseumEngine.createBench(3.2, 0.2);
 
-    if (window.MuseumData && window.MuseumData.room3) {
-      const darkTableTex = window.MuseumEngine.createTableTexture(
-        "Mảng Tối: 5 Hạn Chế Thể Chế Kinh Tế Hiện Nay",
-        ["STT", "Bất Cập Thể Chế", "Biểu Hiện Thực Tiễn"],
-        window.MuseumData.room3.darkRows,
-      );
+    if (!window.MuseumData || !window.MuseumData.room3) return;
 
-      const darkBoardGeo = new THREE.PlaneGeometry(5.2, 3.4);
-      const darkBoardMat = new THREE.MeshStandardMaterial({
-        map: darkTableTex,
-        roughness: 0.3,
-      });
-      const darkBoard = new THREE.Mesh(darkBoardGeo, darkBoardMat);
-      darkBoard.position.set(-8.85, 2.1, 0);
-      darkBoard.rotation.y = Math.PI / 2;
-      darkBoard.userData = {
-        title: "Mảng Tối: 5 Hạn Chế Thể Chế Cần Giải Quyết",
-        desc: "Năm điểm nghẽn thể chế cốt lõi đang kìm hãm nguồn lực phát triển: pháp luật chồng chéo, rào cản tự do kinh doanh, thị trường sơ khai, phân hóa giàu nghèo và năng lực điều hành nhà nước chưa đồng bộ.",
-        camPos: { x: -5.8, y: 1.8, z: 0 },
-        lookPos: { x: -8.85, y: 2.1, z: 0 },
+    const exhibits = window.MuseumData.room3.exhibits;
+    const tableRows = window.MuseumData.room3.comparisonTableRows;
+
+    exhibits.forEach((ex) => {
+      const userData = {
+        id: ex.id,
+        room: 3,
+        sectionCode: ex.sectionCode,
+        badge: ex.badge,
+        title: ex.title,
+        subtitle: ex.subtitle,
+        desc: ex.desc,
+        fullHtml: ex.fullHtml,
+        camPos: ex.camPos,
+        lookPos: ex.lookPos,
       };
-      scene.add(darkBoard);
-      window.MuseumEngine.interactableObjects.push(darkBoard);
 
-      const spotDark = new THREE.SpotLight(0xfffbeb, 2.6, 9, Math.PI / 4, 0.3);
-      spotDark.position.set(-6.2, 4.0, 0);
-      spotDark.target = darkBoard;
-      scene.add(spotDark);
-
-      window.MuseumData.room3.solutions.forEach((s) => {
-        const artTex = window.MuseumEngine.createArtworkTexture(
-          s.title,
-          s.subtitle,
-          s.badge,
-          s.color,
-          s.lines,
+      if (ex.id === "r3-table") {
+        // Bảng so sánh đối chiếu 6 tiêu chí kích thước lớn ở chính giữa tường sau
+        const boardTex = window.MuseumEngine.createComparisonBoardTexture(
+          "BẢNG SO SÁNH ĐỐI CHIẾU 6 TIÊU CHÍ: KTTT TBCN VS. KTTT ĐHXHCN VIỆT NAM",
+          tableRows,
         );
         const placardTex = window.MuseumEngine.createPlacardTexture(
-          s.title,
-          s.subtitle,
+          ex.title,
+          ex.subtitle,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
-          2.2,
-          1.4,
-          artTex,
+          5.6,
+          3.3,
+          boardTex,
           placardTex,
-          {
-            title: s.title,
-            desc: s.desc,
-            camPos: { x: 5.8, y: 1.8, z: s.z },
-            lookPos: { x: 8.85, y: 2.1, z: s.z },
-          },
+          userData,
         );
-        frame.position.set(8.85, 2.1, s.z);
-        frame.rotation.y = -Math.PI / 2;
+        frame.position.set(ex.x, ex.y, ex.z);
+        frame.rotation.y = ex.rotY;
         scene.add(frame);
 
-        const spot = new THREE.SpotLight(0xfffbeb, 2.2, 8, Math.PI / 4, 0.3);
-        spot.position.set(6.4, 3.9, s.z);
+        const spotCenter = new THREE.SpotLight(
+          0xfffbeb,
+          2.8,
+          11,
+          Math.PI / 3,
+          0.35,
+        );
+        spotCenter.position.set(0, 4.3, -2.5);
+        spotCenter.target = frame;
+        scene.add(spotCenter);
+      } else if (ex.id === "r3-verdict") {
+        // Bệ tổng kết trung tâm: Phán quyết cuối cùng & Nguồn tài liệu tham khảo
+        const verdictGroup = new THREE.Group();
+        verdictGroup.position.set(ex.x, 0, ex.z);
+
+        const pedGeo = new THREE.CylinderGeometry(1.15, 1.3, 0.45, 32);
+        const pedMat = new THREE.MeshStandardMaterial({
+          color: 0x1e293b,
+          roughness: 0.35,
+          metalness: 0.5,
+        });
+        const ped = new THREE.Mesh(pedGeo, pedMat);
+        ped.position.y = 0.225;
+        verdictGroup.add(ped);
+
+        const artTex = window.MuseumEngine.createArtworkTexture(
+          ex.title,
+          ex.subtitle,
+          ex.badge,
+          ex.color,
+          ex.lines,
+        );
+        const placardTex = window.MuseumEngine.createPlacardTexture(
+          ex.title,
+          ex.subtitle,
+        );
+        const frame = window.MuseumEngine.createGalleryFrame(
+          2.5,
+          1.55,
+          artTex,
+          placardTex,
+          userData,
+        );
+        frame.position.set(0, 1.5, 0);
+        verdictGroup.add(frame);
+
+        ped.userData = userData;
+        window.MuseumEngine.interactableObjects.push(ped);
+        scene.add(verdictGroup);
+
+        const spotVerdict = new THREE.SpotLight(
+          0xfffbeb,
+          2.4,
+          9,
+          Math.PI / 4,
+          0.35,
+        );
+        spotVerdict.position.set(0, 4.2, ex.z + 2.8);
+        spotVerdict.target = verdictGroup;
+        scene.add(spotVerdict);
+      } else {
+        // Tranh Mảng tối (Tường trái: 3.1, 3.3a) & Mảng sáng (Tường phải: 3.2, 3.3b)
+        const artTex = window.MuseumEngine.createArtworkTexture(
+          ex.title,
+          ex.subtitle,
+          ex.badge,
+          ex.color,
+          ex.lines,
+        );
+        const placardTex = window.MuseumEngine.createPlacardTexture(
+          ex.title,
+          ex.subtitle,
+        );
+        const frame = window.MuseumEngine.createGalleryFrame(
+          3.4,
+          2.1,
+          artTex,
+          placardTex,
+          userData,
+        );
+        frame.position.set(ex.x, ex.y, ex.z);
+        frame.rotation.y = ex.rotY;
+        scene.add(frame);
+
+        const spot = new THREE.SpotLight(0xfffbeb, 2.5, 10, Math.PI / 4, 0.35);
+        spot.position.set(ex.x > 0 ? ex.x - 2.8 : ex.x + 2.8, 4.2, ex.z);
         spot.target = frame;
         scene.add(spot);
-      });
-    }
+      }
+    });
   }
 
   return { build };

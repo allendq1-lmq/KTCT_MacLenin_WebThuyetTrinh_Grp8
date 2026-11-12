@@ -1,11 +1,12 @@
-// museum/room1.js - Dựng Phòng 1
+// museum/room1.js - Phòng 1: Tổng quan về KTTT ĐHXHCN ở Việt Nam (8 hiện vật: 1.1a, 1.1b, 1.2a, 1.2b, 1.2c, 1.3, 1.4a, 1.4b)
 window.MuseumRoom1 = (() => {
   function build(scene) {
-    window.MuseumEngine.createArchitecturalRoom(16, 12, 4.2);
-    window.MuseumEngine.createBench(0, 0.5);
+    window.MuseumEngine.createArchitecturalRoom(18, 14, 4.4);
+    window.MuseumEngine.createBench(-2.5, 1.2);
+    window.MuseumEngine.createBench(2.5, 1.2);
 
     if (window.MuseumData && window.MuseumData.room1) {
-      window.MuseumData.room1.timeline.forEach((ex) => {
+      window.MuseumData.room1.exhibits.forEach((ex) => {
         const artTex = window.MuseumEngine.createArtworkTexture(
           ex.title,
           ex.subtitle,
@@ -18,57 +19,35 @@ window.MuseumRoom1 = (() => {
           ex.subtitle,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
-          2.2,
-          1.4,
+          2.6,
+          1.65,
           artTex,
           placardTex,
           {
+            id: ex.id,
+            room: 1,
+            sectionCode: ex.sectionCode,
+            badge: ex.badge,
             title: ex.title,
+            subtitle: ex.subtitle,
             desc: ex.desc,
-            camPos: { x: ex.x, y: 1.8, z: -3.8 },
-            lookPos: { x: ex.x, y: 2.1, z: -5.85 },
+            fullHtml: ex.fullHtml,
+            camPos: ex.camPos,
+            lookPos: ex.lookPos,
           },
         );
         frame.position.set(ex.x, ex.y, ex.z);
         frame.rotation.y = ex.rotY;
         scene.add(frame);
 
-        const spot = new THREE.SpotLight(0xfffbeb, 2.2, 8, Math.PI / 4, 0.3);
-        spot.position.set(ex.x, 3.9, ex.z + 2.2);
-        spot.target = frame;
-        scene.add(spot);
-      });
-
-      window.MuseumData.room1.reasons.forEach((r) => {
-        const artTex = window.MuseumEngine.createArtworkTexture(
-          r.title,
-          r.subtitle,
-          r.badge,
-          r.color,
-          r.lines,
-        );
-        const placardTex = window.MuseumEngine.createPlacardTexture(
-          r.title,
-          r.subtitle,
-        );
-        const frame = window.MuseumEngine.createGalleryFrame(
-          2.2,
-          1.4,
-          artTex,
-          placardTex,
-          {
-            title: r.title,
-            desc: r.desc,
-            camPos: { x: -5.5, y: 1.8, z: r.z },
-            lookPos: { x: -7.85, y: 2.1, z: r.z },
-          },
-        );
-        frame.position.set(-7.85, 2.1, r.z);
-        frame.rotation.y = Math.PI / 2;
-        scene.add(frame);
-
-        const spot = new THREE.SpotLight(0xfffbeb, 2.0, 8, Math.PI / 4, 0.3);
-        spot.position.set(-5.5, 3.9, r.z);
+        const spot = new THREE.SpotLight(0xfffbeb, 2.2, 9, Math.PI / 4, 0.35);
+        if (ex.wall === "back") {
+          spot.position.set(ex.x, 4.1, ex.z + 2.4);
+        } else if (ex.wall === "left") {
+          spot.position.set(ex.x + 2.4, 4.1, ex.z);
+        } else {
+          spot.position.set(ex.x - 2.4, 4.1, ex.z);
+        }
         spot.target = frame;
         scene.add(spot);
       });

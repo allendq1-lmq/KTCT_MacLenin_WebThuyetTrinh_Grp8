@@ -1,0 +1,5 @@
+*.docx
+~$*.docx
+SPEC.md
+.DS_Store
+Thumbs.db

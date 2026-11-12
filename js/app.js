@@ -1,16 +1,20 @@
-// js/app.js - Điều hướng chuyển đổi các Tabs chính & Chuyển tiếp phím WASD
+// js/app.js - Điều hướng chuyển đổi 3 Tabs chính, Fullscreen & Chuyển tiếp phím vào Bảo tàng 3D
 document.addEventListener("DOMContentLoaded", () => {
   const tabButtons = document.querySelectorAll(".nav-tab");
   const tabContents = document.querySelectorAll(".tab-content");
+  const mainContainer = document.getElementById("main-container");
+  const btnFullscreen = document.getElementById("btn-fullscreen-museum");
+  const labelFullscreen = document.getElementById("label-fullscreen-btn");
+  const museumWrapper = document.getElementById("museum-wrapper");
 
   function switchTab(targetTab) {
     tabButtons.forEach((btn) => {
       if (btn.getAttribute("data-tab") === targetTab) {
-        btn.classList.add("active", "text-white");
-        btn.classList.remove("text-slate-600");
+        btn.classList.add("active");
+        btn.classList.remove("text-slate-300");
       } else {
-        btn.classList.remove("active", "text-white");
-        btn.classList.add("text-slate-600");
+        btn.classList.remove("active");
+        btn.classList.add("text-slate-300");
       }
     });
 
@@ -23,6 +27,23 @@ document.addEventListener("DOMContentLoaded", () => {
         content.classList.remove("block");
       }
     });
+
+    if (targetTab !== "game" && window.ReignsGame) {
+      if (window.ReignsGame.stopAllSounds) window.ReignsGame.stopAllSounds();
+      if (window.ReignsGame.stopConfetti) window.ReignsGame.stopConfetti();
+    }
+
+    if (mainContainer) {
+      if (targetTab === "idea2") {
+        mainContainer.classList.add("museum-mode-main");
+      } else {
+        mainContainer.classList.remove("museum-mode-main");
+      }
+    }
+
+    if (btnFullscreen) {
+      btnFullscreen.style.display = targetTab === "idea2" ? "flex" : "none";
+    }
 
     // Khi bấm Tab 3D, tự động điều chỉnh khung hình và gán focus vào iframe
     if (targetTab === "idea2") {
@@ -49,11 +70,59 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-  // Tự động chuyển tiếp các phím W-A-S-D và Mũi tên từ trang ngoài vào iframe 3D
+  // Xử lý Toàn màn hình (Fullscreen) để trình chiếu trên lớp
+  function toggleMuseumFullscreen() {
+    const targetEl = museumWrapper || document.documentElement;
+    if (!document.fullscreenElement) {
+      if (targetEl.requestFullscreen) {
+        targetEl.requestFullscreen().catch(() => {});
+      } else if (targetEl.webkitRequestFullscreen) {
+        targetEl.webkitRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
+  }
+
+  if (btnFullscreen) {
+    btnFullscreen.addEventListener("click", toggleMuseumFullscreen);
+  }
+
+  document.addEventListener("fullscreenchange", () => {
+    const isFs = !!document.fullscreenElement;
+    if (labelFullscreen) {
+      labelFullscreen.textContent = isFs ? "Thoát Fullscreen" : "Toàn Màn Hình";
+    }
+    const iframe = document.getElementById("museum-frame");
+    if (iframe && iframe.contentWindow) {
+      setTimeout(() => {
+        if (
+          iframe.contentWindow.MuseumEngine &&
+          iframe.contentWindow.MuseumEngine.onWindowResize
+        ) {
+          iframe.contentWindow.MuseumEngine.onWindowResize();
+        }
+        iframe.contentWindow.focus();
+      }, 100);
+    }
+  });
+
+  // Cho phép iframe gọi hàm toggleMuseumFullscreen
+  window.toggleMuseumFullscreen = toggleMuseumFullscreen;
+
+  // Tự động chuyển tiếp các phím W-A-S-D, Mũi tên, Space, Shift từ trang ngoài vào iframe 3D
   window.addEventListener("keydown", (e) => {
     const idea2 = document.getElementById("section-idea2");
     if (idea2 && !idea2.classList.contains("hidden")) {
       const k = e.key.toLowerCase();
+      if (k === "f" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        toggleMuseumFullscreen();
+        return;
+      }
       if (
         [
           "w",
@@ -64,8 +133,16 @@ document.addEventListener("DOMContentLoaded", () => {
           "arrowdown",
           "arrowleft",
           "arrowright",
+          " ",
+          "escape",
+          "shift",
         ].includes(k)
       ) {
+        if (
+          ["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(k)
+        ) {
+          e.preventDefault();
+        }
         const iframe = document.getElementById("museum-frame");
         if (iframe && iframe.contentWindow) {
           iframe.contentWindow.dispatchEvent(
@@ -90,6 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
           "arrowdown",
           "arrowleft",
           "arrowright",
+          " ",
+          "shift",
         ].includes(k)
       ) {
         const iframe = document.getElementById("museum-frame");
@@ -102,10 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Khởi động các module Tòa án & Game Reigns
-  if (typeof CourtModule !== "undefined" && CourtModule.init) {
-    CourtModule.init();
-  }
+  // Mặc định mở tab Bảo Tàng 3D (idea2)
+  switchTab("idea2");
+
+  // Khởi động module Game Thể Chế
   if (typeof ReignsGame !== "undefined" && ReignsGame.init) {
     ReignsGame.init();
   }

@@ -1,0 +1,393 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.room-btn.active {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+/* ================= GIAO DIỆN THUYẾT TRÌNH NỀN SÁNG CỐ ĐỊNH (HIGH-CONTRAST LIGHT MODE) ================= */
+#presentation-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #f8fafc;
+  color: #1e293b;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+}
+
+#presentation-panel h2,
+#presentation-panel h3,
+#presentation-panel h4,
+#presentation-panel p,
+#presentation-panel ul,
+#presentation-panel ol,
+#presentation-panel blockquote {
+  margin: 0;
+}
+
+#presentation-panel svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#pres-top-bar {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #cbd5e1;
+  flex-shrink: 0;
+}
+
+#pres-top-bar > div:first-child {
+  max-width: 1680px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+#pres-top-bar > div:first-child > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+#pres-top-bar [role="group"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+#pres-title-banner,
+#pres-summary-col,
+#pres-detail-col {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+}
+
+#pres-title-banner {
+  border-left: 6px solid #d97706;
+  padding: clamp(0.38rem, 0.85vh, 0.75rem) clamp(0.75rem, 1.2vw, 1.25rem);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+#pres-slide-title {
+  color: #0f172a;
+  font-size: clamp(1.1rem, 2.2vh, 1.65rem);
+  line-height: 1.22;
+}
+
+#pres-slide-subtitle {
+  color: #d97706;
+  font-size: clamp(0.75rem, 1.35vh, 0.95rem);
+}
+
+.pres-col-heading {
+  font-size: clamp(0.76rem, 1.35vh, 0.95rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+#pres-summary-col > div:first-child > div:first-child,
+#pres-detail-col > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+#pres-summary-col,
+#pres-detail-col {
+  padding: clamp(0.55rem, 1.1vh, 1rem) clamp(0.7rem, 1.1vw, 1.15rem);
+}
+
+.pres-key-points-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.3rem, 0.65vh, 0.55rem);
+}
+
+.pres-key-card {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  padding: clamp(0.35rem, 0.7vh, 0.6rem) clamp(0.5rem, 0.8vw, 0.75rem);
+  border-radius: 0.6rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.pres-key-card > span:first-child {
+  flex-shrink: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background-color: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.pres-key-card p {
+  color: #0f172a;
+  font-size: clamp(0.76rem, 1.35vh, 0.95rem);
+  line-height: 1.32;
+}
+
+#pres-summary-desc-box {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  padding: clamp(0.4rem, 0.75vh, 0.65rem) clamp(0.55rem, 0.8vw, 0.8rem);
+}
+
+#pres-summary-desc-box span {
+  color: #0284c7;
+}
+
+#pres-slide-desc {
+  color: #1e293b;
+  font-size: clamp(0.74rem, 1.28vh, 0.9rem);
+  line-height: 1.36;
+}
+
+/* Nội dung chi tiết bên phải co giãn linh hoạt theo khung nhìn */
+.pres-projector-content {
+  font-size: clamp(0.78rem, 1.38vh, 0.96rem);
+  line-height: 1.4;
+  color: #1e293b;
+}
+
+.pres-detail-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.85vh, 0.75rem);
+}
+
+.pres-subcard {
+  padding: clamp(0.45rem, 0.85vh, 0.75rem) clamp(0.6rem, 0.9vw, 0.9rem);
+  border-radius: 0.65rem;
+}
+
+.pres-projector-content h4 {
+  font-size: clamp(0.82rem, 1.45vh, 1.02rem) !important;
+  line-height: 1.28 !important;
+  margin-bottom: 0.15rem !important;
+}
+
+.pres-projector-content p,
+.pres-projector-content li,
+.pres-projector-content blockquote {
+  font-size: clamp(0.76rem, 1.34vh, 0.94rem) !important;
+  line-height: 1.38 !important;
+}
+
+/* Bảng so sánh 6 tiêu chí vừa khít 1 màn hình */
+.pres-comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(0.72rem, 1.24vh, 0.88rem) !important;
+}
+
+.pres-comp-table th,
+.pres-comp-table td {
+  padding: clamp(0.28rem, 0.58vh, 0.52rem) clamp(0.45rem, 0.75vw, 0.8rem) !important;
+  line-height: 1.28 !important;
+  vertical-align: top;
+}
+
+/* Danh sách 10 tài liệu tham khảo ở Slide 20 */
+.pres-ref-list {
+  padding-left: 1.1rem;
+}
+
+.pres-ref-list li {
+  font-size: clamp(0.68rem, 1.14vh, 0.8rem) !important;
+  line-height: 1.25 !important;
+}
+
+/* Fallback Grid helpers inside #presentation-panel (hoạt động cả khi offline không có CDN) */
+#presentation-panel .grid {
+  display: grid;
+}
+#presentation-panel .gap-2 {
+  gap: 0.45rem;
+}
+#presentation-panel .gap-2\.5 {
+  gap: 0.55rem;
+}
+#presentation-panel .gap-x-4 {
+  column-gap: 1rem;
+}
+#presentation-panel .gap-y-1 {
+  row-gap: 0.22rem;
+}
+@media (min-width: 640px) {
+  #presentation-panel .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #presentation-panel .sm\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  #presentation-panel .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #presentation-panel .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  #presentation-panel .md\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+}
+
+/* ================= BỐ CỤC MÁY TÍNH (>= 1024px): TUYỆT ĐỐI KHÔNG CUỘN DỌC (ZERO VERTICAL SCROLL) ================= */
+@media (min-width: 1024px) {
+  #presentation-panel {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #pres-main-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(0.4rem, 0.9vh, 0.85rem) clamp(0.75rem, 1.4vw, 1.5rem);
+  }
+
+  .pres-slide-stage {
+    flex: 1;
+    min-height: 0;
+    max-width: 1680px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.4rem, 0.85vh, 0.8rem);
+    overflow: hidden;
+  }
+
+  #pres-content-grid {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: stretch;
+    gap: clamp(0.5rem, 0.95vw, 0.95rem);
+    overflow: hidden;
+  }
+
+  #pres-summary-col.lg\:col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+  #pres-detail-col.lg\:col-span-8 {
+    grid-column: span 8 / span 8;
+  }
+  #pres-summary-col.lg\:col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+  #pres-detail-col.lg\:col-span-9 {
+    grid-column: span 9 / span 9;
+  }
+
+  #pres-summary-col,
+  #pres-detail-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  #pres-slide-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+}
+
+/* ================= BỐ CỤC MOBILE & TABLET (< 1024px) ================= */
+@media (max-width: 1023px) {
+  #pres-main-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.65rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pres-slide-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  #pres-content-grid {
+    gap: 0.65rem;
+  }
+}
+
+#pres-main-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+#pres-main-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+#pres-main-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}

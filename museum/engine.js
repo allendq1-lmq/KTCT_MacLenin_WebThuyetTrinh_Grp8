@@ -516,16 +516,50 @@ window.MuseumEngine = (() => {
     scene.add(room);
   }
 
+  // Giải phóng đầy đủ texture và material để tránh rò rỉ bộ nhớ GPU/WebGL khi chuyển phòng
+  function disposeMaterial(mat) {
+    if (!mat) return;
+    const textureSlots = [
+      "map",
+      "lightMap",
+      "bumpMap",
+      "normalMap",
+      "emissiveMap",
+      "roughnessMap",
+      "metalnessMap",
+      "alphaMap",
+      "aoMap",
+      "specularMap",
+      "envMap",
+    ];
+    textureSlots.forEach((slot) => {
+      if (mat[slot] && typeof mat[slot].dispose === "function") {
+        mat[slot].dispose();
+      }
+    });
+    if (typeof mat.dispose === "function") {
+      mat.dispose();
+    }
+  }
+
   function clearScene() {
     interactableObjects.length = 0;
     while (scene.children.length > 0) {
       const obj = scene.children[0];
       scene.remove(obj);
-      if (obj.geometry) obj.geometry.dispose();
-      if (obj.material) {
-        if (Array.isArray(obj.material))
-          obj.material.forEach((m) => m.dispose());
-        else obj.material.dispose();
+      if (typeof obj.traverse === "function") {
+        obj.traverse((child) => {
+          if (child.geometry && typeof child.geometry.dispose === "function") {
+            child.geometry.dispose();
+          }
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach(disposeMaterial);
+            } else {
+              disposeMaterial(child.material);
+            }
+          }
+        });
       }
     }
   }

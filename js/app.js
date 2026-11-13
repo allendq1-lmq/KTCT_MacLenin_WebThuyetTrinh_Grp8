@@ -5,9 +5,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const mainContainer = document.getElementById("main-container");
   const btnFullscreen = document.getElementById("btn-fullscreen-museum");
   const labelFullscreen = document.getElementById("label-fullscreen-btn");
-  const presentationWrapper = document.getElementById("presentation-wrapper");
-  const museumWrapper = document.getElementById("museum-wrapper");
+  const iconFullscreenEnter = document.getElementById("icon-fullscreen-enter");
+  const iconFullscreenExit = document.getElementById("icon-fullscreen-exit");
   let currentActiveTab = "content";
+
+  function isDesktopViewport() {
+    return window.innerWidth >= 768;
+  }
+
+  function getFullscreenElement() {
+    return (
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      null
+    );
+  }
+
+  function isFullscreenSupported() {
+    const rootEl = document.documentElement;
+    return !!(
+      rootEl &&
+      (rootEl.requestFullscreen || rootEl.webkitRequestFullscreen)
+    );
+  }
+
+  function updateFullscreenButtonVisibility() {
+    if (!btnFullscreen) return;
+    const isFullBleedTab =
+      currentActiveTab === "content" || currentActiveTab === "idea2";
+    const shouldShow =
+      (isFullBleedTab || !!getFullscreenElement()) &&
+      isDesktopViewport() &&
+      isFullscreenSupported();
+    // Không ép inline "flex" để class responsive CSS (`hidden md:flex`) và @media (max-width: 767px) hoạt động chuẩn
+    btnFullscreen.style.display = shouldShow ? "" : "none";
+  }
+
+  function syncFullscreenButtonState() {
+    const isFs = !!getFullscreenElement();
+    if (labelFullscreen) {
+      labelFullscreen.textContent = isFs
+        ? "Thoát Toàn Màn Hình"
+        : "Toàn Màn Hình";
+    }
+    if (btnFullscreen) {
+      btnFullscreen.setAttribute("aria-pressed", isFs ? "true" : "false");
+      btnFullscreen.title = isFs
+        ? "Thoát Toàn Màn Hình (Phím F / Esc)"
+        : "Toàn màn hình trình chiếu (Phím F)";
+    }
+    if (iconFullscreenEnter) {
+      iconFullscreenEnter.classList.toggle("hidden", isFs);
+    }
+    if (iconFullscreenExit) {
+      iconFullscreenExit.classList.toggle("hidden", !isFs);
+    }
+  }
 
   // Thành phần Modal Mã QR Toàn Màn Hình
   const btnQrModal = document.getElementById("btn-qr-modal");
@@ -130,9 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    if (btnFullscreen) {
-      btnFullscreen.style.display = isFullBleedTab ? "flex" : "none";
-    }
+    updateFullscreenButtonVisibility();
 
     if (targetTab === "content") {
       setTimeout(() => {
@@ -174,16 +225,12 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-  // Xử lý Toàn màn hình (Fullscreen) cho cả tab Nội Dung và tab Bảo Tàng 3D
+  // Xử lý Toàn màn hình trên phần tử gốc để giữ nguyên thanh header và nút Thoát Toàn Màn Hình ở đúng vị trí trên desktop
   function toggleMuseumFullscreen() {
-    let targetEl = document.documentElement;
-    if (currentActiveTab === "content" && presentationWrapper) {
-      targetEl = presentationWrapper;
-    } else if (currentActiveTab === "idea2" && museumWrapper) {
-      targetEl = museumWrapper;
-    }
+    if (!isFullscreenSupported()) return;
+    const targetEl = document.documentElement;
 
-    if (!document.fullscreenElement) {
+    if (!getFullscreenElement()) {
       if (targetEl.requestFullscreen) {
         targetEl.requestFullscreen().catch(() => {});
       } else if (targetEl.webkitRequestFullscreen) {
@@ -202,11 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
     btnFullscreen.addEventListener("click", toggleMuseumFullscreen);
   }
 
-  document.addEventListener("fullscreenchange", () => {
-    const isFs = !!document.fullscreenElement;
-    if (labelFullscreen) {
-      labelFullscreen.textContent = isFs ? "Thoát Fullscreen" : "Toàn Màn Hình";
-    }
+  function handleFullscreenChange() {
+    syncFullscreenButtonState();
+    updateFullscreenButtonVisibility();
 
     const activeIframe =
       currentActiveTab === "content"
@@ -230,7 +275,12 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (_) {}
       }, 100);
     }
+  }
+
+  ["fullscreenchange", "webkitfullscreenchange"].forEach((evt) => {
+    document.addEventListener(evt, handleFullscreenChange);
   });
+  window.addEventListener("resize", updateFullscreenButtonVisibility);
 
   // Cho phép iframe gọi hàm toggleMuseumFullscreen (trực tiếp hoặc qua postMessage)
   window.toggleMuseumFullscreen = toggleMuseumFullscreen;

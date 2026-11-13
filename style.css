@@ -267,10 +267,10 @@ svg {
   animation: fadeIn 0.25s ease-out forwards;
 }
 
-/* Khung Mã QR trình chiếu toàn màn hình: render 600x600px, tự co giãn bằng clamp(280px, 56vmin, 600px) */
+/* Khung Mã QR trình chiếu toàn màn hình: render 600x600px, co giãn vừa khít cả laptop 1366x768 lẫn di động */
 #qr-code-container {
-  width: clamp(280px, 56vmin, 600px);
-  height: clamp(280px, 56vmin, 600px);
+  width: clamp(220px, 46vmin, 540px);
+  height: clamp(220px, 46vmin, 540px);
 }
 
 #qr-code-container img,
@@ -284,5 +284,12 @@ svg {
   image-rendering: crisp-edges;
   image-rendering: pixelated;
   margin: 0 auto;
+}
+
+/* Ẩn hoàn toàn nút Toàn Màn Hình trên giao diện mobile/màn hình nhỏ (< 768px) */
+@media (max-width: 767px) {
+  #btn-fullscreen-museum {
+    display: none !important;
+  }
 }
 

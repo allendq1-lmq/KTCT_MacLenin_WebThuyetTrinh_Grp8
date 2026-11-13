@@ -1,4 +1,4 @@
-// museum/data.js - Toàn bộ dữ liệu lý luận & thực tiễn KTCT Mác - Lênin từ PHÒNG TRIỂN LÃM 3D
+// museum/data.js - Toàn bộ dữ liệu hiện vật & nội dung trưng bày cho không gian Khám phá Bảo Tàng 3D
 window.MuseumData = (() => {
   const comparisonTableRows = [
     {
@@ -530,32 +530,32 @@ window.MuseumData = (() => {
     ],
     desc: "Như mọi nền KTTT hiện đại, nền kinh tế Việt Nam có các chủ thể độc lập tự chủ, giá cả do cung – cầu quyết định, cạnh tranh là động lực, hệ thống thị trường mở hội nhập quốc tế và Nhà nước quản lý vĩ mô. Do xuất phát từ sản xuất nhỏ nên việc tiếp tục hoàn thiện đồng bộ thể chế là yêu cầu tất yếu.",
     fullHtml: `
-      <div class="pres-detail-stack">
-        <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-          <h4 class="text-amber-800 font-bold mb-1.5">a) Những đặc điểm chung với các nền kinh tế thị trường thế giới</h4>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-800">
-            <div class="p-2 rounded-lg bg-white border border-amber-200">
-              <strong>1. Chủ thể độc lập, tự chủ:</strong> Các chủ thể kinh tế có quyền tự chủ trong quyết định sản xuất, kinh doanh.
-            </div>
-            <div class="p-2 rounded-lg bg-white border border-amber-200">
-              <strong>2. Cơ chế giá cả & cạnh tranh:</strong> Giá cả do cung – cầu quyết định; cạnh tranh thúc đẩy đổi mới công nghệ, năng suất.
-            </div>
-            <div class="p-2 rounded-lg bg-white border border-amber-200">
-              <strong>3. Hệ thống thị trường đồng bộ & mở:</strong> Hàng hóa, dịch vụ, vốn, lao động, KH-CN, bất động sản gắn với hội nhập quốc tế.
-            </div>
-            <div class="p-2 rounded-lg bg-white border border-amber-200">
-              <strong>4. Vai trò điều tiết vĩ mô:</strong> Nhà nước quản lý vĩ mô nhằm khắc phục những khuyết tật tự phát của thị trường.
+        <div class="pres-detail-stack">
+          <div class="pres-subcard bg-amber-50/70 border border-amber-200">
+            <h4 class="text-amber-800 font-bold mb-1.5">a) Những đặc điểm chung với các nền kinh tế thị trường thế giới</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-800">
+              <div class="p-2 rounded-lg bg-white border border-amber-200">
+                <strong>1. Chủ thể độc lập, tự chủ:</strong> Các chủ thể kinh tế có quyền tự chủ trong quyết định sản xuất, kinh doanh.
+              </div>
+              <div class="p-2 rounded-lg bg-white border border-amber-200">
+                <strong>2. Cơ chế giá cả & cạnh tranh:</strong> Giá cả do cung – cầu quyết định; cạnh tranh thúc đẩy đổi mới công nghệ, năng suất.
+              </div>
+              <div class="p-2 rounded-lg bg-white border border-amber-200">
+                <strong>3. Hệ thống thị trường đồng bộ & mở:</strong> Hàng hóa, dịch vụ, vốn, lao động, KH-CN, bất động sản gắn với hội nhập quốc tế.
+              </div>
+              <div class="p-2 rounded-lg bg-white border border-amber-200">
+                <strong>4. Vai trò điều tiết vĩ mô:</strong> Nhà nước quản lý vĩ mô nhằm khắc phục những khuyết tật tự phát của thị trường.
+              </div>
             </div>
           </div>
+          <div class="pres-subcard bg-sky-50/70 border border-sky-200">
+            <h4 class="text-sky-800 font-bold">Đặc điểm mang tính giai đoạn ở Việt Nam:</h4>
+            <p class="text-slate-800 mt-1">
+              Xuất phát từ một nền kinh tế chủ yếu là sản xuất nhỏ, trình độ phát triển còn thấp, một số loại thị trường chưa hình thành đầy đủ, đồng bộ. Đây là đặc điểm mang tính giai đoạn, đặt ra yêu cầu tất yếu phải tiếp tục hoàn thiện thể chế KTTT định hướng XHCN.
+            </p>
+          </div>
         </div>
-        <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-          <h4 class="text-sky-800 font-bold">Đặc điểm mang tính giai đoạn ở Việt Nam:</h4>
-          <p class="text-slate-800 mt-1">
-            Xuất phát từ một nền kinh tế chủ yếu là sản xuất nhỏ, trình độ phát triển còn thấp, một số loại thị trường chưa hình thành đầy đủ, đồng bộ. Đây là đặc điểm mang tính giai đoạn, đặt ra yêu cầu tất yếu phải tiếp tục hoàn thiện thể chế KTTT định hướng XHCN.
-          </p>
-        </div>
-      </div>
-    `,
+      `,
   };
 
   const room2Pillars = [
@@ -1059,7 +1059,7 @@ window.MuseumData = (() => {
     p.lookPos = { x: x, y: 2.2, z: z };
   });
 
-  // Danh sách tuyến tính (Playlist 20 slides) phục vụ Chế độ Thuyết trình từ Phòng 1 -> Phòng 2 -> Phòng 3
+  // Danh sách tuyến tính (Playlist 20 hiện vật) phục vụ điều hướng nhảy nhanh trong Bảo Tàng 3D từ Phòng 1 -> Phòng 2 -> Phòng 3
   const playlist = [
     ...room1Exhibits,
     room2Center,

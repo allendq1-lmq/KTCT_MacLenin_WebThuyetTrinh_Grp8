@@ -114,6 +114,7 @@ window.PresentationApp = (() => {
 
     if (bodyEl) {
       bodyEl.innerHTML = slide.fullHtml || `<p>${slide.desc || ""}</p>`;
+      bodyEl.scrollTop = 0;
     }
 
     if (mainScrollEl) {

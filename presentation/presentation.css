@@ -354,8 +354,24 @@ body {
     min-height: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding-right: 0.25rem;
+  }
+
+  /* Căn giữa an toàn khi nội dung ngắn, tự neo sát mép trên để cuộn đủ khi tràn trên màn hình 1366x768 */
+  #pres-slide-body > * {
+    width: 100%;
+  }
+
+  #pres-slide-body > :first-child {
+    margin-top: auto;
+  }
+
+  #pres-slide-body > :last-child {
+    margin-bottom: auto;
   }
 }
 
@@ -380,14 +396,17 @@ body {
   }
 }
 
-#pres-main-scroll::-webkit-scrollbar {
+#pres-main-scroll::-webkit-scrollbar,
+#pres-slide-body::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-#pres-main-scroll::-webkit-scrollbar-track {
+#pres-main-scroll::-webkit-scrollbar-track,
+#pres-slide-body::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
-#pres-main-scroll::-webkit-scrollbar-thumb {
+#pres-main-scroll::-webkit-scrollbar-thumb,
+#pres-slide-body::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 3px;
 }

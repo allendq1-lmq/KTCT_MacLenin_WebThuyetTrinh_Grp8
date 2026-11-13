@@ -23,10 +23,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Bán Chi Phối Thu Ngân Sách",
         effects: { growth: +25, equity: -15, environment: 0, stability: -25 },
+        quality: "wrong",
       },
       right: {
         label: "Giữ Cổ Phần Chi Phối Nhà Nước",
         effects: { growth: -10, equity: +15, environment: 0, stability: +20 },
+        quality: "correct",
       },
     },
     {
@@ -40,10 +42,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Tôn Trọng Cạnh Tranh Tự Do",
         effects: { growth: +15, equity: -20, environment: -5, stability: -15 },
+        quality: "wrong",
       },
       right: {
         label: "Kích Hoạt Luật Chống Độc Quyền",
         effects: { growth: -15, equity: +20, environment: 0, stability: +15 },
+        quality: "correct",
       },
     },
     {
@@ -57,10 +61,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Chấp Thuận Ưu Đãi Ngoại Lệ",
         effects: { growth: +25, equity: -20, environment: -10, stability: -10 },
+        quality: "wrong",
       },
       right: {
         label: "Giữ Khung Bình Đẳng Thuế",
         effects: { growth: -15, equity: +20, environment: +5, stability: +15 },
+        quality: "correct",
       },
     },
     {
@@ -74,10 +80,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Thu Hồi Đất Chuyển Đổi Dự Án",
         effects: { growth: +20, equity: -25, environment: -20, stability: -20 },
+        quality: "wrong",
       },
       right: {
         label: "Giữ Đất Nông Nghiệp Cho Dân",
         effects: { growth: -10, equity: +20, environment: +15, stability: +10 },
+        quality: "correct",
       },
     },
     {
@@ -91,10 +99,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Dùng Ngân Sách Mua Lại Nợ",
         effects: { growth: +10, equity: -30, environment: 0, stability: +15 },
+        quality: "wrong",
       },
       right: {
         label: "Buộc Siết Nợ & Tự Phá Sản",
         effects: { growth: -20, equity: +20, environment: 0, stability: -15 },
+        quality: "correct",
       },
     },
 
@@ -110,10 +120,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Thả Nổi Giá Theo Thị Trường",
         effects: { growth: -10, equity: -20, environment: +5, stability: -20 },
+        quality: "wrong",
       },
       right: {
         label: "Xả Quỹ Bình Ổn & Giảm Thuế",
         effects: { growth: +10, equity: +15, environment: -5, stability: +15 },
+        quality: "correct",
       },
     },
     {
@@ -127,10 +139,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Phê Duyệt Tăng Giá Điện Ngay",
         effects: { growth: -15, equity: -20, environment: +10, stability: -15 },
+        quality: "wrong",
       },
       right: {
         label: "Cấp Bù Lỗ & Giữ Ổn Định Giá",
         effects: { growth: +10, equity: +15, environment: -5, stability: +10 },
+        quality: "correct",
       },
     },
     {
@@ -144,10 +158,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Thả Tự Do Xuất Khẩu Gạo",
         effects: { growth: +20, equity: -25, environment: -10, stability: -20 },
+        quality: "wrong",
       },
       right: {
         label: "Xả Kho Dự Trữ & Hạn Ngạch Xuất",
         effects: { growth: -10, equity: +25, environment: 0, stability: +20 },
+        quality: "correct",
       },
     },
     {
@@ -161,10 +177,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Nới Room Tín Dụng Địa Ốc",
         effects: { growth: +20, equity: -25, environment: -10, stability: -25 },
+        quality: "wrong",
       },
       right: {
         label: "Siết Tín Dụng & Đánh Thuế Lũy Tiến",
         effects: { growth: -15, equity: +20, environment: +5, stability: +20 },
+        quality: "correct",
       },
     },
     {
@@ -178,10 +196,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Mặc Kệ Thị Trường Tự Thanh Lọc",
         effects: { growth: -30, equity: -20, environment: 0, stability: -30 },
+        quality: "wrong",
       },
       right: {
         label: "Đặt Vào Kiểm Soát Đặc Biệt",
         effects: { growth: -5, equity: +20, environment: 0, stability: +25 },
+        quality: "correct",
       },
     },
 
@@ -197,10 +217,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Để Thị Trường Tự Thỏa Thuận Lương",
         effects: { growth: +25, equity: -20, environment: 0, stability: -5 },
+        quality: "wrong",
       },
       right: {
         label: "Tăng 3%, Xây Nhà Ở Cho Công Nhân",
         effects: { growth: +10, equity: +10, environment: 0, stability: -15 },
+        quality: "correct",
       },
     },
     {
@@ -214,10 +236,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Siết Rút Một Lần, Lập Quỹ Hỗ Trợ Khẩn Cấp",
         effects: { growth: -15, equity: +5, environment: 0, stability: +15 },
+        quality: "correct",
       },
       right: {
         label: "Cho Rút Tự Do, Tự Chịu Trách Nhiệm Hưu Trí",
         effects: { growth: +15, equity: +10, environment: 0, stability: -20 },
+        quality: "wrong",
       },
     },
     {
@@ -231,10 +255,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Bắt Buộc Hợp Đồng Lao Động Cho Tài Xế",
         effects: { growth: -20, equity: +25, environment: 0, stability: -5 },
+        quality: "wrong",
       },
       right: {
         label: "Bảo Hiểm Tự Nguyện Có Hỗ Trợ, Giữ Mô Hình Đối Tác",
         effects: { growth: +15, equity: -10, environment: 0, stability: 0 },
+        quality: "correct",
       },
     },
     {
@@ -248,10 +274,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Chấp Nhận Hết, Công Nhân Chịu Thiệt",
         effects: { growth: +30, equity: -30, environment: 0, stability: -10 },
+        quality: "wrong",
       },
       right: {
         label: "Giữ Bảo Hiểm, Nhà Nước Gánh Ưu Đãi",
         effects: { growth: +5, equity: +5, environment: 0, stability: -20 },
+        quality: "correct",
       },
     },
     {
@@ -265,10 +293,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Giữ Giá Sàn, Nhà Nước Hỗ Trợ Doanh Nghiệp",
         effects: { growth: -15, equity: +10, environment: +5, stability: -5 },
+        quality: "correct",
       },
       right: {
         label: "Cho Ép Giá Thu Mua, Nông Dân Chịu Lỗ",
         effects: { growth: +30, equity: -25, environment: -5, stability: -5 },
+        quality: "wrong",
       },
     },
 
@@ -284,10 +314,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Gia Hạn 5 Năm, Lắp Thiết Bị Lọc Khí",
         effects: { growth: +15, equity: 0, environment: -20, stability: +10 },
+        quality: "wrong",
       },
       right: {
         label: "Đóng Cửa, Đẩy Điện Mái Nhà Và Nhập Điện",
         effects: { growth: -15, equity: +5, environment: +20, stability: -10 },
+        quality: "correct",
       },
     },
     {
@@ -301,10 +333,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Siết Cấp Phép, Dùng Cát Biển Và Vật Liệu Thay Thế",
         effects: { growth: -15, equity: +5, environment: +20, stability: -10 },
+        quality: "correct",
       },
       right: {
         label: "Cấp Thêm Mỏ Cát Sông Cho Cao Tốc",
         effects: { growth: +25, equity: -5, environment: -20, stability: +5 },
+        quality: "wrong",
       },
     },
     {
@@ -318,10 +352,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Cấp Phép Ngay, Chấp Nhận Rủi Ro Nguồn Nước",
         effects: { growth: +30, equity: -10, environment: -30, stability: +5 },
+        quality: "wrong",
       },
       right: {
         label: "Cấp Phép Có Điều Kiện, Nhà Nước Giám Sát",
         effects: { growth: +10, equity: +5, environment: -10, stability: -15 },
+        quality: "correct",
       },
     },
     {
@@ -335,10 +371,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Giữ Công Nghệ Cũ, Dân Chịu Bụi Mịn",
         effects: { growth: +25, equity: -15, environment: -30, stability: +5 },
+        quality: "wrong",
       },
       right: {
         label: "Chuyển Đổi Theo Lộ Trình, Vay Ưu Đãi",
         effects: { growth: -5, equity: -5, environment: +15, stability: -15 },
+        quality: "correct",
       },
     },
     {
@@ -352,10 +390,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Cho Lấn Rừng, Bờ Biển Dễ Sạt Lở",
         effects: { growth: +30, equity: 0, environment: -30, stability: -5 },
+        quality: "wrong",
       },
       right: {
         label: "Xây Có Điều Kiện, Trích Quỹ Trồng Rừng Bù",
         effects: { growth: +5, equity: +5, environment: -5, stability: -10 },
+        quality: "correct",
       },
     },
 
@@ -371,10 +411,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Tự Động Hóa Nhanh",
         effects: { growth: +20, equity: -20, environment: -5, stability: -10 },
+        quality: "wrong",
       },
       right: {
         label: "Đổi Mới Kèm Đào Tạo",
         effects: { growth: +15, equity: +20, environment: +5, stability: +10 },
+        quality: "correct",
       },
     },
     {
@@ -388,10 +430,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Thu Thuế Bình Đẳng",
         effects: { growth: +10, equity: +20, environment: 0, stability: +15 },
+        quality: "correct",
       },
       right: {
         label: "Ưu Đãi Thuế Có Hạn",
         effects: { growth: +20, equity: -15, environment: 0, stability: -10 },
+        quality: "wrong",
       },
     },
     {
@@ -405,10 +449,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Bảo Vệ Dữ Liệu Chặt",
         effects: { growth: +5, equity: +20, environment: 0, stability: +20 },
+        quality: "correct",
       },
       right: {
         label: "Tự Quản Dữ Liệu",
         effects: { growth: +15, equity: -20, environment: 0, stability: -15 },
+        quality: "wrong",
       },
     },
     {
@@ -422,10 +468,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Đầu Tư Công Trọng Điểm",
         effects: { growth: +20, equity: +15, environment: -10, stability: +5 },
+        quality: "correct",
       },
       right: {
         label: "Hợp Tác Tư Nhân Dẫn Dắt",
         effects: { growth: +15, equity: +10, environment: -5, stability: +15 },
+        quality: "correct",
       },
     },
     {
@@ -439,10 +487,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Minh Bạch Có Kiểm Toán",
         effects: { growth: +10, equity: +20, environment: 0, stability: +20 },
+        quality: "correct",
       },
       right: {
         label: "Giữ Kín Thuật Toán",
         effects: { growth: +20, equity: -15, environment: 0, stability: -15 },
+        quality: "wrong",
       },
     },
 
@@ -458,10 +508,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Tuân Thủ Kèm Hỗ Trợ",
         effects: { growth: +10, equity: +15, environment: +20, stability: +10 },
+        quality: "correct",
       },
       right: {
         label: "Xin Giãn Cam Kết",
         effects: { growth: +10, equity: -10, environment: -20, stability: -10 },
+        quality: "wrong",
       },
     },
     {
@@ -475,10 +527,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Phòng Vệ Thương Mại",
         effects: { growth: +5, equity: +15, environment: 0, stability: +10 },
+        quality: "correct",
       },
       right: {
         label: "Giữ Thị Trường Mở",
         effects: { growth: +15, equity: +5, environment: 0, stability: +5 },
+        quality: "wrong",
       },
     },
     {
@@ -492,10 +546,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Tập Trung Thị Trường Lớn",
         effects: { growth: +20, equity: -5, environment: 0, stability: -20 },
+        quality: "wrong",
       },
       right: {
         label: "Đa Dạng Hóa Thị Trường",
         effects: { growth: +10, equity: +10, environment: 0, stability: +20 },
+        quality: "correct",
       },
     },
     {
@@ -509,10 +565,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Giảm Giá Nội Tệ Nhanh",
         effects: { growth: +15, equity: -10, environment: 0, stability: -20 },
+        quality: "wrong",
       },
       right: {
         label: "Điều Chỉnh Tỷ Giá Thận Trọng",
         effects: { growth: +5, equity: +10, environment: 0, stability: +20 },
+        quality: "correct",
       },
     },
     {
@@ -526,10 +584,12 @@ window.ReignsGame = (() => {
       left: {
         label: "Tự Do Vốn Tối Đa",
         effects: { growth: +15, equity: -5, environment: 0, stability: -20 },
+        quality: "wrong",
       },
       right: {
         label: "Tăng Giám Sát Rủi Ro",
         effects: { growth: +10, equity: +10, environment: 0, stability: +20 },
+        quality: "correct",
       },
     },
   ];
@@ -750,18 +810,11 @@ window.ReignsGame = (() => {
       .forEach((d) => d.classList.remove("active"));
   }
 
-  // Đánh giá chất lượng lựa chọn: Chọn Đúng (cân bằng / tổng tác động tích cực) vs. Chọn Sai (mất cân bằng / vùng nguy hiểm < 20 hoặc > 80)
-  function evaluateChoiceQuality(oldStats, newStats, effects) {
+  // Đánh giá chất lượng lựa chọn: ưu tiên độ chính xác lý luận/thực tiễn đã gán trên thẻ bài,
+  // đồng thời tự động chuyển sang "wrong" nếu quyết sách đẩy chỉ số sâu hơn vào vùng nguy hiểm (< 20 hoặc > 80)
+  function evaluateChoiceQuality(_oldStats, newStats, decision) {
     const statKeys = ["growth", "equity", "environment", "stability"];
-    const netEffect = statKeys.reduce((sum, k) => sum + (effects[k] || 0), 0);
-    const oldDeviation = statKeys.reduce(
-      (sum, k) => sum + Math.abs(oldStats[k] - 50),
-      0,
-    );
-    const newDeviation = statKeys.reduce(
-      (sum, k) => sum + Math.abs(newStats[k] - 50),
-      0,
-    );
+    const effects = (decision && decision.effects) || {};
 
     let pushedIntoDanger = false;
     statKeys.forEach((k) => {
@@ -775,9 +828,15 @@ window.ReignsGame = (() => {
     });
 
     if (pushedIntoDanger) return "wrong";
-    if (netEffect < 0 && newDeviation > oldDeviation) return "wrong";
-    if (netEffect <= -10) return "wrong";
-    return "correct";
+    return decision && decision.quality === "wrong" ? "wrong" : "correct";
+  }
+
+  function hideFeedbackBanner() {
+    const banner = document.getElementById("card-feedback-banner");
+    if (banner) {
+      banner.className = "hidden";
+      banner.textContent = "";
+    }
   }
 
   // Hiển thị hiệu ứng thẻ phát sáng xanh lá + nảy nhẹ (Chọn Đúng) hoặc rung lắc + viền đỏ (Chọn Sai)
@@ -866,6 +925,7 @@ window.ReignsGame = (() => {
 
     if (failureKey) {
       isGameOver = true;
+      hideFeedbackBanner();
       document.getElementById("game-play-area").classList.add("hidden");
       document.getElementById("gameover-cause").textContent =
         reasons[failureKey];
@@ -882,6 +942,7 @@ window.ReignsGame = (() => {
 
     if (currentYear >= maxYears) {
       isGameOver = true;
+      hideFeedbackBanner();
       document.getElementById("game-play-area").classList.add("hidden");
       const vicTitle = document.getElementById("victory-title-years");
       if (vicTitle) {
@@ -909,11 +970,7 @@ window.ReignsGame = (() => {
       reignsStats[k] += decision.effects[k] || 0;
     });
 
-    const quality = evaluateChoiceQuality(
-      oldStats,
-      reignsStats,
-      decision.effects,
-    );
+    const quality = evaluateChoiceQuality(oldStats, reignsStats, decision);
 
     updateHUDStats();
 
@@ -934,11 +991,7 @@ window.ReignsGame = (() => {
     reignsStats = { growth: 50, equity: 50, environment: 50, stability: 50 };
     isGameOver = false;
 
-    const banner = document.getElementById("card-feedback-banner");
-    if (banner) {
-      banner.className = "hidden";
-      banner.textContent = "";
-    }
+    hideFeedbackBanner();
     const card = document.getElementById("reigns-card");
     if (card) {
       card.classList.remove("card-correct-glow", "card-wrong-shake");

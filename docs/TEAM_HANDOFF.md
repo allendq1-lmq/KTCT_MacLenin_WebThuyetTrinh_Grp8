@@ -10,7 +10,7 @@
     2. **Bảo Tàng 3D** (`data-tab="idea2"`): Nhúng không gian khám phá tự do 3D `museum/index.html` qua `#museum-frame` với chiều cao toàn vùng nhìn `calc(100vh - 5rem)`.
     3. **Game Thể Chế** (`data-tab="game"`): Mô phỏng hoạch định thể chế vĩ mô qua 10 năm nhiệm kỳ.
     4. **Nhóm Tác Giả** (`data-tab="members"`): Danh sách và bảng phân công nhiệm vụ của 16 thành viên Nhóm 8.
-  - Hỗ trợ nút **Mã QR (`#btn-qr-modal`)** mở hộp thoại toàn màn hình tự động sinh mã QR theo URL thực tế của trang web và cho phép sao chép nhanh đường dẫn để khán giả trong lớp quét truy cập trực tiếp.
+  - Hỗ trợ nút **Mã QR (`#btn-qr-modal`)** mở hộp thoại toàn màn hình tự động sinh mã QR trỏ về URL GitHub Pages công khai của dự án (`QR_TARGET_URL`) và cho phép sao chép nhanh đường dẫn để khán giả trong lớp quét truy cập trực tiếp (kể cả khi máy chiếu đang chạy `localhost` / Live Server).
   - Hỗ trợ nút **Toàn Màn Hình (Fullscreen / phím tắt `F`)** hiển thị trên cả 2 tab **Nội Dung** và **Bảo Tàng 3D**, cùng cầu nối tự động chuyển tiếp phím tắt từ cửa sổ ngoài vào đúng `iframe` đang mở (`ArrowLeft`, `ArrowRight`, `Space` cho tab Nội Dung; `W`, `A`, `S`, `D`, phím mũi tên, `Shift`, `Esc` cho tab Bảo Tàng 3D).
 
 - **Trang Nội Dung Thuyết Trình độc lập (`presentation/`):**

@@ -96,17 +96,22 @@ window.MuseumControls = (() => {
     if (!container) return;
     const list = getPlaylist().filter((item) => item.room === roomNumber);
     container.innerHTML = list
-      .map(
-        (item) => `
+      .map((item) => {
+        const escapedTitle = String(item.title || "")
+          .replace(/&/g, "&amp;")
+          .replace(/"/g, "&quot;");
+        return `
       <button
         type="button"
         data-exhibit-id="${item.id}"
-        class="explore-jump-btn pointer-events-auto px-2.5 py-1.5 text-xs font-bold rounded-lg border border-slate-700 bg-slate-900/90 text-slate-200 hover:border-amber-400 hover:text-amber-300 transition shadow"
+        title="${escapedTitle}"
+        aria-label="Nhảy nhanh tới ${escapedTitle}"
+        class="explore-jump-btn pointer-events-auto min-w-[2.5rem] px-3 py-1.5 text-xs font-bold tracking-wide whitespace-nowrap rounded-full border border-slate-700/85 bg-slate-900/90 text-slate-100 hover:border-amber-400 hover:text-amber-300 hover:bg-slate-800 backdrop-blur-sm transition shadow-sm"
       >
-        ${item.sectionCode}: ${item.title.replace(/^[0-9a-z.]+\s*/i, "").slice(0, 22)}
+        ${item.sectionCode}
       </button>
-    `,
-      )
+    `;
+      })
       .join("");
 
     container.querySelectorAll(".explore-jump-btn").forEach((btn) => {

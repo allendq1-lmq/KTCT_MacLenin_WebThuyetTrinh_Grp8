@@ -286,3 +286,10 @@ svg {
   margin: 0 auto;
 }
 
+/* Ẩn hoàn toàn nút Toàn Màn Hình trên giao diện mobile/màn hình nhỏ (< 768px) */
+@media (max-width: 767px) {
+  #btn-fullscreen-museum {
+    display: none !important;
+  }
+}
+

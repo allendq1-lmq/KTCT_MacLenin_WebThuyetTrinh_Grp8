@@ -158,19 +158,21 @@
             <span>Mã QR</span>
           </button>
 
-          <!-- Nút Toàn màn hình (Fullscreen) phục vụ trình chiếu trên lớp -->
+          <!-- Nút Toàn màn hình (Fullscreen) phục vụ trình chiếu trên lớp (chỉ hiển thị trên desktop >= 768px) -->
           <button
             id="btn-fullscreen-museum"
             type="button"
             title="Toàn màn hình trình chiếu (Phím F)"
-            class="px-2.5 sm:px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 border border-amber-500/40 text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 shrink-0"
+            aria-pressed="false"
+            class="px-2.5 sm:px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 border border-amber-500/40 text-xs sm:text-sm font-bold transition-all hidden md:flex items-center gap-1.5 shrink-0"
           >
             <svg
               id="icon-fullscreen-enter"
-              class="w-4 h-4"
+              class="w-4 h-4 shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -179,7 +181,22 @@
                 d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
               ></path>
             </svg>
-            <span class="hidden md:inline" id="label-fullscreen-btn"
+            <svg
+              id="icon-fullscreen-exit"
+              class="w-4 h-4 shrink-0 hidden"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+              ></path>
+            </svg>
+            <span class="hidden md:inline whitespace-nowrap" id="label-fullscreen-btn"
               >Toàn Màn Hình</span
             >
           </button>

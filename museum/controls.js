@@ -283,13 +283,21 @@ window.MuseumControls = (() => {
   function togglePointerLock(domElement) {
     if (!domElement) return;
     if (document.pointerLockElement === domElement) {
-      if (document.exitPointerLock) document.exitPointerLock();
-    } else {
-      if (domElement.requestPointerLock) {
+      if (document.exitPointerLock) {
         try {
-          domElement.requestPointerLock();
+          const exitRes = document.exitPointerLock();
+          if (exitRes && typeof exitRes.catch === "function") {
+            exitRes.catch(() => {});
+          }
         } catch (_) {}
       }
+    } else if (domElement.requestPointerLock) {
+      try {
+        const lockRes = domElement.requestPointerLock();
+        if (lockRes && typeof lockRes.catch === "function") {
+          lockRes.catch(() => {});
+        }
+      } catch (_) {}
     }
   }
 

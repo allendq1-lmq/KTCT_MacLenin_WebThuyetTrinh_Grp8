@@ -4,6 +4,7 @@
 ---
 
 ### Hướng dẫn tải về máy 
-```
-git clone [https://github.com/allendq1-lmq/KTCT_MacLenin_WebThuyetTrinh_Grp8.git](https://github.com/allendq1-lmq/KTCT_MacLenin_WebThuyetTrinh_Grp8.git)
+```bash
+git clone https://github.com/allendq1-lmq/KTCT_MacLenin_WebThuyetTrinh_Grp8.git
 cd KTCT_MacLenin_WebThuyetTrinh_Grp8
+```

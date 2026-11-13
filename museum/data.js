@@ -1,4 +1,4 @@
-// museum/data.js - Toàn bộ dữ liệu lý luận & thực tiễn KTCT Mác - Lênin từ PHÒNG TRIỂN LÃM 3D
+// museum/data.js - Toàn bộ dữ liệu hiện vật & nội dung trưng bày cho không gian Khám phá Bảo Tàng 3D
 window.MuseumData = (() => {
   const comparisonTableRows = [
     {
@@ -1059,7 +1059,7 @@ window.MuseumData = (() => {
     p.lookPos = { x: x, y: 2.2, z: z };
   });
 
-  // Danh sách tuyến tính (Playlist 20 slides) phục vụ Chế độ Thuyết trình từ Phòng 1 -> Phòng 2 -> Phòng 3
+  // Danh sách tuyến tính (Playlist 20 hiện vật) phục vụ điều hướng nhảy nhanh trong Bảo Tàng 3D từ Phòng 1 -> Phòng 2 -> Phòng 3
   const playlist = [
     ...room1Exhibits,
     room2Center,

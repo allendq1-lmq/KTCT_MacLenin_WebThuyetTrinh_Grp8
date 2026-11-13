@@ -39,7 +39,7 @@ svg {
   box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
 }
 
-/* Tối ưu khung hiển thị 3D toàn vùng nhìn */
+/* Tối ưu khung hiển thị Nội Dung & Bảo Tàng 3D toàn vùng nhìn */
 #main-container.museum-mode-main {
   max-width: 100% !important;
   padding: 0 !important;
@@ -48,17 +48,21 @@ svg {
   overflow: hidden;
 }
 
+#presentation-wrapper,
 #museum-wrapper {
   width: 100%;
   height: calc(100vh - 5rem);
 }
 
+#presentation-wrapper:fullscreen,
+#presentation-wrapper:-webkit-full-screen,
 #museum-wrapper:fullscreen,
 #museum-wrapper:-webkit-full-screen {
   width: 100vw !important;
   height: 100vh !important;
 }
 
+#presentation-frame,
 #museum-frame {
   width: 100%;
   height: 100%;

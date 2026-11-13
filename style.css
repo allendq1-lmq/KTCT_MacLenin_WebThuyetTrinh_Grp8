@@ -269,8 +269,8 @@ svg {
 
 /* Khung Mã QR trình chiếu toàn màn hình: render 600x600px, co giãn vừa khít cả laptop 1366x768 lẫn di động */
 #qr-code-container {
-  width: clamp(220px, 50vmin, 560px);
-  height: clamp(220px, 50vmin, 560px);
+  width: clamp(220px, 46vmin, 540px);
+  height: clamp(220px, 46vmin, 540px);
 }
 
 #qr-code-container img,

@@ -12,58 +12,12 @@
   <body
     class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden select-none m-0 p-0 font-sans"
   >
-    <!-- ================= HEADER KHÁM PHÁ TỰ DO: CHUYỂN CHẾ ĐỘ & CHỌN PHÒNG ================= -->
+    <!-- ================= HEADER KHÁM PHÁ TỰ DO 3D: CHỌN PHÒNG & ĐIỀU KHIỂN CAMERA ================= -->
     <header
       id="museum-top-bar"
       class="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-4 sm:right-4 z-30 flex flex-wrap items-center justify-between gap-2 pointer-events-none"
     >
-      <!-- Cụm Nút Gạt Chế Độ: Thuyết Trình vs. Khám Phá Tự Do -->
-      <div
-        class="pointer-events-auto flex items-center bg-slate-900/95 backdrop-blur-md p-1 rounded-xl border border-slate-700/80 shadow-xl"
-      >
-        <button
-          id="mode-btn-presentation"
-          type="button"
-          class="mode-switch-btn active px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5"
-        >
-          <svg
-            class="w-4 h-4 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
-            ></path>
-          </svg>
-          <span>Chế độ Thuyết trình</span>
-        </button>
-        <button
-          id="mode-btn-explore"
-          type="button"
-          class="mode-switch-btn px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all flex items-center gap-1.5"
-        >
-          <svg
-            class="w-4 h-4 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
-            ></path>
-          </svg>
-          <span>Khám phá tự do</span>
-        </button>
-      </div>
-
-      <!-- Cụm Nút Chọn Phòng 3D, Shift-Lock & Góc Chuẩn -->
+      <!-- Cụm Trái: Chọn Phòng 3D -->
       <div
         class="pointer-events-auto flex items-center space-x-1 sm:space-x-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
       >
@@ -91,6 +45,12 @@
           <span class="sm:hidden">Phòng 3</span>
           <span class="hidden sm:inline">Phòng 3: Giới Hạn &amp; Giải Pháp</span>
         </button>
+      </div>
+
+      <!-- Cụm Phải: Trạng thái Shift-Lock & Góc Chuẩn -->
+      <div
+        class="pointer-events-auto flex items-center space-x-1 sm:space-x-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
+      >
         <button
           id="btn-shiftlock-status"
           type="button"
@@ -138,280 +98,16 @@
       ></div>
     </div>
 
-    <!-- ================= CHẾ ĐỘ THUYẾT TRÌNH TOÀN MÀN HÌNH (NỀN SÁNG CỐ ĐỊNH, 1 MÀN HÌNH KHÔNG CUỘN DỌC) ================= -->
-    <section
-      id="presentation-panel"
-      aria-label="Giao diện Trình chiếu Toàn màn hình"
-      class="fixed inset-0 z-40 flex flex-col overflow-hidden pointer-events-auto"
-    >
-      <!-- 1. THANH CÔNG CỤ TRÊN CÙNG 1 HÀNG DUY NHẤT (TOP BAR ~48PX) -->
-      <div
-        id="pres-top-bar"
-        class="relative w-full bg-white border-b border-slate-300 px-2.5 sm:px-5 shrink-0 shadow-sm flex items-center"
-      >
-        <div
-          class="max-w-[1680px] w-full mx-auto flex items-center justify-between gap-1.5 sm:gap-3 overflow-x-auto no-scrollbar"
-        >
-          <!-- Cụm Trái: Chọn phòng (Phòng 1, Phòng 2, Phòng 3) + Bộ đếm tiến độ (Slide X / 20) -->
-          <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-            <div
-              class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-300 gap-0.5"
-              role="group"
-              aria-label="Chọn phòng trưng bày"
-            >
-              <button
-                type="button"
-                class="room-btn active px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs font-extrabold rounded-md transition whitespace-nowrap"
-                data-room="1"
-              >
-                Phòng 1
-              </button>
-              <button
-                type="button"
-                class="room-btn px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs font-extrabold rounded-md text-slate-700 hover:text-slate-950 transition whitespace-nowrap"
-                data-room="2"
-              >
-                Phòng 2
-              </button>
-              <button
-                type="button"
-                class="room-btn px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs font-extrabold rounded-md text-slate-700 hover:text-slate-950 transition whitespace-nowrap"
-                data-room="3"
-              >
-                Phòng 3
-              </button>
-            </div>
-
-            <span
-              id="slide-counter-badge"
-              class="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 font-mono font-extrabold text-[11px] sm:text-xs whitespace-nowrap"
-            >
-              Slide 1 / 20
-            </span>
-
-            <span
-              id="pres-room-tag"
-              class="hidden xl:inline-block text-xs font-bold text-slate-700 bg-slate-100 border border-slate-300 px-2.5 py-1 rounded-lg whitespace-nowrap"
-            >
-              Phòng 1: Tổng quan KTTT ĐHXHCN
-            </span>
-          </div>
-
-          <!-- Cụm Phải: Menu chọn nhanh 20 Slide & Nút Khám phá tự do (3D) -->
-          <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-            <select
-              id="slide-select-dropdown"
-              aria-label="Chọn nhanh Slide thuyết trình"
-              class="bg-slate-50 text-slate-900 border border-slate-300 hover:border-amber-600 rounded-lg px-2 sm:px-3 py-1 text-[11px] sm:text-xs md:text-sm font-bold max-w-[145px] sm:max-w-[260px] md:max-w-[360px] truncate focus:outline-none focus:border-amber-600 transition cursor-pointer"
-            ></select>
-
-            <button
-              id="btn-pres-to-explore"
-              type="button"
-              class="px-2.5 sm:px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-[11px] sm:text-xs md:text-sm shadow-sm transition flex items-center gap-1.5 whitespace-nowrap"
-            >
-              <svg
-                class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
-                ></path>
-              </svg>
-              <span>Khám phá tự do (3D)</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Thanh tiến độ mảnh sát mép dưới thanh công cụ -->
-        <div
-          class="absolute bottom-0 left-0 right-0 h-[3px] bg-slate-200 overflow-hidden"
-        >
-          <div
-            id="pres-progress-bar"
-            class="bg-amber-600 h-full transition-all duration-300"
-            style="width: 5%"
-          ></div>
-        </div>
-      </div>
-
-      <!-- 2. VÙNG NỘI DUNG CHÍNH Ở GIỮA (SLIDE BODY - BỐ CỤC LƯỚI VỪA KHÍT 100% KHUNG HÌNH PC) -->
-      <div id="pres-main-scroll" class="flex-1 min-h-0 select-text">
-        <div class="pres-slide-stage max-w-[1680px] w-full mx-auto">
-          <!-- Khối tiêu đề Slide gọn rõ, độ tương phản cao -->
-          <div
-            id="pres-title-banner"
-            class="rounded-xl bg-white border border-slate-300 border-l-[6px] border-l-amber-600 shadow-sm shrink-0 flex flex-col md:flex-row md:items-center md:justify-between gap-1.5"
-          >
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-2 mb-0.5">
-                <span
-                  id="pres-slide-badge"
-                  class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 whitespace-nowrap"
-                >
-                  Mục 1.1a
-                </span>
-                <p
-                  id="pres-slide-subtitle"
-                  class="text-xs sm:text-sm md:text-base text-amber-700 font-bold truncate"
-                >
-                  Thành tựu phát triển chung của văn minh nhân loại
-                </p>
-              </div>
-              <h2
-                id="pres-slide-title"
-                class="font-black text-slate-950 leading-tight tracking-tight"
-              >
-                1.1a. Kinh Tế Thị Trường Nói Chung
-              </h2>
-            </div>
-
-            <div
-              class="hidden lg:flex items-center gap-2 shrink-0 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg"
-            >
-              <span>Phím tắt:</span>
-              <kbd
-                class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
-                >←</kbd
-              >
-              <kbd
-                class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
-                >→</kbd
-              >
-              <kbd
-                class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
-                >Space</kbd
-              >
-            </div>
-          </div>
-
-          <!-- Bố cục nội dung Slide: Tóm tắt luận điểm chính + Phân tích chi tiết / Bảng đối chiếu -->
-          <div
-            id="pres-content-grid"
-            class="grid grid-cols-1 lg:grid-cols-12 items-stretch"
-          >
-            <!-- Cột Trái: Các thẻ ý chính tóm tắt nhanh (4 Luận điểm cốt lõi) -->
-            <div
-              id="pres-summary-col"
-              class="lg:col-span-4 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col justify-between"
-            >
-              <div class="flex flex-col min-h-0">
-                <div
-                  class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
-                >
-                  <h3
-                    class="pres-col-heading font-extrabold uppercase tracking-wider text-amber-700 flex items-center gap-1.5"
-                  >
-                    <svg
-                      class="w-4 h-4 shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                      ></path>
-                    </svg>
-                    <span>Trọng Tâm Luận Điểm</span>
-                  </h3>
-                  <span
-                    class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200"
-                    >4 Ý Chính</span
-                  >
-                </div>
-                <div id="pres-key-points" class="pres-key-points-list"></div>
-              </div>
-
-              <div
-                id="pres-summary-desc-box"
-                class="rounded-lg bg-slate-50 border border-slate-300 text-slate-800 mt-2 shrink-0"
-              >
-                <span
-                  class="text-[11px] font-extrabold uppercase tracking-wider text-sky-700 block mb-0.5"
-                  >Khái quát nội dung:</span
-                >
-                <p id="pres-slide-desc" class="text-slate-700"></p>
-              </div>
-            </div>
-
-            <!-- Cột Phải: Nội dung chi tiết, Số liệu thực tiễn & Bảng đối chiếu 6 tiêu chí -->
-            <div
-              id="pres-detail-col"
-              class="lg:col-span-8 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col min-h-0"
-            >
-              <div
-                class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
-              >
-                <h3
-                  class="pres-col-heading font-extrabold uppercase tracking-wider text-sky-700 flex items-center gap-1.5"
-                >
-                  <svg
-                    class="w-4 h-4 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    ></path>
-                  </svg>
-                  <span>Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn</span>
-                </h3>
-                <span
-                  id="pres-sync-indicator"
-                  class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full hidden sm:inline-flex items-center gap-1"
-                >
-                  <svg
-                    class="w-3.5 h-3.5 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2.5"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <span>Đã đồng bộ vị trí 3D</span>
-                </span>
-              </div>
-              <div
-                id="pres-slide-body"
-                class="pres-projector-content text-slate-800 flex-1 min-h-0 flex flex-col justify-center"
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= CHẾ ĐỘ KHÁM PHÁ TỰ DO: NÚT NHẢY NHANH THEO PHÒNG ================= -->
+    <!-- ================= THANH NHẢY NHANH HIỆN VẬT THEO PHÒNG ================= -->
     <div
       id="explore-quick-nav"
-      class="hidden absolute bottom-3 left-20 right-3 sm:left-4 sm:right-4 z-10 flex flex-wrap justify-center gap-1.5 pointer-events-none"
+      class="absolute bottom-3 left-20 right-3 sm:left-4 sm:right-4 z-10 flex flex-wrap justify-center gap-1.5 pointer-events-none"
     ></div>
 
-    <!-- ================= CHẾ ĐỘ KHÁM PHÁ TỰ DO: THẺ HUD GÓC PHẢI / BOTTOM SHEET MOBILE ================= -->
+    <!-- ================= THẺ HUD GÓC PHẢI / BOTTOM SHEET MOBILE ================= -->
     <div
       id="museum-hud"
-      class="hidden absolute top-16 right-4 max-w-sm sm:max-w-md w-full bg-slate-900/90 hover:bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-2xl transition-all duration-300 pointer-events-auto z-20 text-slate-100"
+      class="absolute top-16 right-4 max-w-sm sm:max-w-md w-full bg-slate-900/90 hover:bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-2xl transition-all duration-300 pointer-events-auto z-20 text-slate-100"
     >
       <div
         class="flex items-center justify-between border-b border-slate-700/70 pb-2 mb-2.5"
@@ -469,7 +165,7 @@
       </div>
     </div>
 
-    <!-- ================= MODAL / NGĂN KÉO XEM ĐẦY ĐỦ NỘI DUNG (CHẾ ĐỘ KHÁM PHÁ) ================= -->
+    <!-- ================= MODAL / NGĂN KÉO XEM ĐẦY ĐỦ NỘI DUNG HIỆN VẬT ================= -->
     <div
       id="detail-drawer-modal"
       class="hidden fixed inset-0 z-40 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 pointer-events-auto"
@@ -526,7 +222,7 @@
       </div>
     </div>
 
-    <!-- Bộ scripts thành phần của 3D -->
+    <!-- Bộ scripts thành phần của Bảo tàng 3D -->
     <script src="data.js"></script>
     <script src="avatar.js"></script>
     <script src="room1.js"></script>

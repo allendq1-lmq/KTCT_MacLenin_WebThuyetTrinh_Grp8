@@ -70,6 +70,12 @@ svg {
   border: none;
 }
 
+#museum-wrapper,
+#museum-frame {
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
 /* Thanh cuộn mảnh tối giản */
 ::-webkit-scrollbar {
   width: 6px;

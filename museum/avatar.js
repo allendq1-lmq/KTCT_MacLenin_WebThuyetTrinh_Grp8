@@ -3,7 +3,20 @@ window.MuseumAvatar = (() => {
   let avatarGroup = null;
   let leftArmGroup, rightArmGroup, leftLegGroup, rightLegGroup;
   let walkCycle = 0;
-  const moveSpeed = 0.095; // Tốc độ di chuyển tiêu chuẩn
+  const moveSpeed = 0.095; // Tốc độ di chuyển tiêu chuẩn ở 60FPS (~5.7 đơn vị/giây)
+  const moveSpeedPerSecond = 5.7;
+  const MAX_DELTA_TIME = 0.05; // Kẹp deltaTime tối đa <= 0.05s chống nhảy bước/xuyên tường khi rớt FPS hoặc chuyển tab (C1)
+  const DEFAULT_DELTA_TIME = 1 / 60;
+
+  function clampDeltaTime(deltaTime) {
+    if (typeof deltaTime !== "number" || !Number.isFinite(deltaTime)) {
+      return DEFAULT_DELTA_TIME;
+    }
+    if (deltaTime <= 0) {
+      return 0;
+    }
+    return Math.min(deltaTime, MAX_DELTA_TIME);
+  }
 
   // Giới hạn di chuyển của nhân vật bên trong 4 bức tường từng phòng
   const roomBounds = {
@@ -12,7 +25,20 @@ window.MuseumAvatar = (() => {
     3: { minX: -9.0, maxX: 9.0, minZ: -6.0, maxZ: 6.0 },
   };
 
+  let cachedFrontShirtTex = null;
+  let cachedBackShirtTex = null;
+
+  function configureShirtTexture(tex) {
+    tex.generateMipmaps = true;
+    tex.minFilter = THREE.LinearMipmapLinearFilter || THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.userData = tex.userData || {};
+    tex.userData.isShared = true;
+    return tex;
+  }
+
   function createUITFrontShirtTexture() {
+    if (cachedFrontShirtTex) return cachedFrontShirtTex;
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -55,10 +81,14 @@ window.MuseumAvatar = (() => {
     ctx.textBaseline = "middle";
     ctx.fillText("UIT", 256, 390);
 
-    return new THREE.CanvasTexture(canvas);
+    cachedFrontShirtTex = configureShirtTexture(new THREE.CanvasTexture(canvas));
+    canvas.width = 0;
+    canvas.height = 0;
+    return cachedFrontShirtTex;
   }
 
   function createUITBackShirtTexture() {
+    if (cachedBackShirtTex) return cachedBackShirtTex;
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -89,7 +119,10 @@ window.MuseumAvatar = (() => {
     ctx.fillStyle = "#fbbf24";
     ctx.fillRect(156, 325, 200, 8);
 
-    return new THREE.CanvasTexture(canvas);
+    cachedBackShirtTex = configureShirtTexture(new THREE.CanvasTexture(canvas));
+    canvas.width = 0;
+    canvas.height = 0;
+    return cachedBackShirtTex;
   }
 
   function create() {
@@ -249,9 +282,11 @@ window.MuseumAvatar = (() => {
     return avatar;
   }
 
-  function updateWalking(yaw, keys, currentRoom) {
+  function updateWalking(yaw, keys, currentRoom, deltaTime) {
     if (!avatarGroup) return;
 
+    const dt = clampDeltaTime(deltaTime);
+    const stepDistance = moveSpeedPerSecond * dt;
     const bounds = roomBounds[currentRoom] || roomBounds[1];
 
     // Nhân vật sinh viên UIT LUÔN xoay lưng về phía camera và hướng mặt theo đúng góc nhìn ngang (yaw) của camera
@@ -268,35 +303,35 @@ window.MuseumAvatar = (() => {
     let isMoving = false;
 
     // W: đi thẳng về phía trước mặt camera
-    if (keys.w) {
+    if (keys && keys.w) {
       moveX += forwardX;
       moveZ += forwardZ;
       isMoving = true;
     }
     // S: đi lùi (vẫn giữ hướng mặt về phía trước)
-    if (keys.s) {
+    if (keys && keys.s) {
       moveX -= forwardX;
       moveZ -= forwardZ;
       isMoving = true;
     }
     // A: đi ngang sang trái (strafe left)
-    if (keys.a) {
+    if (keys && keys.a) {
       moveX -= rightX;
       moveZ -= rightZ;
       isMoving = true;
     }
     // D: đi ngang sang phải (strafe right)
-    if (keys.d) {
+    if (keys && keys.d) {
       moveX += rightX;
       moveZ += rightZ;
       isMoving = true;
     }
 
-    if (isMoving) {
+    if (isMoving && stepDistance > 0) {
       const len = Math.hypot(moveX, moveZ);
       if (len > 0.0001) {
-        moveX = (moveX / len) * moveSpeed;
-        moveZ = (moveZ / len) * moveSpeed;
+        moveX = (moveX / len) * stepDistance;
+        moveZ = (moveZ / len) * stepDistance;
       }
 
       let nextX = THREE.MathUtils.clamp(
@@ -342,7 +377,7 @@ window.MuseumAvatar = (() => {
 
       // Hoạt ảnh vung tay chân theo nhịp bước (nếu chỉ đi lùi thì đảo nhịp bước tự nhiên)
       const stepDir = keys.s && !keys.w ? -1 : 1;
-      walkCycle += 0.22 * stepDir;
+      walkCycle += 13.2 * dt * stepDir;
       const legAngle = Math.sin(walkCycle) * 0.45;
       const armAngle = -Math.sin(walkCycle) * 0.4;
 
@@ -367,5 +402,12 @@ window.MuseumAvatar = (() => {
     return roomBounds[roomNumber] || roomBounds[1];
   }
 
-  return { create, updateWalking, getAvatar, getRoomBounds };
+  return {
+    create,
+    updateWalking,
+    getAvatar,
+    getRoomBounds,
+    clampDeltaTime,
+    MAX_DELTA_TIME,
+  };
 })();

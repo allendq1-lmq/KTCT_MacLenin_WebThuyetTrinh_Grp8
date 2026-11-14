@@ -21,6 +21,8 @@ body {
 #webgl-container {
   position: relative;
   touch-action: none;
+  overscroll-behavior: none;
+  -webkit-touch-callout: none;
 }
 
 #webgl-container canvas {
@@ -28,6 +30,8 @@ body {
   width: 100% !important;
   height: 100% !important;
   outline: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
 }
 
 .room-btn.active {

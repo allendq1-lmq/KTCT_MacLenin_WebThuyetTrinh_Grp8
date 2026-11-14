@@ -185,6 +185,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateFullscreenButtonVisibility();
 
+    // Tạm dừng vòng lặp render WebGL của Bảo tàng 3D khi người dùng đang ở tab khác để tiết kiệm GPU/CPU (B4)
+    const museumIframe = document.getElementById("museum-frame");
+    const isMuseumTab = targetTab === "idea2";
+    if (museumIframe && museumIframe.contentWindow) {
+      try {
+        if (
+          museumIframe.contentWindow.MuseumEngine &&
+          typeof museumIframe.contentWindow.MuseumEngine.setPaused ===
+            "function"
+        ) {
+          museumIframe.contentWindow.MuseumEngine.setPaused(!isMuseumTab);
+        }
+      } catch (_) {}
+      try {
+        museumIframe.contentWindow.postMessage(
+          { type: "MUSEUM_SET_ACTIVE", active: isMuseumTab },
+          "*",
+        );
+      } catch (_) {}
+    }
+
     if (targetTab === "content") {
       setTimeout(() => {
         const iframe = document.getElementById("presentation-frame");
@@ -387,6 +408,54 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+
+  // Reset phím di chuyển trong Bảo Tàng 3D khi cửa sổ ngoài mất focus hoặc chuyển tab trình duyệt (C1)
+  function notifyMuseumResetKeys() {
+    const iframe = document.getElementById("museum-frame");
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+      if (
+        iframe.contentWindow.MuseumControls &&
+        typeof iframe.contentWindow.MuseumControls.resetAllKeys === "function"
+      ) {
+        iframe.contentWindow.MuseumControls.resetAllKeys();
+      }
+    } catch (_) {}
+    try {
+      iframe.contentWindow.postMessage({ type: "RESET_KEYS" }, "*");
+    } catch (_) {}
+  }
+
+  window.addEventListener("blur", notifyMuseumResetKeys);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      notifyMuseumResetKeys();
+    }
+  });
+
+  const museumFrameEl = document.getElementById("museum-frame");
+  if (museumFrameEl) {
+    museumFrameEl.addEventListener("load", () => {
+      const isMuseumTab = currentActiveTab === "idea2";
+      if (museumFrameEl.contentWindow) {
+        try {
+          if (
+            museumFrameEl.contentWindow.MuseumEngine &&
+            typeof museumFrameEl.contentWindow.MuseumEngine.setPaused ===
+              "function"
+          ) {
+            museumFrameEl.contentWindow.MuseumEngine.setPaused(!isMuseumTab);
+          }
+        } catch (_) {}
+        try {
+          museumFrameEl.contentWindow.postMessage(
+            { type: "MUSEUM_SET_ACTIVE", active: isMuseumTab },
+            "*",
+          );
+        } catch (_) {}
+      }
+    });
+  }
 
   // Mặc định mở tab Nội Dung (content)
   switchTab("content");

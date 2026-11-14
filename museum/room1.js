@@ -5,6 +5,22 @@ window.MuseumRoom1 = (() => {
     window.MuseumEngine.createBench(-2.5, 1.2);
     window.MuseumEngine.createBench(2.5, 1.2);
 
+    // Hàng cọc chắn dây nhung bảo vệ dọc khu vực trưng bày tranh (A4)
+    if (window.MuseumEngine.createStanchionBarrier) {
+      window.MuseumEngine.createStanchionBarrier(
+        [
+          { x1: -7.95, z1: -3.6, x2: -7.95, z2: 0 },
+          { x1: -7.95, z1: 0, x2: -7.95, z2: 3.6 },
+          { x1: -6.8, z1: -5.95, x2: -2.8, z2: -5.95 },
+          { x1: -2.8, z1: -5.95, x2: 2.8, z2: -5.95 },
+          { x1: 2.8, z1: -5.95, x2: 6.8, z2: -5.95 },
+          { x1: 7.95, z1: -4.2, x2: 7.95, z2: 0.2 },
+          { x1: 7.95, z1: 0.2, x2: 7.95, z2: 4.4 },
+        ],
+        scene,
+      );
+    }
+
     if (window.MuseumData && window.MuseumData.room1) {
       window.MuseumData.room1.exhibits.forEach((ex) => {
         const artTex = window.MuseumEngine.createArtworkTexture(
@@ -40,13 +56,21 @@ window.MuseumRoom1 = (() => {
         frame.rotation.y = ex.rotY;
         scene.add(frame);
 
-        const spot = new THREE.SpotLight(0xfffbeb, 2.2, 9, Math.PI / 4, 0.35);
+        // Ánh sáng rọi tranh dịu mắt, góc tỏa mềm chống lóa trắng (A1)
+        const spot = new THREE.SpotLight(
+          0xfff3d6,
+          1.35,
+          9.5,
+          Math.PI / 3.2,
+          0.68,
+          1.5,
+        );
         if (ex.wall === "back") {
-          spot.position.set(ex.x, 4.1, ex.z + 2.4);
+          spot.position.set(ex.x, 4.15, ex.z + 2.6);
         } else if (ex.wall === "left") {
-          spot.position.set(ex.x + 2.4, 4.1, ex.z);
+          spot.position.set(ex.x + 2.6, 4.15, ex.z);
         } else {
-          spot.position.set(ex.x - 2.4, 4.1, ex.z);
+          spot.position.set(ex.x - 2.6, 4.15, ex.z);
         }
         spot.target = frame;
         scene.add(spot);

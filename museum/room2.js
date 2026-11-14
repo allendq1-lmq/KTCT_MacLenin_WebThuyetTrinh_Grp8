@@ -76,7 +76,32 @@ window.MuseumRoom2 = (() => {
 
     scene.add(centerGroup);
 
-    const centerSpot = new THREE.SpotLight(0xfffbeb, 2.5, 9, Math.PI / 3, 0.3);
+    // Hàng rào cọc chắn bát giác bảo vệ quanh bệ trưng bày trung tâm Phòng 2 (A4)
+    if (window.MuseumEngine.createStanchionBarrier) {
+      const centerRingSegments = [];
+      const sides = 8;
+      const barrierRadius = 1.6;
+      for (let i = 0; i < sides; i++) {
+        const a1 = (i * 2 * Math.PI) / sides;
+        const a2 = ((i + 1) * 2 * Math.PI) / sides;
+        centerRingSegments.push({
+          x1: Math.cos(a1) * barrierRadius,
+          z1: -0.8 + Math.sin(a1) * barrierRadius,
+          x2: Math.cos(a2) * barrierRadius,
+          z2: -0.8 + Math.sin(a2) * barrierRadius,
+        });
+      }
+      window.MuseumEngine.createStanchionBarrier(centerRingSegments, scene);
+    }
+
+    const centerSpot = new THREE.SpotLight(
+      0xfff3d6,
+      1.45,
+      9.5,
+      Math.PI / 3,
+      0.68,
+      1.5,
+    );
     centerSpot.position.set(0, 4.3, 1.8);
     centerSpot.target = centerGroup;
     scene.add(centerSpot);
@@ -153,7 +178,14 @@ window.MuseumRoom2 = (() => {
         pillarGroup.lookAt(0, 0, -0.8);
         scene.add(pillarGroup);
 
-        const spot = new THREE.SpotLight(0xfffbeb, 2.4, 8, Math.PI / 4, 0.3);
+        const spot = new THREE.SpotLight(
+          0xfff3d6,
+          1.38,
+          8.5,
+          Math.PI / 3.2,
+          0.68,
+          1.5,
+        );
         spot.position.set(x * 0.55, 4.3, z * 0.55);
         spot.target = shaft;
         scene.add(spot);

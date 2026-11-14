@@ -173,6 +173,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (window.ReignsGame.stopConfetti) window.ReignsGame.stopConfetti();
     }
 
+    if (targetTab !== "quiz" && window.InteractiveQuiz) {
+      if (window.InteractiveQuiz.stopAllSounds)
+        window.InteractiveQuiz.stopAllSounds();
+      if (window.InteractiveQuiz.stopConfetti)
+        window.InteractiveQuiz.stopConfetti();
+    }
+
     const isFullBleedTab = targetTab === "content" || targetTab === "idea2";
 
     if (mainContainer) {
@@ -204,6 +211,9 @@ document.addEventListener("DOMContentLoaded", () => {
           "*",
         );
       } catch (_) {}
+      if (!isMuseumTab) {
+        notifyMuseumResetKeys();
+      }
     }
 
     if (targetTab === "content") {
@@ -338,6 +348,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (currentActiveTab === "quiz" || currentActiveTab === "game" || currentActiveTab === "members") {
+      return;
+    }
+
     const sectionContent = document.getElementById("section-content");
     if (sectionContent && !sectionContent.classList.contains("hidden")) {
       const k = e.key.toLowerCase();
@@ -457,11 +471,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Cho phép các module con (như Trắc nghiệm) chuyển tab ứng dụng
+  window.switchAppTab = switchTab;
+  window.getCurrentActiveTab = () => currentActiveTab;
+
   // Mặc định mở tab Nội Dung (content)
   switchTab("content");
 
-  // Khởi động module Game Thể Chế
-  if (typeof ReignsGame !== "undefined" && ReignsGame.init) {
-    ReignsGame.init();
+  // Khởi động module Game Thể Chế & Trắc Nghiệm Tương Tác
+  const gameModule = window.ReignsGame || (typeof ReignsGame !== "undefined" ? ReignsGame : null);
+  if (gameModule && gameModule.init) {
+    gameModule.init();
+  }
+  const quizModule = window.InteractiveQuiz || (typeof InteractiveQuiz !== "undefined" ? InteractiveQuiz : null);
+  if (quizModule && quizModule.init) {
+    quizModule.init();
   }
 });

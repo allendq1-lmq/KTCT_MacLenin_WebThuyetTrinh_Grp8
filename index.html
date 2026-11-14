@@ -877,7 +877,7 @@
       <!-- ================= TAB 4: TRẮC NGHIỆM TƯƠNG TÁC (5 CÂU MẪU, KHÔNG BẢNG XẾP HẠNG) ================= -->
       <section
         id="section-quiz"
-        class="tab-content hidden max-w-4xl mx-auto p-4 sm:p-6 md:p-8 space-y-6 relative"
+        class="tab-content hidden max-w-6xl w-full mx-auto relative"
       >
         <!-- Canvas hiệu ứng pháo giấy (Confetti) mini & toàn màn hình khi 5/5 -->
         <canvas
@@ -885,80 +885,70 @@
           class="pointer-events-none fixed inset-0 z-40 hidden w-full h-full"
         ></canvas>
 
-        <!-- Tiêu đề, Điểm trực tiếp & Nút Bật/Tắt Âm thanh -->
+        <!-- Thanh trạng thái gọn 1 khối: Tiêu đề, tiến độ, 5 bước, điểm trực tiếp & Bật/Tắt Âm thanh -->
         <div
-          class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          id="quiz-top-bar"
+          class="bg-white rounded-xl sm:rounded-2xl border border-slate-200 px-3 py-2 sm:px-4 sm:py-2.5 shadow-sm shrink-0 space-y-1.5"
         >
-          <div>
-            <span
-              class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-600 block mb-1"
-              >Ôn Tập Kiến Thức Bảo Tàng 3D • 5 Câu Hỏi Nhanh</span
-            >
-            <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
-              Trắc Nghiệm Tương Tác Kinh Tế Chính Trị
-            </h2>
-            <p class="text-slate-600 text-sm md:text-base mt-1">
-              Chọn đáp án để nhận chấm điểm, giải thích tức thì và mở khóa danh hiệu tổng kết.
-            </p>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-2.5 shrink-0">
-            <span
-              id="quiz-score-badge"
-              class="px-3.5 py-2 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 font-extrabold text-xs sm:text-sm font-mono shadow-sm"
-            >
-              Điểm: 0 / 5
-            </span>
-            <button
-              id="btn-quiz-sound-toggle"
-              type="button"
-              aria-pressed="true"
-              title="Bật / Tắt âm thanh hiệu ứng Trắc nghiệm"
-              class="min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
-            >
+          <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
               <span
-                id="quiz-sound-icon"
-                class="inline-flex items-center justify-center w-4 h-4"
+                class="hidden md:inline-block text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100/90 border border-amber-300 px-2.5 py-1 rounded-lg shrink-0"
+                >Trắc Nghiệm KTCT</span
               >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
-                  ></path>
-                </svg>
+              <span
+                id="quiz-progress-label"
+                class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-800 whitespace-nowrap"
+              >
+                Câu 1 / 5
               </span>
-              <span id="quiz-sound-label">Âm thanh: BẬT</span>
-            </button>
-          </div>
-        </div>
+              <div
+                id="quiz-step-indicators"
+                class="flex items-center gap-1 sm:gap-1.5"
+                aria-label="Tiến độ các câu hỏi"
+              ></div>
+            </div>
 
-        <!-- Thanh tiến độ & chỉ báo 5 câu -->
-        <div
-          class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-3"
-        >
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <span
-              id="quiz-progress-label"
-              class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-700"
-            >
-              Câu 1 / 5
-            </span>
-            <div
-              id="quiz-step-indicators"
-              class="flex items-center gap-1.5"
-              aria-label="Tiến độ các câu hỏi"
-            ></div>
+            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+              <span
+                id="quiz-score-badge"
+                class="px-2.5 sm:px-3 py-1.5 rounded-lg sm:rounded-xl bg-amber-100 border border-amber-300 text-amber-950 font-extrabold text-xs sm:text-sm font-mono shadow-sm whitespace-nowrap"
+              >
+                Điểm: 0 / 5
+              </span>
+              <button
+                id="btn-quiz-sound-toggle"
+                type="button"
+                aria-pressed="true"
+                title="Bật / Tắt âm thanh hiệu ứng Trắc nghiệm"
+                class="min-h-[44px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer shrink-0"
+              >
+                <span
+                  id="quiz-sound-icon"
+                  class="inline-flex items-center justify-center w-4 h-4"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
+                    ></path>
+                  </svg>
+                </span>
+                <span id="quiz-sound-label">Âm thanh: BẬT</span>
+              </button>
+            </div>
           </div>
+
           <div
-            class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200"
+            class="w-full h-1.5 sm:h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200"
           >
             <div
               id="quiz-progress-bar"
@@ -968,61 +958,91 @@
           </div>
         </div>
 
-        <!-- Thẻ câu hỏi chính -->
+        <!-- Thẻ câu hỏi chính: co giãn vừa khít 100dvh, không layout shift -->
         <div
           id="quiz-question-card"
-          class="bg-white rounded-3xl border-2 border-slate-200 p-5 sm:p-7 shadow-md transition-all"
+          class="bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200 p-3 sm:p-4 md:p-5 shadow-md transition-all flex-1 min-h-0 flex flex-col justify-between gap-2 sm:gap-3"
         >
-          <div class="mb-3">
-            <span
-              id="quiz-section-badge"
-              class="inline-block text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-900 text-amber-400"
+          <div class="space-y-1.5 sm:space-y-2 shrink-0">
+            <div class="flex items-center justify-between gap-2">
+              <span
+                id="quiz-section-badge"
+                class="inline-block text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-900 text-amber-400"
+              >
+                Mục 1.1a
+              </span>
+              <span class="text-[11px] sm:text-xs font-semibold text-slate-500">
+                Chọn 1 đáp án đúng nhất
+              </span>
+            </div>
+
+            <h3
+              id="quiz-question-text"
+              class="quiz-question-heading font-bold text-slate-900"
             >
-              Mục 1.1a
-            </span>
+              Đang tải câu hỏi trắc nghiệm...
+            </h3>
           </div>
 
-          <h3
-            id="quiz-question-text"
-            class="text-lg sm:text-xl font-bold text-slate-900 leading-snug mb-5"
-          >
-            Đang tải câu hỏi trắc nghiệm...
-          </h3>
+          <!-- Lưới 4 đáp án: 1 cột trên mobile, 2x2 trên desktop/tablet (>= 768px) -->
+          <div class="flex-1 min-h-0 flex items-center">
+            <div
+              id="quiz-options-list"
+              class="w-full grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2.5 md:gap-3"
+            ></div>
+          </div>
 
-          <div
-            id="quiz-feedback-banner"
-            class="hidden"
-            role="status"
-            aria-live="polite"
-          ></div>
-
-          <!-- Danh sách 4 đáp án -->
-          <div id="quiz-options-list" class="space-y-3"></div>
-
-          <!-- Khung giải thích đáp án (mở ngay sau khi người dùng chọn) -->
-          <div
-            id="quiz-explanation-box"
-            class="hidden mt-6 p-4 sm:p-5 rounded-2xl bg-amber-50/90 border-2 border-amber-200 space-y-4 animate-fade-in"
-          >
-            <div class="space-y-1">
+          <!-- Vùng đặt sẵn cố định cho phản hồi, giải thích chi tiết & nút chuyển câu -->
+          <div class="quiz-feedback-dock shrink-0">
+            <!-- Trạng thái chờ trước khi chọn đáp án (giữ chỗ cố định chống giật nhảy bố cục) -->
+            <div
+              id="quiz-explanation-placeholder"
+              class="quiz-dock-panel rounded-xl sm:rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 p-2.5 sm:p-3.5 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4 text-slate-500"
+            >
+              <div class="space-y-0.5 min-w-0">
+                <span
+                  class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block"
+                >
+                  Khung chấm điểm &amp; giải thích tức thì
+                </span>
+                <p class="quiz-explanation-body text-slate-500">
+                  Chọn một phương án A, B, C hoặc D ở trên để kiểm tra đáp án và mở phần giải thích từ Bảo Tàng 3D.
+                </p>
+              </div>
               <span
-                class="text-xs font-extrabold uppercase tracking-wider text-amber-800 block"
-              >
-                Giải thích kiến thức (Bảo Tàng 3D)
-              </span>
-              <p
-                id="quiz-explanation-text"
-                class="text-sm sm:text-base text-slate-800 leading-relaxed"
-              ></p>
-            </div>
-            <div class="flex justify-end">
-              <button
-                id="btn-quiz-next"
-                type="button"
-                class="min-h-[44px] px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm sm:text-base transition shadow-md cursor-pointer"
+                aria-hidden="true"
+                class="min-h-[44px] px-4 py-2 rounded-xl bg-slate-200/80 text-slate-400 font-extrabold text-xs sm:text-sm inline-flex items-center justify-center shrink-0"
               >
                 Câu tiếp theo →
-              </button>
+              </span>
+            </div>
+
+            <!-- Khung giải thích đáp án (thay thế đúng vị trí placeholder ngay sau khi chọn) -->
+            <div
+              id="quiz-explanation-box"
+              class="quiz-dock-panel hidden rounded-xl sm:rounded-2xl bg-amber-50/90 border-2 border-amber-200 p-2.5 sm:p-3.5 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4 animate-fade-in"
+            >
+              <div class="flex-1 min-w-0 space-y-1">
+                <div
+                  id="quiz-feedback-banner"
+                  class="hidden"
+                  role="status"
+                  aria-live="polite"
+                ></div>
+                <p
+                  id="quiz-explanation-text"
+                  class="quiz-explanation-body text-slate-800"
+                ></p>
+              </div>
+              <div class="flex justify-end shrink-0">
+                <button
+                  id="btn-quiz-next"
+                  type="button"
+                  class="min-h-[44px] w-full md:w-auto px-4 sm:px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm transition shadow-md cursor-pointer whitespace-nowrap"
+                >
+                  Câu tiếp theo →
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1030,24 +1050,24 @@
         <!-- Thẻ tổng kết sau khi hoàn thành cả 5 câu -->
         <div
           id="quiz-summary-card"
-          class="hidden bg-white rounded-3xl border-2 border-amber-300 p-6 sm:p-8 shadow-lg text-center space-y-5 animate-fade-in"
+          class="hidden bg-white rounded-2xl sm:rounded-3xl border-2 border-amber-300 p-4 sm:p-6 shadow-lg text-center flex-1 min-h-0 flex-col justify-between gap-2.5 sm:gap-4 animate-fade-in"
         >
-          <div>
+          <div class="space-y-1 shrink-0">
             <span
               id="quiz-summary-badge"
-              class="inline-block text-xs sm:text-sm font-extrabold uppercase tracking-wider px-3.5 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-300"
+              class="inline-block text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-300"
             >
               Tổng kết bài thi
             </span>
             <div
               id="quiz-summary-score"
-              class="text-4xl sm:text-5xl font-black tracking-tight my-2 text-slate-900"
+              class="text-3xl sm:text-5xl font-black tracking-tight my-1 text-slate-900"
             >
               0 / 5
             </div>
             <h3
               id="quiz-summary-title"
-              class="text-xl sm:text-2xl font-extrabold text-slate-900"
+              class="text-lg sm:text-2xl font-extrabold text-slate-900"
             >
               Hoàn Thành Bài Trắc Nghiệm
             </h3>
@@ -1055,28 +1075,28 @@
 
           <p
             id="quiz-summary-message"
-            class="max-w-2xl mx-auto text-sm sm:text-base text-slate-700 leading-relaxed bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5"
+            class="max-w-3xl mx-auto text-xs sm:text-sm md:text-base text-slate-700 leading-relaxed bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl p-3 sm:p-4"
           ></p>
 
           <div
             id="quiz-summary-breakdown"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-left"
+            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 sm:gap-2.5 text-left"
           ></div>
 
           <div
-            class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3"
+            class="pt-1 grid grid-cols-2 sm:flex sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3 shrink-0"
           >
             <button
               id="btn-quiz-restart"
               type="button"
-              class="min-h-[48px] px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm sm:text-base transition shadow-md cursor-pointer"
+              class="min-h-[44px] px-3 sm:px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs sm:text-base transition shadow-md cursor-pointer"
             >
               Làm lại từ đầu
             </button>
             <button
               id="btn-quiz-back-museum"
               type="button"
-              class="min-h-[48px] px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm sm:text-base transition shadow-sm cursor-pointer"
+              class="min-h-[44px] px-3 sm:px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-base transition shadow-sm cursor-pointer"
             >
               Quay lại Bảo Tàng 3D
             </button>

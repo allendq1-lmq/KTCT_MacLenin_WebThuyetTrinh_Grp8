@@ -378,7 +378,7 @@ window.InteractiveQuiz = (() => {
       const dot = document.createElement("span");
       const ans = answers[idx];
       let cls =
-        "inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border transition-all ";
+        "inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[11px] font-bold border transition-all ";
 
       if (ans) {
         cls += ans.isCorrect
@@ -399,6 +399,9 @@ window.InteractiveQuiz = (() => {
   function applyAnsweredVisuals(question, answer) {
     const optionsList = document.getElementById("quiz-options-list");
     const feedbackBanner = document.getElementById("quiz-feedback-banner");
+    const explanationPlaceholder = document.getElementById(
+      "quiz-explanation-placeholder",
+    );
     const explanationBox = document.getElementById("quiz-explanation-box");
     const explanationText = document.getElementById("quiz-explanation-text");
     const nextBtn = document.getElementById("btn-quiz-next");
@@ -424,19 +427,22 @@ window.InteractiveQuiz = (() => {
       feedbackBanner.classList.remove("hidden");
       if (answer.isCorrect) {
         feedbackBanner.className =
-          "mb-4 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold border bg-emerald-50 text-emerald-800 border-emerald-300 flex items-center gap-2";
+          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-extrabold border bg-emerald-100/90 text-emerald-900 border-emerald-300";
         feedbackBanner.textContent =
           "Chính xác! +1 điểm — Lý luận quá chuẩn xác!";
       } else {
         feedbackBanner.className =
-          "mb-4 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold border bg-rose-50 text-rose-800 border-rose-300 flex items-center gap-2";
+          "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-extrabold border bg-rose-100/90 text-rose-900 border-rose-300";
         feedbackBanner.textContent =
-          "Úi chà, chưa chính xác rồi! Xem đáp án đúng và giải thích ngay bên dưới nhé.";
+          "Chưa chính xác! Xem đáp án đúng và giải thích nhé.";
       }
     }
 
     if (explanationText) {
       explanationText.textContent = question.explanation || "";
+    }
+    if (explanationPlaceholder) {
+      explanationPlaceholder.classList.add("hidden");
     }
     if (explanationBox) {
       explanationBox.classList.remove("hidden");
@@ -472,6 +478,9 @@ window.InteractiveQuiz = (() => {
     const sectionBadge = document.getElementById("quiz-section-badge");
     const questionText = document.getElementById("quiz-question-text");
     const feedbackBanner = document.getElementById("quiz-feedback-banner");
+    const explanationPlaceholder = document.getElementById(
+      "quiz-explanation-placeholder",
+    );
     const explanationBox = document.getElementById("quiz-explanation-box");
     const optionsList = document.getElementById("quiz-options-list");
 
@@ -495,6 +504,9 @@ window.InteractiveQuiz = (() => {
       feedbackBanner.className = "hidden";
       feedbackBanner.textContent = "";
     }
+    if (explanationPlaceholder && !existingAnswer) {
+      explanationPlaceholder.classList.remove("hidden");
+    }
     if (explanationBox && !existingAnswer) {
       explanationBox.classList.add("hidden");
     }
@@ -505,16 +517,16 @@ window.InteractiveQuiz = (() => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className =
-          "quiz-option-btn w-full text-left p-3.5 sm:p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/70 transition-all flex items-start gap-3 text-sm sm:text-base font-medium text-slate-800 cursor-pointer";
+          "quiz-option-btn w-full h-full text-left rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/70 transition-all flex items-start gap-2 sm:gap-2.5 font-medium text-slate-800 cursor-pointer";
         btn.setAttribute("data-option-index", String(idx));
 
         const letterSpan = document.createElement("span");
         letterSpan.className =
-          "quiz-option-letter w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-100 border border-slate-300 text-slate-800 font-extrabold text-xs sm:text-sm flex items-center justify-center shrink-0 mt-0.5";
+          "quiz-option-letter w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-slate-100 border border-slate-300 text-slate-800 font-extrabold text-[11px] sm:text-xs flex items-center justify-center shrink-0 mt-0.5";
         letterSpan.textContent = OPTION_LETTERS[idx] || String(idx + 1);
 
         const textSpan = document.createElement("span");
-        textSpan.className = "flex-1 leading-relaxed";
+        textSpan.className = "quiz-option-text flex-1";
         textSpan.textContent = optText;
 
         btn.appendChild(letterSpan);

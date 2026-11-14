@@ -51,6 +51,74 @@ window.MuseumEngine = (() => {
     3: { x: 0, z: 4.4, yaw: 0, pitch: 0.04 },
   };
 
+  let isManualPaused = false;
+  let lastFrameTime = 0;
+
+  // Bộ nhớ đệm dùng chung Geometry / Material / Texture để giảm cấp phát VRAM & Draw Calls (B2, B3)
+  const sharedResources = {
+    geometries: new Map(),
+    materials: new Map(),
+    textures: new Map(),
+  };
+
+  function getSharedGeometry(key, factory) {
+    if (!sharedResources.geometries.has(key)) {
+      const geo = factory();
+      geo.userData = geo.userData || {};
+      geo.userData.isShared = true;
+      sharedResources.geometries.set(key, geo);
+    }
+    return sharedResources.geometries.get(key);
+  }
+
+  function getSharedMaterial(key, factory) {
+    if (!sharedResources.materials.has(key)) {
+      const mat = factory();
+      mat.userData = mat.userData || {};
+      mat.userData.isShared = true;
+      sharedResources.materials.set(key, mat);
+    }
+    return sharedResources.materials.get(key);
+  }
+
+  function isMobileDevice() {
+    return (
+      window.innerWidth < 768 ||
+      Boolean(
+        window.matchMedia && window.matchMedia("(pointer: coarse)").matches,
+      ) ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        (window.navigator && window.navigator.userAgent) || "",
+      )
+    );
+  }
+
+  // Giới hạn PixelRatio tối đa 1.5 trên Desktop và 1.25 trên Mobile (B1)
+  function getOptimalPixelRatio() {
+    const dpr = window.devicePixelRatio || 1;
+    const maxDpr = isMobileDevice() ? 1.25 : 1.5;
+    return Math.min(dpr, maxDpr);
+  }
+
+  function configureCanvasTexture(tex, maxAnisotropy = 4) {
+    tex.generateMipmaps = true;
+    if (THREE.LinearMipmapLinearFilter) {
+      tex.minFilter = THREE.LinearMipmapLinearFilter;
+    }
+    if (THREE.LinearFilter) {
+      tex.magFilter = THREE.LinearFilter;
+    }
+    const maxSupported =
+      renderer &&
+      renderer.capabilities &&
+      typeof renderer.capabilities.getMaxAnisotropy === "function"
+        ? renderer.capabilities.getMaxAnisotropy()
+        : maxAnisotropy;
+    tex.anisotropy = Math.min(maxAnisotropy, maxSupported || maxAnisotropy);
+    tex.needsUpdate = true;
+    return tex;
+  }
+
   function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 2) {
     const words = String(text || "").split(" ");
     let line = "";
@@ -81,35 +149,43 @@ window.MuseumEngine = (() => {
   }
 
   function createParquetTexture() {
+    if (sharedResources.textures.has("parquet")) {
+      return sharedResources.textures.get("parquet");
+    }
     const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 1024;
+    canvas.width = 512;
+    canvas.height = 512;
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "#5c4033";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const plankW = 128;
-    const plankH = 32;
+    const plankW = 64;
+    const plankH = 16;
     const colors = ["#5e412f", "#513728", "#684936", "#4a3123", "#614331"];
     for (let y = 0; y < canvas.height; y += plankH) {
       const rowOffset = ((y / plankH) % 2) * (plankW / 2);
       for (let x = -plankW; x < canvas.width; x += plankW) {
         const px = x + rowOffset;
         ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-        ctx.fillRect(px, y, plankW - 2, plankH - 2);
+        ctx.fillRect(px, y, plankW - 1, plankH - 1);
         ctx.fillStyle = "rgba(0,0,0,0.18)";
-        ctx.fillRect(px, y + plankH - 2, plankW, 2);
-        ctx.fillRect(px + plankW - 2, y, 2, plankH);
+        ctx.fillRect(px, y + plankH - 1, plankW, 1);
+        ctx.fillRect(px + plankW - 1, y, 1, plankH);
       }
     }
-    const tex = new THREE.CanvasTexture(canvas);
+    const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.RepeatWrapping;
     tex.repeat.set(6, 6);
+    tex.userData = { isShared: true };
+    sharedResources.textures.set("parquet", tex);
     return tex;
   }
 
   function createWallTexture() {
+    if (sharedResources.textures.has("wall")) {
+      return sharedResources.textures.get("wall");
+    }
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -134,10 +210,12 @@ window.MuseumEngine = (() => {
         2,
       );
     }
-    const tex = new THREE.CanvasTexture(canvas);
+    const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.RepeatWrapping;
     tex.repeat.set(4, 1);
+    tex.userData = { isShared: true };
+    sharedResources.textures.set("wall", tex);
     return tex;
   }
 
@@ -148,79 +226,79 @@ window.MuseumEngine = (() => {
     tagColor,
     descLines,
   ) {
+    // Tối ưu độ phân giải <= 1024px (1024x700) tiết kiệm 75% VRAM nhưng giữ độ nét cao (B2)
     const canvas = document.createElement("canvas");
-    canvas.width = 2048;
-    canvas.height = 1400;
+    canvas.width = 1024;
+    canvas.height = 700;
     const ctx = canvas.getContext("2d");
 
-    const bgGrad = ctx.createLinearGradient(0, 0, 2048, 1400);
+    const bgGrad = ctx.createLinearGradient(0, 0, 1024, 700);
     bgGrad.addColorStop(0, "#111827");
     bgGrad.addColorStop(1, "#090d16");
     ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, 2048, 1400);
+    ctx.fillRect(0, 0, 1024, 700);
 
     // Lớp bo passepartout chống lóa tạo chiều sâu cho tranh
     ctx.fillStyle = "rgba(255, 255, 255, 0.025)";
-    ctx.fillRect(44, 44, 1960, 1312);
+    ctx.fillRect(22, 22, 980, 656);
     ctx.strokeStyle = "rgba(245, 158, 11, 0.28)";
-    ctx.lineWidth = 4;
-    ctx.strokeRect(56, 56, 1936, 1288);
+    ctx.lineWidth = 2;
+    ctx.strokeRect(28, 28, 968, 644);
 
     ctx.fillStyle = tagColor || "#d97706";
-    ctx.fillRect(96, 92, 22, 210);
+    ctx.fillRect(48, 46, 11, 105);
 
     ctx.fillStyle = tagColor || "#f59e0b";
-    ctx.font = "bold 42px 'Segoe UI', Tahoma, sans-serif";
+    ctx.font = "bold 21px 'Segoe UI', Tahoma, sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText((badgeText || "CHỦ ĐỀ LÝ LUẬN").toUpperCase(), 145, 138);
+    ctx.fillText((badgeText || "CHỦ ĐỀ LÝ LUẬN").toUpperCase(), 72, 69);
 
     ctx.fillStyle = "#f8fafc";
-    ctx.font = "bold 66px 'Segoe UI', Tahoma, sans-serif";
-    wrapCanvasText(ctx, title, 145, 218, 1780, 76, 1);
+    ctx.font = "bold 33px 'Segoe UI', Tahoma, sans-serif";
+    wrapCanvasText(ctx, title, 72, 109, 890, 38, 1);
 
     ctx.fillStyle = "#cbd5e1";
-    ctx.font = "italic 40px 'Segoe UI', Tahoma, sans-serif";
-    wrapCanvasText(ctx, subtitle, 145, 295, 1780, 52, 1);
+    ctx.font = "italic 20px 'Segoe UI', Tahoma, sans-serif";
+    wrapCanvasText(ctx, subtitle, 72, 148, 890, 26, 1);
 
     ctx.strokeStyle = tagColor || "rgba(217, 119, 6, 0.65)";
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(145, 345);
-    ctx.lineTo(1920, 345);
+    ctx.moveTo(72, 173);
+    ctx.lineTo(960, 173);
     ctx.stroke();
 
     ctx.fillStyle = "#f1f5f9";
-    ctx.font = "500 48px 'Segoe UI', Tahoma, sans-serif";
-    let curY = 445;
+    ctx.font = "500 24px 'Segoe UI', Tahoma, sans-serif";
+    let curY = 222;
 
     if (Array.isArray(descLines)) {
       descLines.slice(0, 4).forEach((line) => {
-        curY = wrapCanvasText(ctx, line, 145, curY, 1760, 66, 2);
-        curY += 26;
+        curY = wrapCanvasText(ctx, line, 72, curY, 880, 33, 2);
+        curY += 13;
       });
     }
 
     ctx.fillStyle = "rgba(251, 191, 36, 0.95)";
-    ctx.font = "bold 34px 'Segoe UI', Tahoma, sans-serif";
+    ctx.font = "bold 17px 'Segoe UI', Tahoma, sans-serif";
     ctx.fillText(
       "NHẤP VÀO TRANH ĐỂ MỞ BẢNG THÔNG TIN HIỆN VẬT",
-      145,
-      1305,
+      72,
+      652,
     );
 
     ctx.strokeStyle = "rgba(255,255,255,0.14)";
-    ctx.lineWidth = 10;
-    ctx.strokeRect(22, 22, 2004, 1356);
+    ctx.lineWidth = 5;
+    ctx.strokeRect(11, 11, 1002, 678);
 
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.anisotropy = 4;
-    return tex;
+    return configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
   }
 
   function createPlacardTexture(title, subtitle) {
+    // Tối ưu độ phân giải <= 1024px (512x180) cho bảng chú thích 3D (B2)
     const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 360;
+    canvas.width = 512;
+    canvas.height = 180;
     const ctx = canvas.getContext("2d");
 
     // Nền bảng chú thích tối dịu (dark gallery plaque) chống cháy sáng, tương phản chữ cao
@@ -231,176 +309,189 @@ window.MuseumEngine = (() => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.strokeStyle = "#d97706";
-    ctx.lineWidth = 8;
-    ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+    ctx.lineWidth = 4;
+    ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
 
     ctx.strokeStyle = "rgba(251, 191, 36, 0.35)";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
 
     ctx.fillStyle = "#f8fafc";
-    ctx.font = "bold 42px 'Segoe UI', Tahoma, sans-serif";
+    ctx.font = "bold 21px 'Segoe UI', Tahoma, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText(String(title).slice(0, 44), canvas.width / 2, 122);
+    ctx.fillText(String(title).slice(0, 44), canvas.width / 2, 61);
 
     ctx.fillStyle = "#cbd5e1";
-    ctx.font = "32px 'Segoe UI', Tahoma, sans-serif";
-    ctx.fillText(String(subtitle).slice(0, 56), canvas.width / 2, 205);
+    ctx.font = "16px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillText(String(subtitle).slice(0, 56), canvas.width / 2, 102);
 
     ctx.fillStyle = "#fbbf24";
-    ctx.font = "bold 28px 'Segoe UI', Tahoma, sans-serif";
-    ctx.fillText("◆ NHẤP ĐỂ MỞ BẢNG THÔNG TIN ◆", canvas.width / 2, 294);
+    ctx.font = "bold 14px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillText("◆ NHẤP ĐỂ MỞ BẢNG THÔNG TIN ◆", canvas.width / 2, 147);
 
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.anisotropy = 4;
-    return tex;
+    return configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
   }
 
   function createComparisonBoardTexture(title, rows) {
+    // Tối ưu độ phân giải <= 1024px (1024x640) cho bảng đối chiếu 6 tiêu chí (B2)
     const canvas = document.createElement("canvas");
-    canvas.width = 2400;
-    canvas.height = 1500;
+    canvas.width = 1024;
+    canvas.height = 640;
     const ctx = canvas.getContext("2d");
 
     ctx.fillStyle = "#0f172a";
-    ctx.fillRect(0, 0, 2400, 1500);
+    ctx.fillRect(0, 0, 1024, 640);
 
-    const grad = ctx.createLinearGradient(0, 0, 2400, 0);
+    const grad = ctx.createLinearGradient(0, 0, 1024, 0);
     grad.addColorStop(0, "#7c2d12");
     grad.addColorStop(0.5, "#b45309");
     grad.addColorStop(1, "#065f46");
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 2400, 140);
+    ctx.fillRect(0, 0, 1024, 60);
 
     ctx.fillStyle = "#f8fafc";
-    ctx.font = "bold 54px 'Segoe UI', Tahoma, sans-serif";
+    ctx.font = "bold 23px 'Segoe UI', Tahoma, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText(title.toUpperCase(), 1200, 92);
+    ctx.fillText(title.toUpperCase(), 512, 39);
 
-    const startX = 60;
-    const startY = 175;
-    const colWidths = [480, 880, 920];
-    const rowHeight = 195;
+    const startX = 26;
+    const startY = 74;
+    const colWidths = [205, 375, 392];
+    const rowHeight = 83;
 
     ctx.fillStyle = "#1e293b";
-    ctx.fillRect(startX, startY, 2280, 88);
-    ctx.font = "bold 40px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillRect(startX, startY, 972, 38);
+    ctx.font = "bold 17px 'Segoe UI', Tahoma, sans-serif";
     ctx.textAlign = "left";
 
     ctx.fillStyle = "#fbbf24";
-    ctx.fillText("TIÊU CHÍ SO SÁNH", startX + 24, startY + 58);
+    ctx.fillText("TIÊU CHÍ SO SÁNH", startX + 10, startY + 25);
     ctx.fillStyle = "#fda4af";
     ctx.fillText(
       "KTTT TƯ BẢN CHỦ NGHĨA",
-      startX + colWidths[0] + 24,
-      startY + 58,
+      startX + colWidths[0] + 10,
+      startY + 25,
     );
     ctx.fillStyle = "#6ee7b7";
     ctx.fillText(
       "KTTT ĐỊNH HƯỚNG XHCN VIỆT NAM",
-      startX + colWidths[0] + colWidths[1] + 24,
-      startY + 58,
+      startX + colWidths[0] + colWidths[1] + 10,
+      startY + 25,
     );
 
     rows.forEach((r, idx) => {
-      const y = startY + 102 + idx * rowHeight;
+      const y = startY + 44 + idx * rowHeight;
       ctx.fillStyle =
         idx % 2 === 0 ? "rgba(30, 41, 59, 0.82)" : "rgba(15, 23, 42, 0.94)";
-      ctx.fillRect(startX, y, 2280, rowHeight - 12);
+      ctx.fillRect(startX, y, 972, rowHeight - 5);
 
       ctx.fillStyle = "#fbbf24";
-      ctx.font = "bold 36px 'Segoe UI', Tahoma, sans-serif";
+      ctx.font = "bold 15px 'Segoe UI', Tahoma, sans-serif";
       wrapCanvasText(
         ctx,
         r.criteria,
-        startX + 24,
-        y + 65,
-        colWidths[0] - 40,
-        46,
+        startX + 10,
+        y + 28,
+        colWidths[0] - 18,
+        20,
         2,
       );
 
       ctx.fillStyle = "#fecdd3";
-      ctx.font = "34px 'Segoe UI', Tahoma, sans-serif";
+      ctx.font = "14px 'Segoe UI', Tahoma, sans-serif";
       wrapCanvasText(
         ctx,
         r.capitalist,
-        startX + colWidths[0] + 24,
-        y + 62,
-        colWidths[1] - 44,
-        46,
+        startX + colWidths[0] + 10,
+        y + 26,
+        colWidths[1] - 18,
+        19,
         3,
       );
 
       ctx.fillStyle = "#d1fae5";
-      ctx.font = "bold 34px 'Segoe UI', Tahoma, sans-serif";
+      ctx.font = "bold 14px 'Segoe UI', Tahoma, sans-serif";
       wrapCanvasText(
         ctx,
         r.socialist,
-        startX + colWidths[0] + colWidths[1] + 24,
-        y + 62,
-        colWidths[2] - 44,
-        46,
+        startX + colWidths[0] + colWidths[1] + 10,
+        y + 26,
+        colWidths[2] - 18,
+        19,
         3,
       );
     });
 
     ctx.strokeStyle = "rgba(245, 158, 11, 0.5)";
-    ctx.lineWidth = 10;
-    ctx.strokeRect(16, 16, 2368, 1468);
+    ctx.lineWidth = 4;
+    ctx.strokeRect(7, 7, 1010, 626);
 
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.anisotropy = 4;
-    return tex;
+    return configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
   }
 
   function createGalleryFrame(width, height, artTexture, placardTexture, data) {
     const group = new THREE.Group();
 
-    // Khung viền ngoài có chiều sâu kiến trúc
-    const outerFrameGeo = new THREE.BoxGeometry(
-      width + 0.2,
-      height + 0.2,
-      0.085,
+    // Dùng chung Geometry & Material cho các khung tranh cùng kích thước (B3)
+    const outerFrameGeo = getSharedGeometry(
+      `frame-outer-${width}-${height}`,
+      () => new THREE.BoxGeometry(width + 0.2, height + 0.2, 0.085),
     );
-    const outerFrameMat = new THREE.MeshStandardMaterial({
-      color: 0x1c2026,
-      roughness: 0.48,
-      metalness: 0.55,
-    });
+    const outerFrameMat = getSharedMaterial(
+      "frame-outer-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x1c2026,
+          roughness: 0.48,
+          metalness: 0.55,
+        }),
+    );
     const outerFrame = new THREE.Mesh(outerFrameGeo, outerFrameMat);
     outerFrame.castShadow = true;
     outerFrame.receiveShadow = true;
     group.add(outerFrame);
 
     // Viền chỉ vàng đồng bên trong (inner bevel liner) tạo chiều sâu cho khung tranh
-    const innerBevelGeo = new THREE.BoxGeometry(
-      width + 0.06,
-      height + 0.06,
-      0.092,
+    const innerBevelGeo = getSharedGeometry(
+      `frame-bevel-${width}-${height}`,
+      () => new THREE.BoxGeometry(width + 0.06, height + 0.06, 0.092),
     );
-    const innerBevelMat = new THREE.MeshStandardMaterial({
-      color: 0xb45309,
-      roughness: 0.55,
-      metalness: 0.35,
-    });
+    const innerBevelMat = getSharedMaterial(
+      "frame-bevel-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0xb45309,
+          roughness: 0.55,
+          metalness: 0.35,
+        }),
+    );
     const innerBevel = new THREE.Mesh(innerBevelGeo, innerBevelMat);
     innerBevel.position.z = 0.002;
     group.add(innerBevel);
 
     // Lớp nền passepartout tối nhám chống phản xạ
-    const matBoardGeo = new THREE.PlaneGeometry(width + 0.02, height + 0.02);
-    const matBoardMat = new THREE.MeshStandardMaterial({
-      color: 0x0b0f19,
-      roughness: 0.96,
-      metalness: 0.0,
-    });
+    const matBoardGeo = getSharedGeometry(
+      `frame-matboard-${width}-${height}`,
+      () => new THREE.PlaneGeometry(width + 0.02, height + 0.02),
+    );
+    const matBoardMat = getSharedMaterial(
+      "frame-matboard-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x0b0f19,
+          roughness: 0.96,
+          metalness: 0.0,
+        }),
+    );
     const matBoard = new THREE.Mesh(matBoardGeo, matBoardMat);
     matBoard.position.z = 0.049;
     group.add(matBoard);
 
     // Bề mặt tranh phủ lớp nhám chống lóa (matte anti-glare coating: roughness cao, metalness = 0)
-    const canvasGeo = new THREE.PlaneGeometry(width, height);
+    const canvasGeo = getSharedGeometry(
+      `frame-canvas-${width}-${height}`,
+      () => new THREE.PlaneGeometry(width, height),
+    );
     const canvasMat = new THREE.MeshStandardMaterial({
       map: artTexture,
       roughness: 0.92,
@@ -412,12 +503,19 @@ window.MuseumEngine = (() => {
 
     // Đế bảng chú thích 3D nổi có độ dày và góc nghiêng nhẹ chống chói
     const placardY = -(height / 2 + 0.29);
-    const placardBaseGeo = new THREE.BoxGeometry(0.94, 0.34, 0.036);
-    const placardBaseMat = new THREE.MeshStandardMaterial({
-      color: 0x27272a,
-      roughness: 0.55,
-      metalness: 0.4,
-    });
+    const placardBaseGeo = getSharedGeometry(
+      "placard-base-geo",
+      () => new THREE.BoxGeometry(0.94, 0.34, 0.036),
+    );
+    const placardBaseMat = getSharedMaterial(
+      "placard-base-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x27272a,
+          roughness: 0.55,
+          metalness: 0.4,
+        }),
+    );
     const placardBase = new THREE.Mesh(placardBaseGeo, placardBaseMat);
     placardBase.position.set(0, placardY, 0.038);
     placardBase.rotation.x = -0.06;
@@ -425,7 +523,10 @@ window.MuseumEngine = (() => {
     group.add(placardBase);
 
     // Mặt bảng chú thích 3D nhám hoàn toàn, chữ sắc nét tương phản cao
-    const placardGeo = new THREE.PlaneGeometry(0.88, 0.29);
+    const placardGeo = getSharedGeometry(
+      "placard-plane-geo",
+      () => new THREE.PlaneGeometry(0.88, 0.29),
+    );
     const placardMat = new THREE.MeshStandardMaterial({
       map: placardTexture,
       roughness: 0.94,
@@ -453,34 +554,55 @@ window.MuseumEngine = (() => {
     const bench = new THREE.Group();
     bench.position.set(x, 0, z);
 
-    const seatGeo = new THREE.BoxGeometry(2.4, 0.1, 0.85);
-    const seatMat = new THREE.MeshStandardMaterial({
-      color: 0x27272a,
-      roughness: 0.65,
-      metalness: 0.1,
-    });
+    const seatGeo = getSharedGeometry(
+      "bench-seat-geo",
+      () => new THREE.BoxGeometry(2.4, 0.1, 0.85),
+    );
+    const seatMat = getSharedMaterial(
+      "bench-seat-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x27272a,
+          roughness: 0.65,
+          metalness: 0.1,
+        }),
+    );
     const seat = new THREE.Mesh(seatGeo, seatMat);
     seat.position.y = 0.46;
     seat.castShadow = true;
     seat.receiveShadow = true;
     bench.add(seat);
 
-    const cushionGeo = new THREE.BoxGeometry(2.28, 0.05, 0.76);
-    const cushionMat = new THREE.MeshStandardMaterial({
-      color: 0x451a03,
-      roughness: 0.8,
-      metalness: 0.05,
-    });
+    const cushionGeo = getSharedGeometry(
+      "bench-cushion-geo",
+      () => new THREE.BoxGeometry(2.28, 0.05, 0.76),
+    );
+    const cushionMat = getSharedMaterial(
+      "bench-cushion-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x451a03,
+          roughness: 0.8,
+          metalness: 0.05,
+        }),
+    );
     const cushion = new THREE.Mesh(cushionGeo, cushionMat);
     cushion.position.y = 0.525;
     bench.add(cushion);
 
-    const legGeo = new THREE.BoxGeometry(0.09, 0.42, 0.75);
-    const legMat = new THREE.MeshStandardMaterial({
-      color: 0x71717a,
-      metalness: 0.75,
-      roughness: 0.35,
-    });
+    const legGeo = getSharedGeometry(
+      "bench-leg-geo",
+      () => new THREE.BoxGeometry(0.09, 0.42, 0.75),
+    );
+    const legMat = getSharedMaterial(
+      "bench-leg-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x71717a,
+          metalness: 0.75,
+          roughness: 0.35,
+        }),
+    );
 
     const leg1 = new THREE.Mesh(legGeo, legMat);
     leg1.position.set(-0.95, 0.21, 0);
@@ -495,7 +617,7 @@ window.MuseumEngine = (() => {
     scene.add(bench);
   }
 
-  // Hệ thống đèn rọi ray trần (Ceiling Track Lighting System - A4)
+  // Hệ thống đèn rọi ray trần dùng InstancedMesh giảm Draw Calls (A4, B3)
   function createCeilingLights(width, depth, height, targetGroup) {
     const parent = targetGroup || scene;
     if (!parent) return null;
@@ -503,44 +625,55 @@ window.MuseumEngine = (() => {
     const lightsGroup = new THREE.Group();
     lightsGroup.name = "ceiling-lights-system";
 
-    const railMat = new THREE.MeshStandardMaterial({
-      color: 0x18181b,
-      roughness: 0.5,
-      metalness: 0.7,
-    });
-    const fixtureMat = new THREE.MeshStandardMaterial({
-      color: 0x27272a,
-      roughness: 0.4,
-      metalness: 0.75,
-    });
-    const bulbMat = new THREE.MeshBasicMaterial({
-      color: 0xfff3d1,
-    });
+    const railMat = getSharedMaterial(
+      "ceiling-rail-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x18181b,
+          roughness: 0.5,
+          metalness: 0.7,
+        }),
+    );
+    const fixtureMat = getSharedMaterial(
+      "ceiling-fixture-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x27272a,
+          roughness: 0.4,
+          metalness: 0.75,
+        }),
+    );
+    const bulbMat = getSharedMaterial(
+      "ceiling-bulb-mat",
+      () =>
+        new THREE.MeshBasicMaterial({
+          color: 0xfff3d1,
+        }),
+    );
 
     const trackOffsetX = Math.max(2.6, width * 0.32);
     const trackLenZ = Math.max(4.0, depth - 3.2);
     const trackLenX = Math.max(4.0, width - 5.2);
     const railY = height - 0.05;
 
-    // 3 thanh ray đèn trần (Trái, Phải, Sau)
-    const leftRail = new THREE.Mesh(
-      new THREE.BoxGeometry(0.07, 0.04, trackLenZ),
-      railMat,
+    const sideRailGeo = getSharedGeometry(
+      `rail-z-${trackLenZ.toFixed(2)}`,
+      () => new THREE.BoxGeometry(0.07, 0.04, trackLenZ),
     );
+    const backRailGeo = getSharedGeometry(
+      `rail-x-${trackLenX.toFixed(2)}`,
+      () => new THREE.BoxGeometry(trackLenX, 0.04, 0.07),
+    );
+
+    const leftRail = new THREE.Mesh(sideRailGeo, railMat);
     leftRail.position.set(-trackOffsetX, railY, 0);
     lightsGroup.add(leftRail);
 
-    const rightRail = new THREE.Mesh(
-      new THREE.BoxGeometry(0.07, 0.04, trackLenZ),
-      railMat,
-    );
+    const rightRail = new THREE.Mesh(sideRailGeo, railMat);
     rightRail.position.set(trackOffsetX, railY, 0);
     lightsGroup.add(rightRail);
 
-    const backRail = new THREE.Mesh(
-      new THREE.BoxGeometry(trackLenX, 0.04, 0.07),
-      railMat,
-    );
+    const backRail = new THREE.Mesh(backRailGeo, railMat);
     backRail.position.set(0, railY, -depth / 2 + 2.2);
     lightsGroup.add(backRail);
 
@@ -556,24 +689,46 @@ window.MuseumEngine = (() => {
       { x: trackLenX * 0.32, z: -depth / 2 + 2.2 },
     ];
 
-    const housingGeo = new THREE.CylinderGeometry(0.08, 0.11, 0.18, 12);
-    const lensGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.02, 12);
+    const housingGeo = getSharedGeometry(
+      "ceiling-housing-geo",
+      () => new THREE.CylinderGeometry(0.08, 0.11, 0.18, 12),
+    );
+    const lensGeo = getSharedGeometry(
+      "ceiling-lens-geo",
+      () => new THREE.CylinderGeometry(0.09, 0.09, 0.02, 12),
+    );
 
-    fixturePositions.forEach((pos) => {
-      const housing = new THREE.Mesh(housingGeo, fixtureMat);
-      housing.position.set(pos.x, height - 0.14, pos.z);
-      lightsGroup.add(housing);
+    const count = fixturePositions.length;
+    const housingInstanced = new THREE.InstancedMesh(
+      housingGeo,
+      fixtureMat,
+      count,
+    );
+    const lensInstanced = new THREE.InstancedMesh(lensGeo, bulbMat, count);
+    const dummy = new THREE.Object3D();
 
-      const lens = new THREE.Mesh(lensGeo, bulbMat);
-      lens.position.set(pos.x, height - 0.23, pos.z);
-      lightsGroup.add(lens);
+    fixturePositions.forEach((pos, idx) => {
+      dummy.position.set(pos.x, height - 0.14, pos.z);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      housingInstanced.setMatrixAt(idx, dummy.matrix);
+
+      dummy.position.set(pos.x, height - 0.23, pos.z);
+      dummy.updateMatrix();
+      lensInstanced.setMatrixAt(idx, dummy.matrix);
     });
+
+    housingInstanced.instanceMatrix.needsUpdate = true;
+    lensInstanced.instanceMatrix.needsUpdate = true;
+    lightsGroup.add(housingInstanced);
+    lightsGroup.add(lensInstanced);
 
     parent.add(lightsGroup);
     return lightsGroup;
   }
 
-  // Hệ thống cọc chắn & dây nhung bảo vệ hiện vật (Stanchion & Velvet Rope Barrier - A4)
+  // Hệ thống cọc chắn & dây nhung bảo vệ hiện vật dùng InstancedMesh (A4, B3)
   function createStanchionBarrier(segments, targetGroup) {
     const parent = targetGroup || scene;
     if (!parent || !Array.isArray(segments) || segments.length === 0) return null;
@@ -581,63 +736,142 @@ window.MuseumEngine = (() => {
     const barrierGroup = new THREE.Group();
     barrierGroup.name = "stanchion-barrier-group";
 
-    const postMat = new THREE.MeshStandardMaterial({
-      color: 0xd97706,
-      roughness: 0.32,
-      metalness: 0.78,
-    });
-    const baseMat = new THREE.MeshStandardMaterial({
-      color: 0x1f242d,
-      roughness: 0.45,
-      metalness: 0.65,
-    });
-    const ropeMat = new THREE.MeshStandardMaterial({
-      color: 0x881337,
-      roughness: 0.85,
-      metalness: 0.05,
-    });
+    const postMat = getSharedMaterial(
+      "stanchion-post-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0xd97706,
+          roughness: 0.32,
+          metalness: 0.78,
+        }),
+    );
+    const baseMat = getSharedMaterial(
+      "stanchion-base-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x1f242d,
+          roughness: 0.45,
+          metalness: 0.65,
+        }),
+    );
+    const ropeMat = getSharedMaterial(
+      "stanchion-rope-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x881337,
+          roughness: 0.85,
+          metalness: 0.05,
+        }),
+    );
 
-    const baseGeo = new THREE.CylinderGeometry(0.15, 0.17, 0.04, 16);
-    const poleGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.82, 12);
-    const ballGeo = new THREE.SphereGeometry(0.048, 12, 12);
+    const baseGeo = getSharedGeometry(
+      "stanchion-base-geo",
+      () => new THREE.CylinderGeometry(0.15, 0.17, 0.04, 16),
+    );
+    const poleGeo = getSharedGeometry(
+      "stanchion-pole-geo",
+      () => new THREE.CylinderGeometry(0.028, 0.028, 0.82, 12),
+    );
+    const ballGeo = getSharedGeometry(
+      "stanchion-ball-geo",
+      () => new THREE.SphereGeometry(0.048, 12, 12),
+    );
+    const unitRopeGeo = getSharedGeometry(
+      "stanchion-unit-rope-geo",
+      () => new THREE.CylinderGeometry(0.018, 0.018, 1.0, 10),
+    );
 
     const placedPosts = new Map();
-    const addPostIfMissing = (x, z) => {
+    const validRopes = [];
+
+    const registerPost = (x, z) => {
       const key = `${x.toFixed(2)},${z.toFixed(2)}`;
-      if (placedPosts.has(key)) return;
-      placedPosts.set(key, { x, z });
-
-      const base = new THREE.Mesh(baseGeo, baseMat);
-      base.position.set(x, 0.02, z);
-      barrierGroup.add(base);
-
-      const pole = new THREE.Mesh(poleGeo, postMat);
-      pole.position.set(x, 0.43, z);
-      pole.castShadow = true;
-      barrierGroup.add(pole);
-
-      const finial = new THREE.Mesh(ballGeo, postMat);
-      finial.position.set(x, 0.86, z);
-      barrierGroup.add(finial);
+      if (!placedPosts.has(key)) {
+        placedPosts.set(key, { x, z });
+      }
     };
 
     segments.forEach((seg) => {
       if (!seg) return;
-      addPostIfMissing(seg.x1, seg.z1);
-      addPostIfMissing(seg.x2, seg.z2);
+      registerPost(seg.x1, seg.z1);
+      registerPost(seg.x2, seg.z2);
 
       const dx = seg.x2 - seg.x1;
       const dz = seg.z2 - seg.z1;
       const len = Math.hypot(dx, dz);
       if (len > 0.05) {
-        const ropeGeo = new THREE.CylinderGeometry(0.018, 0.018, len, 10);
-        const rope = new THREE.Mesh(ropeGeo, ropeMat);
-        rope.position.set((seg.x1 + seg.x2) / 2, 0.72, (seg.z1 + seg.z2) / 2);
-        rope.rotation.z = Math.PI / 2;
-        rope.rotation.y = -Math.atan2(dz, dx);
-        barrierGroup.add(rope);
+        validRopes.push({
+          mx: (seg.x1 + seg.x2) / 2,
+          mz: (seg.z1 + seg.z2) / 2,
+          len,
+          rotY: -Math.atan2(dz, dx),
+        });
       }
     });
+
+    const posts = Array.from(placedPosts.values());
+    const dummy = new THREE.Object3D();
+
+    if (posts.length > 0) {
+      const baseInstanced = new THREE.InstancedMesh(
+        baseGeo,
+        baseMat,
+        posts.length,
+      );
+      const poleInstanced = new THREE.InstancedMesh(
+        poleGeo,
+        postMat,
+        posts.length,
+      );
+      const finialInstanced = new THREE.InstancedMesh(
+        ballGeo,
+        postMat,
+        posts.length,
+      );
+      poleInstanced.castShadow = true;
+
+      posts.forEach((pt, idx) => {
+        dummy.rotation.set(0, 0, 0);
+        dummy.scale.set(1, 1, 1);
+
+        dummy.position.set(pt.x, 0.02, pt.z);
+        dummy.updateMatrix();
+        baseInstanced.setMatrixAt(idx, dummy.matrix);
+
+        dummy.position.set(pt.x, 0.43, pt.z);
+        dummy.updateMatrix();
+        poleInstanced.setMatrixAt(idx, dummy.matrix);
+
+        dummy.position.set(pt.x, 0.86, pt.z);
+        dummy.updateMatrix();
+        finialInstanced.setMatrixAt(idx, dummy.matrix);
+      });
+
+      baseInstanced.instanceMatrix.needsUpdate = true;
+      poleInstanced.instanceMatrix.needsUpdate = true;
+      finialInstanced.instanceMatrix.needsUpdate = true;
+
+      barrierGroup.add(baseInstanced);
+      barrierGroup.add(poleInstanced);
+      barrierGroup.add(finialInstanced);
+    }
+
+    if (validRopes.length > 0) {
+      const ropeInstanced = new THREE.InstancedMesh(
+        unitRopeGeo,
+        ropeMat,
+        validRopes.length,
+      );
+      validRopes.forEach((r, idx) => {
+        dummy.position.set(r.mx, 0.72, r.mz);
+        dummy.rotation.set(0, r.rotY, Math.PI / 2);
+        dummy.scale.set(1, r.len, 1);
+        dummy.updateMatrix();
+        ropeInstanced.setMatrixAt(idx, dummy.matrix);
+      });
+      ropeInstanced.instanceMatrix.needsUpdate = true;
+      barrierGroup.add(ropeInstanced);
+    }
 
     parent.add(barrierGroup);
     return barrierGroup;
@@ -647,112 +881,135 @@ window.MuseumEngine = (() => {
     const room = new THREE.Group();
 
     const parquetTex = createParquetTexture();
-    const floorGeo = new THREE.PlaneGeometry(width, depth);
-    const floorMat = new THREE.MeshStandardMaterial({
-      map: parquetTex,
-      roughness: 0.65,
-      metalness: 0.05,
-    });
+    const floorGeo = getSharedGeometry(
+      `floor-${width}-${depth}`,
+      () => new THREE.PlaneGeometry(width, depth),
+    );
+    const floorMat = getSharedMaterial(
+      "room-floor-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          map: parquetTex,
+          roughness: 0.65,
+          metalness: 0.05,
+        }),
+    );
     const floor = new THREE.Mesh(floorGeo, floorMat);
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
     room.add(floor);
 
-    const ceilingGeo = new THREE.PlaneGeometry(width, depth);
-    const ceilingMat = new THREE.MeshStandardMaterial({
-      color: 0x141821,
-      roughness: 0.95,
-      metalness: 0.02,
-    });
+    const ceilingGeo = getSharedGeometry(
+      `ceiling-${width}-${depth}`,
+      () => new THREE.PlaneGeometry(width, depth),
+    );
+    const ceilingMat = getSharedMaterial(
+      "room-ceiling-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x141821,
+          roughness: 0.95,
+          metalness: 0.02,
+        }),
+    );
     const ceiling = new THREE.Mesh(ceilingGeo, ceilingMat);
     ceiling.position.y = height;
     ceiling.rotation.x = Math.PI / 2;
     room.add(ceiling);
 
     const wallTex = createWallTexture();
-    const wallMat = new THREE.MeshStandardMaterial({
-      map: wallTex,
-      roughness: 0.92,
-      metalness: 0.0,
-    });
+    const wallMat = getSharedMaterial(
+      "room-wall-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          map: wallTex,
+          roughness: 0.92,
+          metalness: 0.0,
+        }),
+    );
+
+    const fbWallGeo = getSharedGeometry(
+      `wall-fb-${width}-${height}`,
+      () => new THREE.PlaneGeometry(width, height),
+    );
+    const lrWallGeo = getSharedGeometry(
+      `wall-lr-${depth}-${height}`,
+      () => new THREE.PlaneGeometry(depth, height),
+    );
 
     // Tường sau (-Z)
-    const backWall = new THREE.Mesh(
-      new THREE.PlaneGeometry(width, height),
-      wallMat,
-    );
+    const backWall = new THREE.Mesh(fbWallGeo, wallMat);
     backWall.position.set(0, height / 2, -depth / 2);
     backWall.receiveShadow = true;
     room.add(backWall);
 
     // Tường trước (+Z) khép kín 4 bức tường bảo tàng
-    const frontWall = new THREE.Mesh(
-      new THREE.PlaneGeometry(width, height),
-      wallMat,
-    );
+    const frontWall = new THREE.Mesh(fbWallGeo, wallMat);
     frontWall.position.set(0, height / 2, depth / 2);
     frontWall.rotation.y = Math.PI;
     frontWall.receiveShadow = true;
     room.add(frontWall);
 
     // Tường trái (-X)
-    const leftWall = new THREE.Mesh(
-      new THREE.PlaneGeometry(depth, height),
-      wallMat,
-    );
+    const leftWall = new THREE.Mesh(lrWallGeo, wallMat);
     leftWall.position.set(-width / 2, height / 2, 0);
     leftWall.rotation.y = Math.PI / 2;
     leftWall.receiveShadow = true;
     room.add(leftWall);
 
     // Tường phải (+X)
-    const rightWall = new THREE.Mesh(
-      new THREE.PlaneGeometry(depth, height),
-      wallMat,
-    );
+    const rightWall = new THREE.Mesh(lrWallGeo, wallMat);
     rightWall.position.set(width / 2, height / 2, 0);
     rightWall.rotation.y = -Math.PI / 2;
     rightWall.receiveShadow = true;
     room.add(rightWall);
 
     // Hệ phào chỉ chân tường (Baseboard), phào lưng tường (Dado rail) và phào trần (Crown molding)
-    const trimMat = new THREE.MeshStandardMaterial({
-      color: 0x262933,
-      roughness: 0.55,
-      metalness: 0.15,
-    });
-    const accentTrimMat = new THREE.MeshStandardMaterial({
-      color: 0x78350f,
-      roughness: 0.6,
-      metalness: 0.25,
-    });
+    const trimMat = getSharedMaterial(
+      "room-trim-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x262933,
+          roughness: 0.55,
+          metalness: 0.15,
+        }),
+    );
+    const accentTrimMat = getSharedMaterial(
+      "room-accent-trim-mat",
+      () =>
+        new THREE.MeshStandardMaterial({
+          color: 0x78350f,
+          roughness: 0.6,
+          metalness: 0.25,
+        }),
+    );
 
     const addWallMoldings = (len, x, z, rotY) => {
       const wallMoldingGroup = new THREE.Group();
       wallMoldingGroup.position.set(x, 0, z);
       wallMoldingGroup.rotation.y = rotY;
 
-      // Phào chỉ chân tường (Baseboard)
-      const baseBoard = new THREE.Mesh(
-        new THREE.BoxGeometry(len, 0.18, 0.05),
-        trimMat,
+      const baseBoardGeo = getSharedGeometry(
+        `molding-base-${len}`,
+        () => new THREE.BoxGeometry(len, 0.18, 0.05),
       );
+      const baseBoard = new THREE.Mesh(baseBoardGeo, trimMat);
       baseBoard.position.set(0, 0.09, 0.025);
       wallMoldingGroup.add(baseBoard);
 
-      // Nẹp chỉ lưng tường (Dado / Wainscoting rail)
-      const dadoRail = new THREE.Mesh(
-        new THREE.BoxGeometry(len, 0.045, 0.035),
-        accentTrimMat,
+      const dadoRailGeo = getSharedGeometry(
+        `molding-dado-${len}`,
+        () => new THREE.BoxGeometry(len, 0.045, 0.035),
       );
+      const dadoRail = new THREE.Mesh(dadoRailGeo, accentTrimMat);
       dadoRail.position.set(0, 0.96, 0.018);
       wallMoldingGroup.add(dadoRail);
 
-      // Phào chỉ trần (Crown molding)
-      const crownMolding = new THREE.Mesh(
-        new THREE.BoxGeometry(len, 0.14, 0.06),
-        trimMat,
+      const crownGeo = getSharedGeometry(
+        `molding-crown-${len}`,
+        () => new THREE.BoxGeometry(len, 0.14, 0.06),
       );
+      const crownMolding = new THREE.Mesh(crownGeo, trimMat);
       crownMolding.position.set(0, height - 0.07, 0.03);
       wallMoldingGroup.add(crownMolding);
 
@@ -771,9 +1028,10 @@ window.MuseumEngine = (() => {
     return room;
   }
 
-  // Giải phóng đầy đủ texture và material để tránh rò rỉ bộ nhớ GPU/WebGL khi chuyển phòng
-  function disposeMaterial(mat) {
+  // Giải phóng đầy đủ texture và material (bỏ qua tài nguyên dùng chung khi chỉ chuyển phòng)
+  function disposeMaterial(mat, forceShared = false) {
     if (!mat) return;
+    if (!forceShared && mat.userData && mat.userData.isShared) return;
     const textureSlots = [
       "map",
       "lightMap",
@@ -788,8 +1046,13 @@ window.MuseumEngine = (() => {
       "envMap",
     ];
     textureSlots.forEach((slot) => {
-      if (mat[slot] && typeof mat[slot].dispose === "function") {
-        mat[slot].dispose();
+      const tex = mat[slot];
+      if (
+        tex &&
+        typeof tex.dispose === "function" &&
+        (forceShared || !tex.userData || !tex.userData.isShared)
+      ) {
+        tex.dispose();
       }
     });
     if (typeof mat.dispose === "function") {
@@ -797,25 +1060,59 @@ window.MuseumEngine = (() => {
     }
   }
 
-  function clearScene() {
+  function clearScene(forceShared = false) {
     interactableObjects.length = 0;
+    if (!scene) return;
     while (scene.children.length > 0) {
       const obj = scene.children[0];
       scene.remove(obj);
       if (typeof obj.traverse === "function") {
         obj.traverse((child) => {
-          if (child.geometry && typeof child.geometry.dispose === "function") {
+          if (
+            child.geometry &&
+            typeof child.geometry.dispose === "function" &&
+            (forceShared ||
+              !child.geometry.userData ||
+              !child.geometry.userData.isShared)
+          ) {
             child.geometry.dispose();
           }
           if (child.material) {
             if (Array.isArray(child.material)) {
-              child.material.forEach(disposeMaterial);
+              child.material.forEach((m) => disposeMaterial(m, forceShared));
             } else {
-              disposeMaterial(child.material);
+              disposeMaterial(child.material, forceShared);
             }
+          }
+          if (child.isInstancedMesh && typeof child.dispose === "function") {
+            child.dispose();
           }
         });
       }
+    }
+  }
+
+  // Giải phóng toàn bộ bộ nhớ WebGL (bao gồm cả bộ nhớ đệm dùng chung và WebGLRenderer) khi thoát (B2)
+  function dispose() {
+    pauseRenderLoop();
+    clearScene(true);
+    sharedResources.geometries.forEach((geo) => {
+      if (geo && typeof geo.dispose === "function") geo.dispose();
+    });
+    sharedResources.geometries.clear();
+
+    sharedResources.materials.forEach((mat) => {
+      disposeMaterial(mat, true);
+    });
+    sharedResources.materials.clear();
+
+    sharedResources.textures.forEach((tex) => {
+      if (tex && typeof tex.dispose === "function") tex.dispose();
+    });
+    sharedResources.textures.clear();
+
+    if (renderer && typeof renderer.dispose === "function") {
+      renderer.dispose();
     }
   }
 
@@ -1030,14 +1327,69 @@ window.MuseumEngine = (() => {
 
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    renderer.setPixelRatio(getOptimalPixelRatio());
     renderer.setSize(width, height);
   }
 
-  function animate() {
+  function shouldPauseRender() {
+    return Boolean((document && document.hidden) || isManualPaused);
+  }
+
+  function pauseRenderLoop() {
+    if (animId !== null) {
+      cancelAnimationFrame(animId);
+      animId = null;
+    }
+    keys.w = false;
+    keys.a = false;
+    keys.s = false;
+    keys.d = false;
+  }
+
+  function resumeRenderLoop() {
+    if (shouldPauseRender() || !renderer || !scene || !camera) return;
+    if (animId === null) {
+      lastFrameTime =
+        typeof performance !== "undefined" && performance.now
+          ? performance.now()
+          : Date.now();
+      animId = requestAnimationFrame(animate);
+    }
+  }
+
+  function setPaused(paused) {
+    isManualPaused = Boolean(paused);
+    if (shouldPauseRender()) {
+      pauseRenderLoop();
+    } else {
+      resumeRenderLoop();
+    }
+  }
+
+  function isPaused() {
+    return shouldPauseRender() || animId === null;
+  }
+
+  function animate(now) {
+    if (shouldPauseRender()) {
+      animId = null;
+      return;
+    }
+
     animId = requestAnimationFrame(animate);
 
+    const currentTime =
+      typeof now === "number"
+        ? now
+        : typeof performance !== "undefined" && performance.now
+          ? performance.now()
+          : Date.now();
+    const rawDt =
+      lastFrameTime > 0 ? (currentTime - lastFrameTime) / 1000 : 1 / 60;
+    lastFrameTime = currentTime;
+
     if (window.MuseumAvatar && window.MuseumAvatar.updateWalking) {
-      window.MuseumAvatar.updateWalking(camYaw, keys, currentRoom);
+      window.MuseumAvatar.updateWalking(camYaw, keys, currentRoom, rawDt);
     }
 
     updateShiftLockCamera();
@@ -1076,8 +1428,8 @@ window.MuseumEngine = (() => {
       antialias: true,
       powerPreference: "high-performance",
     });
+    renderer.setPixelRatio(getOptimalPixelRatio());
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2.0));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -1094,13 +1446,35 @@ window.MuseumEngine = (() => {
 
     window.addEventListener("resize", onWindowResize);
 
+    // Tự động tạm dừng / tiếp tục vòng lặp render khi ẩn/hiện tab hoặc chuyển chế độ (B4)
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        pauseRenderLoop();
+      } else {
+        resumeRenderLoop();
+      }
+    });
+
+    window.addEventListener("message", (e) => {
+      if (!e || !e.data) return;
+      if (e.data.type === "MUSEUM_SET_ACTIVE") {
+        setPaused(!e.data.active);
+        if (e.data.active) {
+          onWindowResize();
+        }
+      }
+    });
+
     loadRoom(1);
 
     if (window.MuseumControls && window.MuseumControls.init) {
       window.MuseumControls.init(camera, renderer.domElement, keys);
     }
 
-    animate();
+    // Vẽ frame đầu tiên ngay khi khởi tạo, sau đó chạy vòng lặp nếu tab đang hiển thị
+    updateShiftLockCamera();
+    renderer.render(scene, camera);
+    resumeRenderLoop();
   }
 
   return {
@@ -1115,6 +1489,12 @@ window.MuseumEngine = (() => {
     getCameraAngles,
     cancelTransition,
     onWindowResize,
+    setPaused,
+    isPaused,
+    dispose,
+    getOptimalPixelRatio,
+    getSharedGeometry,
+    getSharedMaterial,
     getScene: () => scene,
     getRenderer: () => renderer,
     interactableObjects,

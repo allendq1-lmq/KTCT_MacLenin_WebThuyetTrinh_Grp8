@@ -12,7 +12,20 @@ window.MuseumAvatar = (() => {
     3: { minX: -9.0, maxX: 9.0, minZ: -6.0, maxZ: 6.0 },
   };
 
+  let cachedFrontShirtTex = null;
+  let cachedBackShirtTex = null;
+
+  function configureShirtTexture(tex) {
+    tex.generateMipmaps = true;
+    tex.minFilter = THREE.LinearMipmapLinearFilter || THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.userData = tex.userData || {};
+    tex.userData.isShared = true;
+    return tex;
+  }
+
   function createUITFrontShirtTexture() {
+    if (cachedFrontShirtTex) return cachedFrontShirtTex;
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -55,10 +68,14 @@ window.MuseumAvatar = (() => {
     ctx.textBaseline = "middle";
     ctx.fillText("UIT", 256, 390);
 
-    return new THREE.CanvasTexture(canvas);
+    cachedFrontShirtTex = configureShirtTexture(new THREE.CanvasTexture(canvas));
+    canvas.width = 0;
+    canvas.height = 0;
+    return cachedFrontShirtTex;
   }
 
   function createUITBackShirtTexture() {
+    if (cachedBackShirtTex) return cachedBackShirtTex;
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -89,7 +106,10 @@ window.MuseumAvatar = (() => {
     ctx.fillStyle = "#fbbf24";
     ctx.fillRect(156, 325, 200, 8);
 
-    return new THREE.CanvasTexture(canvas);
+    cachedBackShirtTex = configureShirtTexture(new THREE.CanvasTexture(canvas));
+    canvas.width = 0;
+    canvas.height = 0;
+    return cachedBackShirtTex;
   }
 
   function create() {

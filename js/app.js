@@ -409,6 +409,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Reset phím di chuyển trong Bảo Tàng 3D khi cửa sổ ngoài mất focus hoặc chuyển tab trình duyệt (C1)
+  function notifyMuseumResetKeys() {
+    const iframe = document.getElementById("museum-frame");
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+      if (
+        iframe.contentWindow.MuseumControls &&
+        typeof iframe.contentWindow.MuseumControls.resetAllKeys === "function"
+      ) {
+        iframe.contentWindow.MuseumControls.resetAllKeys();
+      }
+    } catch (_) {}
+    try {
+      iframe.contentWindow.postMessage({ type: "RESET_KEYS" }, "*");
+    } catch (_) {}
+  }
+
+  window.addEventListener("blur", notifyMuseumResetKeys);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      notifyMuseumResetKeys();
+    }
+  });
+
   const museumFrameEl = document.getElementById("museum-frame");
   if (museumFrameEl) {
     museumFrameEl.addEventListener("load", () => {

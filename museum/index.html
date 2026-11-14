@@ -47,15 +47,15 @@
         </button>
       </div>
 
-      <!-- Cụm Phải: Trạng thái Shift-Lock & Góc Chuẩn -->
+      <!-- Cụm Phải: Trạng thái Shift-Lock -->
       <div
-        class="pointer-events-auto flex items-center space-x-1 sm:space-x-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
+        class="pointer-events-auto flex items-center bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
       >
         <button
           id="btn-shiftlock-status"
           type="button"
           title="Bấm phím Shift để khóa/mở khóa trỏ chuột xoay góc nhìn (Shift-Lock)"
-          class="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-amber-300 border border-amber-500/30 hover:bg-slate-700 transition"
+          class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-amber-300 border border-amber-500/30 hover:bg-slate-700 transition"
         >
           <svg
             class="w-3.5 h-3.5 shrink-0"
@@ -74,14 +74,6 @@
           <span>Shift-Lock:</span>
           <span id="shiftlock-state-label">Giữ chuột / Phím Shift</span>
         </button>
-        <button
-          id="btn-reset-cam"
-          type="button"
-          title="Đưa nhân vật và góc nhìn về vị trí chuẩn giữa phòng"
-          class="px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-slate-800 text-slate-200 hover:text-white hover:bg-slate-700 transition"
-        >
-          Góc Chuẩn
-        </button>
       </div>
     </header>
 
@@ -96,73 +88,6 @@
       <div
         class="w-3.5 h-3.5 rounded-full border-2 border-amber-400/90 bg-slate-950/40 shadow-[0_0_8px_rgba(245,158,11,0.8)]"
       ></div>
-    </div>
-
-    <!-- ================= THANH NHẢY NHANH HIỆN VẬT THEO PHÒNG ================= -->
-    <div
-      id="explore-quick-nav"
-      class="absolute bottom-3 left-20 right-3 sm:left-4 sm:right-4 z-10 flex flex-wrap justify-center gap-1.5 pointer-events-none"
-    ></div>
-
-    <!-- ================= THẺ HUD GÓC PHẢI / BOTTOM SHEET MOBILE ================= -->
-    <div
-      id="museum-hud"
-      class="absolute top-16 right-4 max-w-sm sm:max-w-md w-full bg-slate-900/90 hover:bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-2xl transition-all duration-300 pointer-events-auto z-20 text-slate-100"
-    >
-      <div
-        class="flex items-center justify-between border-b border-slate-700/70 pb-2 mb-2.5"
-      >
-        <span
-          id="hud-badge"
-          class="text-xs font-bold uppercase tracking-wider text-amber-400 block truncate pr-2"
-          >Hiện vật triển lãm</span
-        >
-        <button
-          id="hud-toggle-btn"
-          type="button"
-          class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold text-sm transition shrink-0"
-          title="Thu gọn / Mở rộng thẻ thông tin"
-        >
-          −
-        </button>
-      </div>
-      <div id="hud-content-body" class="space-y-2.5">
-        <h4
-          id="hud-title"
-          class="text-base sm:text-lg font-bold text-white leading-snug"
-        >
-          Phòng 1: Tổng Quan Về KTTT Định Hướng XHCN
-        </h4>
-        <p
-          id="hud-desc"
-          class="text-xs sm:text-sm text-slate-300 leading-relaxed"
-        >
-          Dùng phím W-A-S-D (hoặc D-pad bên trái) để bước đi. Kéo chuột hoặc bấm
-          phím Shift để xoay góc nhìn qua vai (Shift-Lock). Nhấp vào tranh để
-          mở bảng thông tin chi tiết.
-        </p>
-        <button
-          id="btn-open-detail-drawer"
-          type="button"
-          class="w-full mt-2 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-1.5"
-        >
-          <svg
-            class="w-4 h-4 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            ></path>
-          </svg>
-          <span>Xem đầy đủ nội dung</span>
-        </button>
-      </div>
     </div>
 
     <!-- ================= MODAL / NGĂN KÉO XEM ĐẦY ĐỦ NỘI DUNG HIỆN VẬT ================= -->

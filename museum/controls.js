@@ -91,27 +91,6 @@ window.MuseumControls = (() => {
     });
   }
 
-  function updateHUD(exhibit) {
-    if (!exhibit) return;
-    currentExhibitData = exhibit;
-
-    const hudBadge = document.getElementById("hud-badge");
-    const hudTitle = document.getElementById("hud-title");
-    const hudDesc = document.getElementById("hud-desc");
-    const hudBody = document.getElementById("hud-content-body");
-    const hudToggleBtn = document.getElementById("hud-toggle-btn");
-
-    if (hudBadge)
-      hudBadge.textContent = exhibit.badge || "Hiện vật triển lãm";
-    if (hudTitle) hudTitle.textContent = exhibit.title || "";
-    if (hudDesc) hudDesc.textContent = exhibit.desc || "";
-
-    if (hudBody && hudBody.classList.contains("hidden")) {
-      hudBody.classList.remove("hidden");
-      if (hudToggleBtn) hudToggleBtn.textContent = "−";
-    }
-  }
-
   function openDetailDrawer(exhibit) {
     const data = exhibit || currentExhibitData;
     if (!data) return;
@@ -143,73 +122,7 @@ window.MuseumControls = (() => {
     if (modal) modal.classList.add("hidden");
   }
 
-  function renderExploreQuickNav(roomNumber) {
-    const container = document.getElementById("explore-quick-nav");
-    if (!container) return;
-    const list = getPlaylist().filter((item) => item.room === roomNumber);
-    container.innerHTML = list
-      .map((item) => {
-        const escapedTitle = String(item.title || "")
-          .replace(/&/g, "&amp;")
-          .replace(/"/g, "&quot;");
-        return `
-      <button
-        type="button"
-        data-exhibit-id="${item.id}"
-        title="${escapedTitle}"
-        aria-label="Nhảy nhanh tới ${escapedTitle}"
-        class="explore-jump-btn pointer-events-auto min-w-[2.5rem] px-3 py-1.5 text-xs font-bold tracking-wide whitespace-nowrap rounded-full border border-slate-700/85 bg-slate-900/90 text-slate-100 hover:border-amber-400 hover:text-amber-300 hover:bg-slate-800 backdrop-blur-sm transition shadow-sm"
-      >
-        ${item.sectionCode}
-      </button>
-    `;
-      })
-      .join("");
-
-    container.querySelectorAll(".explore-jump-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-exhibit-id");
-        const idx = getPlaylist().findIndex((x) => x.id === id);
-        if (idx !== -1) {
-          focusExhibitByIndex(idx);
-        }
-      });
-    });
-  }
-
-  // Đưa nhân vật sinh viên UIT & camera Shift-Lock tới hiện vật được chọn
-  function focusExhibitByIndex(idx) {
-    const playlist = getPlaylist();
-    if (!playlist.length) return;
-    const clampedIdx = (idx + playlist.length) % playlist.length;
-    currentExhibitIndex = clampedIdx;
-    const exhibit = playlist[clampedIdx];
-    currentExhibitData = exhibit;
-
-    if (
-      window.MuseumEngine &&
-      window.MuseumEngine.getCurrentRoom() !== exhibit.room
-    ) {
-      window.MuseumEngine.setRoom(exhibit.room);
-    }
-    syncRoomButtons(exhibit.room);
-    renderExploreQuickNav(exhibit.room);
-
-    if (exhibit.camPos && exhibit.lookPos && window.MuseumEngine) {
-      window.MuseumEngine.syncAvatarToExhibit(
-        exhibit.camPos.x,
-        exhibit.camPos.y,
-        exhibit.camPos.z,
-        exhibit.lookPos.x,
-        exhibit.lookPos.y,
-        exhibit.lookPos.z,
-      );
-    }
-
-    updateHUD(exhibit);
-  }
-
-  // Khi bấm chuột / chạm vào tranh trên tường: mở bảng thông tin hiện vật, không làm bay camera khỏi nhân vật
+  // Khi bấm chuột / chạm vào tranh trên tường: mở thẳng modal thông tin đầy đủ hiện vật, không làm bay camera khỏi nhân vật
   function onItemClicked(e, camera) {
     const renderer =
       window.MuseumEngine && window.MuseumEngine.getRenderer
@@ -251,7 +164,7 @@ window.MuseumControls = (() => {
         if (foundIdx !== -1) {
           currentExhibitIndex = foundIdx;
         }
-        updateHUD(exhibitData);
+        currentExhibitData = exhibitData;
         openDetailDrawer(exhibitData);
       }
     }
@@ -610,52 +523,23 @@ window.MuseumControls = (() => {
       btn.addEventListener("click", () => {
         const room = parseInt(btn.getAttribute("data-room"), 10);
         syncRoomButtons(room);
+        closeDetailDrawer();
         if (window.MuseumEngine) window.MuseumEngine.setRoom(room);
-        renderExploreQuickNav(room);
 
         const firstExhibitOfRoom = getPlaylist().findIndex(
           (item) => item.room === room,
         );
         if (firstExhibitOfRoom !== -1) {
           currentExhibitIndex = firstExhibitOfRoom;
-          updateHUD(getPlaylist()[firstExhibitOfRoom]);
+          currentExhibitData = getPlaylist()[firstExhibitOfRoom];
         }
       });
     });
 
-    // Nút Góc Chuẩn
-    const btnResetCam = document.getElementById("btn-reset-cam");
-    if (btnResetCam) {
-      btnResetCam.addEventListener("click", () => {
-        if (window.MuseumEngine) window.MuseumEngine.resetCamera();
-      });
-    }
-
-    // Nút thu gọn / mở rộng HUD góc phải
-    const hudToggleBtn = document.getElementById("hud-toggle-btn");
-    const hudBody = document.getElementById("hud-content-body");
-    if (hudToggleBtn && hudBody) {
-      hudToggleBtn.addEventListener("click", () => {
-        if (hudBody.classList.contains("hidden")) {
-          hudBody.classList.remove("hidden");
-          hudToggleBtn.textContent = "−";
-        } else {
-          hudBody.classList.add("hidden");
-          hudToggleBtn.textContent = "+";
-        }
-      });
-    }
-
-    // Nút Xem đầy đủ nội dung (Ngăn kéo / Modal)
-    const btnOpenDrawer = document.getElementById("btn-open-detail-drawer");
+    // Đóng Modal / Ngăn kéo xem đầy đủ nội dung hiện vật
     const btnCloseDrawer = document.getElementById("btn-close-detail-drawer");
     const drawerModal = document.getElementById("detail-drawer-modal");
 
-    if (btnOpenDrawer) {
-      btnOpenDrawer.addEventListener("click", () =>
-        openDetailDrawer(currentExhibitData),
-      );
-    }
     if (btnCloseDrawer) {
       btnCloseDrawer.addEventListener("click", closeDetailDrawer);
     }
@@ -763,19 +647,14 @@ window.MuseumControls = (() => {
       ? window.MuseumEngine.getCurrentRoom()
       : 1;
     syncRoomButtons(initialRoom);
-    renderExploreQuickNav(initialRoom);
-    if (getPlaylist().length > 0) {
-      updateHUD(getPlaylist()[0]);
-    }
+    currentExhibitData = getPlaylist()[0] || null;
   }
 
   return {
     init,
     onItemClicked,
-    updateHUD,
     openDetailDrawer,
     closeDetailDrawer,
-    focusExhibitByIndex,
     resetAllKeys,
     getKeysState,
     classifyTouchInteraction,

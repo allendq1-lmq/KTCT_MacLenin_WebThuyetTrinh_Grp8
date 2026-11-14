@@ -1111,6 +1111,13 @@ window.MuseumEngine = (() => {
     });
     sharedResources.textures.clear();
 
+    if (
+      window.MuseumAvatar &&
+      typeof window.MuseumAvatar.dispose === "function"
+    ) {
+      window.MuseumAvatar.dispose();
+    }
+
     if (renderer && typeof renderer.dispose === "function") {
       renderer.dispose();
     }

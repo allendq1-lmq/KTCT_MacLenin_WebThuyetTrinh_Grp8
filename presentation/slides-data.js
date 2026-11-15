@@ -470,10 +470,10 @@ window.PresentationData = (() => {
       lines: [
         "• Chủ thể kinh tế độc lập, tự chủ trong sản xuất kinh doanh.",
         "• Giá cả cơ bản do cung – cầu quyết định; cạnh tranh là động lực.",
-        "• Hệ thống thị trường đồng bộ; nền kinh tế mở hội nhập quốc tế.",
+        "• Hệ thống thị trường từng bước đồng bộ; kinh tế mở, hội nhập quốc tế.",
         "• Nhà nước quản lý vĩ mô khắc phục các khuyết tật thị trường.",
       ],
-      desc: "Như mọi nền KTTT hiện đại, nền kinh tế Việt Nam có các chủ thể độc lập tự chủ, giá cả do cung – cầu quyết định, cạnh tranh là động lực, hệ thống thị trường mở hội nhập quốc tế và Nhà nước quản lý vĩ mô. Do xuất phát từ sản xuất nhỏ nên việc tiếp tục hoàn thiện đồng bộ thể chế là yêu cầu tất yếu.",
+      desc: "Như mọi nền KTTT hiện đại, nền kinh tế Việt Nam có các chủ thể độc lập tự chủ, giá cả do cung – cầu quyết định, cạnh tranh là động lực, hệ thống thị trường mở hội nhập quốc tế và Nhà nước quản lý vĩ mô. Do xuất phát từ sản xuất nhỏ, thị trường ở nước ta đang trong quá trình hình thành, phát triển nên phải tiếp tục hoàn thiện thể chế.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="pres-subcard bg-amber-50/70 border border-amber-200">
@@ -483,20 +483,20 @@ window.PresentationData = (() => {
                 <strong>1. Chủ thể độc lập, tự chủ:</strong> Các chủ thể kinh tế có quyền tự chủ trong quyết định sản xuất, kinh doanh.
               </div>
               <div class="p-2 rounded-lg bg-white border border-amber-200">
-                <strong>2. Cơ chế giá cả & cạnh tranh:</strong> Giá cả do cung – cầu quyết định; cạnh tranh thúc đẩy đổi mới công nghệ, năng suất.
+                <strong>2. Cơ chế giá cả & cạnh tranh:</strong> Giá cả do cung – cầu quyết định; cạnh tranh thúc đẩy đổi mới công nghệ, nâng cao năng suất và hiệu quả.
               </div>
               <div class="p-2 rounded-lg bg-white border border-amber-200">
-                <strong>3. Hệ thống thị trường đồng bộ & mở:</strong> Hàng hóa, dịch vụ, vốn, lao động, KH-CN, bất động sản gắn với hội nhập quốc tế.
+                <strong>3. Hệ thống thị trường từng bước đồng bộ & mở:</strong> Hàng hóa, dịch vụ, vốn, lao động, KH-CN, bất động sản gắn với hội nhập quốc tế.
               </div>
               <div class="p-2 rounded-lg bg-white border border-amber-200">
-                <strong>4. Vai trò điều tiết vĩ mô:</strong> Nhà nước quản lý vĩ mô nhằm khắc phục những khuyết tật tự phát của thị trường.
+                <strong>4. Vai trò điều tiết vĩ mô:</strong> Nhà nước quản lý vĩ mô nhằm khắc phục những khuyết tật của thị trường.
               </div>
             </div>
           </div>
           <div class="pres-subcard bg-sky-50/70 border border-sky-200">
             <h4 class="text-sky-800 font-bold">Đặc điểm mang tính giai đoạn ở Việt Nam:</h4>
             <p class="text-slate-800 mt-1">
-              Xuất phát từ một nền kinh tế chủ yếu là sản xuất nhỏ, trình độ phát triển còn thấp, một số loại thị trường chưa hình thành đầy đủ, đồng bộ. Đây là đặc điểm mang tính giai đoạn, đặt ra yêu cầu tất yếu phải tiếp tục hoàn thiện thể chế KTTT định hướng XHCN.
+              Nền kinh tế thị trường ở nước ta đang trong quá trình hình thành và phát triển, xuất phát từ một nền kinh tế chủ yếu là sản xuất nhỏ, trình độ phát triển còn thấp, một số loại thị trường chưa hình thành đầy đủ, đồng bộ. Đây là đặc điểm mang tính giai đoạn, đặt ra yêu cầu phải tiếp tục hoàn thiện thể chế KTTT định hướng XHCN.
             </p>
           </div>
         </div>
@@ -506,21 +506,21 @@ window.PresentationData = (() => {
       id: "r2-b1",
       room: 2,
       sectionCode: "2.b.1",
-      badge: "Đặc Trưng 01 • Mục Tiêu Phát Triển",
+      badge: "Mục 2.b • Năm Đặc Trưng Cơ Bản Của KTTT Định Hướng XHCN (1/5)",
       title: "Đặc Trưng 1: Về Mục Tiêu Phát Triển",
       subtitle: "Dân giàu, nước mạnh, dân chủ, công bằng, văn minh",
       color: "#d97706",
       lines: [
         "• Phát triển LLSX, xây dựng cơ sở vật chất – kỹ thuật CNXH.",
-        "• Nâng cao đời sống nhân dân: Dân giàu, nước mạnh, văn minh.",
+        "• Nâng cao đời sống: dân giàu, nước mạnh, dân chủ, công bằng, văn minh.",
         "• Phản ánh mục tiêu chính trị - xã hội dưới sự lãnh đạo của Đảng.",
         "• Gắn phát triển LLSX hiện đại với xây dựng QHSX tiến bộ.",
       ],
-      desc: "Đặc trưng 1 - Về mục tiêu: Hướng tới phát triển lực lượng sản xuất, xây dựng cơ sở vật chất – kỹ thuật của CNXH; nâng cao đời sống nhân dân, thực hiện 'dân giàu, nước mạnh, dân chủ, công bằng, văn minh', gắn liền với xây dựng quan hệ sản xuất tiến bộ, phù hợp.",
+      desc: "Mục 2.b – Năm Đặc Trưng Cơ Bản Của Kinh Tế Thị Trường Định Hướng Xã Hội Chủ Nghĩa: mục tiêu; sở hữu và thành phần kinh tế; quản lý; phân phối; tăng trưởng gắn với công bằng. Đặc trưng 1 - Về mục tiêu: phát triển lực lượng sản xuất, xây dựng cơ sở vật chất – kỹ thuật của CNXH; dân giàu, nước mạnh, dân chủ, công bằng, văn minh.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="pres-subcard bg-amber-50/80 border border-amber-300">
-            <h4 class="text-amber-900 font-bold">1. Về mục tiêu tối thượng của KTTT định hướng XHCN</h4>
+            <h4 class="text-amber-900 font-bold">Về mục tiêu của KTTT định hướng XHCN</h4>
             <p class="text-slate-800 mt-1">
               Kinh tế thị trường định hướng XHCN hướng tới <strong>phát triển lực lượng sản xuất, xây dựng cơ sở vật chất – kỹ thuật của chủ nghĩa xã hội; nâng cao đời sống nhân dân, thực hiện “dân giàu, nước mạnh, dân chủ, công bằng, văn minh”</strong>.
             </p>
@@ -535,7 +535,7 @@ window.PresentationData = (() => {
             <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
               <h4 class="text-emerald-800 font-bold">Gắn kết LLSX và QHSX</h4>
               <p class="text-slate-800 mt-1">
-                Đi đôi với phát triển lực lượng sản xuất hiện đại, quá trình phát triển KTTT ở Việt Nam gắn liền với <strong>xây dựng quan hệ sản xuất tiến bộ, phù hợp</strong> nhằm hoàn thiện cơ sở kinh tế – xã hội của CNXH.
+                Đi đôi với phát triển lực lượng sản xuất hiện đại, quá trình phát triển KTTT ở Việt Nam gắn liền với <strong>xây dựng quan hệ sản xuất tiến bộ, phù hợp</strong> nhằm ngày càng hoàn thiện cơ sở kinh tế – xã hội của CNXH.
               </p>
             </div>
           </div>
@@ -546,7 +546,7 @@ window.PresentationData = (() => {
       id: "r2-b2",
       room: 2,
       sectionCode: "2.b.2",
-      badge: "Đặc Trưng 02 • Sở Hữu & Thành Phần KT",
+      badge: "Mục 2.b • Năm Đặc Trưng Cơ Bản Của KTTT Định Hướng XHCN (2/5)",
       title: "Đặc Trưng 2: Quan Hệ Sở Hữu & Thành Phần KT",
       subtitle: "Nội dung kinh tế - pháp lý; KT nhà nước chủ đạo, KT tư nhân động lực",
       color: "#0284c7",
@@ -561,9 +561,9 @@ window.PresentationData = (() => {
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">a) Bản chất của Sở hữu (Kinh tế & Pháp lý)</h4>
+              <h4 class="text-sky-800 font-bold">Bản chất của sở hữu (kinh tế & pháp lý)</h4>
               <p class="text-slate-800 mt-1">
-                <strong>Sở hữu</strong> là quan hệ giữa người với người trong sản xuất và tái sản xuất xã hội trên cơ sở chiếm hữu nguồn lực và kết quả lao động (gồm: <em>chủ thể, đối tượng, lợi ích</em>).
+                <strong>Sở hữu</strong> là quan hệ giữa người với người trong sản xuất và tái sản xuất xã hội trên cơ sở chiếm hữu nguồn lực và kết quả lao động tương ứng, trong một điều kiện lịch sử nhất định (gồm:<em>chủ thể, đối tượng, lợi ích</em>).
               </p>
               <ul class="list-disc list-inside space-y-1 text-slate-800 mt-1.5">
                 <li><strong class="text-amber-800">Nội dung kinh tế:</strong> Sở hữu là điều kiện của sản xuất, là lợi ích kinh tế mà chủ thể sở hữu được thụ hưởng.</li>
@@ -571,7 +571,7 @@ window.PresentationData = (() => {
               </ul>
             </div>
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">b) Cơ cấu kinh tế nhiều thành phần ở Việt Nam</h4>
+              <h4 class="text-amber-800 font-bold">Nhiều hình thức sở hữu, nhiều thành phần kinh tế</h4>
               <ul class="list-disc list-inside space-y-1.5 text-slate-800 mt-1.5">
                 <li><strong>Kinh tế nhà nước</strong> giữ vai trò <strong>chủ đạo</strong>.</li>
                 <li><strong>Kinh tế tư nhân</strong> là một <strong>động lực quan trọng</strong>.</li>
@@ -587,7 +587,7 @@ window.PresentationData = (() => {
       id: "r2-b3",
       room: 2,
       sectionCode: "2.b.3",
-      badge: "Đặc Trưng 03 • Quan Hệ Quản Lý",
+      badge: "Mục 2.b • Năm Đặc Trưng Cơ Bản Của KTTT Định Hướng XHCN (3/5)",
       title: "Đặc Trưng 3: Quan Hệ Quản Lý Nền Kinh Tế",
       subtitle: "Nhà nước pháp quyền XHCN dưới sự lãnh đạo của Đảng CSVN",
       color: "#dc2626",
@@ -627,28 +627,28 @@ window.PresentationData = (() => {
       id: "r2-b4",
       room: 2,
       sectionCode: "2.b.4",
-      badge: "Đặc Trưng 04 • Quan Hệ Phân Phối",
+      badge: "Mục 2.b • Năm Đặc Trưng Cơ Bản Của KTTT Định Hướng XHCN (4/5)",
       title: "Đặc Trưng 4: Quan Hệ Phân Phối (Đầu Vào & Đầu Ra)",
       subtitle: "Công bằng cơ hội tiếp cận nguồn lực & đa dạng hình thức phân phối",
       color: "#059669",
       lines: [
-        "• Đầu vào: Phân phối công bằng yếu tố sản xuất & cơ hội phát triển.",
-        "• Đầu ra chủ yếu: Theo kết quả lao động và hiệu quả kinh tế.",
-        "• Kết hợp phân phối theo mức đóng góp vốn và nguồn lực khác.",
-        "• Tái phân phối thông qua hệ thống an sinh và phúc lợi xã hội.",
+        "• Phân phối đầu vào: công bằng các yếu tố sản xuất, cơ hội và điều kiện phát triển.",
+        "• Phân phối đầu ra chủ yếu theo kết quả lao động, hiệu quả kinh tế.",
+        "• Theo mức đóng góp vốn cùng các nguồn lực khác.",
+        "• Thông qua hệ thống an sinh xã hội, phúc lợi xã hội.",
       ],
       desc: "Đặc trưng 4 - Về quan hệ phân phối: Thực hiện phân phối công bằng các yếu tố sản xuất đầu vào (cơ hội tiếp cận nguồn lực) và phân phối kết quả đầu ra chủ yếu theo lao động, hiệu quả kinh tế, mức đóng góp vốn cùng hệ thống an sinh, phúc lợi xã hội.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">1. Phân phối đầu vào</h4>
+              <h4 class="text-emerald-800 font-bold">Phân phối đầu vào</h4>
               <p class="text-slate-800 mt-1">
                 Thực hiện <strong>phân phối công bằng các yếu tố sản xuất</strong>, bảo đảm quyền tiếp cận và sử dụng các cơ hội, điều kiện phát triển của mọi chủ thể kinh tế để tiến tới xây dựng xã hội mọi người đều giàu có.
               </p>
             </div>
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">2. Phân phối đầu ra</h4>
+              <h4 class="text-amber-800 font-bold">Phân phối đầu ra</h4>
               <p class="text-slate-800 mt-1">
                 Phân phối kết quả làm ra chủ yếu theo <strong>kết quả lao động, hiệu quả kinh tế</strong>, đồng thời theo <strong>mức đóng góp vốn cùng các nguồn lực khác</strong> và thông qua <strong>hệ thống an sinh xã hội, phúc lợi xã hội</strong>.
               </p>
@@ -656,7 +656,7 @@ window.PresentationData = (() => {
           </div>
           <div class="pres-subcard bg-sky-50/70 border border-sky-200">
             <p class="text-slate-800 font-medium">
-              <strong class="text-sky-800">Điểm cốt lõi:</strong> Trong các hình thức trên, <strong>phân phối theo lao động và hiệu quả kinh tế</strong> cùng <strong>phân phối theo phúc lợi xã hội</strong> là những hình thức phân phối phản ánh rõ nét bản chất định hướng xã hội chủ nghĩa của nền kinh tế thị trường.
+              <strong class="text-sky-800">Điểm cốt lõi:</strong> Trong các hình thức trên, <strong>phân phối theo lao động và hiệu quả kinh tế</strong> cùng <strong>phân phối theo phúc lợi xã hội</strong> là những hình thức phân phối phản ánh định hướng xã hội chủ nghĩa của nền kinh tế thị trường.
             </p>
           </div>
         </div>
@@ -666,15 +666,15 @@ window.PresentationData = (() => {
       id: "r2-b5",
       room: 2,
       sectionCode: "2.b.5",
-      badge: "Đặc Trưng 05 • Tăng Trưởng & Công Bằng",
+      badge: "Mục 2.b • Năm Đặc Trưng Cơ Bản Của KTTT Định Hướng XHCN (5/5)",
       title: "Đặc Trưng 5: Gắn Tăng Trưởng Với Công Bằng Xã Hội",
       subtitle: "Thực hiện tiến bộ & công bằng ngay trong từng bước, từng chính sách",
       color: "#7c3aed",
       lines: [
         "• Gắn tăng trưởng kinh tế với phát triển văn hóa – xã hội.",
         "• Thực hiện tiến bộ, công bằng ngay trong từng bước, từng chính sách.",
-        "• Không chỉ điều tiết thu nhập và an sinh phúc lợi xã hội.",
-        "• Đảm bảo cơ hội bình đẳng tiếp cận giáo dục, y tế, việc làm.",
+        "• Công bằng không chỉ dựa vào điều tiết thu nhập, an sinh, phúc lợi.",
+        "• Mà còn bảo đảm cơ hội bình đẳng tiếp cận giáo dục, y tế, việc làm.",
       ],
       desc: "Đặc trưng 5 - Gắn tăng trưởng kinh tế với công bằng xã hội: Thực hiện tiến bộ và công bằng xã hội ngay trong từng chính sách, chiến lược, quy hoạch và từng giai đoạn phát triển; bảo đảm mọi người dân đều có cơ hội bình đẳng tiếp cận các dịch vụ xã hội cơ bản (giáo dục, y tế, việc làm).",
       fullHtml: `

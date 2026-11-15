@@ -632,10 +632,10 @@ window.PresentationData = (() => {
       subtitle: "Công bằng cơ hội tiếp cận nguồn lực & đa dạng hình thức phân phối",
       color: "#059669",
       lines: [
-        "• Đầu vào: Phân phối công bằng yếu tố sản xuất & cơ hội phát triển.",
-        "• Đầu ra chủ yếu: Theo kết quả lao động và hiệu quả kinh tế.",
-        "• Kết hợp phân phối theo mức đóng góp vốn và nguồn lực khác.",
-        "• Đồng thời phân phối qua hệ thống an sinh xã hội, phúc lợi xã hội.",
+        "• Phân phối đầu vào: công bằng các yếu tố sản xuất, cơ hội và điều kiện phát triển.",
+        "• Phân phối đầu ra chủ yếu theo kết quả lao động, hiệu quả kinh tế.",
+        "• Theo mức đóng góp vốn cùng các nguồn lực khác.",
+        "• Thông qua hệ thống an sinh xã hội, phúc lợi xã hội.",
       ],
       desc: "Đặc trưng 4 - Về quan hệ phân phối: Thực hiện phân phối công bằng các yếu tố sản xuất đầu vào (cơ hội tiếp cận nguồn lực) và phân phối kết quả đầu ra chủ yếu theo lao động, hiệu quả kinh tế, mức đóng góp vốn cùng hệ thống an sinh, phúc lợi xã hội.",
       fullHtml: `

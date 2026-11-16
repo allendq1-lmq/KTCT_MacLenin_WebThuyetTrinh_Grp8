@@ -90,26 +90,26 @@ window.PresentationData = (() => {
       subtitle: "Thành tựu phát triển chung của văn minh nhân loại",
       color: "#0284c7",
       lines: [
-        "• Quan hệ SX, trao đổi, phân phối, tiêu dùng đều qua thị trường.",
-        "• Vận hành bởi quy luật giá trị, cung – cầu, cạnh tranh, tiền tệ.",
-        "• Là thành tựu văn minh nhân loại, không riêng có của CNTB.",
-        "• Nhiều mô hình đa dạng (Mỹ, Đức, Nhật Bản, Trung Quốc...).",
+        "• Mọi khâu tái sản xuất (SX, phân phối, trao đổi, tiêu dùng) đều qua thị trường.",
+        "• Vận hành bởi 4 quy luật: giá trị, cung – cầu, cạnh tranh, lưu thông tiền tệ.",
+        "• Là thành tựu chung của văn minh nhân loại, không riêng có của CNTB.",
+        "• Tồn tại nhiều mô hình đa dạng (Mỹ, Đức, Nhật Bản, Trung Quốc...).",
       ],
-      desc: "Kinh tế thị trường là giai đoạn phát triển cao của kinh tế hàng hóa, là thành tựu chung của văn minh nhân loại chứ không phải sản phẩm riêng có của chủ nghĩa tư bản. Mỗi quốc gia lựa chọn mô hình phù hợp với điều kiện lịch sử của mình.",
+      desc: "Kinh tế thị trường là giai đoạn phát triển cao của kinh tế hàng hóa và là thành tựu văn minh chung của nhân loại; mỗi quốc gia cần lựa chọn mô hình vận hành phù hợp với điều kiện lịch sử – cụ thể của mình.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             <div class="pres-subcard bg-sky-50/70 border border-sky-200">
               <h4 class="text-sky-800 font-bold">Bản chất của Kinh tế thị trường (KTTT)</h4>
               <p class="text-slate-800">
-                <strong>Kinh tế thị trường</strong> là nền kinh tế trong đó các quan hệ sản xuất, trao đổi, phân phối và tiêu dùng đều thực hiện qua thị trường. Ba vấn đề cơ bản (<em>sản xuất cái gì, như thế nào, cho ai</em>) do thị trường quyết định qua 4 quy luật: <strong>Giá trị, Cung – cầu, Cạnh tranh, Lưu thông tiền tệ</strong>.
+                <strong>Kinh tế thị trường</strong> là nền kinh tế hàng hóa phát triển ở trình độ cao, nơi mọi quan hệ sản xuất và trao đổi đều thông qua thị trường. Ba vấn đề cơ bản (<em>sản xuất cái gì, như thế nào, cho ai</em>) do thị trường quyết định qua 4 quy luật: <strong>Giá trị, Cung – cầu, Cạnh tranh, Lưu thông tiền tệ</strong>.
               </p>
             </div>
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
               <h4 class="text-amber-800 font-bold">Nguồn gốc & Giá trị văn minh nhân loại</h4>
               <p class="text-slate-800">
-                <strong>Nguồn gốc:</strong> Là giai đoạn phát triển cao của kinh tế hàng hóa khi phân công lao động xã hội và tách biệt kinh tế phát triển.<br/>
-                <strong>Thành tựu chung:</strong> KTTT <em>không phải sản phẩm riêng của CNTB</em>; CNTB chỉ là chế độ đã sử dụng và đưa KTTT lên trình độ cao.
+                <strong>Nguồn gốc:</strong> Hình thành khách quan khi phân công lao động xã hội và sự tách biệt kinh tế phát triển cao.<br/>
+                <strong>Thành tựu chung:</strong> KTTT <em>không phải sản phẩm riêng của CNTB</em>; CNTB chỉ là chế độ đã sử dụng và phát triển KTTT lên trình độ cao.
               </p>
             </div>
           </div>
@@ -145,25 +145,26 @@ window.PresentationData = (() => {
       subtitle: "Văn kiện Đại hội XIII (2021) & Điều 51 Hiến pháp 2013",
       color: "#d97706",
       lines: [
-        "• Mô hình kinh tế tổng quát thời kỳ quá độ lên CNXH.",
-        "• KTTT hiện đại, hội nhập, vận hành đầy đủ theo quy luật thị trường.",
-        "• Nhà nước pháp quyền XHCN quản lý, Đảng CSVN lãnh đạo.",
-        "• Hiến pháp 2013 (Điều 51): Kinh tế nhà nước giữ vai trò chủ đạo.",
+        "• Là mô hình kinh tế tổng quát trong thời kỳ quá độ lên CNXH.",
+        "• KTTT hiện đại, hội nhập quốc tế, vận hành đầy đủ và đồng bộ.",
+        "• Nhà nước pháp quyền XHCN quản lý dưới sự lãnh đạo của Đảng CSVN.",
+        "• Hiến pháp 2013 (Điều 51): Đa sở hữu, kinh tế nhà nước giữ vai trò chủ đạo.",
       ],
-      desc: "Theo Văn kiện Đại hội XIII (2021), KTTT định hướng XHCN là nền kinh tế thị trường hiện đại, hội nhập quốc tế, vận hành đầy đủ, đồng bộ theo quy luật thị trường, có sự quản lý của Nhà nước pháp quyền XHCN dưới sự lãnh đạo của Đảng vì mục tiêu 'Dân giàu, nước mạnh, dân chủ, công bằng, văn minh'.",
+      desc: "KTTT định hướng XHCN Việt Nam là mô hình kết hợp hài hòa giữa quy luật khách quan của thị trường hiện đại với sự điều tiết của Nhà nước pháp quyền XHCN dưới sự lãnh đạo của Đảng nhằm hiện thực hóa mục tiêu 'Dân giàu, nước mạnh, dân chủ, công bằng, văn minh'.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
               <h4 class="text-amber-800 font-bold">Định nghĩa cốt lõi</h4>
               <p class="text-slate-800">
-                <strong>Kinh tế thị trường định hướng xã hội chủ nghĩa</strong> là mô hình kinh tế tổng quát của Việt Nam trong thời kỳ quá độ lên CNXH. Vận hành tuân theo các quy luật vốn có của KTTT; đồng thời được Nhà nước định hướng, điều tiết dưới sự lãnh đạo của Đảng Cộng sản Việt Nam.
+                <strong>Tính phổ biến:</strong> Vận hành đầy đủ, đồng bộ theo các quy luật vốn có của KTTT hiện đại và hội nhập quốc tế.<br/>
+                <strong>Tính đặc thù:</strong> Được Nhà nước pháp quyền XHCN định hướng, điều tiết dưới sự lãnh đạo của Đảng Cộng sản Việt Nam.
               </p>
             </div>
             <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
               <h4 class="text-emerald-800 font-bold">Hiến định tại Điều 51 Hiến pháp 2013</h4>
               <p class="text-slate-800">
-                Xác định nền kinh tế Việt Nam là nền KTTT định hướng XHCN với <strong>nhiều hình thức sở hữu và nhiều thành phần kinh tế</strong>; kinh tế nhà nước giữ vai trò chủ đạo. Vừa dựa trên nguyên tắc thị trường, vừa dẫn dắt bởi bản chất ưu việt của CNXH.
+                Xác lập nền KTTT định hướng XHCN với <strong>nhiều hình thức sở hữu và nhiều thành phần kinh tế</strong>; trong đó <strong>kinh tế nhà nước giữ vai trò chủ đạo</strong>, các thành phần kinh tế đều bình đẳng trước pháp luật.
               </p>
             </div>
           </div>
@@ -185,20 +186,20 @@ window.PresentationData = (() => {
       subtitle: "Cơ chế kế hoạch hóa tập trung, bao cấp & các bước tìm tòi",
       color: "#64748b",
       lines: [
-        "• Kế hoạch hóa tập trung, bao cấp; coi KTTT đối lập CNXH.",
-        "• Sau 1975: Triệt tiêu động lực, đình đốn, khủng hoảng KT-XH.",
-        "• Đột phá tiền đề: HNTW 6 khóa IV (1979) làm sản xuất 'bung ra'.",
-        "• Chỉ thị 100 (1981) khoán nông nghiệp; HNTW 8 khóa V (1985).",
+        "• Tuyệt đối hóa kế hoạch hóa tập trung; coi KTTT đối lập với CNXH.",
+        "• Thời chiến: Phát huy tác dụng tập trung tối đa nguồn lực cho kháng chiến.",
+        "• Sau 1975: Triệt tiêu động lực, sản xuất đình đốn, khủng hoảng KT-XH.",
+        "• Đột phá tiền đề: HNTW 6 (1979), Chỉ thị 100 (1981), HNTW 8 (1985).",
       ],
-      desc: "Trước năm 1986, nền kinh tế vận hành theo cơ chế kế hoạch hóa tập trung, quan liêu, bao cấp. Trước khủng hoảng KT-XH sau năm 1975, Đảng đã có những bước tìm tòi đột phá (HNTW 6 khóa IV năm 1979, Chỉ thị 100 năm 1981, HNTW 8 khóa V năm 1985) chuẩn bị tiền đề cho Đổi mới.",
+      desc: "Trước thực trạng cơ chế kế hoạch hóa tập trung, bao cấp lâm vào khủng hoảng trầm trọng sau năm 1975, Đảng đã từng bước khảo nghiệm thực tiễn qua các bước đột phá (1979–1985), chuẩn bị tiền đề trực tiếp cho công cuộc Đổi mới năm 1986.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="pres-subcard bg-slate-50 border border-slate-300">
             <h4 class="text-slate-900 font-bold">Đặc trưng cơ chế kế hoạch hóa tập trung, quan liêu, bao cấp</h4>
             <ul class="list-disc list-inside space-y-1 text-slate-800 mt-1">
-              <li>Coi KTTT là sản phẩm riêng của CNTB; không thừa nhận sản xuất hàng hóa và cơ chế thị trường tồn tại khách quan trong thời kỳ quá độ.</li>
-              <li>Kế hoạch hóa tập trung được xem là đặc trưng tuyệt đối, thị trường chỉ giữ vai trò thứ yếu.</li>
-              <li>Từng phát huy tác dụng tập trung nguồn lực trong chiến tranh, nhưng sau 1975 bộc lộ hạn chế nghiêm trọng: <strong>triệt tiêu động lực lao động, sản xuất đình đốn, lạm phát phi mã, khủng hoảng KT-XH</strong>.</li>
+              <li><strong>Nhận thức:</strong> Coi KTTT là sản phẩm riêng của CNTB; phủ nhận sự tồn tại khách quan của sản xuất hàng hóa và cơ chế thị trường.</li>
+              <li><strong>Vận hành:</strong> Quản lý bằng mệnh lệnh hành chính; kế hoạch hóa tập trung là đặc trưng tuyệt đối, thị trường bị xem nhẹ.</li>
+              <li><strong>Hệ quả:</strong> Phù hợp thời chiến nhưng kìm hãm lực lượng sản xuất sau năm 1975, gây <strong>đình đốn, lạm phát phi mã và khủng hoảng KT-XH</strong>.</li>
             </ul>
           </div>
           <div class="pres-subcard bg-amber-50/70 border border-amber-200">
@@ -206,7 +207,7 @@ window.PresentationData = (() => {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1.5">
               <div class="p-2.5 rounded-lg bg-white border border-amber-200">
                 <strong class="text-amber-800 block">1. HNTW 6 khóa IV (1979):</strong>
-                Chủ trương khắc phục khuyết điểm quản lý kinh tế, làm cho sản xuất <em>“bung ra”</em>.
+                Chủ trương khắc phục khuyết điểm quản lý kinh tế, cởi trói làm cho sản xuất <em>“bung ra”</em>.
               </div>
               <div class="p-2.5 rounded-lg bg-white border border-amber-200">
                 <strong class="text-amber-800 block">2. Chỉ thị 100-CT/TW (1981):</strong>
@@ -230,37 +231,37 @@ window.PresentationData = (() => {
       subtitle: "Đổi mới tư duy kinh tế & thừa nhận sản xuất hàng hóa",
       color: "#ea580c",
       lines: [
-        "• Đại hội VI (12/1986): Đổi mới toàn diện, kinh tế nhiều thành phần.",
-        "• Đại hội VII (1991): Cương lĩnh quá độ, cơ chế thị trường có quản lý.",
-        "• Đại hội VIII (1996): SX hàng hóa không đối lập với CNXH.",
-        "• Nhìn nhận KTTT như một cơ chế, công cụ quản lý kinh tế.",
+        "• Đại hội VI (12/1986): Đổi mới toàn diện, phát triển kinh tế nhiều thành phần.",
+        "• Đại hội VII (1991): Kinh tế hàng hóa vận hành theo cơ chế thị trường có quản lý.",
+        "• Đại hội VIII (1996): Khẳng định sản xuất hàng hóa không đối lập với CNXH.",
+        "• Giới hạn: Mới dừng ở 'cơ chế thị trường', chưa coi KTTT là mô hình tổng quát.",
       ],
-      desc: "Từ Đại hội VI (1986) đến Đại hội VIII (1996), Đảng khởi xướng công cuộc Đổi mới toàn diện, xóa bỏ cơ chế bao cấp, thừa nhận kinh tế hàng hóa nhiều thành phần vận hành theo cơ chế thị trường có sự quản lý của Nhà nước và khẳng định sản xuất hàng hóa không đối lập với CNXH.",
+      desc: "Giai đoạn 1986–2000 đánh dấu bước chuyển lịch sử từ cơ chế bao cấp sang nền kinh tế hàng hóa nhiều thành phần vận hành theo cơ chế thị trường có sự quản lý của Nhà nước theo định hướng XHCN.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
               <h4 class="text-amber-800 font-bold">1. Đại hội VI (12/1986) & HNTW 6 (1989)</h4>
               <p class="text-slate-800 mt-1">
-                Mở đầu Đổi mới toàn diện, lấy <strong>đổi mới tư duy kinh tế làm trọng tâm</strong>. Khôi phục kinh tế nhiều thành phần, sử dụng quan hệ hàng hóa – tiền tệ, xóa bỏ cơ chế bao cấp, giải phóng mọi năng lực sản xuất.
+                Khởi xướng Đổi mới toàn diện, lấy <strong>đổi mới tư duy kinh tế làm trọng tâm</strong>. Xóa bỏ cơ chế bao cấp, phát triển kinh tế hàng hóa nhiều thành phần, giải phóng sức sản xuất.
               </p>
             </div>
             <div class="pres-subcard bg-sky-50/70 border border-sky-200">
               <h4 class="text-sky-800 font-bold">2. Đại hội VII (1991) – Cương lĩnh</h4>
               <p class="text-slate-800 mt-1">
-                Xác định chủ trương chiến lược lâu dài trong suốt thời kỳ quá độ: phát triển <strong>nền kinh tế hàng hóa nhiều thành phần theo định hướng XHCN, vận hành theo cơ chế thị trường có sự quản lý của Nhà nước</strong>.
+                Xác định chủ trương chiến lược lâu dài trong thời kỳ quá độ: phát triển <strong>nền kinh tế hàng hóa nhiều thành phần theo định hướng XHCN, vận hành theo cơ chế thị trường có sự quản lý của Nhà nước</strong>.
               </p>
             </div>
             <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
               <h4 class="text-emerald-800 font-bold">3. Đại hội VIII (1996) – Nhận thức mới</h4>
               <p class="text-slate-800 mt-1">
-                Khẳng định <strong>sản xuất hàng hóa không đối lập với CNXH</strong>, mà là thành tựu của văn minh nhân loại, tồn tại khách quan và cần thiết cho công cuộc xây dựng CNXH.
+                Đẩy mạnh CNH, HĐH đất nước; khẳng định <strong>sản xuất hàng hóa không đối lập với CNXH</strong> mà là thành tựu văn minh nhân loại, tồn tại khách quan và cần thiết để xây dựng CNXH.
               </p>
             </div>
           </div>
           <div class="pres-subcard bg-slate-50 border border-slate-300">
             <strong class="text-slate-900">Đánh giá tổng kết giai đoạn 1986–2000:</strong>
-            <span class="text-slate-700">Đã thừa nhận kinh tế hàng hóa nhiều thành phần và cơ chế thị trường, nhưng KTTT chủ yếu vẫn được nhìn nhận như một cơ chế/công cụ quản lý, chưa được xác định là mô hình kinh tế tổng quát.</span>
+            <span class="text-slate-700">Đã thừa nhận kinh tế hàng hóa nhiều thành phần và cơ chế thị trường, nhưng mới dừng ở khái niệm "cơ chế thị trường", chưa chính thức định danh KTTT ĐHXHCN là mô hình kinh tế tổng quát.</span>
           </div>
         </div>
       `,
@@ -269,42 +270,42 @@ window.PresentationData = (() => {
       id: "r1-2c",
       room: 1,
       sectionCode: "1.2c",
-      badge: "Mục 1.2c • Giai Đoạn 2001 – Nay (ĐH XIV)",
+      badge: "Mục 1.2c • Giai Đoạn 2001 – 2026",
       title: "1.2c. Từ Đại Hội IX (2001) Đến Đại Hội XIV (2026)",
       subtitle: "Xác lập mô hình tổng quát, NQ 68-NQ/TW & Đại hội XIV",
       color: "#dc2626",
       lines: [
-        "• ĐH IX (2001): Chính thức xác lập mô hình tổng quát KTTT ĐHXHCN.",
-        "• ĐH X – XIII (2006–2021): Hoàn thiện thể chế hiện đại, hội nhập.",
-        "• NQ 68-NQ/TW (2025): Đến 2030 KTTN là động lực quan trọng nhất.",
-        "• Đại hội XIV (01/2026): Hoàn thiện đồng bộ, vận hành thông suốt.",
+        "• ĐH IX (2001): Chính thức xác lập KTTT ĐHXHCN là mô hình kinh tế tổng quát.",
+        "• ĐH X – XIII (2006–2021): Hoàn thiện lý luận về thể chế KTTT hiện đại, hội nhập.",
+        "• NQ 68-NQ/TW (2025): Xác định kinh tế tư nhân là một động lực quan trọng nhất.",
+        "• Đại hội XIV (01/2026): Hoàn thiện đồng bộ thể chế, vận hành thông suốt.",
       ],
-      desc: "Từ Đại hội IX (2001) xác lập KTTT ĐHXHCN là mô hình tổng quát, qua các kỳ Đại hội X, XI, XII, XIII đến 4 Nghị quyết chiến lược (57, 59, 66, 68-NQ/TW) và Đại hội XIV (tháng 01/2026), tư duy lý luận về thể chế KTTT ĐHXHCN ngày càng hoàn chỉnh, hiện đại.",
+      desc: "Giai đoạn 2001–2026 đánh dấu sự chín muồi và đột phá trong tư duy lý luận của Đảng: từ việc chính thức định danh mô hình tổng quát (ĐH IX) đến hoàn thiện đồng bộ thể chế KTTT hiện đại, hội nhập và bứt phá động lực tăng trưởng mới (ĐH XIV).",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div class="pres-subcard bg-white border border-slate-300">
               <span class="text-amber-700 font-bold block">1. Đại hội IX (2001):</span>
-              Lần đầu tiên chính thức xác định KTTT ĐHXHCN là <strong>mô hình kinh tế tổng quát</strong> của nước ta trong thời kỳ quá độ lên CNXH.
+              Lần đầu tiên chính thức định danh KTTT ĐHXHCN là <strong>mô hình kinh tế tổng quát</strong> của nước ta trong thời kỳ quá độ lên CNXH.
             </div>
             <div class="pres-subcard bg-white border border-slate-300">
               <span class="text-amber-700 font-bold block">2. Đại hội X (2006) & XI (2011):</span>
-              Làm rõ mục tiêu dân giàu, nước mạnh, dân chủ, công bằng, văn minh; Cương lĩnh 2011 khẳng định các thành phần kinh tế bình đẳng trước pháp luật.
+              Hoàn thiện hệ mục tiêu <em>“dân giàu, nước mạnh, dân chủ, công bằng, văn minh”</em>; Cương lĩnh 2011 khẳng định các thành phần kinh tế bình đẳng trước pháp luật.
             </div>
             <div class="pres-subcard bg-white border border-slate-300">
               <span class="text-amber-700 font-bold block">3. Đại hội XII (2016) & NQ TW5 (2017):</span>
-              Nêu quan niệm toàn diện về KTTT hiện đại, hội nhập quốc tế; xác định <strong>kinh tế tư nhân là một động lực quan trọng</strong>.
+              Xác lập quan niệm toàn diện về KTTT hiện đại, hội nhập quốc tế; khẳng định <strong>kinh tế tư nhân là một động lực quan trọng</strong>.
             </div>
             <div class="pres-subcard bg-white border border-slate-300">
               <span class="text-amber-700 font-bold block">4. Đại hội XIII (2021):</span>
-              Xác định rõ vai trò từng thành phần kinh tế; bổ sung <strong>nhân tố xã hội</strong> bên cạnh Nhà nước và thị trường trong vận hành kinh tế.
+              Phân định rõ vai trò từng thành phần kinh tế; gắn kết hài hòa mối quan hệ giữa <strong>Nhà nước – Thị trường – Xã hội</strong>.
             </div>
           </div>
           <div class="pres-subcard bg-amber-50/80 border border-amber-300">
             <h4 class="text-amber-900 font-bold">Bước ngoặt chiến lược 2024 – 2026:</h4>
             <p class="text-slate-800 mt-1">
-              • <strong>Bốn Nghị quyết chiến lược của Bộ Chính trị (57, 59, 66 và 68-NQ/TW):</strong> Đặc biệt, <strong>Nghị quyết 68-NQ/TW</strong> đặt mục tiêu đến năm 2030 <em>kinh tế tư nhân là một động lực quan trọng nhất của nền kinh tế quốc gia</em>.<br/>
-              • <strong>Đại hội XIV của Đảng (tháng 01/2026):</strong> Khẳng định hoàn thiện đồng bộ thể chế KTTT ĐHXHCN, bảo đảm thị trường vận hành thông suốt, giữ vững định hướng XHCN dưới sự quản lý của Nhà nước và lãnh đạo của Đảng.
+              • <strong>Bộ tứ Nghị quyết chiến lược của Bộ Chính trị (57, 59, 66 và 68-NQ/TW):</strong> Trọng tâm là <strong>Nghị quyết 68-NQ/TW (2025)</strong> xác định đến năm 2030 <em>kinh tế tư nhân là một động lực quan trọng nhất của nền kinh tế quốc gia</em>.<br/>
+              • <strong>Đại hội XIV của Đảng (tháng 01/2026):</strong> Hoàn thiện đồng bộ thể chế KTTT ĐHXHCN, bảo đảm thị trường vận hành thông suốt dưới sự quản lý của Nhà nước và lãnh đạo của Đảng.
             </p>
           </div>
         </div>
@@ -319,25 +320,25 @@ window.PresentationData = (() => {
       subtitle: "Quy luật lịch sử, thực tiễn GDP 476,3 tỷ USD & mục tiêu XHCN",
       color: "#059669",
       lines: [
-        "• 1. Phù hợp quy luật khách quan & lý luận 'khâu trung gian'.",
-        "• 2. Ưu việt thực tiễn (2024): GDP ~476,3 tỷ USD, hạng 33 thế giới.",
-        "• Đã ký 17 FTA (>60 đối tác), 73 quốc gia công nhận KTTT.",
-        "• 3. Phù hợp nguyện vọng nhân dân, đặt con người làm trung tâm.",
+        "• Phù hợp quy luật phát triển kinh tế hàng hóa & lý luận về 'khâu trung gian'.",
+        "• Ưu việt trong thúc đẩy LLSX (GDP 2024 đạt ~476,3 tỷ USD, hạng 33 thế giới).",
+        "• Hội nhập sâu rộng: Thực thi 17 FTA (>60 đối tác), 73 nước công nhận KTTT.",
+        "• Phù hợp nguyện vọng nhân dân, lấy con người làm trung tâm phát triển.",
       ],
-      desc: "Lựa chọn KTTT ĐHXHCN là tất yếu khách quan dựa trên 3 căn cứ: (1) Phù hợp quy luật phát triển sản xuất hàng hóa và hội nhập; (2) Tính ưu việt thúc đẩy LLSX đã được kiểm nghiệm (năm 2024 GDP đạt ~476,3 tỷ USD, hạng 33 thế giới, 17 FTA, 73 nước công nhận); (3) Phù hợp mục tiêu XHCN và nguyện vọng nhân dân.",
+      desc: "Phát triển KTTT định hướng XHCN ở Việt Nam là sự lựa chọn tất yếu khách quan, xuất phát từ quy luật phát triển lịch sử – tự nhiên, tính ưu việt thực tiễn trong giải phóng sức sản xuất và mục tiêu xây dựng xã hội vì con người.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
               <h4 class="text-amber-800 font-bold">1. Phù hợp quy luật và xu thế khách quan</h4>
               <p class="text-slate-800 mt-1">
-                Chừng nào còn phân công lao động xã hội và sự tách biệt kinh tế thì KTTT còn tồn tại khách quan. Việt Nam quá độ lên CNXH bỏ qua chế độ TBCN nhưng kế thừa thành tựu KTTT nhân loại — bổ sung lý luận về <strong>“khâu trung gian”</strong> phù hợp tiến trình lịch sử – tự nhiên.
+                Việt Nam tồn tại đầy đủ điều kiện khách quan của kinh tế hàng hóa (phân công lao động xã hội và tách biệt kinh tế). Quá độ lên CNXH bỏ qua chế độ TBCN cần kế thừa KTTT làm <strong>“khâu trung gian”</strong> tất yếu theo tiến trình lịch sử – tự nhiên.
               </p>
             </div>
             <div class="pres-subcard bg-sky-50/70 border border-sky-200">
               <h4 class="text-sky-800 font-bold">3. Phù hợp mục tiêu XHCN & nguyện vọng nhân dân</h4>
               <p class="text-slate-800 mt-1">
-                Khắc phục mặt trái tự phát của KTTT TBCN (khủng hoảng, bất bình đẳng, ô nhiễm). Đặt thị trường dưới sự lãnh đạo của Đảng và quản lý của Nhà nước pháp quyền XHCN; lấy con người làm trung tâm, gắn tăng trưởng với công bằng xã hội.
+                Khắc phục khuyết tật tự phát của KTTT TBCN (khủng hoảng, phân hóa giàu nghèo, ô nhiễm). Đặt thị trường dưới sự lãnh đạo của Đảng và quản lý của Nhà nước pháp quyền XHCN; gắn tăng trưởng kinh tế với tiến bộ và công bằng xã hội.
               </p>
             </div>
           </div>
@@ -374,37 +375,37 @@ window.PresentationData = (() => {
       subtitle: "Kiến tạo phát triển, giữ vững cân đối lớn & an ninh kinh tế",
       color: "#0284c7",
       lines: [
-        "• Hoàn thiện hệ thống pháp luật tương thích cam kết quốc tế.",
-        "• Bảo đảm ổn định vĩ mô, cạnh tranh lành mạnh & cân đối lớn.",
-        "• Thúc đẩy khởi nghiệp, đổi mới sáng tạo & mô hình kinh doanh mới.",
-        "• Đa phương hóa quan hệ kinh tế, chủ động phòng vệ thương mại.",
+        "• Hoàn thiện pháp luật tương thích quốc tế; giữ vững ổn định vĩ mô & cân đối lớn.",
+        "• Nâng cao quản trị quốc gia; thúc đẩy khởi nghiệp và đổi mới sáng tạo.",
+        "• Phát huy vai trò giám sát, điều tiết của các tổ chức xã hội & hiệp hội.",
+        "• Đa phương hóa kinh tế quốc tế, nâng cao sức chống chịu & phòng vệ thương mại.",
       ],
-      desc: "Nhà nước pháp quyền XHCN chủ động hoàn thiện pháp luật, giữ vững ổn định kinh tế vĩ mô, khuyến khích khởi nghiệp đổi mới sáng tạo, phát huy vai trò các tổ chức xã hội, đa phương hóa kinh tế quốc tế và bảo vệ an ninh kinh tế.",
+      desc: "Nhà nước pháp quyền XHCN đóng vai trò kiến tạo phát triển và điều tiết vĩ mô thông qua hệ thống pháp luật đồng bộ, bảo đảm các cân đối lớn, phát huy sự tham gia của xã hội và chủ động bảo vệ an ninh kinh tế trong hội nhập quốc tế.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div class="pres-subcard bg-sky-50/70 border border-sky-200">
               <h4 class="text-sky-800 font-bold">1. Hoàn thiện pháp luật & ổn định vĩ mô</h4>
               <p class="text-slate-800 mt-1">
-                Chủ động hoàn thiện hệ thống pháp luật phù hợp các cam kết quốc tế; bảo đảm ổn định kinh tế vĩ mô, bảo vệ cạnh tranh lành mạnh, giữ vững các cân đối lớn và an ninh kinh tế.
+                Chủ động hoàn thiện hệ thống pháp luật đồng bộ, phù hợp cam kết quốc tế; bảo đảm ổn định kinh tế vĩ mô, cạnh tranh lành mạnh, giữ vững các cân đối lớn và an ninh kinh tế.
               </p>
             </div>
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
               <h4 class="text-amber-800 font-bold">2. Kiến tạo môi trường & đổi mới sáng tạo</h4>
               <p class="text-slate-800 mt-1">
-                Nâng cao chất lượng, hiệu quả quản trị quốc gia; tạo môi trường thuận lợi thúc đẩy doanh nghiệp, khuyến khích khởi nghiệp, đổi mới sáng tạo và các mô hình kinh doanh mới.
+                Nâng cao chất lượng, hiệu quả quản trị quốc gia; tạo môi trường thuận lợi thúc đẩy doanh nghiệp phát triển, khuyến khích khởi nghiệp, đổi mới sáng tạo và các mô hình kinh doanh mới.
               </p>
             </div>
             <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
               <h4 class="text-emerald-800 font-bold">3. Phát huy vai trò các tổ chức xã hội</h4>
               <p class="text-slate-800 mt-1">
-                Phát huy vai trò của các tổ chức xã hội, hiệp hội nghề nghiệp trong tham gia hình thành, giám sát và điều tiết các quan hệ kinh tế thị trường minh bạch, lành mạnh.
+                Gắn kết hài hòa cơ chế <strong>Nhà nước – Thị trường – Xã hội</strong>; phát huy vai trò của các tổ chức xã hội, hiệp hội nghề nghiệp trong tham gia hình thành, giám sát và điều tiết các quan hệ thị trường lành mạnh.
               </p>
             </div>
             <div class="pres-subcard bg-slate-50 border border-slate-300">
               <h4 class="text-slate-900 font-bold">4. Hội nhập chủ động & phòng vệ thương mại</h4>
               <p class="text-slate-800 mt-1">
-                Đẩy mạnh đa phương hóa, đa dạng hóa kinh tế quốc tế, tránh lệ thuộc vào một thị trường; nâng cao sức chống chịu trước biến động thế giới và hoàn thiện phòng vệ thương mại.
+                Đẩy mạnh đa phương hóa, đa dạng hóa quan hệ kinh tế quốc tế, tránh lệ thuộc vào một thị trường; nâng cao sức chống chịu trước biến động toàn cầu và hoàn thiện công cụ phòng vệ thương mại.
               </p>
             </div>
           </div>
@@ -420,44 +421,43 @@ window.PresentationData = (() => {
       subtitle: "Lãnh đạo toàn diện, định hướng lý luận & kiểm soát quyền lực",
       color: "#7c3aed",
       lines: [
-        "• a. Phát triển tư duy lý luận & đề ra đường lối, chiến lược.",
-        "• b. Định hướng giữ vững mục tiêu XHCN, gắn tăng trưởng & công bằng.",
-        "• c. Lãnh đạo xây dựng và hoàn thiện đồng bộ thể chế kinh tế.",
-        "• d. Công tác cán bộ, kiểm tra, giám sát & phòng chống tham nhũng.",
+        "• Tổng kết thực tiễn, phát triển lý luận & đề ra đường lối, chiến lược.",
+        "• Định hướng giữ vững mục tiêu XHCN, gắn tăng trưởng với công bằng xã hội.",
+        "• Lãnh đạo Nhà nước xây dựng và hoàn thiện đồng bộ thể chế kinh tế.",
+        "• Lãnh đạo công tác cán bộ, kiểm tra, giám sát & phòng chống tham nhũng.",
       ],
-      desc: "Đảng Cộng sản Việt Nam giữ vai trò lãnh đạo toàn diện đối với nền KTTT định hướng XHCN thông qua 4 nội dung cốt lõi: phát triển lý luận chiến lược, giữ vững mục tiêu XHCN, lãnh đạo hoàn thiện thể chế và tăng cường kiểm tra, giám sát, phòng chống tham nhũng.",
+      desc: "Sự lãnh đạo của Đảng Cộng sản Việt Nam là nhân tố quyết định bảo đảm định hướng XHCN của nền kinh tế thị trường thông qua việc hoạch định đường lối chiến lược, lãnh đạo hoàn thiện thể chế, công tác cán bộ và kiểm soát quyền lực.",
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">a. Phát triển lý luận & đề ra đường lối</h4>
+              <h4 class="text-amber-800 font-bold">1. Phát triển lý luận & đề ra đường lối</h4>
               <p class="text-slate-800 mt-1">
-                Đảng là lực lượng tiên phong đúc kết thực tiễn, chuyển từ cơ chế mệnh lệnh hành chính sang KTTT ĐHXHCN; đề ra cương lĩnh, chiến lược phát triển KT-XH qua các kỳ Đại hội.
+                Đảng là lực lượng tiên phong tổng kết thực tiễn, phát triển lý luận từ cơ chế mệnh lệnh hành chính sang KTTT ĐHXHCN; đề ra Cương lĩnh, chiến lược phát triển KT-XH qua các kỳ Đại hội.
               </p>
             </div>
             <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">b. Định hướng & giữ vững mục tiêu XHCN</h4>
+              <h4 class="text-emerald-800 font-bold">2. Định hướng & giữ vững mục tiêu XHCN</h4>
               <p class="text-slate-800 mt-1">
-                Ngăn ngừa tự phát, chệch hướng sang TBCN; bảo đảm tăng trưởng kinh tế luôn đi đôi với tiến bộ, công bằng xã hội, văn hóa, giáo dục, y tế và bảo vệ môi trường.
+                Ngăn ngừa tính tự phát và nguy cơ chệch hướng sang TBCN; bảo đảm tăng trưởng kinh tế luôn đi đôi với tiến bộ, công bằng xã hội, phát triển văn hóa và bảo vệ môi trường.
               </p>
             </div>
             <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">c. Lãnh đạo xây dựng & hoàn thiện thể chế</h4>
+              <h4 class="text-sky-800 font-bold">3. Lãnh đạo xây dựng & hoàn thiện thể chế</h4>
               <p class="text-slate-800 mt-1">
-                Lãnh đạo Nhà nước thể chế hóa quan điểm chính trị thành pháp luật, chính sách đồng bộ; xác định rõ KT nhà nước chủ đạo, KT tư nhân là động lực quan trọng, cạnh tranh bình đẳng.
+                Lãnh đạo Nhà nước thể chế hóa chủ trương thành pháp luật, chính sách đồng bộ; xác định rõ KT nhà nước giữ vai trò chủ đạo, <strong>KT tư nhân là một động lực quan trọng nhất</strong>, cạnh tranh bình đẳng.
               </p>
             </div>
             <div class="pres-subcard bg-slate-50 border border-slate-300">
-              <h4 class="text-slate-900 font-bold">d. Công tác cán bộ, kiểm tra & giám sát</h4>
+              <h4 class="text-slate-900 font-bold">4. Công tác cán bộ, kiểm tra & giám sát</h4>
               <p class="text-slate-800 mt-1">
-                Bố trí cán bộ đủ phẩm chất và năng lực vào vị trí trọng yếu; tăng cường kiểm tra, giám sát, phòng chống tham nhũng, lãng phí, tiêu cực trong lĩnh vực kinh tế – tài chính.
+                Bố trí cán bộ đủ phẩm chất và năng lực vào vị trí trọng yếu; tăng cường kiểm tra, giám sát, kiểm soát quyền lực, phòng chống tham nhũng, lãng phí, tiêu cực trong lĩnh vực kinh tế – tài chính.
               </p>
             </div>
           </div>
         </div>
       `,
     },
-
     // ================= PHÒNG 2: NĂM ĐẶC TRƯNG CƠ BẢN CỦA KTTT ĐHXHCN (6 SLIDES) =================
     {
       id: "r2-a",

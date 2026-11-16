@@ -410,3 +410,8 @@ body {
   background: #cbd5e1;
   border-radius: 3px;
 }
+
+/* Ẩn nhãn cố định "20 Chuyên đề Lý luận & Thực tiễn" (không có chức năng, lặp trên mọi slide) */
+#pres-detail-col > div:first-child > span:last-child {
+  display: none !important;
+}

@@ -30,17 +30,38 @@ svg {
 
 /* Tab điều hướng đang active */
 .nav-tab.active {
-  background-color: #f59e0b !important;
-  color: #0f172a !important;
-  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+  background-color: #ea580c !important;
+  color: #ffffff !important;
+  box-shadow: none;
 }
 
 /* Bộ lọc chủ đề Game đang active */
 .game-filter-btn.active {
-  background-color: #f59e0b !important;
-  border-color: #d97706 !important;
-  color: #0f172a !important;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+  background-color: #ea580c !important;
+  border-color: #c2410c !important;
+  color: #ffffff !important;
+  box-shadow: none;
+}
+
+/* Ẩn thanh cuộn nhưng vẫn cho phép cuộn ngang trên danh sách 30 câu */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Khung Game Thể Chế vừa khít 1 màn hình (Zero-Scroll trên desktop) */
+@media (min-width: 1024px) {
+  #section-game:not(.hidden) {
+    height: calc(100vh - var(--navbar-height));
+    height: calc(100dvh - var(--navbar-height));
+    max-height: calc(100dvh - var(--navbar-height));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 /* Tối ưu khung hiển thị Nội Dung & Bảo Tàng 3D toàn vùng nhìn */
@@ -150,9 +171,7 @@ body.reveal-full-page {
 
 #reigns-card.card-correct-glow {
   border-color: #10b981 !important;
-  box-shadow:
-    0 0 0 3px rgba(16, 185, 129, 0.35),
-    0 0 32px rgba(16, 185, 129, 0.7) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
   animation: cardBounceCorrect 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
 }
 
@@ -184,9 +203,7 @@ body.reveal-full-page {
 
 #reigns-card.card-wrong-shake {
   border-color: #ef4444 !important;
-  box-shadow:
-    0 0 0 3px rgba(239, 68, 68, 0.35),
-    0 0 32px rgba(239, 68, 68, 0.75) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
   animation: cardShakeWrong 0.52s ease-in-out forwards !important;
 }
 
@@ -350,23 +367,16 @@ body.reveal-full-page {
 .quiz-feedback-dock {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  min-block-size: clamp(11.75rem, 25dvh, 13.75rem);
+  grid-template-rows: auto;
+  min-block-size: 0;
 }
 
 .quiz-dock-panel {
   grid-area: 1 / 1;
-  min-height: 100%;
 }
 
 .quiz-dock-panel.hidden {
   display: none !important;
-}
-
-@media (min-width: 768px) {
-  .quiz-feedback-dock {
-    min-block-size: clamp(7.75rem, 17.5dvh, 9.5rem);
-  }
 }
 
 .quiz-option-btn {
@@ -394,7 +404,7 @@ body.reveal-full-page {
 #btn-quiz-next:focus-visible,
 #btn-quiz-restart:focus-visible,
 #btn-quiz-back-museum:focus-visible {
-  outline: 2px solid #4f46e5;
+  outline: 2px solid #ea580c;
   outline-offset: 2px;
 }
 
@@ -402,7 +412,7 @@ body.reveal-full-page {
   background-color: #ecfdf5 !important;
   border-color: #10b981 !important;
   color: #065f46 !important;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  box-shadow: none;
 }
 
 .quiz-option-correct .quiz-option-letter {
@@ -415,7 +425,7 @@ body.reveal-full-page {
   background-color: #fff1f2 !important;
   border-color: #f43f5e !important;
   color: #9f1239 !important;
-  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2);
+  box-shadow: none;
 }
 
 .quiz-option-wrong .quiz-option-letter {
@@ -426,16 +436,12 @@ body.reveal-full-page {
 
 .quiz-card-correct-bounce {
   border-color: #10b981 !important;
-  box-shadow:
-    0 0 0 3px rgba(16, 185, 129, 0.25),
-    0 10px 28px rgba(16, 185, 129, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
 }
 
 .quiz-card-wrong-shake {
   border-color: #f43f5e !important;
-  box-shadow:
-    0 0 0 3px rgba(244, 63, 94, 0.22),
-    0 10px 28px rgba(244, 63, 94, 0.18) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -279,14 +279,6 @@ window.MuseumEngine = (() => {
       });
     }
 
-    ctx.fillStyle = "rgba(251, 191, 36, 0.95)";
-    ctx.font = "bold 17px 'Segoe UI', Tahoma, sans-serif";
-    ctx.fillText(
-      "NHẤP VÀO TRANH ĐỂ MỞ BẢNG THÔNG TIN HIỆN VẬT",
-      72,
-      652,
-    );
-
     ctx.strokeStyle = "rgba(255,255,255,0.14)";
     ctx.lineWidth = 5;
     ctx.strokeRect(11, 11, 1002, 678);
@@ -319,15 +311,11 @@ window.MuseumEngine = (() => {
     ctx.fillStyle = "#f8fafc";
     ctx.font = "bold 21px 'Segoe UI', Tahoma, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText(String(title).slice(0, 44), canvas.width / 2, 61);
+    ctx.fillText(String(title).slice(0, 44), canvas.width / 2, 76);
 
     ctx.fillStyle = "#cbd5e1";
     ctx.font = "16px 'Segoe UI', Tahoma, sans-serif";
-    ctx.fillText(String(subtitle).slice(0, 56), canvas.width / 2, 102);
-
-    ctx.fillStyle = "#fbbf24";
-    ctx.font = "bold 14px 'Segoe UI', Tahoma, sans-serif";
-    ctx.fillText("◆ NHẤP ĐỂ MỞ BẢNG THÔNG TIN ◆", canvas.width / 2, 147);
+    ctx.fillText(String(subtitle).slice(0, 56), canvas.width / 2, 118);
 
     return configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
   }

@@ -123,13 +123,9 @@
                     <div class="flex flex-col min-h-0">
                       <div class="canva-panel-head">
                         <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
-                        <span class="canva-count-chip">4 Ý Chính</span>
                       </div>
                       <div id="pres-key-points" class="pres-key-points-list">
-                        <div
-                          class="pres-key-card fragment fade-up visible"
-                          data-fragment-index="0"
-                        >
+                        <div class="pres-key-card">
                           <span>1</span>
                           <p>
                             Quan hệ SX, trao đổi, phân phối, tiêu dùng đều qua thị trường.
@@ -152,7 +148,6 @@
                       <h3 class="pres-col-heading">
                         Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn
                       </h3>
-                      <span class="canva-topic-chip">20 Chuyên đề</span>
                     </div>
                     <div
                       id="pres-slide-body"
@@ -215,7 +210,7 @@
             ></select>
           </div>
 
-          <!-- Cụm Giữa: Điều hướng PowerPoint (← Trước | Bộ đếm | Ý tiếp | Tiếp →) -->
+          <!-- Cụm Giữa: Điều hướng Slide (← Trước | Slide 1 / 20 | Tiếp →) -->
           <div
             class="canva-dock-group canva-dock-center"
             role="group"
@@ -250,30 +245,6 @@
             </span>
 
             <button
-              id="btn-fragment-next"
-              type="button"
-              title="Hiện từng luận điểm (Phím Space)"
-              aria-label="Hiện luận điểm tiếp theo"
-              class="pres-ctrl-btn canva-dock-btn canva-dock-btn-soft"
-            >
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.2"
-                  d="M5 13l4 4L19 7"
-                ></path>
-              </svg>
-              <span>Ý tiếp</span>
-            </button>
-
-            <button
               id="btn-slide-next"
               type="button"
               aria-label="Slide tiếp theo"
@@ -298,19 +269,15 @@
             </button>
           </div>
 
-          <!-- Cụm Phải: Trạng thái luận điểm & Toàn màn hình -->
+          <!-- Cụm Phải: Toàn màn hình -->
           <div class="canva-dock-group canva-dock-right">
-            <span id="pres-fragment-status" class="canva-frag-pill">
-              Luận điểm: 4 / 4
-            </span>
-
             <button
               id="btn-pres-fullscreen"
               type="button"
               aria-pressed="false"
               title="Toàn màn hình trình chiếu (Phím F)"
               aria-label="Bật hoặc tắt chế độ toàn màn hình"
-              class="pres-ctrl-btn canva-dock-btn canva-dock-btn-dark"
+              class="pres-ctrl-btn canva-dock-btn canva-dock-btn-primary"
             >
               <svg
                 id="icon-pres-fullscreen-enter"

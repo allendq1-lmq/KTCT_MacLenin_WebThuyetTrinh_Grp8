@@ -4,7 +4,6 @@ window.PresentationApp = (() => {
   let isActiveState = true;
   let isSyncingReveal = false;
   let currentSlideIndex = 0;
-  let fragmentCursor = -1; // -1 = hiển thị đầy đủ tất cả luận điểm; >= 0 = nhấn mạnh tuần tự từng ý
   let revealInstance = null;
   let touchStartX = 0;
   let touchStartY = 0;
@@ -31,7 +30,7 @@ window.PresentationApp = (() => {
   };
 
   const HERO_COVER_IDS = new Set(["r1-1a", "r2-a", "r3-1"]);
-  const BENTO_SLIDE_IDS = new Set([
+  const GRID_SLIDE_IDS = new Set([
     "r1-3",
     "r1-4a",
     "r1-4b",
@@ -69,7 +68,7 @@ window.PresentationApp = (() => {
     if (slide.id === "r3-table") return "comparison-matrix";
     if (slide.id === "r3-verdict") return "citation-grid";
     if (HERO_COVER_IDS.has(slide.id)) return "hero-cover";
-    if (BENTO_SLIDE_IDS.has(slide.id)) return "bento-grid";
+    if (GRID_SLIDE_IDS.has(slide.id)) return "card-grid";
     if (FEATURE_PILLAR_IDS.has(slide.id)) return "feature-pillars";
     return "split-timeline";
   }
@@ -192,7 +191,7 @@ window.PresentationApp = (() => {
 
   function highlightPlainTextSegment(text) {
     const metricPattern =
-      /(Thực tiễn VN:|476,3 tỷ USD|476,3 tỷ \$|~4\.700 \$|17 FTA|73 quốc gia|73 Nước|Hạng 33 TG|hạng 33 thế giới|trên 58% \(1993\)|>58%|dưới 3%|<3%|>93% dân số|>93%|Net Zero 2050|Nghị quyết 68-NQ\/TW|NQ 68-NQ\/TW|Nghị quyết 11-NQ\/TW|Điều 51 Hiến pháp 2013|Hiến pháp 2013 \(Điều 51\)|Đại hội XIV|COP26|Luật Bảo vệ Môi trường 2020)/g;
+      /(Thực tiễn VN:)|(476,3 tỷ USD|476,3 tỷ \$|~4\.700 \$|17 FTA|73 quốc gia|73 Nước|Hạng 33 TG|hạng 33 thế giới|trên 58% \(1993\)|>58%|dưới 3%|<3%|>93% dân số|>93%|Net Zero 2050|Nghị quyết 68-NQ\/TW|NQ 68-NQ\/TW|Nghị quyết 11-NQ\/TW|Điều 51 Hiến pháp 2013|Hiến pháp 2013 \(Điều 51\)|Đại hội XIV|COP26|Luật Bảo vệ Môi trường 2020)([.,;:!?%)]*)/g;
     let out = "";
     let lastIdx = 0;
     const raw = String(text || "");
@@ -201,11 +200,17 @@ window.PresentationApp = (() => {
       if (match.index > lastIdx) {
         out += escapeHtmlText(raw.slice(lastIdx, match.index));
       }
-      const matched = match[0];
-      const cls =
-        matched === "Thực tiễn VN:" ? "canva-vn-tag" : "canva-kpi-pill";
-      out += `<span class="${cls}">${escapeHtmlText(matched)}</span>`;
-      lastIdx = match.index + matched.length;
+      if (match[1]) {
+        out += `<span class="canva-vn-tag">${escapeHtmlText(match[1])}</span>`;
+      } else {
+        const core = match[2];
+        const punct = match[3] || "";
+        const pill = `<span class="canva-kpi-pill">${escapeHtmlText(core)}</span>`;
+        out += punct
+          ? `<span class="canva-kpi-wrap">${pill}${escapeHtmlText(punct)}</span>`
+          : pill;
+      }
+      lastIdx = match.index + match[0].length;
     }
     if (lastIdx < raw.length) {
       out += escapeHtmlText(raw.slice(lastIdx));
@@ -218,10 +223,14 @@ window.PresentationApp = (() => {
     if (isPlainText) {
       return highlightPlainTextSegment(raw);
     }
-    return raw
+    const joined = raw
       .split(/(<\/?[a-zA-Z!][^>]*>)/g)
       .map((part, idx) => (idx % 2 === 1 ? part : highlightPlainTextSegment(part)))
       .join("");
+    return joined.replace(
+      /(<(?:strong|b|em)><span class="canva-kpi-pill">[^<]+<\/span><\/(?:strong|b|em)>)([.,;:!?)]+)/g,
+      '<span class="canva-kpi-wrap">$1$2</span>',
+    );
   }
 
   function wrapVietnamPracticeCallout(card) {
@@ -248,24 +257,12 @@ window.PresentationApp = (() => {
     const wrapper = document.createElement("div");
     wrapper.innerHTML = highlightedHtml;
 
-    const lineCount =
-      Array.isArray(slide.lines) && slide.lines.length ? slide.lines.length : 4;
-    const maxIdx = Math.max(0, lineCount - 1);
-
     if (layoutType === "comparison-matrix") {
-      const tableRows = wrapper.querySelectorAll(".pres-comp-table tbody tr");
-      tableRows.forEach((row, idx) => {
-        row.classList.add("fragment", "fade-up", "visible");
-        row.setAttribute("data-fragment-index", String(Math.min(idx, maxIdx)));
-      });
       return wrapper.innerHTML;
     }
 
     const subcards = wrapper.querySelectorAll(".pres-subcard");
     subcards.forEach((card, idx) => {
-      card.classList.add("fragment", "fade-up", "visible");
-      card.setAttribute("data-fragment-index", String(Math.min(idx, maxIdx)));
-
       if (layoutType === "citation-grid") {
         if (idx === 0) card.classList.add("canva-verdict-box");
         return;
@@ -332,7 +329,7 @@ window.PresentationApp = (() => {
           true,
         );
         return `
-          <div class="pres-key-card fragment fade-up visible" data-fragment-index="${i}">
+          <div class="pres-key-card">
             <span>${i + 1}</span>
             <p>${cleanText}</p>
           </div>
@@ -350,7 +347,7 @@ window.PresentationApp = (() => {
     `;
   }
 
-  function buildHeroCoverBody(slide, idx, totalSlides, ctx) {
+  function buildHeroCoverBody(slide, _idx, _totalSlides, ctx) {
     return `
       <div data-pres-role="content-grid" class="canva-layout-hero">
         <div class="canva-hero-poster">
@@ -358,9 +355,6 @@ window.PresentationApp = (() => {
           <div class="canva-hero-visual-stage">
             <div>
               <span class="canva-room-watermark" aria-hidden="true">PHÒNG 0${slide.room}</span>
-              <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mt-1">
-                Chuyên đề trọng tâm • Slide ${idx + 1} / ${totalSlides}
-              </span>
             </div>
             ${ctx.themeVisualHtml}
           </div>
@@ -371,7 +365,6 @@ window.PresentationApp = (() => {
           <div data-pres-role="summary-col" class="pres-summary-col">
             <div class="canva-panel-head">
               <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
-              <span class="canva-count-chip">${ctx.lineCount} Ý Chính</span>
             </div>
             <div data-pres-role="key-points" class="pres-key-points-list">
               ${ctx.keyCardsHtml}
@@ -381,7 +374,6 @@ window.PresentationApp = (() => {
           <div data-pres-role="detail-col" class="pres-detail-col">
             <div class="canva-panel-head">
               <h3 class="pres-col-heading">Phân Tích Nền Tảng</h3>
-              <span class="canva-topic-chip">Mở đầu Phòng ${slide.room}</span>
             </div>
             <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content">
               ${ctx.decoratedBodyHtml}
@@ -392,23 +384,23 @@ window.PresentationApp = (() => {
     `;
   }
 
-  function buildStackedFullCanvasBody(slide, idx, totalSlides, ctx, wrapperClass, panelHeading, chipLabel) {
+  function buildStackedFullCanvasBody(slide, _idx, _totalSlides, ctx, wrapperClass, panelHeading, chipLabel) {
     return `
       <div class="${wrapperClass}">
-        <div class="canva-bento-header-row">
+        <div class="canva-grid-header-row">
           ${renderTitleBannerHtml(slide, ctx.themeVisualHtml, "")}
           ${renderQuoteBoxHtml(ctx.decoratedDesc, "")}
         </div>
         <div data-pres-role="content-grid" class="flex-1 min-h-0 flex flex-col gap-2">
-          <div data-pres-role="summary-col" class="pres-summary-col canva-bento-strip">
+          <div data-pres-role="summary-col" class="pres-summary-col canva-grid-strip">
             <div data-pres-role="key-points" class="pres-key-points-list">
               ${ctx.keyCardsHtml}
             </div>
           </div>
-          <div data-pres-role="detail-col" class="pres-detail-col canva-bento-canvas">
+          <div data-pres-role="detail-col" class="pres-detail-col canva-grid-canvas">
             <div class="canva-panel-head">
               <h3 class="pres-col-heading">${panelHeading}</h3>
-              <span class="canva-topic-chip">${chipLabel} • ${idx + 1}/${totalSlides}</span>
+              ${chipLabel ? `<span class="canva-topic-chip">${chipLabel}</span>` : ""}
             </div>
             <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content">
               ${ctx.decoratedBodyHtml}
@@ -419,7 +411,7 @@ window.PresentationApp = (() => {
     `;
   }
 
-  function buildSplitTimelineBody(slide, idx, totalSlides, ctx) {
+  function buildSplitTimelineBody(slide, _idx, _totalSlides, ctx) {
     return `
       <div class="canva-layout-timeline">
         ${renderTitleBannerHtml(slide, ctx.themeVisualHtml, "")}
@@ -428,7 +420,6 @@ window.PresentationApp = (() => {
             <div class="flex flex-col min-h-0">
               <div class="canva-panel-head">
                 <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
-                <span class="canva-count-chip">${ctx.lineCount} Ý Chính</span>
               </div>
               <div data-pres-role="key-points" class="pres-key-points-list">
                 ${ctx.keyCardsHtml}
@@ -440,7 +431,6 @@ window.PresentationApp = (() => {
           <div data-pres-role="detail-col" class="pres-detail-col lg:col-span-8 flex flex-col min-h-0">
             <div class="canva-panel-head">
               <h3 class="pres-col-heading">Diễn Tiến &amp; Luận Giải Chi Tiết</h3>
-              <span class="canva-topic-chip">Slide ${idx + 1} / ${totalSlides}</span>
             </div>
             <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content flex-1 min-h-0 flex flex-col justify-center">
               ${ctx.decoratedBodyHtml}
@@ -451,7 +441,7 @@ window.PresentationApp = (() => {
     `;
   }
 
-  function buildFeaturePillarsBody(slide, idx, totalSlides, ctx) {
+  function buildFeaturePillarsBody(slide, _idx, _totalSlides, ctx) {
     return `
       <div class="canva-layout-pillars">
         ${renderTitleBannerHtml(slide, ctx.themeVisualHtml, "")}
@@ -459,7 +449,6 @@ window.PresentationApp = (() => {
           <div data-pres-role="detail-col" class="pres-detail-col canva-pillars-showcase lg:col-span-8 flex flex-col min-h-0">
             <div class="canva-panel-head">
               <h3 class="pres-col-heading">Trụ Cột Lý Luận &amp; Phân Tích</h3>
-              <span class="canva-topic-chip">Đặc trưng cốt lõi • ${idx + 1}/${totalSlides}</span>
             </div>
             <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content flex-1 min-h-0 flex flex-col justify-center">
               ${ctx.decoratedBodyHtml}
@@ -471,7 +460,6 @@ window.PresentationApp = (() => {
             <div class="flex flex-col min-h-0">
               <div class="canva-panel-head">
                 <h3 class="pres-col-heading">Điểm Nhớ Nhanh</h3>
-                <span class="canva-count-chip">${ctx.lineCount} Ý Chính</span>
               </div>
               <div data-pres-role="key-points" class="pres-key-points-list">
                 ${ctx.keyCardsHtml}
@@ -498,15 +486,15 @@ window.PresentationApp = (() => {
     let stageInnerHtml = "";
     if (layoutType === "hero-cover") {
       stageInnerHtml = buildHeroCoverBody(slide, idx, totalSlides, ctx);
-    } else if (layoutType === "bento-grid") {
+    } else if (layoutType === "card-grid") {
       stageInnerHtml = buildStackedFullCanvasBody(
         slide,
         idx,
         totalSlides,
         ctx,
-        "canva-layout-bento",
-        "Bento Lý Luận &amp; Dẫn Chứng Thực Tiễn",
-        "Bento Grid",
+        "canva-layout-grid",
+        "Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn",
+        "",
       );
     } else if (layoutType === "feature-pillars") {
       stageInnerHtml = buildFeaturePillarsBody(slide, idx, totalSlides, ctx);
@@ -564,56 +552,8 @@ window.PresentationApp = (() => {
       .join("");
   }
 
-  function getActiveSection() {
-    const sections = document.querySelectorAll("#pres-reveal-slides > section");
-    return sections[currentSlideIndex] || null;
-  }
-
-  function getFragmentMaxIndex(section) {
-    if (!section) return 3;
-    let maxIndex = 0;
-    const fragments = section.querySelectorAll(".fragment");
-    fragments.forEach((frag) => {
-      const idx = parseInt(frag.getAttribute("data-fragment-index") || "0", 10);
-      if (!isNaN(idx) && idx > maxIndex) {
-        maxIndex = idx;
-      }
-    });
-    return maxIndex;
-  }
-
-  function updateFragmentStatusLabel(section) {
-    const statusEl = document.getElementById("pres-fragment-status");
-    const totalSteps = getFragmentMaxIndex(section) + 1;
-    if (!statusEl) return;
-    const shownCount =
-      fragmentCursor < 0 ? totalSteps : Math.min(totalSteps, fragmentCursor + 1);
-    statusEl.textContent = `Luận điểm: ${shownCount} / ${totalSteps}`;
-  }
-
   function applyFragmentState() {
-    const activeSection = getActiveSection();
-    if (!activeSection) return;
-    const fragments = activeSection.querySelectorAll(".fragment");
-
-    fragments.forEach((frag) => {
-      const idx = parseInt(frag.getAttribute("data-fragment-index") || "0", 10);
-      if (fragmentCursor < 0) {
-        frag.classList.add("visible");
-        frag.classList.remove("current-fragment");
-      } else if (idx <= fragmentCursor) {
-        frag.classList.add("visible");
-        if (idx === fragmentCursor) {
-          frag.classList.add("current-fragment");
-        } else {
-          frag.classList.remove("current-fragment");
-        }
-      } else {
-        frag.classList.remove("visible", "current-fragment");
-      }
-    });
-
-    updateFragmentStatusLabel(activeSection);
+    // Không ẩn/dim từng luận điểm; toàn bộ nội dung trên slide luôn hiển thị ngay.
   }
 
   function syncActiveSectionIds(activeIdx) {
@@ -677,7 +617,6 @@ window.PresentationApp = (() => {
     if (!slides.length) return;
     const clampedIdx = ((idx % slides.length) + slides.length) % slides.length;
     currentSlideIndex = clampedIdx;
-    fragmentCursor = -1;
     const slide = slides[clampedIdx];
 
     if (
@@ -711,31 +650,10 @@ window.PresentationApp = (() => {
   }
 
   function nextFragment() {
-    const activeSection = getActiveSection();
-    if (!activeSection) {
-      nextSlide();
-      return;
-    }
-    const maxIndex = getFragmentMaxIndex(activeSection);
-    if (fragmentCursor < 0) {
-      fragmentCursor = 0;
-      applyFragmentState();
-      return;
-    }
-    if (fragmentCursor < maxIndex) {
-      fragmentCursor++;
-      applyFragmentState();
-      return;
-    }
     nextSlide();
   }
 
   function prevFragment() {
-    if (fragmentCursor > 0) {
-      fragmentCursor--;
-      applyFragmentState();
-      return;
-    }
     prevSlide();
   }
 
@@ -864,7 +782,7 @@ window.PresentationApp = (() => {
       keyboardCondition: "focused",
       transition: "slide",
       transitionSpeed: "default",
-      fragments: true,
+      fragments: false,
       touch: true,
       controls: false,
       progress: false,
@@ -953,28 +871,16 @@ window.PresentationApp = (() => {
       return;
     }
 
-    if (k === "arrowright" || k === "pagedown") {
+    if (k === "arrowright" || k === "pagedown" || k === " " || k === "arrowdown") {
       e.preventDefault();
       if (e.stopPropagation) e.stopPropagation();
       nextSlide();
       return;
     }
-    if (k === "arrowleft" || k === "pageup") {
+    if (k === "arrowleft" || k === "pageup" || k === "arrowup") {
       e.preventDefault();
       if (e.stopPropagation) e.stopPropagation();
       prevSlide();
-      return;
-    }
-    if (k === " " || k === "arrowdown") {
-      e.preventDefault();
-      if (e.stopPropagation) e.stopPropagation();
-      nextFragment();
-      return;
-    }
-    if (k === "arrowup") {
-      e.preventDefault();
-      if (e.stopPropagation) e.stopPropagation();
-      prevFragment();
       return;
     }
     if (k === "home") {
@@ -1015,7 +921,6 @@ window.PresentationApp = (() => {
 
     bindClickAction(document.getElementById("btn-slide-prev"), prevSlide);
     bindClickAction(document.getElementById("btn-slide-next"), nextSlide);
-    bindClickAction(document.getElementById("btn-fragment-next"), nextFragment);
     bindClickAction(document.getElementById("btn-pres-fullscreen"), toggleFullscreen);
 
     ["fullscreenchange", "webkitfullscreenchange"].forEach((evt) => {

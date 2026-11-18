@@ -1,5 +1,5 @@
 /**
- * js/quiz.js - Engine Trắc nghiệm tương tác (5 câu mẫu, không bảng xếp hạng)
+ * js/quiz.js - Engine Trắc nghiệm tương tác (30 câu hỏi, hỗ trợ 2 & 4 đáp án)
  * Dữ liệu câu hỏi lấy từ `window.QUIZ_QUESTIONS` trong `js/quiz-data.js`.
  */
 window.InteractiveQuiz = (() => {
@@ -182,7 +182,7 @@ window.InteractiveQuiz = (() => {
     return soundEnabled;
   }
 
-  // Hiệu ứng Pháo giấy (mini burst khi đúng từng câu, toàn màn hình khi 5/5)
+  // Hiệu ứng Pháo giấy (mini burst khi đúng từng câu, toàn màn hình khi đạt từ 90% trở lên)
   function stopConfetti() {
     if (confettiAnimId) {
       cancelAnimationFrame(confettiAnimId);
@@ -306,55 +306,59 @@ window.InteractiveQuiz = (() => {
     runConfettiLoop(true);
   }
 
-  // Nhận xét phân tầng theo điểm số (0/5 đến 5/5)
+  // Nhận xét phân tầng theo tỷ lệ % điểm số
   function getFeedbackForScore(finalScore, totalQuestions) {
-    const total = typeof totalQuestions === "number" && totalQuestions > 0 ? totalQuestions : 5;
+    const total =
+      typeof totalQuestions === "number" && totalQuestions > 0
+        ? totalQuestions
+        : getQuestions().length || 30;
     const numericScore = Math.max(0, Math.min(total, Number(finalScore) || 0));
+    const pct = total > 0 ? numericScore / total : 0;
 
     if (numericScore === 0) {
       return {
         tier: "0",
-        badge: "Mốc 0/5 • Làm Nóng Động Cơ",
-        title: "Chưa Trúng Câu Nào — Khởi Động Nhẹ Nhàng Thôi!",
+        badge: `Mốc 0/${total} • Cần ôn tập lại từ đầu`,
+        title: "Chưa Trúng Câu Nào — Hãy Khởi Động Lại Nhé!",
         message:
-          "Suýt chút nữa thì trúng hết rồi! Xem như bạn vừa 'khởi động nhẹ' làm quen mặt chữ. Hãy dạo lại một vòng Bảo Tàng 3D để nạp thêm lý luận rồi quay lại phục thù ngay nhé!",
-        badgeTone: "bg-slate-100 text-slate-700 border-slate-300",
-        scoreTone: "text-slate-700",
+          "Bạn chưa trả lời đúng câu hỏi nào. Hãy xem lại các phòng trưng bày trong Bảo Tàng 3D và hệ thống slide thuyết trình để nắm vững kiến thức cốt lõi rồi thử lại nhé!",
+        badgeTone: "bg-rose-50 text-rose-700 border-rose-200",
+        scoreTone: "text-rose-700",
       };
     }
 
-    if (numericScore <= 2) {
+    if (pct < 0.5) {
       return {
-        tier: "1-2",
-        badge: `Mốc ${numericScore}/${total} • Tân Binh KTCT`,
-        title: "Có Khởi Đầu Rồi Đó — Cố Thêm Chút Nữa!",
+        tier: "low",
+        badge: `Mốc ${numericScore}/${total} • Cần cố gắng thêm`,
+        title: "Bước Đầu Làm Quen — Ôn Tập Thêm Chút Nữa!",
         message:
-          "Bạn đã nắm được những ý nền tảng ban đầu rồi! Chỉ cần ghé tham quan thêm vài gian trưng bày trong Bảo Tàng 3D là điểm số sẽ bật tăng vù vù ngay.",
+          "Bạn đã nắm được một phần kiến thức nền tảng nhưng vẫn còn nhầm lẫn ở một số khái niệm trọng tâm. Hãy đọc kỹ phần giải thích chi tiết và xem lại nội dung thuyết trình để cải thiện điểm số!",
         badgeTone: "bg-amber-100 text-amber-800 border-amber-300",
         scoreTone: "text-amber-600",
       };
     }
 
-    if (numericScore <= 4) {
+    if (pct < 0.9) {
       return {
-        tier: "3-4",
-        badge: `Mốc ${numericScore}/${total} • Chuyên Gia Triển Vọng`,
-        title: "Rất Tốt! Nắm Vững Kiến Thức Cốt Lõi!",
+        tier: "mid",
+        badge: `Mốc ${numericScore}/${total} • Nắm vững kiến thức`,
+        title: "Rất Tốt! Nắm Chắc Kiến Thức Trọng Tâm!",
         message:
-          "Phong độ rất ấn tượng — bạn đã hiểu chắc nội dung trọng tâm của bài thuyết trình, chỉ hơi sẩy chân nhẹ một chút xíu thôi. Thử lại lần nữa để chạm đỉnh tuyệt đối nhé!",
-        badgeTone: "bg-sky-100 text-sky-800 border-sky-300",
-        scoreTone: "text-sky-600",
+          "Kết quả rất ấn tượng — bạn đã nắm khá vững bản chất Kinh tế thị trường định hướng xã hội chủ nghĩa và giới hạn lịch sử của chủ nghĩa tư bản. Chỉ còn vài chi tiết nhỏ cần lưu ý thêm!",
+        badgeTone: "bg-emerald-100 text-emerald-800 border-emerald-300",
+        scoreTone: "text-emerald-600",
       };
     }
 
     return {
-      tier: "5",
-      badge: `Danh Hiệu • Thủ khoa Kinh tế Chính trị Nhóm 8`,
-      title: "Xuất Sắc Tuyệt Đối 5/5 — Thủ Khoa Kinh Tế Chính Trị Nhóm 8!",
+      tier: "high",
+      badge: `Mốc ${numericScore}/${total} • Thủ khoa Kinh tế Chính trị Nhóm 8`,
+      title: `Xuất Sắc Toàn Diện (${numericScore}/${total})!`,
       message:
-        "Xin chúc mừng! Bạn đã chinh phục trọn vẹn cả 5/5 câu hỏi với kiến thức lý luận sắc bén không tì vết. Xứng đáng nhận tràng pháo tay và danh hiệu Thủ khoa Kinh tế Chính trị Nhóm 8!",
-      badgeTone: "bg-emerald-100 text-emerald-800 border-emerald-300",
-      scoreTone: "text-emerald-600",
+        "Xin chúc mừng! Bạn đã làm chủ xuất sắc hệ thống lý luận và thực tiễn của đề tài Kinh tế chính trị Mác - Lênin Nhóm 8!",
+      badgeTone: "bg-amber-100 text-amber-900 border-amber-400",
+      scoreTone: "text-amber-600",
     };
   }
 
@@ -378,14 +382,14 @@ window.InteractiveQuiz = (() => {
       const dot = document.createElement("span");
       const ans = answers[idx];
       let cls =
-        "inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[11px] font-bold border transition-all ";
+        "inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[10px] sm:text-[11px] font-bold border transition-all shrink-0 ";
 
       if (ans) {
         cls += ans.isCorrect
           ? "bg-emerald-500 text-white border-emerald-600 shadow-sm"
           : "bg-rose-500 text-white border-rose-600 shadow-sm";
       } else if (idx === currentIndex) {
-        cls += "bg-amber-500 text-slate-950 border-amber-600 ring-2 ring-amber-300";
+        cls += "bg-orange-600 text-white border-orange-700";
       } else {
         cls += "bg-slate-100 text-slate-500 border-slate-300";
       }
@@ -393,6 +397,12 @@ window.InteractiveQuiz = (() => {
       dot.className = cls;
       dot.textContent = String(idx + 1);
       container.appendChild(dot);
+
+      if (idx === currentIndex && typeof dot.scrollIntoView === "function") {
+        try {
+          dot.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        } catch (_) {}
+      }
     });
   }
 
@@ -428,13 +438,11 @@ window.InteractiveQuiz = (() => {
       if (answer.isCorrect) {
         feedbackBanner.className =
           "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-extrabold border bg-emerald-100/90 text-emerald-900 border-emerald-300";
-        feedbackBanner.textContent =
-          "Chính xác! +1 điểm — Lý luận quá chuẩn xác!";
+        feedbackBanner.textContent = "Chính xác! +1 điểm";
       } else {
         feedbackBanner.className =
           "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-[11px] sm:text-xs font-extrabold border bg-rose-100/90 text-rose-900 border-rose-300";
-        feedbackBanner.textContent =
-          "Chưa chính xác! Xem đáp án đúng và giải thích nhé.";
+        feedbackBanner.textContent = "Chưa chính xác!";
       }
     }
 
@@ -464,6 +472,7 @@ window.InteractiveQuiz = (() => {
     const question = questions[currentIndex];
     const total = questions.length;
     const existingAnswer = answers[currentIndex] || null;
+    const optionCount = Array.isArray(question.options) ? question.options.length : 4;
 
     clearCardAnimationClasses();
 
@@ -488,11 +497,11 @@ window.InteractiveQuiz = (() => {
       progressLabel.textContent = `Câu ${currentIndex + 1} / ${total}`;
     }
     if (scoreBadge) {
-      scoreBadge.textContent = `Điểm: ${score} / ${total}`;
+      scoreBadge.textContent = `${score} / ${total} đúng`;
     }
     if (progressBar) {
       const pct = Math.round(((currentIndex + (existingAnswer ? 1 : 0)) / total) * 100);
-      progressBar.style.width = `${Math.max(10, pct)}%`;
+      progressBar.style.width = `${Math.max(3, pct)}%`;
     }
     if (sectionBadge) {
       sectionBadge.textContent = question.sectionCode || `Câu ${currentIndex + 1}`;
@@ -504,14 +513,18 @@ window.InteractiveQuiz = (() => {
       feedbackBanner.className = "hidden";
       feedbackBanner.textContent = "";
     }
-    if (explanationPlaceholder && !existingAnswer) {
-      explanationPlaceholder.classList.remove("hidden");
+    if (explanationPlaceholder) {
+      explanationPlaceholder.classList.add("hidden");
     }
     if (explanationBox && !existingAnswer) {
       explanationBox.classList.add("hidden");
     }
 
     if (optionsList) {
+      optionsList.className =
+        optionCount === 2
+          ? "w-full grid grid-cols-1 sm:grid-cols-2 gap-3"
+          : "w-full grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2.5 md:gap-3";
       optionsList.innerHTML = "";
       (question.options || []).forEach((optText, idx) => {
         const btn = document.createElement("button");
@@ -564,7 +577,7 @@ window.InteractiveQuiz = (() => {
 
     const scoreBadge = document.getElementById("quiz-score-badge");
     if (scoreBadge) {
-      scoreBadge.textContent = `Điểm: ${score} / ${questions.length}`;
+      scoreBadge.textContent = `${score} / ${questions.length} đúng`;
     }
 
     const progressBar = document.getElementById("quiz-progress-bar");
@@ -638,22 +651,24 @@ window.InteractiveQuiz = (() => {
         const ans = answers[idx];
         const ok = ans && ans.isCorrect;
         const pill = document.createElement("div");
-        pill.className = `px-3 py-2 rounded-xl border text-xs sm:text-sm font-bold flex items-center justify-between gap-2 ${
+        pill.className = `px-2.5 py-1.5 rounded-lg border text-xs font-bold flex items-center justify-between gap-1.5 ${
           ok
             ? "bg-emerald-50 border-emerald-200 text-emerald-800"
             : "bg-rose-50 border-rose-200 text-rose-800"
         }`;
         const label = document.createElement("span");
-        label.textContent = `Câu ${idx + 1} (${q.sectionCode || ""})`;
+        label.className = "truncate";
+        label.textContent = `Câu ${idx + 1} • ${q.sectionCode || ""}`;
         const status = document.createElement("span");
-        status.textContent = ok ? "Đúng" : "Chưa đúng";
+        status.className = "shrink-0";
+        status.textContent = ok ? "Đúng" : "Sai";
         pill.appendChild(label);
         pill.appendChild(status);
         breakdownEl.appendChild(pill);
       });
     }
 
-    if (score === total) {
+    if (total > 0 && score / total >= 0.9) {
       startFullConfetti();
     }
     playQuizSound("complete");

@@ -110,7 +110,7 @@ body {
   min-height: 0;
   position: relative;
   overflow: hidden;
-  padding-bottom: 54px;
+  padding-bottom: 52px;
 }
 
 #pres-reveal.reveal {
@@ -225,30 +225,30 @@ body {
   }
 }
 
-/* ================= HỆ THỐNG THẺ & TYPOGRAPHY CANVA EDITORIAL ================= */
+/* ================= TYPOGRAPHY & SURFACE TOKENS CHUẨN CANVA ================= */
+.canva-card-surface,
 .pres-title-banner,
 .pres-summary-col,
 .pres-detail-col {
   background-color: var(--canva-surface);
   border: 1px solid rgba(15, 23, 42, 0.09);
-  border-radius: 1.1rem;
+  border-radius: 1.15rem;
   box-shadow:
     0 1px 2px rgba(15, 23, 42, 0.04),
-    0 10px 26px -12px rgba(15, 23, 42, 0.1);
+    0 12px 28px -14px rgba(15, 23, 42, 0.11);
 }
 
 .pres-title-banner {
   position: relative;
   overflow: hidden;
-  padding: clamp(0.45rem, 1vh, 0.82rem) clamp(0.85rem, 1.4vw, 1.4rem);
+  padding: clamp(0.45rem, 0.95vh, 0.8rem) clamp(0.85rem, 1.35vw, 1.35rem);
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.9rem;
   border-left: 5px solid var(--slide-accent);
-  background:
-    linear-gradient(125deg, #ffffff 0%, var(--slide-accent-soft) 140%);
+  background: linear-gradient(125deg, #ffffff 0%, var(--slide-accent-soft) 140%);
 }
 
 .canva-banner-main {
@@ -263,7 +263,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.45rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.18rem;
 }
 
 .pres-slide-badge {
@@ -274,7 +274,7 @@ body {
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 0.22rem 0.65rem;
+  padding: 0.22rem 0.68rem;
   border-radius: 9999px;
   background-color: var(--slide-accent-soft);
   color: var(--slide-accent-ink);
@@ -284,17 +284,17 @@ body {
 
 .pres-slide-subtitle {
   color: var(--slide-accent-ink);
-  font-size: clamp(0.8rem, 1.05vw, 0.98rem);
+  font-size: clamp(0.82rem, 1.05vw, 1rem);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 
 .pres-slide-title {
   color: var(--canva-heading);
-  font-size: clamp(1.28rem, 2.15vw, 2.05rem);
+  font-size: clamp(1.45rem, 2.5vw, 2.25rem);
   font-weight: 800;
   line-height: 1.18;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .canva-banner-visual {
@@ -309,7 +309,7 @@ body {
 .canva-theme-badge-box {
   width: 44px;
   height: 44px;
-  border-radius: 0.85rem;
+  border-radius: 0.88rem;
   background-color: var(--slide-accent-soft);
   border: 1px solid var(--slide-accent-border);
   color: var(--slide-accent);
@@ -325,34 +325,31 @@ body {
 }
 
 .canva-room-watermark {
-  position: absolute;
-  right: 110px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: clamp(2.8rem, 5.2vw, 4.8rem);
+  font-size: clamp(2.8rem, 5vw, 4.75rem);
   font-weight: 900;
   letter-spacing: -0.04em;
   color: var(--slide-accent);
-  opacity: 0.07;
+  opacity: 0.1;
+  line-height: 1;
   pointer-events: none;
-  z-index: 1;
+  user-select: none;
   white-space: nowrap;
 }
 
-/* Tiêu đề panel cột trái/phải */
+/* Tiêu đề panel */
 .canva-panel-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding-bottom: 0.38rem;
+  padding-bottom: 0.35rem;
   margin-bottom: 0.42rem;
   border-bottom: 1px dashed #cbd5e1;
   flex-shrink: 0;
 }
 
 .pres-col-heading {
-  font-size: clamp(0.76rem, 1vw, 0.92rem);
+  font-size: clamp(0.75rem, 0.95vw, 0.9rem);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -367,33 +364,35 @@ body {
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 0.18rem 0.55rem;
+  padding: 0.18rem 0.56rem;
   border-radius: 9999px;
   background-color: var(--slide-accent-soft);
   color: var(--slide-accent-ink);
   border: 1px solid var(--slide-accent-border);
+  white-space: nowrap;
 }
 
 .canva-topic-chip {
   font-size: 0.68rem;
   font-weight: 700;
-  padding: 0.18rem 0.55rem;
+  padding: 0.18rem 0.56rem;
   border-radius: 9999px;
   background-color: #ecfdf5;
   color: #065f46;
   border: 1px solid #a7f3d0;
+  white-space: nowrap;
 }
 
 .pres-summary-col,
 .pres-detail-col {
-  padding: clamp(0.58rem, 1.15vh, 1rem) clamp(0.75rem, 1.2vw, 1.2rem);
+  padding: clamp(0.55rem, 1.05vh, 0.95rem) clamp(0.75rem, 1.2vw, 1.15rem);
 }
 
-/* 4 Thẻ luận điểm cột trái */
+/* Thẻ luận điểm chính */
 .pres-key-points-list {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.3rem, 0.65vh, 0.52rem);
+  gap: clamp(0.32rem, 0.62vh, 0.52rem);
 }
 
 .pres-key-card {
@@ -401,8 +400,8 @@ body {
   border: 1px solid #e2e8f0;
   border-left: 3.5px solid var(--slide-accent);
   color: var(--canva-heading);
-  padding: clamp(0.36rem, 0.7vh, 0.56rem) clamp(0.55rem, 0.85vw, 0.78rem);
-  border-radius: 0.75rem;
+  padding: clamp(0.36rem, 0.68vh, 0.56rem) clamp(0.55rem, 0.85vw, 0.78rem);
+  border-radius: 0.78rem;
   display: flex;
   align-items: flex-start;
   gap: 0.55rem;
@@ -421,25 +420,24 @@ body {
   font-weight: 800;
   background-color: var(--slide-accent);
   color: #ffffff;
-  margin-top: 0.05rem;
+  margin-top: 0.1rem;
 }
 
 .pres-key-card p {
   color: var(--canva-heading);
-  font-size: clamp(0.84rem, 1.05vw, 0.98rem);
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
   font-weight: 600;
-  line-height: 1.38;
+  line-height: 1.55;
 }
 
-/* Hộp Khái quát nội dung */
+/* Hộp Khái quát nội dung / Quote Card */
 .pres-summary-desc-box {
   position: relative;
   background: linear-gradient(145deg, #f8fafc 0%, #fffbeb 100%);
   border: 1px solid #e2e8f0;
-  border-radius: 0.85rem;
+  border-radius: 0.88rem;
   color: var(--canva-ink);
-  padding: clamp(0.45rem, 0.85vh, 0.72rem) clamp(0.65rem, 0.95vw, 0.9rem);
-  margin-top: 0.45rem;
+  padding: clamp(0.45rem, 0.82vh, 0.72rem) clamp(0.65rem, 0.95vw, 0.9rem);
 }
 
 .canva-quote-label {
@@ -449,19 +447,19 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: var(--slide-accent-ink);
-  margin-bottom: 0.18rem;
+  margin-bottom: 0.16rem;
 }
 
 .pres-slide-desc {
   color: #334155;
-  font-size: clamp(0.8rem, 0.98vw, 0.92rem);
-  line-height: 1.42;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  line-height: 1.55;
 }
 
-/* Nội dung chi tiết cột phải */
+/* Nội dung phân tích & subcards */
 .pres-projector-content {
-  font-size: clamp(0.86rem, 1.08vw, 1.04rem);
-  line-height: 1.48;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  line-height: 1.55;
   color: var(--canva-ink);
 }
 
@@ -473,16 +471,69 @@ body {
 
 .pres-subcard {
   position: relative;
-  padding: clamp(0.5rem, 0.95vh, 0.82rem) clamp(0.68rem, 1.05vw, 1rem);
-  border-radius: 0.95rem;
+  padding: clamp(0.5rem, 0.92vh, 0.8rem) clamp(0.68rem, 1.05vw, 1rem);
+  border-radius: 1rem;
   box-shadow: 0 3px 12px -4px rgba(15, 23, 42, 0.06);
   border-width: 1px;
 }
 
+/* Huy hiệu số thứ tự tròn + SVG icon trên góc phải mỗi thẻ subcard */
+.canva-subcard-head {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  pointer-events: none;
+}
+
+.canva-subcard-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.45rem;
+  height: 1.45rem;
+  padding: 0 0.28rem;
+  border-radius: 9999px;
+  background-color: var(--slide-accent);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.canva-subcard-index::before {
+  content: attr(data-subcard-num);
+}
+
+.canva-subcard-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--slide-accent-border);
+  color: var(--slide-accent);
+}
+
+.canva-subcard-icon svg {
+  width: 0.86rem;
+  height: 0.86rem;
+}
+
+.pres-subcard:has(.canva-subcard-head) > h4:first-of-type,
+.pres-subcard:has(.canva-subcard-head) > strong:first-of-type,
+.pres-subcard:has(.canva-subcard-head) > span:first-of-type {
+  padding-right: 3.35rem;
+}
+
 .pres-projector-content h4 {
-  font-size: clamp(0.9rem, 1.18vw, 1.08rem) !important;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem) !important;
   font-weight: 800 !important;
-  line-height: 1.28 !important;
+  line-height: 1.32 !important;
   margin-bottom: 0.22rem !important;
   letter-spacing: -0.01em;
 }
@@ -490,11 +541,11 @@ body {
 .pres-projector-content p,
 .pres-projector-content li,
 .pres-projector-content blockquote {
-  font-size: clamp(0.82rem, 1.04vw, 0.98rem) !important;
-  line-height: 1.46 !important;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem) !important;
+  line-height: 1.55 !important;
 }
 
-/* ================= HUY HIỆU SỐ LIỆU KPI & THỰC TIỄN VN ================= */
+/* ================= HUY HIỆU SỐ LIỆU KPI & KHUNG THỰC TIỄN VIỆT NAM ================= */
 .canva-kpi-pill {
   display: inline-flex;
   align-items: center;
@@ -511,71 +562,146 @@ body {
 
 .canva-vn-tag {
   display: inline-block;
-  padding: 0.05rem 0.45rem;
+  padding: 0.05rem 0.46rem;
   border-radius: 9999px;
   background-color: #059669;
   color: #ffffff !important;
   font-size: 0.78em;
   font-weight: 800;
   letter-spacing: 0.02em;
-  margin-right: 0.25rem;
+  margin-right: 0.28rem;
 }
 
-/* ================= 5 MẪU BỐ CỤC CANVA TỰ ĐỘNG ================= */
+.canva-vn-callout {
+  margin-top: 0.38rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.68rem;
+  background: linear-gradient(135deg, #ffffff 0%, #ecfdf5 100%);
+  border: 1px solid #a7f3d0;
+  border-left: 3.5px solid #059669;
+  color: #064e3b;
+}
 
-/* 1. HERO COVER (Mở đầu Phòng 1, 2, 3) */
-section[data-layout="hero-cover"] .canva-hero-banner {
+/* ================= 6 KIẾN TRÚC BỐ CỤC CANVA RIÊNG BIỆT ================= */
+
+/* 1. HERO COVER: Poster bất đối xứng bên trái (5-col) + Lưới 2x2 & phân tích bên phải (7-col) */
+.canva-layout-hero {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.55rem, 1vw, 1rem);
+}
+
+.canva-hero-poster {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: clamp(0.75rem, 1.4vh, 1.25rem) clamp(0.9rem, 1.5vw, 1.45rem);
+  border-radius: 1.25rem;
   background:
-    radial-gradient(circle at 88% 20%, color-mix(in srgb, var(--slide-accent) 16%, transparent), transparent 48%),
-    linear-gradient(125deg, #ffffff 0%, var(--slide-accent-soft) 100%);
-  border-left-width: 7px;
-  padding: clamp(0.55rem, 1.15vh, 0.95rem) clamp(1rem, 1.6vw, 1.6rem);
+    radial-gradient(circle at 86% 16%, color-mix(in srgb, var(--slide-accent) 18%, transparent), transparent 52%),
+    linear-gradient(155deg, #ffffff 0%, var(--slide-accent-soft) 100%);
+  border: 1px solid var(--slide-accent-border);
+  border-top: 6px solid var(--slide-accent);
+  box-shadow: 0 14px 32px -16px rgba(15, 23, 42, 0.16);
 }
 
-section[data-layout="hero-cover"] .canva-hero-illustration {
-  width: clamp(56px, 5.2vw, 84px);
-  height: clamp(56px, 5.2vw, 84px);
+.canva-hero-poster .pres-title-banner {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  display: block;
+}
+
+.canva-hero-visual-stage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--slide-accent-border);
+}
+
+.canva-hero-illustration {
+  width: clamp(66px, 6vw, 94px);
+  height: clamp(66px, 6vw, 94px);
   filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.12));
 }
 
-section[data-layout="hero-cover"] .pres-summary-col {
-  background: linear-gradient(180deg, #ffffff 0%, var(--slide-accent-soft) 160%);
+.canva-hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.45rem, 0.85vh, 0.8rem);
+  min-height: 0;
 }
 
-/* 2. BENTO GRID (Thẻ nổi bất đối xứng hiện đại) */
-section[data-layout="bento-grid"] .pres-subcard {
-  border-radius: 1rem;
-  border-top: 3px solid var(--slide-accent);
-  box-shadow:
-    0 2px 6px rgba(15, 23, 42, 0.04),
-    0 10px 22px -10px rgba(15, 23, 42, 0.09);
+.canva-hero-right .pres-key-points-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.45rem;
 }
 
-section[data-layout="bento-grid"] .canva-bento-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.12rem 0.5rem;
-  border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: var(--slide-accent-ink);
-  border: 1px solid var(--slide-accent-border);
-  margin-bottom: 0.25rem;
+/* 2. BENTO GRID: Tầng Header + Quote ngang -> Dải 4 trụ cột ngang -> Lưới Bento toàn chiều rộng */
+.canva-layout-bento {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vh, 0.72rem);
+}
+
+.canva-bento-header-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.45rem, 0.9vw, 0.85rem);
+  flex-shrink: 0;
+}
+
+.canva-bento-strip {
+  flex-shrink: 0;
+  padding: clamp(0.4rem, 0.75vh, 0.62rem) clamp(0.65rem, 1vw, 0.9rem);
+}
+
+.canva-bento-strip .pres-key-points-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.42rem;
+}
+
+.canva-bento-canvas {
+  flex: 1;
+  min-height: 0;
+}
+
+.canva-bento-canvas .pres-subcard {
+  border-top: 3.5px solid var(--slide-accent);
+  border-radius: 1.05rem;
 }
 
 /* 3. SPLIT EDITORIAL + CONNECTED TIMELINE */
-section[data-layout="split-timeline"] .pres-summary-desc-box {
-  background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 140%);
-  border: 1px solid #fcd34d;
-  border-left: 4px solid #d97706;
-  padding-left: 1rem;
+.canva-layout-timeline {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.42rem, 0.85vh, 0.8rem);
 }
 
-section[data-layout="split-timeline"] .pres-summary-desc-box::before {
+.canva-quote-card {
+  background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 140%) !important;
+  border: 1px solid #fcd34d !important;
+  border-left: 4.5px solid #d97706 !important;
+  padding-left: 1rem !important;
+}
+
+.canva-quote-card::before {
   content: "“";
   position: absolute;
   top: -0.2rem;
@@ -588,31 +714,31 @@ section[data-layout="split-timeline"] .pres-summary-desc-box::before {
   pointer-events: none;
 }
 
-section[data-layout="split-timeline"] .pres-detail-stack {
+.canva-timeline-rail {
   position: relative;
-  padding-left: 1.35rem;
+  padding-left: 1.4rem;
 }
 
-section[data-layout="split-timeline"] .pres-detail-stack::before {
+.canva-timeline-rail::before {
   content: "";
   position: absolute;
-  left: 0.42rem;
-  top: 0.75rem;
-  bottom: 0.75rem;
+  left: 0.44rem;
+  top: 0.7rem;
+  bottom: 0.7rem;
   width: 3px;
   border-radius: 9999px;
   background: linear-gradient(180deg, var(--slide-accent), #059669);
-  opacity: 0.45;
+  opacity: 0.5;
 }
 
-section[data-layout="split-timeline"] .pres-detail-stack > * {
+.canva-timeline-rail > * {
   position: relative;
 }
 
-section[data-layout="split-timeline"] .pres-detail-stack > *::before {
+.canva-timeline-rail > *::before {
   content: "";
   position: absolute;
-  left: -1.24rem;
+  left: -1.28rem;
   top: 0.95rem;
   width: 0.85rem;
   height: 0.85rem;
@@ -623,8 +749,40 @@ section[data-layout="split-timeline"] .pres-detail-stack > *::before {
   z-index: 2;
 }
 
-/* 4. SPOTLIGHT COMPARISON MATRIX (r3-table) */
-section[data-layout="comparison-matrix"] .pres-detail-col {
+/* 4. FEATURE PILLARS: Đảo chiều Editorial (Showcase 8 cột bên trái + Sidebar 4 cột bên phải) */
+.canva-layout-pillars {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.42rem, 0.85vh, 0.8rem);
+}
+
+.canva-pillars-showcase {
+  border-top: 4px solid var(--slide-accent);
+  background: linear-gradient(180deg, #ffffff 0%, var(--slide-accent-soft) 180%);
+}
+
+.canva-pillars-sidebar {
+  background: linear-gradient(180deg, var(--slide-accent-soft) 0%, #ffffff 42%);
+}
+
+/* 5. SPOTLIGHT COMPARISON MATRIX (r3-table) */
+.canva-layout-matrix {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.38rem, 0.75vh, 0.65rem);
+}
+
+.canva-layout-matrix .canva-bento-strip .pres-key-points-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.38rem;
+}
+
+.canva-layout-matrix .pres-detail-col {
   border: 2px solid #f59e0b;
   background: linear-gradient(180deg, #ffffff 0%, #fffbeb 160%);
 }
@@ -633,7 +791,7 @@ section[data-layout="comparison-matrix"] .pres-detail-col {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: clamp(0.75rem, 0.96vw, 0.9rem) !important;
+  font-size: clamp(0.78rem, 1.02vw, 0.96rem) !important;
 }
 
 .pres-comp-table thead tr th:first-child {
@@ -646,13 +804,21 @@ section[data-layout="comparison-matrix"] .pres-detail-col {
 
 .pres-comp-table th,
 .pres-comp-table td {
-  padding: clamp(0.3rem, 0.58vh, 0.54rem) clamp(0.48rem, 0.82vw, 0.85rem) !important;
-  line-height: 1.32 !important;
+  padding: clamp(0.32rem, 0.6vh, 0.56rem) clamp(0.5rem, 0.85vw, 0.9rem) !important;
+  line-height: 1.38 !important;
   vertical-align: top;
 }
 
-/* 5. ACADEMIC CITATION GRID (r3-verdict) */
-section[data-layout="citation-grid"] .canva-verdict-box {
+/* 6. ACADEMIC CITATION GRID (r3-verdict) */
+.canva-layout-citations {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.38rem, 0.75vh, 0.65rem);
+}
+
+.canva-layout-citations .canva-verdict-box {
   background: linear-gradient(135deg, #fffbeb 0%, #ffffff 70%, #ecfdf5 100%);
   border: 2px solid #f59e0b;
   box-shadow: 0 8px 24px -10px rgba(217, 119, 6, 0.25);
@@ -667,13 +833,13 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   display: flex;
   align-items: flex-start;
   gap: 0.45rem;
-  padding: 0.34rem 0.52rem;
-  border-radius: 0.68rem;
+  padding: 0.36rem 0.54rem;
+  border-radius: 0.72rem;
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
-  font-size: clamp(0.69rem, 0.85vw, 0.8rem) !important;
-  line-height: 1.3 !important;
+  font-size: clamp(0.72rem, 0.9vw, 0.85rem) !important;
+  line-height: 1.36 !important;
   color: #334155;
 }
 
@@ -682,14 +848,18 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.1rem 0.36rem;
+  padding: 0.1rem 0.38rem;
   border-radius: 0.42rem;
   background-color: #0f172a;
   color: #fbbf24;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.66rem;
   font-weight: 800;
-  margin-top: 0.06rem;
+  margin-top: 0.08rem;
+}
+
+.canva-citation-num::before {
+  content: attr(data-cite-num);
 }
 
 .canva-citation-body {
@@ -718,11 +888,11 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   align-items: center;
   justify-content: space-between;
   gap: 0.45rem;
-  padding: 0.32rem 0.55rem;
+  padding: 0.3rem 0.55rem;
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(15, 23, 42, 0.12);
   box-shadow:
     0 10px 28px -8px rgba(15, 23, 42, 0.18),
@@ -801,7 +971,7 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   display: inline-flex;
   align-items: center;
   gap: 0.28rem;
-  padding: 0.26rem 0.65rem;
+  padding: 0.24rem 0.65rem;
   min-block-size: 30px;
   border-radius: 9999px;
   font-size: 0.73rem;
@@ -922,7 +1092,9 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   row-gap: 0.32rem;
 }
 @media (min-width: 640px) {
-  #presentation-panel .sm\:grid-cols-2 {
+  #presentation-panel .sm\:grid-cols-2,
+  .canva-hero-right .pres-key-points-list,
+  .canva-bento-strip .pres-key-points-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   #presentation-panel .sm\:grid-cols-4 {
@@ -941,7 +1113,7 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   }
 }
 
-/* ================= BỐ CỤC MÁY TÍNH (>= 1024px): VỪA KHÍT KHUNG HÌNH KHÔNG TRÀN ================= */
+/* ================= BỐ CỤC MÁY TÍNH (>= 1024px): ĐA DẠNG 6 KIẾN TRÚC KHÔNG TRÀN KHUNG ================= */
 @media (min-width: 1024px) {
   #presentation-panel {
     height: 100vh;
@@ -975,17 +1147,44 @@ section[data-layout="citation-grid"] .canva-verdict-box {
     overflow: hidden;
   }
 
+  /* Hero Cover: Poster 5 cột trái + Nội dung 7 cột phải */
+  .canva-layout-hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: stretch;
+    overflow: hidden;
+  }
+  .canva-hero-poster {
+    grid-column: span 5 / span 5;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .canva-hero-right {
+    grid-column: span 7 / span 7;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .canva-hero-right .pres-summary-col {
+    flex-shrink: 0;
+  }
+  .canva-hero-right .pres-detail-col {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Bento Grid, Comparison Matrix & Citation Grid: Header + Strip 4 cột ngang + Canvas 12 cột rộng */
+  .canva-bento-header-row {
+    grid-template-columns: 7fr 5fr;
+    align-items: stretch;
+  }
+  .canva-bento-strip .pres-key-points-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .pres-summary-col.lg\:col-span-4 {
     grid-column: span 4 / span 4;
   }
   .pres-detail-col.lg\:col-span-8 {
     grid-column: span 8 / span 8;
-  }
-  .pres-summary-col.lg\:col-span-3 {
-    grid-column: span 3 / span 3;
-  }
-  .pres-detail-col.lg\:col-span-9 {
-    grid-column: span 9 / span 9;
   }
 
   .pres-summary-col,
@@ -1022,42 +1221,55 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   }
 }
 
-/* Tinh chỉnh riêng cho màn hình laptop chiều cao gọn (1366x768) */
-@media (min-width: 1024px) and (max-height: 780px) {
+/* Tinh chỉnh thông minh theo chiều cao gọn của laptop (1366x768) giữ nguyên readability và không tràn */
+@media (min-width: 1024px) and (max-height: 790px) {
   #pres-main-scroll {
-    padding-bottom: 50px;
+    padding-bottom: 48px;
   }
 
   .pres-slide-title {
-    font-size: clamp(1.18rem, 1.9vw, 1.58rem);
+    font-size: clamp(1.22rem, 1.85vw, 1.58rem);
+  }
+
+  .pres-key-card {
+    padding: 0.34rem 0.52rem;
   }
 
   .pres-key-card p {
-    font-size: 0.83rem;
-    line-height: 1.32;
+    font-size: 0.84rem;
+    line-height: 1.34;
   }
 
   .pres-slide-desc {
-    font-size: 0.79rem;
-    line-height: 1.35;
+    font-size: 0.81rem;
+    line-height: 1.38;
   }
 
   .pres-projector-content p,
   .pres-projector-content li,
   .pres-projector-content blockquote {
-    font-size: 0.82rem !important;
-    line-height: 1.38 !important;
+    font-size: 0.83rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .pres-subcard {
+    padding: 0.42rem 0.65rem;
+  }
+
+  .canva-vn-callout {
+    margin-top: 0.24rem;
+    padding: 0.26rem 0.45rem;
   }
 
   .pres-comp-table th,
   .pres-comp-table td {
-    padding: 0.28rem 0.5rem !important;
-    font-size: 0.76rem !important;
+    padding: 0.26rem 0.48rem !important;
+    font-size: 0.77rem !important;
   }
 
   .canva-citation-card {
-    padding: 0.28rem 0.45rem;
-    font-size: 0.7rem !important;
+    padding: 0.26rem 0.45rem;
+    font-size: 0.71rem !important;
   }
 }
 
@@ -1070,7 +1282,7 @@ section[data-layout="citation-grid"] .canva-verdict-box {
   #pres-reveal.reveal .slides > section.pres-slide-section.present {
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0.65rem 0.65rem 1rem;
+    padding: 0.65rem 0.65rem 1.2rem;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -1084,8 +1296,7 @@ section[data-layout="citation-grid"] .canva-verdict-box {
     gap: 0.65rem;
   }
 
-  .canva-room-watermark,
-  .canva-hero-illustration {
+  .canva-room-watermark {
     display: none;
   }
 

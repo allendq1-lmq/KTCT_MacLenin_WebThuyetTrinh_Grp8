@@ -832,7 +832,7 @@ body {
   justify-content: center;
   padding: 0.1rem 0.38rem;
   border-radius: 0.42rem;
-  background-color: #ea580c;
+  background-color: #df7a28;
   color: #ffffff;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.66rem;
@@ -917,7 +917,7 @@ body {
 }
 
 .room-btn.active {
-  background-color: #ea580c !important;
+  background-color: #df7a28 !important;
   color: #ffffff !important;
   box-shadow: none;
 }
@@ -992,43 +992,98 @@ body {
 }
 
 .canva-dock-btn-primary {
-  background-color: #ea580c;
+  background-color: #df7a28;
   color: #ffffff;
-  border: 1px solid #c2410c;
+  border: 1px solid #b85d14;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
 }
 
 .canva-dock-btn-primary:hover {
-  background-color: #c2410c;
+  background-color: #c4661b;
 }
 
 .canva-dock-btn-dark {
-  background-color: #ea580c;
+  background-color: #df7a28;
   color: #ffffff;
-  border: 1px solid #c2410c;
+  border: 1px solid #b85d14;
 }
 
 .canva-dock-btn-dark:hover {
-  background-color: #c2410c;
+  background-color: #c4661b;
 }
 
 .canva-dock-btn-dark[aria-pressed="true"] {
-  background-color: #d97706;
+  background-color: #c4661b;
   color: #ffffff;
-  border-color: #b45309;
+  border-color: #9a4a0f;
 }
 
 .canva-counter-pill {
   padding: 0.24rem 0.7rem;
   border-radius: 9999px;
-  background-color: #d97706;
+  background-color: #df7a28;
   color: #ffffff;
-  border: 1px solid #b45309;
+  border: 1px solid #b85d14;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.72rem;
   font-weight: 800;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
+/* Nút thoát toàn màn hình tối giản, bán trong suốt tinh tế ở góc trên bên phải */
+.pres-exit-fs-btn {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.85rem;
+  z-index: 60;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
+  opacity: 0.35;
+  cursor: pointer;
+  transition:
+    opacity 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 140ms ease;
+}
+
+.pres-exit-fs-btn:hover,
+.pres-exit-fs-btn:focus-visible {
+  opacity: 0.92;
+  background-color: rgba(223, 122, 40, 0.92);
+  border-color: rgba(255, 255, 255, 0.48);
+}
+
+.pres-exit-fs-btn:active {
+  transform: scale(0.94);
+}
+
+.pres-exit-fs-btn.hidden {
+  display: none !important;
+}
+
+#presentation-panel.pres-fullscreen-active #pres-dock-shell,
+#presentation-panel.pres-fullscreen-active #pres-top-bar,
+#presentation-panel.pres-fullscreen-active .canva-progress-track {
+  display: none !important;
+}
+
+#presentation-panel.pres-fullscreen-active #pres-main-scroll {
+  padding-bottom: 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
 }
 
 .canva-frag-pill {
@@ -1260,7 +1315,7 @@ body {
 /* ================= BỐ CỤC MOBILE & TABLET (< 1024px) ================= */
 @media (max-width: 1023px) {
   #pres-main-scroll {
-    padding-bottom: 58px;
+    padding-bottom: 54px;
   }
 
   #pres-reveal.reveal .slides > section.pres-slide-section.present {
@@ -1280,7 +1335,8 @@ body {
     gap: 0.65rem;
   }
 
-  .canva-room-watermark {
+  .canva-room-watermark,
+  .canva-hero-visual-stage {
     display: none;
   }
 
@@ -1300,8 +1356,96 @@ body {
   }
 
   .canva-dock-btn {
-    min-block-size: 34px;
-    padding: 0.28rem 0.55rem;
+    min-block-size: 32px;
+    padding: 0.26rem 0.5rem;
+  }
+}
+
+@media (max-width: 767px), (max-height: 520px) {
+  .canva-dock-right {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .canva-presenter-dock {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.25rem 0.38rem;
+    gap: 0.25rem;
+    overflow: visible;
+    justify-content: space-between;
+  }
+
+  .canva-dock-left {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 0.22rem;
+  }
+
+  .canva-room-pills {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .room-btn {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.68rem;
+  }
+
+  .canva-slide-select {
+    flex: 1 1 56px;
+    min-width: 52px;
+    max-width: 120px;
+    padding: 0.2rem 0.35rem;
+    font-size: 0.68rem;
+  }
+
+  .canva-dock-center {
+    gap: 0.2rem;
+  }
+
+  .canva-counter-pill {
+    padding: 0.2rem 0.45rem;
+    font-size: 0.67rem;
+  }
+
+  .canva-dock-btn {
+    min-block-size: 30px;
+    padding: 0.22rem 0.42rem;
+  }
+}
+
+@media (max-height: 520px) {
+  #pres-main-scroll {
+    padding-bottom: 44px;
+  }
+
+  #pres-reveal.reveal .slides > section.pres-slide-section.present {
+    padding: 0.45rem 0.6rem 0.9rem;
+  }
+
+  .pres-title-banner {
+    padding: 0.42rem 0.7rem;
+  }
+
+  .pres-slide-title {
+    font-size: 1.15rem;
+  }
+
+  .canva-dock-shell {
+    bottom: 4px;
+  }
+
+  .canva-presenter-dock {
+    width: fit-content;
+    padding: 0.22rem 0.45rem;
+    gap: 0.35rem;
+  }
+
+  .canva-dock-btn {
+    min-block-size: 28px;
+    padding: 0.18rem 0.48rem;
   }
 }
 

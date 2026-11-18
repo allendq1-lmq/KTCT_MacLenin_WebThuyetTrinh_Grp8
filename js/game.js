@@ -1118,6 +1118,10 @@ window.ReignsGame = (() => {
     window.addEventListener("touchend", onDragEnd);
 
     window.addEventListener("keydown", (e) => {
+      const qrModal = document.getElementById("qr-modal");
+      if (qrModal && !qrModal.classList.contains("hidden")) {
+        return;
+      }
       const gameSection = document.getElementById("section-game");
       if (
         gameSection &&

@@ -35,7 +35,7 @@ body {
 }
 
 .room-btn.active {
-  background-color: #ea580c !important;
+  background-color: #df7a28 !important;
   color: #ffffff !important;
 }
 
@@ -129,23 +129,92 @@ body {
 
 .dpad-btn:active,
 .dpad-btn.dpad-active {
-  background-color: #ea580c !important;
+  background-color: #df7a28 !important;
   color: #ffffff !important;
-  border-color: #c2410c !important;
+  border-color: #b85d14 !important;
   transform: scale(0.92);
 }
 
-/* Tối ưu Mobile (< 768px): thu gọn Virtual D-Pad không che vùng nhìn */
+/* Tối ưu Mobile Portrait (< 768px): giữ thanh Phòng và Shift-Lock trên 1 hàng gọn, thu gọn D-Pad */
 @media (max-width: 767px) {
   .virtual-dpad-container {
-    bottom: 14px;
+    bottom: 12px;
     left: 10px;
   }
 
   .dpad-btn {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 10px;
+  }
+}
+
+@media (max-width: 639px) {
+  .museum-shiftlock-detail {
+    display: none;
+  }
+
+  #museum-top-bar {
+    flex-wrap: nowrap;
+  }
+
+  .room-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  #btn-shiftlock-status {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+}
+
+/* Tối ưu Mobile Landscape (chiều cao thấp <= 520px, ví dụ 812x375, 844x390): không bao giờ đè giữa thanh Phòng và D-pad */
+@media (max-height: 520px) {
+  #museum-top-bar {
+    top: 6px;
+    left: 8px;
+    right: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .museum-room-short {
+    display: inline !important;
+  }
+
+  .museum-room-full,
+  .museum-shiftlock-detail {
+    display: none !important;
+  }
+
+  .room-btn {
+    padding: 0.28rem 0.58rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  #btn-shiftlock-status {
+    padding: 0.28rem 0.55rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .virtual-dpad-container {
+    bottom: 8px;
+    left: 10px;
+    gap: 4px;
+  }
+
+  .dpad-row {
+    gap: 4px;
+  }
+
+  .dpad-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
   }
 }
 

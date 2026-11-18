@@ -1,9 +1,10 @@
 /**
- * js/quiz.js - Engine Trắc nghiệm tương tác (30 câu hỏi, hỗ trợ 2 & 4 đáp án)
+ * js/quiz.js - Engine Trắc nghiệm tương tác (bốc ngẫu nhiên 5 câu từ ngân hàng 30 câu, hỗ trợ 2 & 4 đáp án)
  * Dữ liệu câu hỏi lấy từ `window.QUIZ_QUESTIONS` trong `js/quiz-data.js`.
  */
 window.InteractiveQuiz = (() => {
   const OPTION_LETTERS = ["A", "B", "C", "D"];
+  const QUIZ_ROUND_SIZE = 5;
 
   // Nguồn âm thanh công cộng (Google Actions Sound Library - thân thiện CORS)
   // kèm cơ chế tự động fallback sang Web Audio API nếu trình duyệt chặn / ngoại tuyến
@@ -32,9 +33,32 @@ window.InteractiveQuiz = (() => {
   let currentIndex = 0;
   let score = 0;
   let answers = [];
+  let activeQuestions = [];
+
+  function getQuestionBank() {
+    return Array.isArray(window.QUIZ_QUESTIONS) ? window.QUIZ_QUESTIONS : [];
+  }
+
+  function shuffleQuestions(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function buildQuizRound() {
+    const bank = getQuestionBank();
+    activeQuestions = shuffleQuestions(bank).slice(0, QUIZ_ROUND_SIZE);
+    return activeQuestions;
+  }
 
   function getQuestions() {
-    return Array.isArray(window.QUIZ_QUESTIONS) ? window.QUIZ_QUESTIONS : [];
+    if (!activeQuestions.length) {
+      buildQuizRound();
+    }
+    return activeQuestions;
   }
 
   function ensureAudioElements() {
@@ -311,7 +335,7 @@ window.InteractiveQuiz = (() => {
     const total =
       typeof totalQuestions === "number" && totalQuestions > 0
         ? totalQuestions
-        : getQuestions().length || 30;
+        : getQuestions().length || QUIZ_ROUND_SIZE;
     const numericScore = Math.max(0, Math.min(total, Number(finalScore) || 0));
     const pct = total > 0 ? numericScore / total : 0;
 
@@ -389,7 +413,7 @@ window.InteractiveQuiz = (() => {
           ? "bg-emerald-500 text-white border-emerald-600 shadow-sm"
           : "bg-rose-500 text-white border-rose-600 shadow-sm";
       } else if (idx === currentIndex) {
-        cls += "bg-orange-600 text-white border-orange-700";
+        cls += "bg-[#df7a28] text-white border-[#c4661b]";
       } else {
         cls += "bg-slate-100 text-slate-500 border-slate-300";
       }
@@ -408,6 +432,7 @@ window.InteractiveQuiz = (() => {
 
   function applyAnsweredVisuals(question, answer) {
     const optionsList = document.getElementById("quiz-options-list");
+    const feedbackDock = document.getElementById("quiz-feedback-dock");
     const feedbackBanner = document.getElementById("quiz-feedback-banner");
     const explanationPlaceholder = document.getElementById(
       "quiz-explanation-placeholder",
@@ -452,6 +477,9 @@ window.InteractiveQuiz = (() => {
     if (explanationPlaceholder) {
       explanationPlaceholder.classList.add("hidden");
     }
+    if (feedbackDock) {
+      feedbackDock.classList.remove("hidden");
+    }
     if (explanationBox) {
       explanationBox.classList.remove("hidden");
     }
@@ -486,6 +514,7 @@ window.InteractiveQuiz = (() => {
     const progressBar = document.getElementById("quiz-progress-bar");
     const sectionBadge = document.getElementById("quiz-section-badge");
     const questionText = document.getElementById("quiz-question-text");
+    const feedbackDock = document.getElementById("quiz-feedback-dock");
     const feedbackBanner = document.getElementById("quiz-feedback-banner");
     const explanationPlaceholder = document.getElementById(
       "quiz-explanation-placeholder",
@@ -509,6 +538,9 @@ window.InteractiveQuiz = (() => {
     if (questionText) {
       questionText.textContent = question.question || "";
     }
+    if (feedbackDock && !existingAnswer) {
+      feedbackDock.classList.add("hidden");
+    }
     if (feedbackBanner && !existingAnswer) {
       feedbackBanner.className = "hidden";
       feedbackBanner.textContent = "";
@@ -524,13 +556,13 @@ window.InteractiveQuiz = (() => {
       optionsList.className =
         optionCount === 2
           ? "w-full grid grid-cols-1 sm:grid-cols-2 gap-3"
-          : "w-full grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2.5 md:gap-3";
+          : "w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-2.5 md:gap-3";
       optionsList.innerHTML = "";
       (question.options || []).forEach((optText, idx) => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className =
-          "quiz-option-btn w-full h-full text-left rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/70 transition-all flex items-start gap-2 sm:gap-2.5 font-medium text-slate-800 cursor-pointer";
+          "quiz-option-btn w-full h-auto text-left rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/70 transition-all flex items-start gap-2 sm:gap-2.5 font-medium text-slate-800 cursor-pointer";
         btn.setAttribute("data-option-index", String(idx));
 
         const letterSpan = document.createElement("span");
@@ -691,6 +723,7 @@ window.InteractiveQuiz = (() => {
     currentIndex = 0;
     score = 0;
     answers = [];
+    buildQuizRound();
     renderQuestion();
   }
 
@@ -720,6 +753,7 @@ window.InteractiveQuiz = (() => {
       });
     }
 
+    buildQuizRound();
     syncSoundButtonUI();
     renderQuestion();
   }
@@ -735,11 +769,15 @@ window.InteractiveQuiz = (() => {
     playQuizSound,
     stopAllSounds,
     stopConfetti,
-    getState: () => ({
-      currentIndex,
-      score,
-      total: getQuestions().length,
-      answers: answers.slice(),
-    }),
+    getState: () => {
+      const questions = getQuestions();
+      return {
+        currentIndex,
+        score,
+        total: questions.length,
+        questionIds: questions.map((q) => q.id),
+        answers: answers.slice(),
+      };
+    },
   };
 })();

@@ -2,6 +2,7 @@
 window.MuseumControls = (() => {
   let raycaster, mouse;
   let isInitialized = false;
+  let isActiveState = true;
   let currentExhibitIndex = 0;
   let currentExhibitData = null;
   let boundKeys = { w: false, a: false, s: false, d: false };
@@ -560,6 +561,7 @@ window.MuseumControls = (() => {
 
     // Sự kiện bàn phím: Shift-Lock & Di chuyển (W, A, S, D / Mũi tên)
     window.addEventListener("keydown", (e) => {
+      if (!isActiveState) return;
       const k = (e.key || "").toLowerCase();
 
       if (k === "escape") {
@@ -600,6 +602,7 @@ window.MuseumControls = (() => {
     });
 
     window.addEventListener("keyup", (e) => {
+      if (!isActiveState) return;
       const k = (e.key || "").toLowerCase();
       if (k === "w" || k === "arrowup") keys.w = false;
       if (k === "a" || k === "arrowleft") keys.a = false;
@@ -613,11 +616,15 @@ window.MuseumControls = (() => {
         resetAllKeys();
         return;
       }
-      if (e.data.type === "MUSEUM_SET_ACTIVE" && !e.data.active) {
-        resetAllKeys();
+      if (e.data.type === "MUSEUM_SET_ACTIVE") {
+        isActiveState = Boolean(e.data.active);
+        if (!isActiveState) {
+          resetAllKeys();
+        }
         return;
       }
       if (e.data.type === "PARENT_KEY_EVENT") {
+        if (!isActiveState) return;
         const evtType = e.data.eventType || "keydown";
         const keyVal = (e.data.key || "").toLowerCase();
         if (evtType === "keydown") {
@@ -656,6 +663,10 @@ window.MuseumControls = (() => {
     openDetailDrawer,
     closeDetailDrawer,
     resetAllKeys,
+    setActive: (active) => {
+      isActiveState = Boolean(active);
+      if (!isActiveState) resetAllKeys();
+    },
     getKeysState,
     classifyTouchInteraction,
     TAP_MAX_DISTANCE_PX,

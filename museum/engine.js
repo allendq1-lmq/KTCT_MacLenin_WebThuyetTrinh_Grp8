@@ -1466,6 +1466,18 @@ window.MuseumEngine = (() => {
       window.MuseumControls.init(camera, renderer.domElement, keys);
     }
 
+    // Đồng bộ trạng thái tạm dừng ban đầu theo tab đang mở ở cửa sổ cha
+    try {
+      if (
+        window.parent &&
+        window.parent !== window &&
+        typeof window.parent.getCurrentActiveTab === "function" &&
+        window.parent.getCurrentActiveTab() !== "idea2"
+      ) {
+        isManualPaused = true;
+      }
+    } catch (_) {}
+
     // Vẽ frame đầu tiên ngay khi khởi tạo, sau đó chạy vòng lặp nếu tab đang hiển thị
     updateShiftLockCamera();
     renderer.render(scene, camera);

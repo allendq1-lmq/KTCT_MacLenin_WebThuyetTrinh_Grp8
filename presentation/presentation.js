@@ -660,10 +660,15 @@ window.PresentationApp = (() => {
   function getParentFullscreenFlag() {
     try {
       if (window.parent && window.parent !== window && window.parent.document) {
-        return !!(
+        const parentFs = !!(
           window.parent.document.fullscreenElement ||
           window.parent.document.webkitFullscreenElement
         );
+        if (!parentFs) return false;
+        if (typeof window.parent.getCurrentActiveTab === "function") {
+          return window.parent.getCurrentActiveTab() === "content";
+        }
+        return true;
       }
     } catch (_) {}
     return false;
@@ -680,10 +685,19 @@ window.PresentationApp = (() => {
   function syncFullscreenButtonState(explicitState) {
     const isFs =
       typeof explicitState === "boolean" ? explicitState : isFullscreenActive();
+    const panel = document.getElementById("presentation-panel");
+    const exitOverlayBtn = document.getElementById("btn-exit-pres-fullscreen");
     const btn = document.getElementById("btn-pres-fullscreen");
     const label = document.getElementById("label-pres-fullscreen");
     const iconEnter = document.getElementById("icon-pres-fullscreen-enter");
     const iconExit = document.getElementById("icon-pres-fullscreen-exit");
+
+    if (panel) {
+      panel.classList.toggle("pres-fullscreen-active", isFs);
+    }
+    if (exitOverlayBtn) {
+      exitOverlayBtn.classList.toggle("hidden", !isFs);
+    }
 
     if (btn) {
       btn.setAttribute("aria-pressed", isFs ? "true" : "false");
@@ -699,6 +713,36 @@ window.PresentationApp = (() => {
     }
     if (iconExit) {
       iconExit.classList.toggle("hidden", !isFs);
+    }
+  }
+
+  function exitFullscreenMode() {
+    try {
+      if (
+        window.parent &&
+        window.parent !== window &&
+        typeof window.parent.exitMuseumFullscreen === "function"
+      ) {
+        window.parent.exitMuseumFullscreen();
+        return;
+      }
+    } catch (_) {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: "EXIT_FULLSCREEN" }, "*");
+        return;
+      }
+    }
+
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    } else if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: "EXIT_FULLSCREEN" }, "*");
+    } else {
+      syncFullscreenButtonState(false);
     }
   }
 
@@ -922,6 +966,10 @@ window.PresentationApp = (() => {
     bindClickAction(document.getElementById("btn-slide-prev"), prevSlide);
     bindClickAction(document.getElementById("btn-slide-next"), nextSlide);
     bindClickAction(document.getElementById("btn-pres-fullscreen"), toggleFullscreen);
+    bindClickAction(
+      document.getElementById("btn-exit-pres-fullscreen"),
+      exitFullscreenMode,
+    );
 
     ["fullscreenchange", "webkitfullscreenchange"].forEach((evt) => {
       document.addEventListener(evt, () => syncFullscreenButtonState());
@@ -1044,6 +1092,8 @@ window.PresentationApp = (() => {
     setActive,
     isActive,
     toggleFullscreen,
+    exitFullscreen: exitFullscreenMode,
+    setFullscreenState: syncFullscreenButtonState,
     getCurrentSlideIndex: () => currentSlideIndex,
     getTotalSlides: () => getSlides().length,
     getRevealInstance: () => revealInstance,

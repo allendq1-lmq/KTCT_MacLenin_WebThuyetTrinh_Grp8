@@ -26,24 +26,24 @@
           class="room-btn active px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition"
           data-room="1"
         >
-          <span class="sm:hidden">Phòng 1</span>
-          <span class="hidden sm:inline">Phòng 1: Tổng Quan</span>
+          <span class="museum-room-short sm:hidden">Phòng 1</span>
+          <span class="museum-room-full hidden sm:inline">Phòng 1: Tổng Quan</span>
         </button>
         <button
           type="button"
           class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
           data-room="2"
         >
-          <span class="sm:hidden">Phòng 2</span>
-          <span class="hidden sm:inline">Phòng 2: 5 Đặc Trưng</span>
+          <span class="museum-room-short sm:hidden">Phòng 2</span>
+          <span class="museum-room-full hidden sm:inline">Phòng 2: 5 Đặc Trưng</span>
         </button>
         <button
           type="button"
           class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
           data-room="3"
         >
-          <span class="sm:hidden">Phòng 3</span>
-          <span class="hidden sm:inline">Phòng 3: Giới Hạn &amp; Giải Pháp</span>
+          <span class="museum-room-short sm:hidden">Phòng 3</span>
+          <span class="museum-room-full hidden sm:inline">Phòng 3: Giới Hạn &amp; Giải Pháp</span>
         </button>
       </div>
 
@@ -71,8 +71,9 @@
               d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
             ></path>
           </svg>
-          <span>Shift-Lock:</span>
-          <span id="shiftlock-state-label">Giữ chuột / Phím Shift</span>
+          <span>Shift-Lock</span>
+          <span class="museum-shiftlock-detail">:</span>
+          <span id="shiftlock-state-label" class="museum-shiftlock-detail">Giữ chuột / Phím Shift</span>
         </button>
       </div>
     </header>
@@ -121,7 +122,7 @@
           <button
             id="btn-close-detail-drawer"
             type="button"
-            class="px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs sm:text-sm transition shrink-0 flex items-center gap-1"
+            class="px-3 py-1.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-bold text-xs sm:text-sm transition shrink-0 flex items-center gap-1"
           >
             <svg
               class="w-3.5 h-3.5 shrink-0"

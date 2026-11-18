@@ -7,10 +7,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const labelFullscreen = document.getElementById("label-fullscreen-btn");
   const iconFullscreenEnter = document.getElementById("icon-fullscreen-enter");
   const iconFullscreenExit = document.getElementById("icon-fullscreen-exit");
+  const appHeader = document.getElementById("app-header");
   let currentActiveTab = "content";
 
   function isDesktopViewport() {
-    return window.innerWidth >= 768;
+    return window.innerWidth >= 768 && window.innerHeight > 520;
+  }
+
+  function syncNavbarHeightVar() {
+    if (!appHeader || document.body.classList.contains("pres-fullscreen-mode")) {
+      return;
+    }
+    const headerHeight = Math.round(appHeader.getBoundingClientRect().height);
+    if (headerHeight > 0) {
+      document.documentElement.style.setProperty(
+        "--navbar-height",
+        `${headerHeight}px`,
+      );
+    }
   }
 
   function getFullscreenElement() {
@@ -147,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function switchTab(targetTab) {
     currentActiveTab = targetTab;
+    window.scrollTo(0, 0);
 
     tabButtons.forEach((btn) => {
       if (btn.getAttribute("data-tab") === targetTab) {
@@ -190,7 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    syncPresentationFullscreenMode();
     updateFullscreenButtonVisibility();
+    syncNavbarHeightVar();
 
     // Tạm dừng vòng lặp render WebGL của Bảo tàng 3D khi người dùng đang ở tab khác để tiết kiệm GPU/CPU (B4)
     setMuseumActive(targetTab === "idea2");
@@ -238,7 +255,44 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-  // Xử lý Toàn màn hình trên phần tử gốc để giữ nguyên thanh header và nút Thoát Toàn Màn Hình ở đúng vị trí trên desktop
+  function syncPresentationFullscreenMode() {
+    const isPresFs =
+      Boolean(getFullscreenElement()) && currentActiveTab === "content";
+    document.body.classList.toggle("pres-fullscreen-mode", isPresFs);
+
+    const presIframe = document.getElementById("presentation-frame");
+    if (presIframe && presIframe.contentWindow) {
+      try {
+        if (
+          presIframe.contentWindow.PresentationApp &&
+          typeof presIframe.contentWindow.PresentationApp.setFullscreenState ===
+            "function"
+        ) {
+          presIframe.contentWindow.PresentationApp.setFullscreenState(isPresFs);
+        }
+      } catch (_) {}
+      try {
+        presIframe.contentWindow.postMessage(
+          { type: "FULLSCREEN_CHANGED", isFullscreen: isPresFs },
+          "*",
+        );
+      } catch (_) {}
+    }
+  }
+
+  function exitMuseumFullscreen() {
+    if (!getFullscreenElement()) {
+      syncPresentationFullscreenMode();
+      return;
+    }
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+
+  // Xử lý Toàn màn hình trên phần tử gốc để giữ ngữ cảnh SPA và chuyển giao diện tối giản cho tab Nội Dung
   function toggleMuseumFullscreen() {
     if (!isFullscreenSupported()) return;
     const targetEl = document.documentElement;
@@ -250,11 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
         targetEl.webkitRequestFullscreen();
       }
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
+      exitMuseumFullscreen();
     }
   }
 
@@ -264,13 +314,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setMuseumActive(isActive) {
     const museumIframe = document.getElementById("museum-frame");
-    if (!museumIframe || !museumIframe.contentWindow) return;
+    if (!museumIframe) return;
+
+    if (
+      !isActive &&
+      document.activeElement === museumIframe &&
+      typeof museumIframe.blur === "function"
+    ) {
+      museumIframe.blur();
+    }
+
+    if (!museumIframe.contentWindow) return;
     try {
       if (
         museumIframe.contentWindow.MuseumEngine &&
         typeof museumIframe.contentWindow.MuseumEngine.setPaused === "function"
       ) {
         museumIframe.contentWindow.MuseumEngine.setPaused(!isActive);
+      }
+    } catch (_) {}
+    try {
+      if (
+        museumIframe.contentWindow.MuseumControls &&
+        typeof museumIframe.contentWindow.MuseumControls.setActive ===
+          "function"
+      ) {
+        museumIframe.contentWindow.MuseumControls.setActive(Boolean(isActive));
       }
     } catch (_) {}
     try {
@@ -311,18 +380,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleFullscreenChange() {
     syncFullscreenButtonState();
+    syncPresentationFullscreenMode();
     updateFullscreenButtonVisibility();
-
-    const isFs = !!getFullscreenElement();
-    const presIframe = document.getElementById("presentation-frame");
-    if (presIframe && presIframe.contentWindow) {
-      try {
-        presIframe.contentWindow.postMessage(
-          { type: "FULLSCREEN_CHANGED", isFullscreen: isFs },
-          "*",
-        );
-      } catch (_) {}
-    }
+    syncNavbarHeightVar();
 
     const activeIframe =
       currentActiveTab === "content"
@@ -351,13 +411,27 @@ document.addEventListener("DOMContentLoaded", () => {
   ["fullscreenchange", "webkitfullscreenchange"].forEach((evt) => {
     document.addEventListener(evt, handleFullscreenChange);
   });
-  window.addEventListener("resize", updateFullscreenButtonVisibility);
+  window.addEventListener("resize", () => {
+    updateFullscreenButtonVisibility();
+    syncNavbarHeightVar();
+  });
 
-  // Cho phép iframe gọi hàm toggleMuseumFullscreen (trực tiếp hoặc qua postMessage)
+  if (appHeader && typeof ResizeObserver === "function") {
+    const headerObserver = new ResizeObserver(() => {
+      syncNavbarHeightVar();
+    });
+    headerObserver.observe(appHeader);
+  }
+
+  // Cho phép iframe gọi hàm toggleMuseumFullscreen / exitMuseumFullscreen (trực tiếp hoặc qua postMessage)
   window.toggleMuseumFullscreen = toggleMuseumFullscreen;
+  window.exitMuseumFullscreen = exitMuseumFullscreen;
   window.addEventListener("message", (e) => {
-    if (e.data && e.data.type === "TOGGLE_FULLSCREEN") {
+    if (!e || !e.data) return;
+    if (e.data.type === "TOGGLE_FULLSCREEN") {
       toggleMuseumFullscreen();
+    } else if (e.data.type === "EXIT_FULLSCREEN") {
+      exitMuseumFullscreen();
     }
   });
 
@@ -523,14 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (presentationFrameEl) {
     presentationFrameEl.addEventListener("load", () => {
       setPresentationActive(currentActiveTab === "content");
-      try {
-        if (presentationFrameEl.contentWindow) {
-          presentationFrameEl.contentWindow.postMessage(
-            { type: "FULLSCREEN_CHANGED", isFullscreen: !!getFullscreenElement() },
-            "*",
-          );
-        }
-      } catch (_) {}
+      syncPresentationFullscreenMode();
     });
   }
 

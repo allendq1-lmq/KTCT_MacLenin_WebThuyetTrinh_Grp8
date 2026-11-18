@@ -29,6 +29,7 @@ window.MuseumRoom1 = (() => {
           ex.badge,
           ex.color,
           ex.lines,
+          ex,
         );
         const placardTex = window.MuseumEngine.createPlacardTexture(
           ex.title,
@@ -43,6 +44,10 @@ window.MuseumRoom1 = (() => {
             id: ex.id,
             room: 1,
             sectionCode: ex.sectionCode,
+            visualType: ex.visualType,
+            localImagePath: ex.localImagePath,
+            imageUrl: ex.imageUrl,
+            imageCaption: ex.imageCaption,
             badge: ex.badge,
             title: ex.title,
             subtitle: ex.subtitle,

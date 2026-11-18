@@ -42,6 +42,7 @@ window.MuseumRoom2 = (() => {
         centerData.badge,
         centerData.color,
         centerData.lines,
+        centerData,
       );
       const centerPlacardTex = window.MuseumEngine.createPlacardTexture(
         centerData.title,
@@ -56,6 +57,10 @@ window.MuseumRoom2 = (() => {
           id: centerData.id,
           room: 2,
           sectionCode: centerData.sectionCode,
+          visualType: centerData.visualType,
+          localImagePath: centerData.localImagePath,
+          imageUrl: centerData.imageUrl,
+          imageCaption: centerData.imageCaption,
           badge: centerData.badge,
           title: centerData.title,
           subtitle: centerData.subtitle,
@@ -210,6 +215,7 @@ window.MuseumRoom2 = (() => {
           p.badge,
           p.color,
           p.lines,
+          p,
         );
         const placardTex = window.MuseumEngine.createPlacardTexture(
           p.title,
@@ -225,6 +231,10 @@ window.MuseumRoom2 = (() => {
             id: p.id,
             room: 2,
             sectionCode: p.sectionCode,
+            visualType: p.visualType,
+            localImagePath: p.localImagePath,
+            imageUrl: p.imageUrl,
+            imageCaption: p.imageCaption,
             badge: p.badge,
             title: p.title,
             subtitle: p.subtitle,

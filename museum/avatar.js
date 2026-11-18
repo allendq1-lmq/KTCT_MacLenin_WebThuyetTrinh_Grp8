@@ -9,6 +9,224 @@ window.MuseumAvatar = (() => {
   let rightLegGroup = null;
   let walkCycle = 0;
 
+  // Hệ thống tổng hợp âm thanh bước chân kiểu Roblox (Web Audio API) đồng bộ chu kỳ walkCycle
+  let soundEnabled = true;
+  let systemMuted = false;
+  let audioCtx = null;
+  let noiseBuffer = null;
+  let audioUnlockBound = false;
+  let lastStepCount = 0;
+  let isLeftFootStep = false;
+  let footstepCount = 0;
+  let lastFootstepPitch = 1;
+  let wasMoving = false;
+  const activeAudioNodes = new Set();
+
+  function getAudioContextClass() {
+    if (typeof window === "undefined") return null;
+    return window.AudioContext || window.webkitAudioContext || null;
+  }
+
+  function ensureAudioContext() {
+    const AudioCtx = getAudioContextClass();
+    if (!AudioCtx) return null;
+    if (!audioCtx) {
+      try {
+        audioCtx = new AudioCtx();
+      } catch (_) {
+        return null;
+      }
+    }
+    if (!noiseBuffer && audioCtx && typeof audioCtx.createBuffer === "function") {
+      try {
+        const sampleRate = audioCtx.sampleRate || 44100;
+        const length = Math.max(1, Math.floor(sampleRate * 0.09));
+        const buffer = audioCtx.createBuffer(1, length, sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < length; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        noiseBuffer = buffer;
+      } catch (_) {}
+    }
+    return audioCtx;
+  }
+
+  let audioUnlockedByGesture = false;
+
+  function unlockAudio() {
+    audioUnlockedByGesture = true;
+    const ctx = ensureAudioContext();
+    if (ctx && ctx.state === "suspended" && typeof ctx.resume === "function") {
+      try {
+        const res = ctx.resume();
+        if (res && typeof res.catch === "function") res.catch(() => {});
+      } catch (_) {}
+    }
+    return ctx;
+  }
+
+  function bindFirstGestureUnlock() {
+    if (audioUnlockBound || typeof window === "undefined") return;
+    audioUnlockBound = true;
+    const onGesture = () => {
+      unlockAudio();
+    };
+    ["keydown", "mousedown", "pointerdown", "touchstart"].forEach((evt) => {
+      window.addEventListener(evt, onGesture, { passive: true });
+    });
+  }
+
+  function stopFootsteps() {
+    activeAudioNodes.forEach((entry) => {
+      try {
+        if (entry.gainNode && audioCtx) {
+          entry.gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+          entry.gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        }
+        if (entry.srcNode && typeof entry.srcNode.stop === "function") {
+          entry.srcNode.stop();
+        }
+        if (entry.srcNode && typeof entry.srcNode.disconnect === "function") {
+          entry.srcNode.disconnect();
+        }
+        if (entry.gainNode && typeof entry.gainNode.disconnect === "function") {
+          entry.gainNode.disconnect();
+        }
+      } catch (_) {}
+    });
+    activeAudioNodes.clear();
+  }
+
+  function triggerFootstep(leftFoot) {
+    if (
+      !soundEnabled ||
+      systemMuted ||
+      (typeof document !== "undefined" && document.hidden)
+    ) {
+      return false;
+    }
+
+    const useLeft =
+      typeof leftFoot === "boolean" ? leftFoot : !isLeftFootStep;
+    const pitch = (useLeft ? 0.96 : 1.04) * (0.97 + Math.random() * 0.06);
+    lastFootstepPitch = pitch;
+    footstepCount++;
+
+    const ctx = ensureAudioContext();
+    if (!ctx || ctx.state === "closed") return true;
+    if (ctx.state === "suspended" && typeof ctx.resume === "function") {
+      try {
+        const res = ctx.resume();
+        if (res && typeof res.catch === "function") res.catch(() => {});
+      } catch (_) {}
+    }
+    if (ctx.state !== "running" && !audioUnlockedByGesture) return true;
+
+    try {
+      const now = ctx.currentTime;
+
+      // Lớp 1: Xung nhiễu ngắn lọc bandpass tạo tiếng "tạch" giòn đặc trưng Roblox
+      if (noiseBuffer && typeof ctx.createBufferSource === "function") {
+        const noiseSrc = ctx.createBufferSource();
+        noiseSrc.buffer = noiseBuffer;
+        noiseSrc.playbackRate.value = pitch;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(1220 * pitch, now);
+        filter.Q.setValueAtTime(2.4, now);
+
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.001, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.16, now + 0.004);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.058);
+
+        noiseSrc.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(ctx.destination);
+
+        const entry = { srcNode: noiseSrc, gainNode: noiseGain };
+        activeAudioNodes.add(entry);
+        noiseSrc.onended = () => {
+          activeAudioNodes.delete(entry);
+          try {
+            noiseSrc.disconnect();
+            filter.disconnect();
+            noiseGain.disconnect();
+          } catch (_) {}
+        };
+        noiseSrc.start(now);
+        noiseSrc.stop(now + 0.065);
+      }
+
+      // Lớp 2: Âm trầm gõ sàn (triangle oscillator tụt tần số nhanh trong 55ms)
+      if (typeof ctx.createOscillator === "function") {
+        const osc = ctx.createOscillator();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(175 * pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(62, now + 0.055);
+
+        const oscGain = ctx.createGain();
+        oscGain.gain.setValueAtTime(0.001, now);
+        oscGain.gain.exponentialRampToValueAtTime(0.13, now + 0.003);
+        oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.062);
+
+        osc.connect(oscGain);
+        oscGain.connect(ctx.destination);
+
+        const entry = { srcNode: osc, gainNode: oscGain };
+        activeAudioNodes.add(entry);
+        osc.onended = () => {
+          activeAudioNodes.delete(entry);
+          try {
+            osc.disconnect();
+            oscGain.disconnect();
+          } catch (_) {}
+        };
+        osc.start(now);
+        osc.stop(now + 0.068);
+      }
+    } catch (_) {}
+
+    return true;
+  }
+
+  function setSoundEnabled(enabled) {
+    soundEnabled = Boolean(enabled);
+    if (!soundEnabled) {
+      stopFootsteps();
+    } else {
+      unlockAudio();
+    }
+    return soundEnabled;
+  }
+
+  function isSoundEnabled() {
+    return soundEnabled;
+  }
+
+  function setSystemMuted(muted) {
+    systemMuted = Boolean(muted);
+    if (systemMuted) {
+      stopFootsteps();
+      lastStepCount = 0;
+    }
+    return systemMuted;
+  }
+
+  function getAudioState() {
+    return {
+      soundEnabled,
+      systemMuted,
+      footstepCount,
+      lastStepCount,
+      isLeftFootStep,
+      lastFootstepPitch,
+      audioCtxState: audioCtx ? audioCtx.state : "uninitialized",
+    };
+  }
+
   // Quy đổi tỷ lệ pixel gốc của Steve (32 px tổng chiều cao = 1.80 đơn vị khớp chiều cao cũ & Camera Shift-Lock)
   const TOTAL_HEIGHT = 1.8;
   const PIXEL_SCALE = TOTAL_HEIGHT / 32; // 0.05625 đơn vị / pixel
@@ -399,6 +617,7 @@ window.MuseumAvatar = (() => {
   }
 
   function create() {
+    bindFirstGestureUnlock();
     const { geometries, partMaterials } = ensureSharedResources();
     const avatar = new THREE.Group();
     avatar.name = "MinecraftSteveAvatar";
@@ -491,6 +710,7 @@ window.MuseumAvatar = (() => {
       typeof speed === "number" && Number.isFinite(speed) ? speed : 1;
 
     if (isMoving && dt > 0 && speedScale > 0) {
+      wasMoving = true;
       walkCycle += 13.2 * dt * speedScale * stepDir;
       const legAngle = Math.sin(walkCycle) * 0.55;
       const armAngle = -Math.sin(walkCycle) * 0.5;
@@ -499,7 +719,23 @@ window.MuseumAvatar = (() => {
       if (rightLegGroup) rightLegGroup.rotation.x = -legAngle;
       if (leftArmGroup) leftArmGroup.rotation.x = armAngle;
       if (rightArmGroup) rightArmGroup.rotation.x = -armAngle;
+
+      // Đồng bộ nhịp bước chân với chu kỳ vung chân (mỗi nửa chu kỳ PI phát 1 bước Trái/Phải)
+      const currentStepCount = Math.floor(
+        (Math.abs(walkCycle) + Math.PI * 0.85) / Math.PI,
+      );
+      if (currentStepCount > lastStepCount) {
+        lastStepCount = currentStepCount;
+        isLeftFootStep = !isLeftFootStep;
+        triggerFootstep(isLeftFootStep);
+      }
     } else {
+      if (wasMoving || lastStepCount > 0) {
+        stopFootsteps();
+        wasMoving = false;
+        lastStepCount = 0;
+        walkCycle = 0;
+      }
       const damping = dt > 0 ? Math.exp(-16 * dt) : 0.72;
       const dampJoint = (group) => {
         if (!group) return;
@@ -653,6 +889,9 @@ window.MuseumAvatar = (() => {
     leftLegGroup = null;
     rightLegGroup = null;
     walkCycle = 0;
+    lastStepCount = 0;
+    wasMoving = false;
+    stopFootsteps();
   }
 
   function getAvatar() {
@@ -689,5 +928,12 @@ window.MuseumAvatar = (() => {
     getRoomBounds,
     clampDeltaTime,
     MAX_DELTA_TIME,
+    setSoundEnabled,
+    isSoundEnabled,
+    setSystemMuted,
+    stopFootsteps,
+    triggerFootstep,
+    getAudioState,
+    unlockAudio,
   };
 })();

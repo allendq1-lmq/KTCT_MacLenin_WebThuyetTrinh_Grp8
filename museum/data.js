@@ -85,6 +85,12 @@ window.MuseumData = (() => {
       camPos: { x: -5.4, y: 1.85, z: 2.4 },
       lookPos: { x: -8.85, y: 2.15, z: 2.4 },
       sectionCode: "1.1a",
+      visualType: "r1-1a",
+      localImagePath: "images/r1-1a.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
+      imageCaption:
+        "Thương mại & lưu thông hàng hóa theo các quy luật thị trường (Ảnh: Wikimedia Commons)",
       badge: "Mục 1.1a • Khái Niệm Nền Tảng",
       title: "1.1a. Kinh Tế Thị Trường Nói Chung",
       subtitle: "Thành tựu phát triển chung của văn minh nhân loại",
@@ -147,6 +153,12 @@ window.MuseumData = (() => {
       camPos: { x: -5.4, y: 1.85, z: -2.4 },
       lookPos: { x: -8.85, y: 2.15, z: -2.4 },
       sectionCode: "1.1b",
+      visualType: "r1-1b",
+      localImagePath: "images/r1-1b.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/960px-Flag_of_Vietnam.svg.png",
+      imageCaption:
+        "Định hướng XHCN vì mục tiêu Dân giàu, nước mạnh, dân chủ, công bằng, văn minh",
       badge: "Mục 1.1b • Mô Hình Tổng Quát",
       title: "1.1b. Khái Niệm KTTT Định Hướng XHCN Việt Nam",
       subtitle: "Văn kiện Đại hội XIII (2021) & Điều 51 Hiến pháp 2013",
@@ -194,6 +206,12 @@ window.MuseumData = (() => {
       camPos: { x: -5.6, y: 1.85, z: -3.5 },
       lookPos: { x: -5.6, y: 2.15, z: -6.85 },
       sectionCode: "1.2a",
+      visualType: "r1-2a",
+      localImagePath: "images/r1-2a.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Agricultural_output_Vietnam.svg/960px-Agricultural_output_Vietnam.svg.png",
+      imageCaption:
+        "Chuyển biến sản xuất nông nghiệp từ Khoán 100 (1981) & giai đoạn tiền Đổi mới",
       badge: "Mục 1.2a • Trước Năm 1986",
       title: "1.2a. Giai Đoạn Trước Đổi Mới (Trước 1986)",
       subtitle: "Cơ chế kế hoạch hóa tập trung, bao cấp & các bước tìm tòi",
@@ -246,6 +264,12 @@ window.MuseumData = (() => {
       camPos: { x: 0, y: 1.85, z: -3.5 },
       lookPos: { x: 0, y: 2.15, z: -6.85 },
       sectionCode: "1.2b",
+      visualType: "r1-2b",
+      localImagePath: "images/r1-2b.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Ho_Chi_Minh_City%2C_City_Hall%2C_2020-01_CN-03.jpg/960px-Ho_Chi_Minh_City%2C_City_Hall%2C_2020-01_CN-03.jpg",
+      imageCaption:
+        "Đổi mới tư duy kinh tế giai đoạn 1986–2000: Kinh tế nhiều thành phần & hội nhập",
       badge: "Mục 1.2b • Giai Đoạn 1986 – 2000",
       title: "1.2b. Từ Đại Hội VI Đến Đại Hội VIII (1986–2000)",
       subtitle: "Đổi mới tư duy kinh tế & thừa nhận sản xuất hàng hóa",
@@ -297,6 +321,12 @@ window.MuseumData = (() => {
       camPos: { x: 5.6, y: 1.85, z: -3.5 },
       lookPos: { x: 5.6, y: 2.15, z: -6.85 },
       sectionCode: "1.2c",
+      visualType: "r1-2c",
+      localImagePath: "images/r1-2c.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Hanoi_skyline_with_Ba_Vi_Mountain.jpg/960px-Hanoi_skyline_with_Ba_Vi_Mountain.jpg",
+      imageCaption:
+        "Hoàn thiện đồng bộ thể chế KTTT ĐHXHCN giai đoạn 2001–2026 (NQ 68 & Đại hội XIV)",
       badge: "Mục 1.2c • Giai Đoạn 2001 – Nay (ĐH XIV)",
       title: "1.2c. Từ Đại Hội IX (2001) Đến Đại Hội XIV (2026)",
       subtitle: "Xác lập mô hình tổng quát, NQ 68-NQ/TW & Đại hội XIV",
@@ -349,6 +379,12 @@ window.MuseumData = (() => {
       camPos: { x: 5.4, y: 1.85, z: -3.2 },
       lookPos: { x: 8.85, y: 2.15, z: -3.2 },
       sectionCode: "1.3",
+      visualType: "r1-3",
+      localImagePath: "images/r1-3.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Ho_Chi_Minh_City_-_DJI_0124-HDR.jpg/960px-Ho_Chi_Minh_City_-_DJI_0124-HDR.jpg",
+      imageCaption:
+        "Thành tựu thực tiễn 2024: Quy mô GDP 476,3 tỷ USD, 17 FTA & 73 quốc gia công nhận",
       badge: "Mục 1.3 • Ba Luận Điểm & Số Liệu 2024",
       title: "1.3. Tính Tất Yếu Khách Quan Của KTTT ĐHXHCN",
       subtitle: "Quy luật lịch sử, thực tiễn GDP 476,3 tỷ USD & mục tiêu XHCN",
@@ -411,6 +447,12 @@ window.MuseumData = (() => {
       camPos: { x: 5.4, y: 1.85, z: 0.2 },
       lookPos: { x: 8.85, y: 2.15, z: 0.2 },
       sectionCode: "1.4a",
+      visualType: "r1-4a",
+      localImagePath: "images/r1-4a.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg/960px-%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg",
+      imageCaption:
+        "Nhà nước pháp quyền XHCN hoàn thiện pháp luật, điều tiết vĩ mô & bảo đảm an ninh kinh tế",
       badge: "Mục 1.4a • Quản Trị Quốc Gia",
       title: "1.4a. Vai Trò Quản Lý Vĩ Mô Của Nhà Nước",
       subtitle: "Kiến tạo phát triển, giữ vững cân đối lớn & an ninh kinh tế",
@@ -464,6 +506,12 @@ window.MuseumData = (() => {
       camPos: { x: 5.4, y: 1.85, z: 3.6 },
       lookPos: { x: 8.85, y: 2.15, z: 3.6 },
       sectionCode: "1.4b",
+      visualType: "r1-4b",
+      localImagePath: "images/r1-4b.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Communist_Party_of_Vietnam_flag_logo.svg/960px-Communist_Party_of_Vietnam_flag_logo.svg.png",
+      imageCaption:
+        "Sự lãnh đạo toàn diện của Đảng CSVN — Bảo đảm định hướng XHCN",
       badge: "Mục 1.4b • Hạt Nhân Lãnh Đạo",
       title: "1.4b. Bốn Vai Trò Lãnh Đạo Của Đảng CSVN",
       subtitle: "Lãnh đạo toàn diện, định hướng lý luận & kiểm soát quyền lực",
@@ -518,6 +566,12 @@ window.MuseumData = (() => {
     camPos: { x: 0, y: 1.85, z: 2.5 },
     lookPos: { x: 0, y: 1.35, z: -0.8 },
     sectionCode: "2.a",
+    visualType: "r2-a",
+    localImagePath: "images/r2-a.jpg",
+    imageUrl:
+      "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/TR%C3%8AN_S%C3%94NG_S%C3%80I_G%C3%92N_-_panoramio.jpg/960px-TR%C3%8AN_S%C3%94NG_S%C3%80I_G%C3%92N_-_panoramio.jpg",
+    imageCaption:
+      "Thương mại hàng hải & vận hành đồng bộ các loại thị trường hội nhập quốc tế",
     badge: "Phòng 2 • Bệ Trung Tâm (Mục 2.a)",
     title: "2.a. Những Đặc Điểm Chung Với Các Nền KTTT",
     subtitle: "Tính phổ biến của kinh tế thị trường và đặc điểm giai đoạn Việt Nam",
@@ -564,6 +618,12 @@ window.MuseumData = (() => {
       room: 2,
       angleDeg: 180,
       sectionCode: "2.b.1",
+      visualType: "r2-b1",
+      localImagePath: "images/r2-b1.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Ho_Chi_Minh_City_panorama_2019_%28cropped%29.jpg/960px-Ho_Chi_Minh_City_panorama_2019_%28cropped%29.jpg",
+      imageCaption:
+        "Phát triển LLSX hiện đại vì mục tiêu Dân giàu, nước mạnh, dân chủ, công bằng, văn minh",
       badge: "Cột Trụ 01 • Đặc Trưng Mục Tiêu",
       title: "Đặc Trưng 1: Về Mục Tiêu Phát Triển",
       subtitle: "Dân giàu, nước mạnh, dân chủ, công bằng, văn minh",
@@ -605,6 +665,12 @@ window.MuseumData = (() => {
       room: 2,
       angleDeg: 225,
       sectionCode: "2.b.2",
+      visualType: "r2-b2",
+      localImagePath: "images/r2-b2.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Newone_-_Hung_An_-_VinFast_2020.jpg/960px-Newone_-_Hung_An_-_VinFast_2020.jpg",
+      imageCaption:
+        "Đa dạng sở hữu: KT nhà nước chủ đạo, KT tư nhân là một động lực quan trọng",
       badge: "Cột Trụ 02 • Sở Hữu & Thành Phần KT",
       title: "Đặc Trưng 2: Quan Hệ Sở Hữu & Thành Phần KT",
       subtitle: "Nội dung kinh tế - pháp lý; KT nhà nước chủ đạo, KT tư nhân động lực",
@@ -647,6 +713,12 @@ window.MuseumData = (() => {
       room: 2,
       angleDeg: 270,
       sectionCode: "2.b.3",
+      visualType: "r2-b3",
+      localImagePath: "images/r2-b3.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg/960px-%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg",
+      imageCaption:
+        "Nhà nước pháp quyền XHCN của nhân dân, do nhân dân, vì nhân dân dưới sự lãnh đạo của Đảng",
       badge: "Cột Trụ 03 • Quan Hệ Quản Lý",
       title: "Đặc Trưng 3: Quan Hệ Quản Lý Nền Kinh Tế",
       subtitle: "Nhà nước pháp quyền XHCN dưới sự lãnh đạo của Đảng CSVN",
@@ -688,6 +760,12 @@ window.MuseumData = (() => {
       room: 2,
       angleDeg: 315,
       sectionCode: "2.b.4",
+      visualType: "r2-b4",
+      localImagePath: "images/r2-b4.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/C%E1%BA%A7u_Cao_L%C3%A3nh.jpg/960px-C%E1%BA%A7u_Cao_L%C3%A3nh.jpg",
+      imageCaption:
+        "Công bằng phân phối đầu vào (hạ tầng, cơ hội) & đa dạng phân phối đầu ra theo lao động, an sinh",
       badge: "Cột Trụ 04 • Quan Hệ Phân Phối",
       title: "Đặc Trưng 4: Quan Hệ Phân Phối (Đầu Vào & Đầu Ra)",
       subtitle: "Công bằng cơ hội tiếp cận nguồn lực & đa dạng hình thức phân phối",
@@ -728,6 +806,12 @@ window.MuseumData = (() => {
       room: 2,
       angleDeg: 360,
       sectionCode: "2.b.5",
+      visualType: "r2-b5",
+      localImagePath: "images/r2-b5.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12%2C_Qu%E1%BA%ADn_5%2C_TPHCM%2C_Vi%E1%BB%87t_Nam_-_panoramio.jpg/960px-Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12%2C_Qu%E1%BA%ADn_5%2C_TPHCM%2C_Vi%E1%BB%87t_Nam_-_panoramio.jpg",
+      imageCaption:
+        "Gắn tăng trưởng kinh tế với tiến bộ, công bằng xã hội & tiếp cận bình đẳng y tế, giáo dục",
       badge: "Cột Trụ 05 • Tăng Trưởng & Công Bằng",
       title: "Đặc Trưng 5: Gắn Tăng Trưởng Với Công Bằng Xã Hội",
       subtitle: "Thực hiện tiến bộ & công bằng ngay trong từng bước, từng chính sách",
@@ -773,6 +857,12 @@ window.MuseumData = (() => {
       camPos: { x: -5.8, y: 1.9, z: -2.8 },
       lookPos: { x: -9.85, y: 2.2, z: -2.8 },
       sectionCode: "3.1",
+      visualType: "r3-1",
+      localImagePath: "images/r3-1.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927.jpg/960px-Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927.jpg",
+      imageCaption:
+        "Tư liệu lịch sử: Khủng hoảng chu kỳ & thất nghiệp hàng loạt trong CNTB (Ảnh: NARA/Wikimedia)",
       badge: "Mảng Tối • Mục 3.1 (Giới Hạn CNTB)",
       title: "3.1. Năm Giới Hạn Lịch Sử Của Chủ Nghĩa Tư Bản",
       subtitle: "Những khuyết tật cố hữu từ chế độ chiếm hữu tư nhân TBCN",
@@ -822,6 +912,12 @@ window.MuseumData = (() => {
       camPos: { x: 5.8, y: 1.9, z: -2.8 },
       lookPos: { x: 9.85, y: 2.2, z: -2.8 },
       sectionCode: "3.2",
+      visualType: "r3-2",
+      localImagePath: "images/r3-2.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Windmills_D1-D4_%28Thornton_Bank%29.jpg/960px-Windmills_D1-D4_%28Thornton_Bank%29.jpg",
+      imageCaption:
+        "Chuyển đổi năng lượng xanh Net Zero 2050, giảm nghèo <3% & BHYT >93% dân số",
       badge: "Mảng Sáng • Mục 3.2 (Khả Năng Khắc Phục)",
       title: "3.2. Năm Trụ Cột Khắc Phục Của KTTT ĐHXHCN Việt Nam",
       subtitle: "Giải pháp lý luận gắn liền minh chứng thực tiễn sinh động tại Việt Nam",
@@ -871,6 +967,12 @@ window.MuseumData = (() => {
       camPos: { x: 0, y: 1.95, z: -2.6 },
       lookPos: { x: 0, y: 2.25, z: -6.85 },
       sectionCode: "3.BẢNG",
+      visualType: "r3-table",
+      localImagePath: "images/r3-table.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/DJI_0550-HDR-Pano_Bitexco_Financial_Tower.jpg/960px-DJI_0550-HDR-Pano_Bitexco_Financial_Tower.jpg",
+      imageCaption:
+        "Đối chiếu 6 tiêu chí bản chất giữa KTTT Tư bản chủ nghĩa và KTTT Định hướng XHCN",
       badge: "Trung Tâm Phòng 3 • Bảng Đối Chiếu 6 Tiêu Chí",
       title: "Bảng So Sánh Đối Chiếu: KTTT TBCN vs. KTTT ĐHXHCN",
       subtitle: "Đối chiếu trực diện 6 tiêu chí bản chất giữa hai mô hình kinh tế thị trường",
@@ -899,6 +1001,12 @@ window.MuseumData = (() => {
       camPos: { x: -5.8, y: 1.9, z: 2.8 },
       lookPos: { x: -9.85, y: 2.2, z: 2.8 },
       sectionCode: "3.3a",
+      visualType: "r3-3a",
+      localImagePath: "images/r3-3a.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
+      imageCaption:
+        "Bốn hạn chế thực tiễn: hợp tác xã yếu, thể chế kinh tế số & khoảng cách giàu nghèo",
       badge: "Mảng Tối • Mục 3.3a (Hạn Chế Hiện Nay)",
       title: "3.3a. Bốn Hạn Chế Còn Đọng Lại Hiện Nay Ở Việt Nam",
       subtitle: "Nhìn thẳng vào sự thật những bất cập trong thực tiễn vận hành",
@@ -952,6 +1060,12 @@ window.MuseumData = (() => {
       camPos: { x: 5.8, y: 1.9, z: 2.8 },
       lookPos: { x: 9.85, y: 2.2, z: 2.8 },
       sectionCode: "3.3b",
+      visualType: "r3-3b",
+      localImagePath: "images/r3-3b.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Khu_trung_t%C3%A2m_th%C3%A0nh_ph%E1%BB%91_H%E1%BB%93_Ch%C3%AD_Minh%2C_nh%C3%ACn_t%E1%BB%AB_ph%C3%ADa_qu%E1%BA%ADn_2.JPG/960px-Khu_trung_t%C3%A2m_th%C3%A0nh_ph%E1%BB%91_H%E1%BB%93_Ch%C3%AD_Minh%2C_nh%C3%ACn_t%E1%BB%AB_ph%C3%ADa_qu%E1%BA%ADn_2.JPG",
+      imageCaption:
+        "Bốn giải pháp đồng bộ: hoàn thiện pháp lý kinh tế số, minh bạch DNNN & an sinh nông thôn",
       badge: "Mảng Sáng • Mục 3.3b (Bốn Giải Pháp)",
       title: "3.3b. Bốn Giải Pháp Khắc Phục Hạn Chế Hiện Nay",
       subtitle: "Phương hướng hoàn thiện đồng bộ thể chế KTTT ĐHXHCN Việt Nam",
@@ -1005,6 +1119,12 @@ window.MuseumData = (() => {
       camPos: { x: 0, y: 1.9, z: 4.8 },
       lookPos: { x: 0, y: 1.35, z: 1.6 },
       sectionCode: "3.KẾT",
+      visualType: "r3-verdict",
+      localImagePath: "images/r3-verdict.jpg",
+      imageUrl:
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/960px-Flag_of_Vietnam.svg.png",
+      imageCaption:
+        "Phán quyết tổng kết: Từng bước khắc phục giới hạn lịch sử của CNTB, tiếp tục kiểm chứng qua thực tiễn",
       badge: "Tổng Kết • Phán Quyết & Tài Liệu Tham Khảo",
       title: "Phán Quyết Cuối Cùng & Nguồn Tài Liệu Tham Khảo",
       subtitle: "KTTT định hướng XHCN có giải quyết được giới hạn lịch sử của CNTB không?",

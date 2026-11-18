@@ -1,0 +1,4 @@
+{
+  "note": "Danh sach anh local uu tien trong museum/images/. Them ten file (vd: 'r1-1a.jpg') vao mang 'files' hoac dat preferLocal: true trong data.js de nap anh offline truoc URL Wikimedia.",
+  "files": []
+}

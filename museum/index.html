@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bảo Tàng 3D Kinh Tế Chính Trị Mác - Lênin</title>
+    <link rel="icon" href="data:," />
     <!-- Tailwind CSS & Three.js CDN (Hệ thống Camera 3D Shift-Lock góc nhìn thứ ba qua vai) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -47,10 +48,52 @@
         </button>
       </div>
 
-      <!-- Cụm Phải: Trạng thái Shift-Lock -->
+      <!-- Cụm Phải: Trạng thái Shift-Lock & Bật/Tắt Âm bước chân -->
       <div
-        class="pointer-events-auto flex items-center bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
+        id="museum-status-controls"
+        class="pointer-events-auto flex items-center gap-1 sm:gap-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
       >
+        <button
+          id="btn-museum-sound-toggle"
+          type="button"
+          aria-pressed="true"
+          title="Bật hoặc tắt hiệu ứng âm thanh bước chân khi di chuyển"
+          class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-emerald-300 border border-emerald-500/35 hover:bg-slate-700 transition"
+        >
+          <svg
+            id="sound-icon-on"
+            class="w-3.5 h-3.5 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+            ></path>
+          </svg>
+          <svg
+            id="sound-icon-off"
+            class="w-3.5 h-3.5 shrink-0 hidden"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
+            ></path>
+          </svg>
+          <span class="museum-sound-detail">Âm bước chân:</span>
+          <span id="sound-toggle-label">BẬT</span>
+        </button>
+
         <button
           id="btn-shiftlock-status"
           type="button"
@@ -150,6 +193,7 @@
 
     <!-- Bộ scripts thành phần của Bảo tàng 3D -->
     <script src="data.js"></script>
+    <script src="visuals.js"></script>
     <script src="avatar.js"></script>
     <script src="room1.js"></script>
     <script src="room2.js"></script>

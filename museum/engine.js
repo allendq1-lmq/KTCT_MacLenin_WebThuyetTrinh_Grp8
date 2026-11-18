@@ -53,6 +53,7 @@ window.MuseumEngine = (() => {
 
   let isManualPaused = false;
   let lastFrameTime = 0;
+  let sceneEpoch = 0;
 
   // Bộ nhớ đệm dùng chung Geometry / Material / Texture để giảm cấp phát VRAM & Draw Calls (B2, B3)
   const sharedResources = {
@@ -102,6 +103,11 @@ window.MuseumEngine = (() => {
 
   function configureCanvasTexture(tex, maxAnisotropy = 4) {
     tex.generateMipmaps = true;
+    if (THREE.SRGBColorSpace && "colorSpace" in tex) {
+      tex.colorSpace = THREE.SRGBColorSpace;
+    } else if (THREE.sRGBEncoding) {
+      tex.encoding = THREE.sRGBEncoding;
+    }
     if (THREE.LinearMipmapLinearFilter) {
       tex.minFilter = THREE.LinearMipmapLinearFilter;
     }
@@ -219,18 +225,37 @@ window.MuseumEngine = (() => {
     return tex;
   }
 
+  function resolveExhibitMeta(title, badgeText, exhibitMeta) {
+    if (exhibitMeta && typeof exhibitMeta === "object") {
+      return exhibitMeta;
+    }
+    const playlist =
+      (window.MuseumData && window.MuseumData.playlist) || [];
+    return (
+      playlist.find(
+        (item) =>
+          (title && item.title === title) ||
+          (badgeText && item.badge === badgeText),
+      ) || {}
+    );
+  }
+
   function createArtworkTexture(
     title,
     subtitle,
     badgeText,
     tagColor,
     descLines,
+    exhibitMeta,
   ) {
-    // Tối ưu độ phân giải <= 1024px (1024x700) tiết kiệm 75% VRAM nhưng giữ độ nét cao (B2)
+    // Tối ưu độ phân giải <= 1024px (1024x700) kết hợp bố cục 2 cột (Cách 1 Infographic + Cách 2 Ảnh tư liệu)
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
     canvas.height = 700;
     const ctx = canvas.getContext("2d");
+    const meta = resolveExhibitMeta(title, badgeText, exhibitMeta);
+    const accentColor = tagColor || meta.color || "#d97706";
+    const visualType = meta.visualType || meta.id || "r1-1a";
 
     const bgGrad = ctx.createLinearGradient(0, 0, 1024, 700);
     bgGrad.addColorStop(0, "#111827");
@@ -240,50 +265,174 @@ window.MuseumEngine = (() => {
 
     // Lớp bo passepartout chống lóa tạo chiều sâu cho tranh
     ctx.fillStyle = "rgba(255, 255, 255, 0.025)";
-    ctx.fillRect(22, 22, 980, 656);
+    ctx.fillRect(20, 20, 984, 660);
     ctx.strokeStyle = "rgba(245, 158, 11, 0.28)";
     ctx.lineWidth = 2;
-    ctx.strokeRect(28, 28, 968, 644);
+    ctx.strokeRect(26, 26, 972, 648);
 
-    ctx.fillStyle = tagColor || "#d97706";
-    ctx.fillRect(48, 46, 11, 105);
+    ctx.fillStyle = accentColor;
+    ctx.fillRect(44, 42, 10, 102);
 
-    ctx.fillStyle = tagColor || "#f59e0b";
-    ctx.font = "bold 21px 'Segoe UI', Tahoma, sans-serif";
+    ctx.fillStyle = accentColor;
+    ctx.font = "bold 19px 'Segoe UI', Tahoma, sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText((badgeText || "CHỦ ĐỀ LÝ LUẬN").toUpperCase(), 72, 69);
+    ctx.fillText((badgeText || "CHỦ ĐỀ LÝ LUẬN").toUpperCase(), 66, 63);
 
     ctx.fillStyle = "#f8fafc";
-    ctx.font = "bold 33px 'Segoe UI', Tahoma, sans-serif";
-    wrapCanvasText(ctx, title, 72, 109, 890, 38, 1);
+    ctx.font = "bold 30px 'Segoe UI', Tahoma, sans-serif";
+    wrapCanvasText(ctx, title, 66, 102, 910, 36, 1);
 
     ctx.fillStyle = "#cbd5e1";
-    ctx.font = "italic 20px 'Segoe UI', Tahoma, sans-serif";
-    wrapCanvasText(ctx, subtitle, 72, 148, 890, 26, 1);
+    ctx.font = "italic 18px 'Segoe UI', Tahoma, sans-serif";
+    wrapCanvasText(ctx, subtitle, 66, 138, 910, 24, 1);
 
-    ctx.strokeStyle = tagColor || "rgba(217, 119, 6, 0.65)";
+    ctx.strokeStyle = accentColor;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(72, 173);
-    ctx.lineTo(960, 173);
+    ctx.moveTo(44, 164);
+    ctx.lineTo(980, 164);
     ctx.stroke();
 
-    ctx.fillStyle = "#f1f5f9";
-    ctx.font = "500 24px 'Segoe UI', Tahoma, sans-serif";
-    let curY = 222;
+    // CỘT TRÁI (44..540): Hiển thị 4 luận điểm cốt lõi trong khung thẻ sắc nét
+    const leftX = 44;
+    const leftW = 496;
+    const lines = Array.isArray(descLines) ? descLines.slice(0, 4) : [];
+    const slotStartY = 182;
+    const slotGap = 12;
+    const slotH = 109;
 
-    if (Array.isArray(descLines)) {
-      descLines.slice(0, 4).forEach((line) => {
-        curY = wrapCanvasText(ctx, line, 72, curY, 880, 33, 2);
-        curY += 13;
-      });
+    lines.forEach((line, idx) => {
+      const cardY = slotStartY + idx * (slotH + slotGap);
+      if (window.MuseumVisuals && window.MuseumVisuals.fillCard) {
+        window.MuseumVisuals.fillCard(
+          ctx,
+          leftX,
+          cardY,
+          leftW,
+          slotH,
+          10,
+          "rgba(15, 23, 42, 0.78)",
+          "rgba(148, 163, 184, 0.24)",
+          1.2,
+        );
+        ctx.fillStyle = accentColor;
+        ctx.fillRect(leftX, cardY + 12, 5, slotH - 24);
+      } else {
+        ctx.fillStyle = "rgba(15, 23, 42, 0.78)";
+        ctx.fillRect(leftX, cardY, leftW, slotH);
+      }
+
+      ctx.fillStyle = "#f1f5f9";
+      ctx.font = "500 20px 'Segoe UI', Tahoma, sans-serif";
+      ctx.textAlign = "left";
+      wrapCanvasText(ctx, line, leftX + 18, cardY + 36, leftW - 32, 28, 3);
+    });
+
+    // CỘT PHẢI (556..980): Khung đồ họa Infographic (Cách 1) + Ảnh tư liệu bất đồng bộ (Cách 2)
+    const rightX = 556;
+    const rightY = 182;
+    const rightW = 424;
+    const rightH = 472;
+
+    if (window.MuseumVisuals && window.MuseumVisuals.fillCard) {
+      window.MuseumVisuals.fillCard(
+        ctx,
+        rightX,
+        rightY,
+        rightW,
+        rightH,
+        12,
+        "#0b111e",
+        `${accentColor}66`,
+        1.5,
+      );
+    } else {
+      ctx.fillStyle = "#0b111e";
+      ctx.fillRect(rightX, rightY, rightW, rightH);
     }
+
+    // Nhãn đầu cột phải
+    ctx.fillStyle = "#fde68a";
+    ctx.font = "bold 13px 'Segoe UI', Tahoma, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(
+      "MINH HỌA TRỰC QUAN & TƯ LIỆU",
+      rightX + rightW / 2,
+      rightY + 23,
+    );
+
+    const visualRect = {
+      x: rightX + 8,
+      y: rightY + 34,
+      w: rightW - 16,
+      h: rightH - 86,
+    };
+
+    if (
+      window.MuseumVisuals &&
+      typeof window.MuseumVisuals.drawExhibitInfographic === "function"
+    ) {
+      window.MuseumVisuals.drawExhibitInfographic(
+        ctx,
+        visualType,
+        visualRect,
+        accentColor,
+      );
+    }
+
+    // Chú thích chân khung phải
+    const captionText = meta.imageCaption || subtitle || title || "";
+    ctx.save();
+    ctx.fillStyle = "#0c1322";
+    ctx.fillRect(rightX + 8, visualRect.y + visualRect.h + 4, rightW - 16, 42);
+    if (window.MuseumVisuals && window.MuseumVisuals.drawCenterLines) {
+      window.MuseumVisuals.drawCenterLines(
+        ctx,
+        captionText,
+        rightX + rightW / 2,
+        visualRect.y + visualRect.h + 25,
+        rightW - 28,
+        15,
+        "italic 12px 'Segoe UI', Tahoma, sans-serif",
+        "#cbd5e1",
+        2,
+      );
+    }
+    ctx.restore();
 
     ctx.strokeStyle = "rgba(255,255,255,0.14)";
     ctx.lineWidth = 5;
     ctx.strokeRect(11, 11, 1002, 678);
 
-    return configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
+    const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
+    const captureEpoch = sceneEpoch;
+
+    // Nạp bất đồng bộ ảnh local/Wikimedia (Cách 2): thành công -> kết hợp vào khung phải; lỗi/offline -> giữ nguyên Cách 1
+    if (
+      window.MuseumVisuals &&
+      typeof window.MuseumVisuals.loadExhibitImageWithFallback === "function" &&
+      (meta.localImagePath || meta.imageUrl)
+    ) {
+      window.MuseumVisuals.loadExhibitImageWithFallback(meta)
+        .then((res) => {
+          if (!res || !res.ok || !res.img || captureEpoch !== sceneEpoch) {
+            return;
+          }
+          window.MuseumVisuals.drawLoadedPhotoInFrame(
+            ctx,
+            res.img,
+            res.src,
+            visualRect,
+            visualType,
+            accentColor,
+            meta.imageCaption,
+          );
+          tex.needsUpdate = true;
+        })
+        .catch(() => {});
+    }
+
+    return tex;
   }
 
   function createPlacardTexture(title, subtitle) {
@@ -1049,6 +1198,7 @@ window.MuseumEngine = (() => {
   }
 
   function clearScene(forceShared = false) {
+    sceneEpoch++;
     interactableObjects.length = 0;
     if (!scene) return;
     while (scene.children.length > 0) {
@@ -1339,10 +1489,22 @@ window.MuseumEngine = (() => {
     keys.a = false;
     keys.s = false;
     keys.d = false;
+    if (
+      window.MuseumAvatar &&
+      typeof window.MuseumAvatar.setSystemMuted === "function"
+    ) {
+      window.MuseumAvatar.setSystemMuted(true);
+    }
   }
 
   function resumeRenderLoop() {
     if (shouldPauseRender() || !renderer || !scene || !camera) return;
+    if (
+      window.MuseumAvatar &&
+      typeof window.MuseumAvatar.setSystemMuted === "function"
+    ) {
+      window.MuseumAvatar.setSystemMuted(false);
+    }
     if (animId === null) {
       lastFrameTime =
         typeof performance !== "undefined" && performance.now
@@ -1475,6 +1637,12 @@ window.MuseumEngine = (() => {
         window.parent.getCurrentActiveTab() !== "idea2"
       ) {
         isManualPaused = true;
+        if (
+          window.MuseumAvatar &&
+          typeof window.MuseumAvatar.setSystemMuted === "function"
+        ) {
+          window.MuseumAvatar.setSystemMuted(true);
+        }
       }
     } catch (_) {}
 
@@ -1513,6 +1681,18 @@ window.MuseumEngine = (() => {
     createCeilingLights,
     createStanchionBarrier,
     createArchitecturalRoom,
+    drawExhibitInfographic: (...args) =>
+      window.MuseumVisuals
+        ? window.MuseumVisuals.drawExhibitInfographic(...args)
+        : null,
+    renderInfographicDataUrl: (...args) =>
+      window.MuseumVisuals
+        ? window.MuseumVisuals.renderInfographicDataUrl(...args)
+        : "",
+    loadExhibitImageWithFallback: (...args) =>
+      window.MuseumVisuals
+        ? window.MuseumVisuals.loadExhibitImageWithFallback(...args)
+        : Promise.resolve({ ok: false }),
   };
 })();
 

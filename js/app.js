@@ -193,28 +193,10 @@ document.addEventListener("DOMContentLoaded", () => {
     updateFullscreenButtonVisibility();
 
     // Tạm dừng vòng lặp render WebGL của Bảo tàng 3D khi người dùng đang ở tab khác để tiết kiệm GPU/CPU (B4)
-    const museumIframe = document.getElementById("museum-frame");
-    const isMuseumTab = targetTab === "idea2";
-    if (museumIframe && museumIframe.contentWindow) {
-      try {
-        if (
-          museumIframe.contentWindow.MuseumEngine &&
-          typeof museumIframe.contentWindow.MuseumEngine.setPaused ===
-            "function"
-        ) {
-          museumIframe.contentWindow.MuseumEngine.setPaused(!isMuseumTab);
-        }
-      } catch (_) {}
-      try {
-        museumIframe.contentWindow.postMessage(
-          { type: "MUSEUM_SET_ACTIVE", active: isMuseumTab },
-          "*",
-        );
-      } catch (_) {}
-      if (!isMuseumTab) {
-        notifyMuseumResetKeys();
-      }
-    }
+    setMuseumActive(targetTab === "idea2");
+
+    // Đồng bộ kích hoạt / cô lập phím tắt trình chiếu Reveal.js theo tab đang mở
+    setPresentationActive(targetTab === "content");
 
     if (targetTab === "content") {
       setTimeout(() => {
@@ -280,9 +262,67 @@ document.addEventListener("DOMContentLoaded", () => {
     btnFullscreen.addEventListener("click", toggleMuseumFullscreen);
   }
 
+  function setMuseumActive(isActive) {
+    const museumIframe = document.getElementById("museum-frame");
+    if (!museumIframe || !museumIframe.contentWindow) return;
+    try {
+      if (
+        museumIframe.contentWindow.MuseumEngine &&
+        typeof museumIframe.contentWindow.MuseumEngine.setPaused === "function"
+      ) {
+        museumIframe.contentWindow.MuseumEngine.setPaused(!isActive);
+      }
+    } catch (_) {}
+    try {
+      museumIframe.contentWindow.postMessage(
+        { type: "MUSEUM_SET_ACTIVE", active: Boolean(isActive) },
+        "*",
+      );
+    } catch (_) {}
+    if (!isActive) {
+      notifyMuseumResetKeys();
+    }
+  }
+
+  function setPresentationActive(isActive) {
+    const presIframe = document.getElementById("presentation-frame");
+    if (!presIframe) return;
+
+    if (!isActive && document.activeElement === presIframe && typeof presIframe.blur === "function") {
+      presIframe.blur();
+    }
+
+    if (!presIframe.contentWindow) return;
+    try {
+      if (
+        presIframe.contentWindow.PresentationApp &&
+        typeof presIframe.contentWindow.PresentationApp.setActive === "function"
+      ) {
+        presIframe.contentWindow.PresentationApp.setActive(Boolean(isActive));
+      }
+    } catch (_) {}
+    try {
+      presIframe.contentWindow.postMessage(
+        { type: "PRESENTATION_SET_ACTIVE", active: Boolean(isActive) },
+        "*",
+      );
+    } catch (_) {}
+  }
+
   function handleFullscreenChange() {
     syncFullscreenButtonState();
     updateFullscreenButtonVisibility();
+
+    const isFs = !!getFullscreenElement();
+    const presIframe = document.getElementById("presentation-frame");
+    if (presIframe && presIframe.contentWindow) {
+      try {
+        presIframe.contentWindow.postMessage(
+          { type: "FULLSCREEN_CHANGED", isFullscreen: isFs },
+          "*",
+        );
+      } catch (_) {}
+    }
 
     const activeIframe =
       currentActiveTab === "content"
@@ -348,19 +388,43 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const activeTag =
+      document.activeElement && document.activeElement.tagName
+        ? document.activeElement.tagName.toUpperCase()
+        : "";
+    if (["INPUT", "SELECT", "TEXTAREA"].includes(activeTag)) {
+      return;
+    }
+
     if (currentActiveTab === "quiz" || currentActiveTab === "game" || currentActiveTab === "members") {
       return;
     }
 
     const sectionContent = document.getElementById("section-content");
-    if (sectionContent && !sectionContent.classList.contains("hidden")) {
-      const k = e.key.toLowerCase();
+    if (
+      currentActiveTab === "content" &&
+      sectionContent &&
+      !sectionContent.classList.contains("hidden")
+    ) {
+      const k = (e.key || "").toLowerCase();
       if (k === "f" && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault();
         toggleMuseumFullscreen();
         return;
       }
-      if (["arrowleft", "arrowright", " "].includes(k)) {
+      if (
+        [
+          "arrowleft",
+          "arrowright",
+          "arrowup",
+          "arrowdown",
+          " ",
+          "pageup",
+          "pagedown",
+          "home",
+          "end",
+        ].includes(k)
+      ) {
         e.preventDefault();
         forwardKeyToIframe("presentation-frame", "keydown", e.key, e.code);
       }
@@ -368,8 +432,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const sectionIdea2 = document.getElementById("section-idea2");
-    if (sectionIdea2 && !sectionIdea2.classList.contains("hidden")) {
-      const k = e.key.toLowerCase();
+    if (
+      currentActiveTab === "idea2" &&
+      sectionIdea2 &&
+      !sectionIdea2.classList.contains("hidden")
+    ) {
+      const k = (e.key || "").toLowerCase();
       if (k === "f" && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault();
         toggleMuseumFullscreen();
@@ -402,8 +470,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("keyup", (e) => {
     const sectionIdea2 = document.getElementById("section-idea2");
-    if (sectionIdea2 && !sectionIdea2.classList.contains("hidden")) {
-      const k = e.key.toLowerCase();
+    if (
+      currentActiveTab === "idea2" &&
+      sectionIdea2 &&
+      !sectionIdea2.classList.contains("hidden")
+    ) {
+      const k = (e.key || "").toLowerCase();
       if (
         [
           "w",
@@ -447,27 +519,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const presentationFrameEl = document.getElementById("presentation-frame");
+  if (presentationFrameEl) {
+    presentationFrameEl.addEventListener("load", () => {
+      setPresentationActive(currentActiveTab === "content");
+      try {
+        if (presentationFrameEl.contentWindow) {
+          presentationFrameEl.contentWindow.postMessage(
+            { type: "FULLSCREEN_CHANGED", isFullscreen: !!getFullscreenElement() },
+            "*",
+          );
+        }
+      } catch (_) {}
+    });
+  }
+
   const museumFrameEl = document.getElementById("museum-frame");
   if (museumFrameEl) {
     museumFrameEl.addEventListener("load", () => {
-      const isMuseumTab = currentActiveTab === "idea2";
-      if (museumFrameEl.contentWindow) {
-        try {
-          if (
-            museumFrameEl.contentWindow.MuseumEngine &&
-            typeof museumFrameEl.contentWindow.MuseumEngine.setPaused ===
-              "function"
-          ) {
-            museumFrameEl.contentWindow.MuseumEngine.setPaused(!isMuseumTab);
-          }
-        } catch (_) {}
-        try {
-          museumFrameEl.contentWindow.postMessage(
-            { type: "MUSEUM_SET_ACTIVE", active: isMuseumTab },
-            "*",
-          );
-        } catch (_) {}
-      }
+      setMuseumActive(currentActiveTab === "idea2");
     });
   }
 

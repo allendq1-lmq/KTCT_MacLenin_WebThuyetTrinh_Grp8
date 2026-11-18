@@ -1,10 +1,10 @@
-// presentation/presentation.js - Bộ điều khiển trình chiếu Reveal.js (embedded: true, 20 Slides, fragments & cách ly SPA)
+// presentation/presentation.js - Bộ điều khiển trình chiếu Canva Presentation + Reveal.js (embedded: true, 5 mẫu layout, 20 Slides)
 window.PresentationApp = (() => {
   let isInitialized = false;
   let isActiveState = true;
   let isSyncingReveal = false;
   let currentSlideIndex = 0;
-  let fragmentCursor = -1; // -1 = hiển thị đầy đủ tất cả luận điểm; >= 0 = đang nhấn mạnh từng ý tuần tự
+  let fragmentCursor = -1; // -1 = hiển thị đầy đủ tất cả luận điểm; >= 0 = nhấn mạnh tuần tự từng ý
   let revealInstance = null;
   let touchStartX = 0;
   let touchStartY = 0;
@@ -30,6 +30,18 @@ window.PresentationApp = (() => {
     "slide-body": "pres-slide-body",
   };
 
+  const BENTO_SLIDE_IDS = new Set([
+    "r1-3",
+    "r1-4a",
+    "r1-4b",
+    "r2-b2",
+    "r3-2",
+    "r3-3a",
+    "r3-3b",
+  ]);
+
+  const HERO_COVER_IDS = new Set(["r1-1a", "r2-a", "r3-1"]);
+
   function getSlides() {
     if (window.PresentationData && Array.isArray(window.PresentationData.slides)) {
       return window.PresentationData.slides;
@@ -44,15 +56,190 @@ window.PresentationApp = (() => {
     );
   }
 
-  function decorateFullHtmlWithFragments(slide) {
-    const rawHtml = slide.fullHtml || `<p>${slide.desc || ""}</p>`;
-    const wrapper = document.createElement("div");
-    wrapper.innerHTML = rawHtml;
+  function classifySlideLayout(slide) {
+    if (!slide) return "split-timeline";
+    if (slide.id === "r3-table") return "comparison-matrix";
+    if (slide.id === "r3-verdict") return "citation-grid";
+    if (HERO_COVER_IDS.has(slide.id)) return "hero-cover";
+    if (BENTO_SLIDE_IDS.has(slide.id)) return "bento-grid";
+    return "split-timeline";
+  }
 
-    const lineCount = Array.isArray(slide.lines) && slide.lines.length ? slide.lines.length : 4;
+  function getSlidePalette(slide) {
+    const color = String((slide && slide.color) || "").toLowerCase();
+    if (color === "#0284c7") {
+      return {
+        accent: "#0284c7",
+        soft: "#f0f9ff",
+        border: "#bae6fd",
+        ink: "#075985",
+      };
+    }
+    if (color === "#059669") {
+      return {
+        accent: "#059669",
+        soft: "#ecfdf5",
+        border: "#a7f3d0",
+        ink: "#065f46",
+      };
+    }
+    if (color === "#dc2626" || color === "#e11d48") {
+      return {
+        accent: "#e11d48",
+        soft: "#fff1f2",
+        border: "#fecdd3",
+        ink: "#9f1239",
+      };
+    }
+    if (color === "#7c3aed") {
+      return {
+        accent: "#7c3aed",
+        soft: "#f5f3ff",
+        border: "#ddd6fe",
+        ink: "#5b21b6",
+      };
+    }
+    if (color === "#64748b") {
+      return {
+        accent: "#475569",
+        soft: "#f8fafc",
+        border: "#cbd5e1",
+        ink: "#1e293b",
+      };
+    }
+    return {
+      accent: "#d97706",
+      soft: "#fffbeb",
+      border: "#fde68a",
+      ink: "#92400e",
+    };
+  }
+
+  function getSlideThemeSvg(slide, layoutType) {
+    const id = (slide && slide.id) || "";
+    const room = (slide && slide.room) || 1;
+
+    if (layoutType === "hero-cover") {
+      if (room === 1) {
+        return `
+          <svg class="canva-hero-illustration" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="6" width="84" height="84" rx="22" fill="#EFF6FF" stroke="#BAE6FD" stroke-width="2" />
+            <path d="M22 64L38 48L50 56L72 30" stroke="#0284C7" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M60 30H72V42" stroke="#0284C7" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="38" cy="48" r="5" fill="#F59E0B" stroke="#FFFFFF" stroke-width="2" />
+            <circle cx="50" cy="56" r="5" fill="#059669" stroke="#FFFFFF" stroke-width="2" />
+            <rect x="22" y="70" width="52" height="5" rx="2.5" fill="#CBD5E1" />
+          </svg>
+        `;
+      }
+      if (room === 2) {
+        return `
+          <svg class="canva-hero-illustration" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="6" width="84" height="84" rx="22" fill="#FFFBEB" stroke="#FDE68A" stroke-width="2" />
+            <polygon points="48,18 57,36 77,39 62,53 66,73 48,63 30,73 34,53 19,39 39,36" fill="#F59E0B" fill-opacity="0.22" stroke="#D97706" stroke-width="3.5" stroke-linejoin="round" />
+            <circle cx="48" cy="48" r="9" fill="#D97706" />
+          </svg>
+        `;
+      }
+      return `
+        <svg class="canva-hero-illustration" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="6" y="6" width="84" height="84" rx="22" fill="#FFF1F2" stroke="#FECDD3" stroke-width="2" />
+          <path d="M48 20L72 30V48C72 63 61 73 48 78C35 73 24 63 24 48V30L48 20Z" fill="#E11D48" fill-opacity="0.14" stroke="#E11D48" stroke-width="3.5" stroke-linejoin="round" />
+          <path d="M48 36V50M48 58H48.02" stroke="#E11D48" stroke-width="4.5" stroke-linecap="round" />
+        </svg>
+      `;
+    }
+
+    let innerPath = "";
+    if (id === "r1-3") {
+      // Biểu đồ tăng trưởng GDP
+      innerPath =
+        '<path d="M3 17l6-6 4 4 8-8M14 7h7v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />';
+    } else if (id === "r3-table" || id === "r2-b4" || id === "r2-b2") {
+      // Cán cân hài hòa
+      innerPath =
+        '<path d="M12 3v18M5 21h14M6 7l6-2 6 2M4 13l2-6 2 6a2.5 2.5 0 01-4 0zm12 0l2-6 2 6a2.5 2.5 0 01-4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
+    } else if (id === "r3-2" || id === "r2-b5") {
+      // Lá xanh & phát triển bền vững
+      innerPath =
+        '<path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10zM2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
+    } else if (id === "r1-1b" || id === "r1-4a" || id === "r2-b3" || id === "r3-verdict") {
+      // Lá chắn thể chế & pháp quyền
+      innerPath =
+        '<path d="M12 3l8 4v5c0 5.25-3.4 9.74-8 11-4.6-1.26-8-5.75-8-11V7l8-4zm-2.5 9.5L11 14l3.5-4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />';
+    } else if (id === "r1-2a" || id === "r1-2b" || id === "r1-2c") {
+      // Tiến trình lịch sử
+      innerPath =
+        '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.1" /><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />';
+    } else if (id === "r3-3a") {
+      // Cảnh báo hạn chế
+      innerPath =
+        '<path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
+    } else {
+      // Mạng lưới giải pháp / lý luận
+      innerPath =
+        '<path d="M12 3l2.5 5.5L20 9.5l-4 4 1 5.5-5-2.8-5 2.8 1-5.5-4-4 5.5-1L12 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
+    }
+
+    return `
+      <span class="canva-theme-badge-box" aria-hidden="true">
+        <svg class="canva-theme-svg" viewBox="0 0 24 24" fill="none">${innerPath}</svg>
+      </span>
+    `;
+  }
+
+  function escapeHtmlText(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function highlightPlainTextSegment(text) {
+    const tokenPattern =
+      /(Thực tiễn VN:|476,3 tỷ USD|476,3 tỷ \$|~4\.700 \$|17 FTA|73 quốc gia|73 Nước|Hạng 33 TG|hạng 33 thế giới|trên 58% \(1993\)|>58%|dưới 3%|<3%|>93% dân số|>93%|Net Zero 2050|Nghị quyết 68-NQ\/TW|NQ 68-NQ\/TW|Nghị quyết 11-NQ\/TW|Điều 51 Hiến pháp 2013|Hiến pháp 2013 \(Điều 51\)|Đại hội XIV|COP26|Luật Bảo vệ Môi trường 2020)/g;
+    let out = "";
+    let lastIdx = 0;
+    const raw = String(text || "");
+    let match;
+    while ((match = tokenPattern.exec(raw))) {
+      if (match.index > lastIdx) {
+        out += escapeHtmlText(raw.slice(lastIdx, match.index));
+      }
+      const token = match[0];
+      const cls =
+        token === "Thực tiễn VN:" ? "canva-vn-tag" : "canva-kpi-pill";
+      out += `<span class="${cls}">${escapeHtmlText(token)}</span>`;
+      lastIdx = match.index + token.length;
+    }
+    if (lastIdx < raw.length) {
+      out += escapeHtmlText(raw.slice(lastIdx));
+    }
+    return out;
+  }
+
+  function highlightKpiMetricsInHtml(html, isPlainText = false) {
+    const raw = String(html || "");
+    if (isPlainText) {
+      return highlightPlainTextSegment(raw);
+    }
+    return raw
+      .split(/(<\/?[a-zA-Z!][^>]*>)/g)
+      .map((part, idx) => (idx % 2 === 1 ? part : highlightPlainTextSegment(part)))
+      .join("");
+  }
+
+  function decorateFullHtmlWithFragments(slide, layoutType) {
+    const rawHtml = slide.fullHtml || `<p>${slide.desc || ""}</p>`;
+    const highlightedHtml = highlightKpiMetricsInHtml(rawHtml);
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = highlightedHtml;
+
+    const lineCount =
+      Array.isArray(slide.lines) && slide.lines.length ? slide.lines.length : 4;
     const maxIdx = Math.max(0, lineCount - 1);
 
-    if (slide.id === "r3-table") {
+    if (layoutType === "comparison-matrix") {
       const tableRows = wrapper.querySelectorAll(".pres-comp-table tbody tr");
       tableRows.forEach((row, idx) => {
         row.classList.add("fragment", "fade-up", "visible");
@@ -64,40 +251,75 @@ window.PresentationApp = (() => {
         card.classList.add("fragment", "fade-up", "visible");
         card.setAttribute("data-fragment-index", String(Math.min(idx, maxIdx)));
       });
+
+      if (layoutType === "citation-grid") {
+        if (subcards[0]) {
+          subcards[0].classList.add("canva-verdict-box");
+        }
+        const refItems = wrapper.querySelectorAll(".pres-ref-list li");
+        refItems.forEach((li, idx) => {
+          li.classList.add("canva-citation-card");
+          const numBadge = String(idx + 1).padStart(2, "0");
+          const originalInner = li.innerHTML;
+          li.innerHTML = `<span class="canva-citation-num">#${numBadge}</span><span class="canva-citation-body">${originalInner}</span>`;
+        });
+      }
     }
 
     return wrapper.innerHTML;
   }
 
   function buildSlideSectionHtml(slide, idx, totalSlides) {
-    const isTableSlide = slide.id === "r3-table";
+    const layoutType = classifySlideLayout(slide, idx);
+    const palette = getSlidePalette(slide);
+    const themeVisualHtml = getSlideThemeSvg(slide, layoutType);
+    const isTableSlide = layoutType === "comparison-matrix";
+
     const summaryColClass = isTableSlide
-      ? "pres-summary-col lg:col-span-3 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col justify-between"
-      : "pres-summary-col lg:col-span-4 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col justify-between";
+      ? "pres-summary-col lg:col-span-3 flex flex-col justify-between"
+      : "pres-summary-col lg:col-span-4 flex flex-col justify-between";
     const detailColClass = isTableSlide
-      ? "pres-detail-col lg:col-span-9 bg-white border-2 border-amber-500 rounded-xl shadow-sm flex flex-col min-h-0"
-      : "pres-detail-col lg:col-span-8 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col min-h-0";
+      ? "pres-detail-col lg:col-span-9 flex flex-col min-h-0"
+      : "pres-detail-col lg:col-span-8 flex flex-col min-h-0";
 
     const lines = Array.isArray(slide.lines) ? slide.lines : [];
     const keyCardsHtml = lines
       .map((line, i) => {
-        const cleanText = String(line).replace(/^[•\-\s]+/, "");
+        const cleanText = highlightKpiMetricsInHtml(
+          String(line).replace(/^[•\-\s]+/, ""),
+          true,
+        );
         return `
-          <div class="pres-key-card fragment fade-up visible flex items-start gap-2.5 shadow-sm" data-fragment-index="${i}">
-            <span class="w-6 h-6 rounded-md bg-amber-600 text-white font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
-              ${i + 1}
-            </span>
-            <p class="font-semibold text-slate-900">
-              ${cleanText}
-            </p>
+          <div class="pres-key-card fragment fade-up visible" data-fragment-index="${i}">
+            <span>${i + 1}</span>
+            <p>${cleanText}</p>
           </div>
         `;
       })
       .join("");
 
-    const decoratedBodyHtml = decorateFullHtmlWithFragments(slide);
+    const decoratedDesc = highlightKpiMetricsInHtml(slide.desc || "", true);
+    const decoratedBodyHtml = decorateFullHtmlWithFragments(slide, layoutType);
     const sectionStateClass = idx === 0 ? "present" : "future";
-    const badgeText = slide.badge || `Mục ${slide.sectionCode}`;
+    const badgeText = escapeHtmlText(slide.badge || `Mục ${slide.sectionCode}`);
+    const bannerClasses =
+      layoutType === "hero-cover"
+        ? "pres-title-banner canva-hero-banner"
+        : "pres-title-banner";
+    const watermarkHtml =
+      layoutType === "hero-cover"
+        ? `<span class="canva-room-watermark" aria-hidden="true">PHÒNG 0${slide.room}</span>`
+        : "";
+    const detailPanelTitle =
+      layoutType === "comparison-matrix"
+        ? "Ma Trận So Sánh 6 Tiêu Chí"
+        : layoutType === "citation-grid"
+          ? "Phán Quyết &amp; Nguồn Trích Dẫn"
+          : layoutType === "split-timeline"
+            ? "Diễn Tiến &amp; Luận Giải Chi Tiết"
+            : "Bento Lý Luận &amp; Dẫn Chứng";
+
+    const styleVars = `--slide-accent:${palette.accent};--slide-accent-soft:${palette.soft};--slide-accent-border:${palette.border};--slide-accent-ink:${palette.ink};`;
 
     return `
       <section
@@ -105,44 +327,30 @@ window.PresentationApp = (() => {
         data-slide-index="${idx}"
         data-slide-id="${slide.id}"
         data-room="${slide.room}"
+        data-layout="${layoutType}"
         data-transition="slide"
+        style="${styleVars}"
         aria-hidden="${idx === 0 ? "false" : "true"}"
       >
-        <div class="pres-slide-stage max-w-[1680px] w-full mx-auto">
-          <div
-            data-pres-role="title-banner"
-            class="pres-title-banner rounded-xl bg-white border border-slate-300 border-l-[6px] border-l-amber-600 shadow-sm shrink-0 flex flex-col md:flex-row md:items-center md:justify-between gap-1.5"
-          >
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-2 mb-0.5">
-                <span
-                  data-pres-role="slide-badge"
-                  class="pres-slide-badge text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 whitespace-nowrap"
-                >
+        <div class="pres-slide-stage max-w-[1640px] w-full mx-auto">
+          <div data-pres-role="title-banner" class="${bannerClasses}">
+            ${watermarkHtml}
+            <div class="canva-banner-main">
+              <div class="canva-banner-meta">
+                <span data-pres-role="slide-badge" class="pres-slide-badge">
                   ${badgeText}
                 </span>
-                <p
-                  data-pres-role="slide-subtitle"
-                  class="pres-slide-subtitle text-xs sm:text-sm md:text-base text-amber-700 font-bold truncate"
-                >
-                  ${slide.subtitle || ""}
+                <p data-pres-role="slide-subtitle" class="pres-slide-subtitle">
+                  ${escapeHtmlText(slide.subtitle || "")}
                 </p>
               </div>
-              <h2
-                data-pres-role="slide-title"
-                class="pres-slide-title font-black text-slate-950 leading-tight tracking-tight"
-              >
-                ${slide.title || ""}
+              <h2 data-pres-role="slide-title" class="pres-slide-title">
+                ${escapeHtmlText(slide.title || "")}
               </h2>
             </div>
 
-            <div
-              class="hidden lg:flex items-center gap-2 shrink-0 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg"
-            >
-              <span>Slide ${idx + 1}/${totalSlides}</span>
-              <kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono">←</kbd>
-              <kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono">→</kbd>
-              <kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono">Space</kbd>
+            <div class="canva-banner-visual">
+              ${themeVisualHtml}
             </div>
           </div>
 
@@ -150,88 +358,31 @@ window.PresentationApp = (() => {
             data-pres-role="content-grid"
             class="pres-content-grid grid grid-cols-1 lg:grid-cols-12 items-stretch"
           >
-            <div
-              data-pres-role="summary-col"
-              class="${summaryColClass}"
-            >
+            <div data-pres-role="summary-col" class="${summaryColClass}">
               <div class="flex flex-col min-h-0">
-                <div
-                  class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
-                >
-                  <h3
-                    class="pres-col-heading font-extrabold uppercase tracking-wider text-amber-700 flex items-center gap-1.5"
-                  >
-                    <svg
-                      class="w-4 h-4 shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                      ></path>
-                    </svg>
-                    <span>Trọng Tâm Luận Điểm</span>
-                  </h3>
-                  <span
-                    class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200"
-                  >${lines.length} Ý Chính</span>
+                <div class="canva-panel-head">
+                  <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
+                  <span class="canva-count-chip">${lines.length} Ý Chính</span>
                 </div>
                 <div data-pres-role="key-points" class="pres-key-points-list">
                   ${keyCardsHtml}
                 </div>
               </div>
 
-              <div
-                data-pres-role="summary-desc-box"
-                class="pres-summary-desc-box rounded-lg bg-slate-50 border border-slate-300 text-slate-800 mt-2 shrink-0"
-              >
-                <span
-                  class="text-[11px] font-extrabold uppercase tracking-wider text-sky-700 block mb-0.5"
-                >Khái quát nội dung:</span>
-                <p data-pres-role="slide-desc" class="pres-slide-desc text-slate-700">${slide.desc || ""}</p>
+              <div data-pres-role="summary-desc-box" class="pres-summary-desc-box">
+                <span class="canva-quote-label">Khái quát nội dung</span>
+                <p data-pres-role="slide-desc" class="pres-slide-desc">${decoratedDesc}</p>
               </div>
             </div>
 
-            <div
-              data-pres-role="detail-col"
-              class="${detailColClass}"
-            >
-              <div
-                class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
-              >
-                <h3
-                  class="pres-col-heading font-extrabold uppercase tracking-wider text-sky-700 flex items-center gap-1.5"
-                >
-                  <svg
-                    class="w-4 h-4 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    ></path>
-                  </svg>
-                  <span>Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn</span>
-                </h3>
-                <span
-                  class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full hidden sm:inline-flex items-center gap-1"
-                >
-                  <span>${totalSlides} Chuyên đề Lý luận &amp; Thực tiễn</span>
-                </span>
+            <div data-pres-role="detail-col" class="${detailColClass}">
+              <div class="canva-panel-head">
+                <h3 class="pres-col-heading">${detailPanelTitle}</h3>
+                <span class="canva-topic-chip">Slide ${idx + 1} / ${totalSlides}</span>
               </div>
               <div
                 data-pres-role="slide-body"
-                class="pres-slide-body pres-projector-content text-slate-800 flex-1 min-h-0 flex flex-col justify-center"
+                class="pres-slide-body pres-projector-content flex-1 min-h-0 flex flex-col justify-center"
               >
                 ${decoratedBodyHtml}
               </div>
@@ -334,20 +485,13 @@ window.PresentationApp = (() => {
     const roomButtons = document.querySelectorAll(".room-btn");
     roomButtons.forEach((btn) => {
       const r = parseInt(btn.getAttribute("data-room"), 10);
-      if (r === roomNumber) {
-        btn.classList.add("active");
-        btn.classList.remove("text-slate-700");
-      } else {
-        btn.classList.remove("active");
-        btn.classList.add("text-slate-700");
-      }
+      btn.classList.toggle("active", r === roomNumber);
     });
   }
 
   function syncToolbarUI(slide, clampedIdx, totalSlides) {
     const roomTagEl = document.getElementById("pres-room-tag");
     const counterEl = document.getElementById("slide-counter-badge");
-    const counterBottomEl = document.getElementById("slide-counter-bottom");
     const selectEl = document.getElementById("slide-select-dropdown");
     const progressEl = document.getElementById("pres-progress-bar");
     const roomNames = getRoomNames();
@@ -355,12 +499,8 @@ window.PresentationApp = (() => {
     if (roomTagEl) {
       roomTagEl.textContent = roomNames[slide.room] || "";
     }
-    const counterLabel = `Slide ${clampedIdx + 1} / ${totalSlides}`;
     if (counterEl) {
-      counterEl.textContent = counterLabel;
-    }
-    if (counterBottomEl) {
-      counterBottomEl.textContent = counterLabel;
+      counterEl.textContent = `Slide ${clampedIdx + 1} / ${totalSlides}`;
     }
     if (selectEl) {
       selectEl.value = String(clampedIdx);
@@ -617,7 +757,7 @@ window.PresentationApp = (() => {
     selectEl.innerHTML = slides
       .map(
         (item, idx) =>
-          `<option value="${idx}">Slide ${idx + 1}/${slides.length} [P.${item.room}] ${item.title}</option>`,
+          `<option value="${idx}">${idx + 1}. [P.${item.room}] ${item.title}</option>`,
       )
       .join("");
     selectEl.addEventListener("change", () => {
@@ -641,7 +781,6 @@ window.PresentationApp = (() => {
     }
 
     const k = (e.key || "").toLowerCase();
-    // Cho phép Space kích hoạt đúng nút đang được focus qua phím Tab
     if (activeTag === "BUTTON" && k === " ") {
       return;
     }
@@ -715,7 +854,6 @@ window.PresentationApp = (() => {
     bindClickAction(document.getElementById("btn-slide-prev"), prevSlide);
     bindClickAction(document.getElementById("btn-slide-next"), nextSlide);
     bindClickAction(document.getElementById("btn-fragment-next"), nextFragment);
-    bindClickAction(document.getElementById("btn-fragment-step"), nextFragment);
     bindClickAction(document.getElementById("btn-pres-fullscreen"), toggleFullscreen);
 
     ["fullscreenchange", "webkitfullscreenchange"].forEach((evt) => {
@@ -769,7 +907,6 @@ window.PresentationApp = (() => {
         ) {
           return;
         }
-        // Tránh nhảy 2 slide nếu Reveal.js touch module đã tự chuyển trang
         if (currentSlideIndex !== slideIdxAtTouchStart) return;
 
         const dx = e.changedTouches[0].clientX - touchStartX;
@@ -796,7 +933,6 @@ window.PresentationApp = (() => {
     bindTouchSwipe();
     initRevealDeck();
 
-    // Bắt phím ở capture phase khi đang active để không xung đột trình duyệt/Reveal
     window.addEventListener("keydown", handleKeyDown, true);
 
     window.addEventListener("message", (e) => {
@@ -829,6 +965,9 @@ window.PresentationApp = (() => {
 
   return {
     init,
+    classifySlideLayout,
+    getSlideThemeSvg,
+    highlightKpiMetricsInHtml,
     goToSlide,
     nextSlide,
     prevSlide,

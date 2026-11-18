@@ -1,4 +1,4 @@
-// presentation/presentation.js - Bộ điều khiển trình chiếu Canva Presentation + Reveal.js (embedded: true, 5 mẫu layout, 20 Slides)
+// presentation/presentation.js - Bộ điều khiển trình chiếu Canva Presentation (6 kiến trúc bố cục) + Reveal.js
 window.PresentationApp = (() => {
   let isInitialized = false;
   let isActiveState = true;
@@ -30,6 +30,7 @@ window.PresentationApp = (() => {
     "slide-body": "pres-slide-body",
   };
 
+  const HERO_COVER_IDS = new Set(["r1-1a", "r2-a", "r3-1"]);
   const BENTO_SLIDE_IDS = new Set([
     "r1-3",
     "r1-4a",
@@ -39,8 +40,15 @@ window.PresentationApp = (() => {
     "r3-3a",
     "r3-3b",
   ]);
+  const FEATURE_PILLAR_IDS = new Set(["r2-b1", "r2-b4", "r2-b5"]);
 
-  const HERO_COVER_IDS = new Set(["r1-1a", "r2-a", "r3-1"]);
+  const SUBCARD_ICON_PATHS = [
+    '<path d="M3 17l6-6 4 4 8-8M14 7h7v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    '<path d="M12 3l8 4v5c0 5.25-3.4 9.74-8 11-4.6-1.26-8-5.75-8-11V7l8-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+    '<path d="M12 3v18M5 21h14M6 7l6-2 6 2M4 13l2-6 2 6a2.5 2.5 0 01-4 0zm12 0l2-6 2 6a2.5 2.5 0 01-4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    '<path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+    '<path d="M12 3l2.4 5 5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8L12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+  ];
 
   function getSlides() {
     if (window.PresentationData && Array.isArray(window.PresentationData.slides)) {
@@ -62,6 +70,7 @@ window.PresentationApp = (() => {
     if (slide.id === "r3-verdict") return "citation-grid";
     if (HERO_COVER_IDS.has(slide.id)) return "hero-cover";
     if (BENTO_SLIDE_IDS.has(slide.id)) return "bento-grid";
+    if (FEATURE_PILLAR_IDS.has(slide.id)) return "feature-pillars";
     return "split-timeline";
   }
 
@@ -115,6 +124,12 @@ window.PresentationApp = (() => {
     };
   }
 
+  function getSubcardIconSvg(idx, slideId) {
+    const offset = slideId === "r3-2" ? 3 : 0;
+    const pathD = SUBCARD_ICON_PATHS[(idx + offset) % SUBCARD_ICON_PATHS.length];
+    return `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${pathD}</svg>`;
+  }
+
   function getSlideThemeSvg(slide, layoutType) {
     const id = (slide && slide.id) || "";
     const room = (slide && slide.room) || 1;
@@ -150,35 +165,15 @@ window.PresentationApp = (() => {
       `;
     }
 
-    let innerPath = "";
-    if (id === "r1-3") {
-      // Biểu đồ tăng trưởng GDP
-      innerPath =
-        '<path d="M3 17l6-6 4 4 8-8M14 7h7v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />';
-    } else if (id === "r3-table" || id === "r2-b4" || id === "r2-b2") {
-      // Cán cân hài hòa
-      innerPath =
-        '<path d="M12 3v18M5 21h14M6 7l6-2 6 2M4 13l2-6 2 6a2.5 2.5 0 01-4 0zm12 0l2-6 2 6a2.5 2.5 0 01-4 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
-    } else if (id === "r3-2" || id === "r2-b5") {
-      // Lá xanh & phát triển bền vững
-      innerPath =
-        '<path d="M11 20A7 7 0 019.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10zM2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
-    } else if (id === "r1-1b" || id === "r1-4a" || id === "r2-b3" || id === "r3-verdict") {
-      // Lá chắn thể chế & pháp quyền
-      innerPath =
-        '<path d="M12 3l8 4v5c0 5.25-3.4 9.74-8 11-4.6-1.26-8-5.75-8-11V7l8-4zm-2.5 9.5L11 14l3.5-4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />';
-    } else if (id === "r1-2a" || id === "r1-2b" || id === "r1-2c") {
-      // Tiến trình lịch sử
-      innerPath =
-        '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.1" /><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />';
+    let innerPath = SUBCARD_ICON_PATHS[4];
+    if (id === "r1-3") innerPath = SUBCARD_ICON_PATHS[0];
+    else if (id === "r3-table" || id === "r2-b4" || id === "r2-b2") innerPath = SUBCARD_ICON_PATHS[2];
+    else if (id === "r3-2" || id === "r2-b5") innerPath = SUBCARD_ICON_PATHS[3];
+    else if (id === "r1-1b" || id === "r1-4a" || id === "r2-b3" || id === "r3-verdict") innerPath = SUBCARD_ICON_PATHS[1];
+    else if (id === "r1-2a" || id === "r1-2b" || id === "r1-2c") {
+      innerPath = '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.1"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>';
     } else if (id === "r3-3a") {
-      // Cảnh báo hạn chế
-      innerPath =
-        '<path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
-    } else {
-      // Mạng lưới giải pháp / lý luận
-      innerPath =
-        '<path d="M12 3l2.5 5.5L20 9.5l-4 4 1 5.5-5-2.8-5 2.8 1-5.5-4-4 5.5-1L12 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />';
+      innerPath = '<path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
     }
 
     return `
@@ -196,21 +191,21 @@ window.PresentationApp = (() => {
   }
 
   function highlightPlainTextSegment(text) {
-    const tokenPattern =
+    const metricPattern =
       /(Thực tiễn VN:|476,3 tỷ USD|476,3 tỷ \$|~4\.700 \$|17 FTA|73 quốc gia|73 Nước|Hạng 33 TG|hạng 33 thế giới|trên 58% \(1993\)|>58%|dưới 3%|<3%|>93% dân số|>93%|Net Zero 2050|Nghị quyết 68-NQ\/TW|NQ 68-NQ\/TW|Nghị quyết 11-NQ\/TW|Điều 51 Hiến pháp 2013|Hiến pháp 2013 \(Điều 51\)|Đại hội XIV|COP26|Luật Bảo vệ Môi trường 2020)/g;
     let out = "";
     let lastIdx = 0;
     const raw = String(text || "");
     let match;
-    while ((match = tokenPattern.exec(raw))) {
+    while ((match = metricPattern.exec(raw))) {
       if (match.index > lastIdx) {
         out += escapeHtmlText(raw.slice(lastIdx, match.index));
       }
-      const token = match[0];
+      const matched = match[0];
       const cls =
-        token === "Thực tiễn VN:" ? "canva-vn-tag" : "canva-kpi-pill";
-      out += `<span class="${cls}">${escapeHtmlText(token)}</span>`;
-      lastIdx = match.index + token.length;
+        matched === "Thực tiễn VN:" ? "canva-vn-tag" : "canva-kpi-pill";
+      out += `<span class="${cls}">${escapeHtmlText(matched)}</span>`;
+      lastIdx = match.index + matched.length;
     }
     if (lastIdx < raw.length) {
       out += escapeHtmlText(raw.slice(lastIdx));
@@ -229,6 +224,24 @@ window.PresentationApp = (() => {
       .join("");
   }
 
+  function wrapVietnamPracticeCallout(card) {
+    const nodes = Array.from(card.childNodes || card.children || []);
+    const vnIdx = nodes.findIndex(
+      (n) =>
+        n.tagName === "SPAN" &&
+        n.textContent &&
+        n.textContent.includes("Thực tiễn VN:"),
+    );
+    if (vnIdx === -1) return;
+
+    const callout = document.createElement("div");
+    callout.className = "canva-vn-callout";
+    nodes.slice(vnIdx).forEach((node) => {
+      callout.appendChild(node);
+    });
+    card.appendChild(callout);
+  }
+
   function decorateFullHtmlWithFragments(slide, layoutType) {
     const rawHtml = slide.fullHtml || `<p>${slide.desc || ""}</p>`;
     const highlightedHtml = highlightKpiMetricsInHtml(rawHtml);
@@ -245,45 +258,74 @@ window.PresentationApp = (() => {
         row.classList.add("fragment", "fade-up", "visible");
         row.setAttribute("data-fragment-index", String(Math.min(idx, maxIdx)));
       });
-    } else {
-      const subcards = wrapper.querySelectorAll(".pres-subcard");
-      subcards.forEach((card, idx) => {
-        card.classList.add("fragment", "fade-up", "visible");
-        card.setAttribute("data-fragment-index", String(Math.min(idx, maxIdx)));
-      });
+      return wrapper.innerHTML;
+    }
+
+    const subcards = wrapper.querySelectorAll(".pres-subcard");
+    subcards.forEach((card, idx) => {
+      card.classList.add("fragment", "fade-up", "visible");
+      card.setAttribute("data-fragment-index", String(Math.min(idx, maxIdx)));
 
       if (layoutType === "citation-grid") {
-        if (subcards[0]) {
-          subcards[0].classList.add("canva-verdict-box");
-        }
-        const refItems = wrapper.querySelectorAll(".pres-ref-list li");
-        refItems.forEach((li, idx) => {
-          li.classList.add("canva-citation-card");
-          const numBadge = String(idx + 1).padStart(2, "0");
-          const originalInner = li.innerHTML;
-          li.innerHTML = `<span class="canva-citation-num">#${numBadge}</span><span class="canva-citation-body">${originalInner}</span>`;
-        });
+        if (idx === 0) card.classList.add("canva-verdict-box");
+        return;
       }
+
+      wrapVietnamPracticeCallout(card);
+
+      const head = document.createElement("div");
+      head.className = "canva-subcard-head";
+      head.setAttribute("aria-hidden", "true");
+      head.innerHTML = `<span class="canva-subcard-index" data-subcard-num="${String(
+        idx + 1,
+      ).padStart(2, "0")}"></span><span class="canva-subcard-icon">${getSubcardIconSvg(
+        idx,
+        slide.id,
+      )}</span>`;
+      card.insertBefore(head, card.firstChild);
+    });
+
+    if (layoutType === "split-timeline") {
+      const stack = wrapper.querySelector(".pres-detail-stack");
+      if (stack) stack.classList.add("canva-timeline-rail");
+    }
+
+    if (layoutType === "citation-grid") {
+      const refItems = wrapper.querySelectorAll(".pres-ref-list li");
+      refItems.forEach((li, idx) => {
+        li.classList.add("canva-citation-card");
+        const numBadge = `#${String(idx + 1).padStart(2, "0")}`;
+        const originalInner = li.innerHTML;
+        li.innerHTML = `<span class="canva-citation-num" data-cite-num="${numBadge}" aria-hidden="true"></span><span class="canva-citation-body">${originalInner}</span>`;
+      });
     }
 
     return wrapper.innerHTML;
   }
 
-  function buildSlideSectionHtml(slide, idx, totalSlides) {
-    const layoutType = classifySlideLayout(slide, idx);
-    const palette = getSlidePalette(slide);
-    const themeVisualHtml = getSlideThemeSvg(slide, layoutType);
-    const isTableSlide = layoutType === "comparison-matrix";
+  function renderTitleBannerHtml(slide, themeVisualHtml, extraClass = "") {
+    const badgeText = escapeHtmlText(slide.badge || `Mục ${slide.sectionCode}`);
+    return `
+      <div data-pres-role="title-banner" class="pres-title-banner ${extraClass}">
+        <div class="canva-banner-main">
+          <div class="canva-banner-meta">
+            <span data-pres-role="slide-badge" class="pres-slide-badge">${badgeText}</span>
+            <p data-pres-role="slide-subtitle" class="pres-slide-subtitle">${escapeHtmlText(
+              slide.subtitle || "",
+            )}</p>
+          </div>
+          <h2 data-pres-role="slide-title" class="pres-slide-title">${escapeHtmlText(
+            slide.title || "",
+          )}</h2>
+        </div>
+        ${themeVisualHtml ? `<div class="canva-banner-visual">${themeVisualHtml}</div>` : ""}
+      </div>
+    `;
+  }
 
-    const summaryColClass = isTableSlide
-      ? "pres-summary-col lg:col-span-3 flex flex-col justify-between"
-      : "pres-summary-col lg:col-span-4 flex flex-col justify-between";
-    const detailColClass = isTableSlide
-      ? "pres-detail-col lg:col-span-9 flex flex-col min-h-0"
-      : "pres-detail-col lg:col-span-8 flex flex-col min-h-0";
-
+  function renderKeyPointsListHtml(slide) {
     const lines = Array.isArray(slide.lines) ? slide.lines : [];
-    const keyCardsHtml = lines
+    return lines
       .map((line, i) => {
         const cleanText = highlightKpiMetricsInHtml(
           String(line).replace(/^[•\-\s]+/, ""),
@@ -297,28 +339,202 @@ window.PresentationApp = (() => {
         `;
       })
       .join("");
+  }
 
-    const decoratedDesc = highlightKpiMetricsInHtml(slide.desc || "", true);
-    const decoratedBodyHtml = decorateFullHtmlWithFragments(slide, layoutType);
+  function renderQuoteBoxHtml(decoratedDesc, extraClass = "") {
+    return `
+      <div data-pres-role="summary-desc-box" class="pres-summary-desc-box ${extraClass}">
+        <span class="canva-quote-label">Khái quát nội dung</span>
+        <p data-pres-role="slide-desc" class="pres-slide-desc">${decoratedDesc}</p>
+      </div>
+    `;
+  }
+
+  function buildHeroCoverBody(slide, idx, totalSlides, ctx) {
+    return `
+      <div data-pres-role="content-grid" class="canva-layout-hero">
+        <div class="canva-hero-poster">
+          ${renderTitleBannerHtml(slide, "", "")}
+          <div class="canva-hero-visual-stage">
+            <div>
+              <span class="canva-room-watermark" aria-hidden="true">PHÒNG 0${slide.room}</span>
+              <span class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mt-1">
+                Chuyên đề trọng tâm • Slide ${idx + 1} / ${totalSlides}
+              </span>
+            </div>
+            ${ctx.themeVisualHtml}
+          </div>
+          ${renderQuoteBoxHtml(ctx.decoratedDesc, "canva-quote-card")}
+        </div>
+
+        <div class="canva-hero-right">
+          <div data-pres-role="summary-col" class="pres-summary-col">
+            <div class="canva-panel-head">
+              <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
+              <span class="canva-count-chip">${ctx.lineCount} Ý Chính</span>
+            </div>
+            <div data-pres-role="key-points" class="pres-key-points-list">
+              ${ctx.keyCardsHtml}
+            </div>
+          </div>
+
+          <div data-pres-role="detail-col" class="pres-detail-col">
+            <div class="canva-panel-head">
+              <h3 class="pres-col-heading">Phân Tích Nền Tảng</h3>
+              <span class="canva-topic-chip">Mở đầu Phòng ${slide.room}</span>
+            </div>
+            <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content">
+              ${ctx.decoratedBodyHtml}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildStackedFullCanvasBody(slide, idx, totalSlides, ctx, wrapperClass, panelHeading, chipLabel) {
+    return `
+      <div class="${wrapperClass}">
+        <div class="canva-bento-header-row">
+          ${renderTitleBannerHtml(slide, ctx.themeVisualHtml, "")}
+          ${renderQuoteBoxHtml(ctx.decoratedDesc, "")}
+        </div>
+        <div data-pres-role="content-grid" class="flex-1 min-h-0 flex flex-col gap-2">
+          <div data-pres-role="summary-col" class="pres-summary-col canva-bento-strip">
+            <div data-pres-role="key-points" class="pres-key-points-list">
+              ${ctx.keyCardsHtml}
+            </div>
+          </div>
+          <div data-pres-role="detail-col" class="pres-detail-col canva-bento-canvas">
+            <div class="canva-panel-head">
+              <h3 class="pres-col-heading">${panelHeading}</h3>
+              <span class="canva-topic-chip">${chipLabel} • ${idx + 1}/${totalSlides}</span>
+            </div>
+            <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content">
+              ${ctx.decoratedBodyHtml}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildSplitTimelineBody(slide, idx, totalSlides, ctx) {
+    return `
+      <div class="canva-layout-timeline">
+        ${renderTitleBannerHtml(slide, ctx.themeVisualHtml, "")}
+        <div data-pres-role="content-grid" class="pres-content-grid grid grid-cols-1 lg:grid-cols-12 items-stretch">
+          <div data-pres-role="summary-col" class="pres-summary-col lg:col-span-4 flex flex-col justify-between">
+            <div class="flex flex-col min-h-0">
+              <div class="canva-panel-head">
+                <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
+                <span class="canva-count-chip">${ctx.lineCount} Ý Chính</span>
+              </div>
+              <div data-pres-role="key-points" class="pres-key-points-list">
+                ${ctx.keyCardsHtml}
+              </div>
+            </div>
+            ${renderQuoteBoxHtml(ctx.decoratedDesc, "canva-quote-card mt-2")}
+          </div>
+
+          <div data-pres-role="detail-col" class="pres-detail-col lg:col-span-8 flex flex-col min-h-0">
+            <div class="canva-panel-head">
+              <h3 class="pres-col-heading">Diễn Tiến &amp; Luận Giải Chi Tiết</h3>
+              <span class="canva-topic-chip">Slide ${idx + 1} / ${totalSlides}</span>
+            </div>
+            <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content flex-1 min-h-0 flex flex-col justify-center">
+              ${ctx.decoratedBodyHtml}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildFeaturePillarsBody(slide, idx, totalSlides, ctx) {
+    return `
+      <div class="canva-layout-pillars">
+        ${renderTitleBannerHtml(slide, ctx.themeVisualHtml, "")}
+        <div data-pres-role="content-grid" class="pres-content-grid grid grid-cols-1 lg:grid-cols-12 items-stretch">
+          <div data-pres-role="detail-col" class="pres-detail-col canva-pillars-showcase lg:col-span-8 flex flex-col min-h-0">
+            <div class="canva-panel-head">
+              <h3 class="pres-col-heading">Trụ Cột Lý Luận &amp; Phân Tích</h3>
+              <span class="canva-topic-chip">Đặc trưng cốt lõi • ${idx + 1}/${totalSlides}</span>
+            </div>
+            <div data-pres-role="slide-body" class="pres-slide-body pres-projector-content flex-1 min-h-0 flex flex-col justify-center">
+              ${ctx.decoratedBodyHtml}
+            </div>
+          </div>
+
+          <div data-pres-role="summary-col" class="pres-summary-col canva-pillars-sidebar lg:col-span-4 flex flex-col justify-between">
+            ${renderQuoteBoxHtml(ctx.decoratedDesc, "canva-quote-card mb-2")}
+            <div class="flex flex-col min-h-0">
+              <div class="canva-panel-head">
+                <h3 class="pres-col-heading">Điểm Nhớ Nhanh</h3>
+                <span class="canva-count-chip">${ctx.lineCount} Ý Chính</span>
+              </div>
+              <div data-pres-role="key-points" class="pres-key-points-list">
+                ${ctx.keyCardsHtml}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildSlideSectionHtml(slide, idx, totalSlides) {
+    const layoutType = classifySlideLayout(slide, idx);
+    const palette = getSlidePalette(slide);
+    const lines = Array.isArray(slide.lines) ? slide.lines : [];
+    const ctx = {
+      lineCount: lines.length,
+      themeVisualHtml: getSlideThemeSvg(slide, layoutType),
+      keyCardsHtml: renderKeyPointsListHtml(slide),
+      decoratedDesc: highlightKpiMetricsInHtml(slide.desc || "", true),
+      decoratedBodyHtml: decorateFullHtmlWithFragments(slide, layoutType),
+    };
+
+    let stageInnerHtml = "";
+    if (layoutType === "hero-cover") {
+      stageInnerHtml = buildHeroCoverBody(slide, idx, totalSlides, ctx);
+    } else if (layoutType === "bento-grid") {
+      stageInnerHtml = buildStackedFullCanvasBody(
+        slide,
+        idx,
+        totalSlides,
+        ctx,
+        "canva-layout-bento",
+        "Bento Lý Luận &amp; Dẫn Chứng Thực Tiễn",
+        "Bento Grid",
+      );
+    } else if (layoutType === "feature-pillars") {
+      stageInnerHtml = buildFeaturePillarsBody(slide, idx, totalSlides, ctx);
+    } else if (layoutType === "comparison-matrix") {
+      stageInnerHtml = buildStackedFullCanvasBody(
+        slide,
+        idx,
+        totalSlides,
+        ctx,
+        "canva-layout-matrix",
+        "Ma Trận So Sánh 6 Tiêu Chí Bản Chất",
+        "Đối chiếu trực diện",
+      );
+    } else if (layoutType === "citation-grid") {
+      stageInnerHtml = buildStackedFullCanvasBody(
+        slide,
+        idx,
+        totalSlides,
+        ctx,
+        "canva-layout-citations",
+        "Phán Quyết Cuối Cùng &amp; 10 Nguồn Tài Liệu Tham Khảo",
+        "Tổng kết học thuật",
+      );
+    } else {
+      stageInnerHtml = buildSplitTimelineBody(slide, idx, totalSlides, ctx);
+    }
+
     const sectionStateClass = idx === 0 ? "present" : "future";
-    const badgeText = escapeHtmlText(slide.badge || `Mục ${slide.sectionCode}`);
-    const bannerClasses =
-      layoutType === "hero-cover"
-        ? "pres-title-banner canva-hero-banner"
-        : "pres-title-banner";
-    const watermarkHtml =
-      layoutType === "hero-cover"
-        ? `<span class="canva-room-watermark" aria-hidden="true">PHÒNG 0${slide.room}</span>`
-        : "";
-    const detailPanelTitle =
-      layoutType === "comparison-matrix"
-        ? "Ma Trận So Sánh 6 Tiêu Chí"
-        : layoutType === "citation-grid"
-          ? "Phán Quyết &amp; Nguồn Trích Dẫn"
-          : layoutType === "split-timeline"
-            ? "Diễn Tiến &amp; Luận Giải Chi Tiết"
-            : "Bento Lý Luận &amp; Dẫn Chứng";
-
     const styleVars = `--slide-accent:${palette.accent};--slide-accent-soft:${palette.soft};--slide-accent-border:${palette.border};--slide-accent-ink:${palette.ink};`;
 
     return `
@@ -333,61 +549,7 @@ window.PresentationApp = (() => {
         aria-hidden="${idx === 0 ? "false" : "true"}"
       >
         <div class="pres-slide-stage max-w-[1640px] w-full mx-auto">
-          <div data-pres-role="title-banner" class="${bannerClasses}">
-            ${watermarkHtml}
-            <div class="canva-banner-main">
-              <div class="canva-banner-meta">
-                <span data-pres-role="slide-badge" class="pres-slide-badge">
-                  ${badgeText}
-                </span>
-                <p data-pres-role="slide-subtitle" class="pres-slide-subtitle">
-                  ${escapeHtmlText(slide.subtitle || "")}
-                </p>
-              </div>
-              <h2 data-pres-role="slide-title" class="pres-slide-title">
-                ${escapeHtmlText(slide.title || "")}
-              </h2>
-            </div>
-
-            <div class="canva-banner-visual">
-              ${themeVisualHtml}
-            </div>
-          </div>
-
-          <div
-            data-pres-role="content-grid"
-            class="pres-content-grid grid grid-cols-1 lg:grid-cols-12 items-stretch"
-          >
-            <div data-pres-role="summary-col" class="${summaryColClass}">
-              <div class="flex flex-col min-h-0">
-                <div class="canva-panel-head">
-                  <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
-                  <span class="canva-count-chip">${lines.length} Ý Chính</span>
-                </div>
-                <div data-pres-role="key-points" class="pres-key-points-list">
-                  ${keyCardsHtml}
-                </div>
-              </div>
-
-              <div data-pres-role="summary-desc-box" class="pres-summary-desc-box">
-                <span class="canva-quote-label">Khái quát nội dung</span>
-                <p data-pres-role="slide-desc" class="pres-slide-desc">${decoratedDesc}</p>
-              </div>
-            </div>
-
-            <div data-pres-role="detail-col" class="${detailColClass}">
-              <div class="canva-panel-head">
-                <h3 class="pres-col-heading">${detailPanelTitle}</h3>
-                <span class="canva-topic-chip">Slide ${idx + 1} / ${totalSlides}</span>
-              </div>
-              <div
-                data-pres-role="slide-body"
-                class="pres-slide-body pres-projector-content flex-1 min-h-0 flex flex-col justify-center"
-              >
-                ${decoratedBodyHtml}
-              </div>
-            </div>
-          </div>
+          ${stageInnerHtml}
         </div>
       </section>
     `;
@@ -967,6 +1129,7 @@ window.PresentationApp = (() => {
     init,
     classifySlideLayout,
     getSlideThemeSvg,
+    getSubcardIconSvg,
     highlightKpiMetricsInHtml,
     goToSlide,
     nextSlide,

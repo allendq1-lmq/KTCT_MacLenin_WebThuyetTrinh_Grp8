@@ -857,7 +857,7 @@ window.ReignsGame = (() => {
       card.classList.add("card-correct-glow");
       if (banner) {
         banner.className =
-          "w-full mb-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-center bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-sm";
+          "w-full mb-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold text-center bg-emerald-50 text-emerald-700 border border-emerald-300";
         banner.textContent =
           "Quyết sách hợp lý: Cân bằng vĩ mô & Tác động tích cực!";
       }
@@ -865,7 +865,7 @@ window.ReignsGame = (() => {
       card.classList.add("card-wrong-shake");
       if (banner) {
         banner.className =
-          "w-full mb-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-center bg-rose-50 text-rose-700 border border-rose-300 shadow-sm";
+          "w-full mb-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold text-center bg-rose-50 text-rose-700 border border-rose-300";
         banner.textContent =
           "Cảnh báo: Quyết sách gây mất cân bằng hoặc đẩy chỉ số vào vùng nguy hiểm!";
       }

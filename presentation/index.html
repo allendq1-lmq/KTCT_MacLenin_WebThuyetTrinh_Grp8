@@ -6,18 +6,23 @@
     <title>Nội Dung Thuyết Trình: KTTT Định Hướng XHCN Việt Nam</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Reveal.js CSS CDN (kèm CSS fallback trong presentation.css) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css"
+    />
     <link rel="stylesheet" href="presentation.css" />
   </head>
   <body
     class="bg-slate-50 text-slate-800 h-screen w-screen overflow-hidden select-none m-0 p-0 font-sans"
   >
-    <!-- ================= GIAO DIỆN THUYẾT TRÌNH TOÀN MÀN HÌNH (NỀN SÁNG CỐ ĐỊNH, 1 MÀN HÌNH KHÔNG CUỘN DỌC) ================= -->
+    <!-- ================= GIAO DIỆN TRÌNH CHIẾU SLIDESHOW REVEAL.JS (CHẾ ĐỘ NHÚNG SPA) ================= -->
     <section
       id="presentation-panel"
-      aria-label="Giao diện Trình chiếu Toàn màn hình"
+      aria-label="Giao diện Trình chiếu Slideshow Toàn màn hình"
       class="fixed inset-0 z-40 flex flex-col overflow-hidden pointer-events-auto"
     >
-      <!-- 1. THANH CÔNG CỤ TRÊN CÙNG 1 HÀNG DUY NHẤT (TOP BAR ~48PX) -->
+      <!-- 1. THANH CÔNG CỤ TRÊN CÙNG (PHÒNG, BỘ ĐẾM, CHỌN NHANH, Ý TIẾP & TOÀN MÀN HÌNH) -->
       <div
         id="pres-top-bar"
         class="relative w-full bg-white border-b border-slate-300 px-2.5 sm:px-5 shrink-0 shadow-sm flex items-center"
@@ -70,19 +75,327 @@
             </span>
           </div>
 
-          <!-- Cụm Phải: Menu chọn nhanh 20 Slide -->
-          <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          <!-- Cụm Phải: Menu chọn nhanh 20 Slide, nút Ý tiếp & Toàn màn hình -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <select
               id="slide-select-dropdown"
               aria-label="Chọn nhanh Slide thuyết trình"
-              class="bg-slate-50 text-slate-900 border border-slate-300 hover:border-amber-600 rounded-lg px-2 sm:px-3 py-1 text-[11px] sm:text-xs md:text-sm font-bold max-w-[180px] sm:max-w-[320px] md:max-w-[440px] truncate focus:outline-none focus:border-amber-600 transition cursor-pointer"
+              class="bg-slate-50 text-slate-900 border border-slate-300 hover:border-amber-600 rounded-lg px-2 sm:px-3 py-1 text-[11px] sm:text-xs md:text-sm font-bold max-w-[140px] sm:max-w-[260px] md:max-w-[380px] truncate focus:outline-none focus:border-amber-600 transition cursor-pointer"
             ></select>
+
+            <button
+              id="btn-fragment-next"
+              type="button"
+              title="Trình chiếu từng luận điểm trên slide (Phím Space)"
+              aria-label="Hiện luận điểm tiếp theo"
+              class="pres-ctrl-btn pres-ctrl-accent px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-extrabold flex items-center gap-1 whitespace-nowrap"
+            >
+              <svg
+                class="w-3.5 h-3.5 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2.2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+              <span>Ý tiếp</span>
+            </button>
+
+            <button
+              id="btn-pres-fullscreen"
+              type="button"
+              aria-pressed="false"
+              title="Toàn màn hình trình chiếu (Phím F)"
+              aria-label="Bật hoặc tắt chế độ toàn màn hình"
+              class="pres-ctrl-btn pres-ctrl-dark px-2 sm:px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-extrabold flex items-center gap-1 whitespace-nowrap"
+            >
+              <svg
+                id="icon-pres-fullscreen-enter"
+                class="w-3.5 h-3.5 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                ></path>
+              </svg>
+              <svg
+                id="icon-pres-fullscreen-exit"
+                class="w-3.5 h-3.5 shrink-0 hidden"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                ></path>
+              </svg>
+              <span id="label-pres-fullscreen" class="hidden sm:inline"
+                >Toàn màn hình</span
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. VÙNG TRÌNH CHIẾU REVEAL.JS CHẾ ĐỘ NHÚNG (EMBEDDED DECK) -->
+      <div id="pres-main-scroll" class="flex-1 min-h-0 select-text relative overflow-hidden">
+        <div
+          id="pres-reveal"
+          class="reveal pres-reveal-deck"
+          tabindex="0"
+          aria-label="Trình chiếu Slide Nội dung Kinh tế Chính trị Mác - Lênin"
+        >
+          <div id="pres-reveal-slides" class="slides">
+            <!-- Slide 1 mặc định (sẽ được presentation.js đồng bộ đầy đủ 20 <section> slides kèm class="fragment") -->
+            <section
+              class="pres-slide-section present"
+              data-slide-index="0"
+              data-slide-id="r1-1a"
+              data-room="1"
+              data-transition="slide"
+            >
+              <div class="pres-slide-stage max-w-[1680px] w-full mx-auto">
+                <div
+                  id="pres-title-banner"
+                  class="pres-title-banner rounded-xl bg-white border border-slate-300 border-l-[6px] border-l-amber-600 shadow-sm shrink-0 flex flex-col md:flex-row md:items-center md:justify-between gap-1.5"
+                >
+                  <div class="min-w-0">
+                    <div class="flex flex-wrap items-center gap-2 mb-0.5">
+                      <span
+                        id="pres-slide-badge"
+                        class="pres-slide-badge text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 whitespace-nowrap"
+                      >
+                        Mục 1.1a • Khái Niệm Nền Tảng
+                      </span>
+                      <p
+                        id="pres-slide-subtitle"
+                        class="pres-slide-subtitle text-xs sm:text-sm md:text-base text-amber-700 font-bold truncate"
+                      >
+                        Thành tựu phát triển chung của văn minh nhân loại
+                      </p>
+                    </div>
+                    <h2
+                      id="pres-slide-title"
+                      class="pres-slide-title font-black text-slate-950 leading-tight tracking-tight"
+                    >
+                      1.1a. Kinh Tế Thị Trường Nói Chung
+                    </h2>
+                  </div>
+
+                  <div
+                    class="hidden lg:flex items-center gap-2 shrink-0 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg"
+                  >
+                    <span>Phím tắt:</span>
+                    <kbd
+                      class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
+                      >←</kbd
+                    >
+                    <kbd
+                      class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
+                      >→</kbd
+                    >
+                    <kbd
+                      class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
+                      >Space</kbd
+                    >
+                  </div>
+                </div>
+
+                <div
+                  id="pres-content-grid"
+                  class="pres-content-grid grid grid-cols-1 lg:grid-cols-12 items-stretch"
+                >
+                  <div
+                    id="pres-summary-col"
+                    class="pres-summary-col lg:col-span-4 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col justify-between"
+                  >
+                    <div class="flex flex-col min-h-0">
+                      <div
+                        class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
+                      >
+                        <h3
+                          class="pres-col-heading font-extrabold uppercase tracking-wider text-amber-700 flex items-center gap-1.5"
+                        >
+                          <svg
+                            class="w-4 h-4 shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                            ></path>
+                          </svg>
+                          <span>Trọng Tâm Luận Điểm</span>
+                        </h3>
+                        <span
+                          class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200"
+                          >4 Ý Chính</span
+                        >
+                      </div>
+                      <div id="pres-key-points" class="pres-key-points-list">
+                        <div
+                          class="pres-key-card fragment fade-up visible flex items-start gap-2.5 shadow-sm"
+                          data-fragment-index="0"
+                        >
+                          <span>1</span>
+                          <p class="font-semibold text-slate-900">
+                            Quan hệ SX, trao đổi, phân phối, tiêu dùng đều qua thị trường.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      id="pres-summary-desc-box"
+                      class="pres-summary-desc-box rounded-lg bg-slate-50 border border-slate-300 text-slate-800 mt-2 shrink-0"
+                    >
+                      <span
+                        class="text-[11px] font-extrabold uppercase tracking-wider text-sky-700 block mb-0.5"
+                        >Khái quát nội dung:</span
+                      >
+                      <p id="pres-slide-desc" class="pres-slide-desc text-slate-700"></p>
+                    </div>
+                  </div>
+
+                  <div
+                    id="pres-detail-col"
+                    class="pres-detail-col lg:col-span-8 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col min-h-0"
+                  >
+                    <div
+                      class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
+                    >
+                      <h3
+                        class="pres-col-heading font-extrabold uppercase tracking-wider text-sky-700 flex items-center gap-1.5"
+                      >
+                        <svg
+                          class="w-4 h-4 shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                          ></path>
+                        </svg>
+                        <span>Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn</span>
+                      </h3>
+                      <span
+                        class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full hidden sm:inline-flex items-center gap-1"
+                      >
+                        <span>20 Chuyên đề Lý luận &amp; Thực tiễn</span>
+                      </span>
+                    </div>
+                    <div
+                      id="pres-slide-body"
+                      class="pres-slide-body pres-projector-content text-slate-800 flex-1 min-h-0 flex flex-col justify-center"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. THANH ĐIỀU KHIỂN TRÌNH CHIẾU Ở ĐÁY KHUNG (TRƯỚC / TIẾP, HIỆU ỨNG Ý & THANH TIẾN ĐỘ) -->
+      <div
+        id="pres-bottom-bar"
+        role="toolbar"
+        aria-label="Điều khiển trình chiếu slide"
+        class="relative w-full bg-white border-t border-slate-300 px-2.5 sm:px-5 shrink-0 flex items-center"
+      >
+        <div class="max-w-[1680px] w-full mx-auto flex items-center justify-between gap-2">
+          <!-- Trạng thái hiệu ứng từng ý -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <span
+              id="pres-fragment-status"
+              class="text-[11px] sm:text-xs font-bold text-slate-700 bg-slate-100 border border-slate-300 px-2 py-1 rounded-md whitespace-nowrap"
+            >
+              Luận điểm: 4 / 4
+            </span>
+            <button
+              id="btn-fragment-step"
+              type="button"
+              title="Hiện từng luận điểm (Space / ↓)"
+              class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 transition cursor-pointer whitespace-nowrap"
+            >
+              <span>Hiện từng ý</span>
+            </button>
+          </div>
+
+          <!-- Cụm nút Trước / Bộ đếm / Tiếp chuẩn PowerPoint -->
+          <div
+            class="flex items-center gap-1.5 sm:gap-2.5 shrink-0"
+            role="group"
+            aria-label="Chuyển trang slide"
+          >
+            <button
+              id="btn-slide-prev"
+              type="button"
+              aria-label="Slide trước"
+              title="Slide trước (←)"
+              class="pres-nav-btn px-2.5 sm:px-3.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-300 font-extrabold text-xs sm:text-sm transition flex items-center gap-1 cursor-pointer whitespace-nowrap"
+            >
+              <span aria-hidden="true">←</span>
+              <span>Trước</span>
+            </button>
+
+            <span
+              id="slide-counter-bottom"
+              class="px-2.5 py-1 rounded-lg bg-slate-900 text-amber-300 font-mono font-extrabold text-xs sm:text-sm whitespace-nowrap"
+            >
+              Slide 1 / 20
+            </span>
+
+            <button
+              id="btn-slide-next"
+              type="button"
+              aria-label="Slide tiếp theo"
+              title="Slide tiếp theo (→)"
+              class="pres-nav-btn px-2.5 sm:px-3.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-600 font-extrabold text-xs sm:text-sm transition flex items-center gap-1 cursor-pointer whitespace-nowrap shadow-sm"
+            >
+              <span>Tiếp</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <!-- Gợi ý thao tác trên desktop / mobile -->
+          <div class="hidden md:flex items-center gap-2 text-[11px] font-semibold text-slate-500 shrink-0">
+            <span>← → chuyển slide • Space từng ý • F toàn màn hình</span>
+          </div>
+          <div class="flex md:hidden items-center text-[10px] font-semibold text-slate-500 shrink-0">
+            <span>Vuốt ngang</span>
           </div>
         </div>
 
-        <!-- Thanh tiến độ mảnh sát mép dưới thanh công cụ -->
+        <!-- Thanh tiến độ ở đáy khung chiếu -->
         <div
-          class="absolute bottom-0 left-0 right-0 h-[3px] bg-slate-200 overflow-hidden"
+          class="absolute bottom-0 left-0 right-0 h-[4px] bg-slate-200 overflow-hidden"
         >
           <div
             id="pres-progress-bar"
@@ -91,153 +404,9 @@
           ></div>
         </div>
       </div>
-
-      <!-- 2. VÙNG NỘI DUNG CHÍNH Ở GIỮA (SLIDE BODY - BỐ CỤC LƯỚI VỪA KHÍT 100% KHUNG HÌNH PC) -->
-      <div id="pres-main-scroll" class="flex-1 min-h-0 select-text">
-        <div class="pres-slide-stage max-w-[1680px] w-full mx-auto">
-          <!-- Khối tiêu đề Slide gọn rõ, độ tương phản cao -->
-          <div
-            id="pres-title-banner"
-            class="rounded-xl bg-white border border-slate-300 border-l-[6px] border-l-amber-600 shadow-sm shrink-0 flex flex-col md:flex-row md:items-center md:justify-between gap-1.5"
-          >
-            <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-2 mb-0.5">
-                <span
-                  id="pres-slide-badge"
-                  class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-sky-50 text-sky-800 border border-sky-200 whitespace-nowrap"
-                >
-                  Mục 1.1a
-                </span>
-                <p
-                  id="pres-slide-subtitle"
-                  class="text-xs sm:text-sm md:text-base text-amber-700 font-bold truncate"
-                >
-                  Thành tựu phát triển chung của văn minh nhân loại
-                </p>
-              </div>
-              <h2
-                id="pres-slide-title"
-                class="font-black text-slate-950 leading-tight tracking-tight"
-              >
-                1.1a. Kinh Tế Thị Trường Nói Chung
-              </h2>
-            </div>
-
-            <div
-              class="hidden lg:flex items-center gap-2 shrink-0 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg"
-            >
-              <span>Phím tắt:</span>
-              <kbd
-                class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
-                >←</kbd
-              >
-              <kbd
-                class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
-                >→</kbd
-              >
-              <kbd
-                class="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-800 font-mono"
-                >Space</kbd
-              >
-            </div>
-          </div>
-
-          <!-- Bố cục nội dung Slide: Tóm tắt luận điểm chính + Phân tích chi tiết / Bảng đối chiếu -->
-          <div
-            id="pres-content-grid"
-            class="grid grid-cols-1 lg:grid-cols-12 items-stretch"
-          >
-            <!-- Cột Trái: Các thẻ ý chính tóm tắt nhanh (4 Luận điểm cốt lõi) -->
-            <div
-              id="pres-summary-col"
-              class="lg:col-span-4 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col justify-between"
-            >
-              <div class="flex flex-col min-h-0">
-                <div
-                  class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
-                >
-                  <h3
-                    class="pres-col-heading font-extrabold uppercase tracking-wider text-amber-700 flex items-center gap-1.5"
-                  >
-                    <svg
-                      class="w-4 h-4 shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                      ></path>
-                    </svg>
-                    <span>Trọng Tâm Luận Điểm</span>
-                  </h3>
-                  <span
-                    class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200"
-                    >4 Ý Chính</span
-                  >
-                </div>
-                <div id="pres-key-points" class="pres-key-points-list"></div>
-              </div>
-
-              <div
-                id="pres-summary-desc-box"
-                class="rounded-lg bg-slate-50 border border-slate-300 text-slate-800 mt-2 shrink-0"
-              >
-                <span
-                  class="text-[11px] font-extrabold uppercase tracking-wider text-sky-700 block mb-0.5"
-                  >Khái quát nội dung:</span
-                >
-                <p id="pres-slide-desc" class="text-slate-700"></p>
-              </div>
-            </div>
-
-            <!-- Cột Phải: Nội dung chi tiết, Số liệu thực tiễn & Bảng đối chiếu 6 tiêu chí -->
-            <div
-              id="pres-detail-col"
-              class="lg:col-span-8 bg-white border border-slate-300 rounded-xl shadow-sm flex flex-col min-h-0"
-            >
-              <div
-                class="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2 shrink-0"
-              >
-                <h3
-                  class="pres-col-heading font-extrabold uppercase tracking-wider text-sky-700 flex items-center gap-1.5"
-                >
-                  <svg
-                    class="w-4 h-4 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    ></path>
-                  </svg>
-                  <span>Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn</span>
-                </h3>
-                <span
-                  class="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full hidden sm:inline-flex items-center gap-1"
-                >
-                  <span>20 Chuyên đề Lý luận &amp; Thực tiễn</span>
-                </span>
-              </div>
-              <div
-                id="pres-slide-body"
-                class="pres-projector-content text-slate-800 flex-1 min-h-0 flex flex-col justify-center"
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
     <script src="slides-data.js"></script>
     <script src="presentation.js"></script>
   </body>

@@ -56,6 +56,7 @@ svg {
 #museum-wrapper {
   width: 100%;
   height: calc(100vh - 5rem);
+  height: calc(100dvh - 5rem);
 }
 
 #presentation-wrapper:fullscreen,
@@ -78,6 +79,20 @@ svg {
 #museum-frame {
   touch-action: none;
   overscroll-behavior: none;
+}
+
+/* Bảo vệ bố cục SPA chính khỏi bất kỳ class viewport nào của Reveal.js */
+html.reveal-viewport,
+body.reveal-viewport,
+html.reveal-full-page,
+body.reveal-full-page {
+  overflow: auto !important;
+  height: auto !important;
+  position: static !important;
+}
+
+#section-content:not(.hidden) {
+  display: block;
 }
 
 /* Thanh cuộn mảnh tối giản */

@@ -186,6 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (targetTab !== "game" && window.ReignsGame) {
       if (window.ReignsGame.stopAllSounds) window.ReignsGame.stopAllSounds();
       if (window.ReignsGame.stopConfetti) window.ReignsGame.stopConfetti();
+    } else if (
+      targetTab === "game" &&
+      window.ReignsGame &&
+      typeof window.ReignsGame.onTabActivated === "function"
+    ) {
+      window.ReignsGame.onTabActivated();
     }
 
     if (targetTab !== "quiz" && window.InteractiveQuiz) {

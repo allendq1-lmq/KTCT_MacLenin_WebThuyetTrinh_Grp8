@@ -1,5 +1,5 @@
-// js/game.js - Engine Game Thể Chế (Reigns) - Chế độ NGẪU NHIÊN 10 năm / 30 thẻ bài kèm Hiệu ứng Hình ảnh & Âm thanh
-window.ReignsGame = (() => {
+// js/game.js - Engine Game Thể Chế (Reigns) - Chế độ NGẪU NHIÊN 10 năm / 30 thẻ bài kèm Hiệu ứng Hình ảnh, Âm thanh & BXH Online
+const ReignsGame = (() => {
   const categoryLabels = {
     all: "NGẪU NHIÊN (10 năm / 30 thẻ bài)",
     1: "Nhóm 1: Sở hữu & Thành phần kinh tế",
@@ -596,15 +596,18 @@ window.ReignsGame = (() => {
 
   // Hệ thống âm thanh từ thư mục assets/sounds/
   let soundEnabled = true;
-  const gameSounds = {
-    correct: new Audio("assets/sounds/correct.mp3"),
-    wrong: new Audio("assets/sounds/wrong.mp3"),
-    lose: new Audio("assets/sounds/lose.mp3"),
-    win: new Audio("assets/sounds/win.mp3"),
-  };
+  const gameSounds =
+    typeof Audio !== "undefined"
+      ? {
+          correct: new Audio("assets/sounds/correct.mp3"),
+          wrong: new Audio("assets/sounds/wrong.mp3"),
+          lose: new Audio("assets/sounds/lose.mp3"),
+          win: new Audio("assets/sounds/win.mp3"),
+        }
+      : {};
 
   Object.values(gameSounds).forEach((aud) => {
-    aud.preload = "auto";
+    if (aud) aud.preload = "auto";
   });
 
   function stopAllSounds() {
@@ -725,6 +728,24 @@ window.ReignsGame = (() => {
   let isGameOver = false;
   let deck = [];
   let cardAnimTimer = null;
+
+  // Trạng thái Người chơi & BXH Online
+  let leaderboardClient = null;
+  let activePlayer = null;
+  let playerPlaysUsed = 0;
+  let playerBestScore = null;
+  let isEditingPlayer = false;
+  let hasSubmittedCurrentRun = false;
+  let isRefreshingLeaderboard = false;
+  let srAnnounceTimer = null;
+  let lastAnnouncedField = null;
+  const fieldInteractionState = new WeakMap();
+  let latestLeaderboardSnapshot = {
+    mode: "online",
+    entries: [],
+    allEntries: [],
+    totalPlayers: 0,
+  };
 
   function shuffleArray(arr) {
     const copy = [...arr];
@@ -923,45 +944,66 @@ window.ReignsGame = (() => {
     else if (reignsStats.stability <= 0) failureKey = "stability_low";
     else if (reignsStats.stability >= 100) failureKey = "stability_high";
 
-    if (failureKey) {
+    function finishGame({ isVictory, yearsSurvived, failureReason }) {
       isGameOver = true;
       hideFeedbackBanner();
-      document.getElementById("game-play-area").classList.add("hidden");
-      document.getElementById("gameover-cause").textContent =
-        reasons[failureKey];
-      document.getElementById("gameover-years").textContent =
-        `${currentYear} / ${maxYears} năm (${categoryLabels.all})`;
-      document
-        .getElementById("reigns-gameover-modal")
-        .classList.remove("hidden");
+      const scoreInfo = calculateGameScore({
+        yearsSurvived,
+        stats: reignsStats,
+        isVictory,
+      });
 
-      triggerLoseVisualEffect();
-      playGameSound("lose");
+      document.getElementById("game-play-area").classList.add("hidden");
+      if (isVictory) {
+        const vicTitle = document.getElementById("victory-title-years");
+        if (vicTitle) {
+          vicTitle.textContent = `Hoàn Thành Xuất Sắc ${maxYears} Năm Nhiệm Kỳ!`;
+        }
+        renderEndgameScoreBox("victory", scoreInfo);
+        document
+          .getElementById("reigns-victory-modal")
+          .classList.remove("hidden");
+        startConfetti();
+        playGameSound("win");
+      } else {
+        document.getElementById("gameover-cause").textContent = failureReason;
+        document.getElementById("gameover-years").textContent =
+          `${yearsSurvived} / ${maxYears} năm`;
+        renderEndgameScoreBox("gameover", scoreInfo);
+        document
+          .getElementById("reigns-gameover-modal")
+          .classList.remove("hidden");
+        triggerLoseVisualEffect();
+        playGameSound("lose");
+      }
+
+      if (!hasSubmittedCurrentRun) {
+        hasSubmittedCurrentRun = true;
+        handleRunFinished({ yearsSurvived, isVictory, scoreInfo });
+      }
       return true;
     }
 
-    if (currentYear >= maxYears) {
-      isGameOver = true;
-      hideFeedbackBanner();
-      document.getElementById("game-play-area").classList.add("hidden");
-      const vicTitle = document.getElementById("victory-title-years");
-      if (vicTitle) {
-        vicTitle.textContent = `Hoàn Thành Xuất Sắc ${maxYears} Năm Nhiệm Kỳ!`;
-      }
-      document
-        .getElementById("reigns-victory-modal")
-        .classList.remove("hidden");
+    if (failureKey) {
+      return finishGame({
+        isVictory: false,
+        yearsSurvived: Math.max(0, currentYear - 1),
+        failureReason: reasons[failureKey],
+      });
+    }
 
-      startConfetti();
-      playGameSound("win");
-      return true;
+    if (currentYear >= maxYears) {
+      return finishGame({
+        isVictory: true,
+        yearsSurvived: maxYears,
+      });
     }
 
     return false;
   }
 
   function applyChoice(side) {
-    if (isGameOver || !deck.length) return;
+    if (!isPlayerReadyToPlay() || isGameOver || !deck.length) return;
     const cardData = deck[currentCardIndex];
     const decision = side === "left" ? cardData.left : cardData.right;
 
@@ -990,6 +1032,7 @@ window.ReignsGame = (() => {
     currentCardIndex = 0;
     reignsStats = { growth: 50, equity: 50, environment: 50, stability: 50 };
     isGameOver = false;
+    hasSubmittedCurrentRun = false;
 
     hideFeedbackBanner();
     const card = document.getElementById("reigns-card");
@@ -999,10 +1042,10 @@ window.ReignsGame = (() => {
 
     document.getElementById("reigns-gameover-modal").classList.add("hidden");
     document.getElementById("reigns-victory-modal").classList.add("hidden");
-    document.getElementById("game-play-area").classList.remove("hidden");
     buildDeck();
     updateHUDStats();
     renderCard();
+    updatePlayerPanelUI();
   }
 
   function setCategory() {
@@ -1011,16 +1054,402 @@ window.ReignsGame = (() => {
     if (modeSub) {
       modeSub.textContent = `Chế độ: ${categoryLabels.all}`;
     }
+    if (!isPlayerReadyToPlay()) {
+      focusPlayerForm();
+      return;
+    }
     resetGame();
   }
 
+  function getMaxScoredPlays() {
+    const cfg = resolveLeaderboardConfig();
+    return Number(cfg.maxScoredPlays) > 0 ? Number(cfg.maxScoredPlays) : 5;
+  }
+
+  function isPlayerReadyToPlay() {
+    return Boolean(activePlayer && !isEditingPlayer);
+  }
+
+  function isPracticeModeActive() {
+    return isPlayerReadyToPlay() && playerPlaysUsed >= getMaxScoredPlays();
+  }
+
+  function focusPlayerForm() {
+    const nameInput = document.getElementById("player-name-input");
+    const mssvInput = document.getElementById("player-mssv-input");
+    if (nameInput && !nameInput.value.trim()) {
+      nameInput.focus();
+    } else if (mssvInput) {
+      mssvInput.focus();
+    }
+  }
+
+  function renderEndgameScoreBox(prefix, scoreInfo) {
+    const totalEl = document.getElementById(`${prefix}-total-score`);
+    const breakdownEl = document.getElementById(`${prefix}-score-breakdown`);
+    const statusEl = document.getElementById(`${prefix}-submit-status`);
+    if (totalEl) totalEl.textContent = String(scoreInfo.totalScore);
+    if (breakdownEl) {
+      breakdownEl.textContent = `Năm: +${scoreInfo.yearScore} • Cân bằng: +${scoreInfo.balanceScore} • Thưởng: +${scoreInfo.victoryBonus}`;
+    }
+    if (statusEl) {
+      statusEl.textContent =
+        playerPlaysUsed >= getMaxScoredPlays()
+          ? "Đã hết 5 lượt tính điểm — lượt này chơi tự do, không tính điểm và không ghi lên BXH."
+          : "Đang lưu kết quả lên BXH...";
+    }
+  }
+
+  function setRulesPanelVisible(showRules) {
+    const rulesBox = document.getElementById("game-rules-box");
+    const lbPanel = document.getElementById("game-leaderboard-panel");
+    const toggleBtn = document.getElementById("btn-game-rules-toggle");
+    const toggleLabel = document.getElementById("btn-game-rules-label");
+    if (rulesBox) rulesBox.classList.toggle("hidden", !showRules);
+    if (lbPanel) lbPanel.classList.toggle("hidden", showRules);
+    if (toggleBtn) toggleBtn.setAttribute("aria-expanded", String(showRules));
+    if (toggleLabel) toggleLabel.textContent = showRules ? "Xem BXH" : "Luật chơi";
+  }
+
+  function updatePlayerPanelUI() {
+    const ready = isPlayerReadyToPlay();
+    const maxPlays = getMaxScoredPlays();
+    const clampedPlays = Math.min(playerPlaysUsed, maxPlays);
+    const practice = isPracticeModeActive();
+
+    const formWrap = document.getElementById("game-player-form-wrap");
+    const summaryWrap = document.getElementById("game-player-summary");
+    const cancelBtn = document.getElementById("btn-player-cancel");
+    const lockOverlay = document.getElementById("game-lock-overlay");
+    const playArea = document.getElementById("game-play-area");
+    const practiceNotice = document.getElementById("player-practice-notice");
+    const practiceBanner = document.getElementById("game-practice-banner");
+    const hudPlaysPill = document.getElementById("game-plays-hud-pill");
+
+    if (formWrap) formWrap.classList.toggle("hidden", ready);
+    if (summaryWrap) summaryWrap.classList.toggle("hidden", !ready);
+    if (cancelBtn) cancelBtn.classList.toggle("hidden", !(isEditingPlayer && activePlayer));
+
+    if (ready && activePlayer) {
+      const nameEl = document.getElementById("player-summary-name");
+      const mssvEl = document.getElementById("player-summary-mssv");
+      const playsEl = document.getElementById("player-plays-badge");
+      const bestEl = document.getElementById("player-best-badge");
+
+      if (nameEl) nameEl.textContent = activePlayer.name;
+      if (mssvEl) mssvEl.textContent = activePlayer.mssv;
+      if (playsEl) playsEl.textContent = `Lượt tính điểm: ${clampedPlays} / ${maxPlays}`;
+      if (bestEl) {
+        bestEl.textContent =
+          playerBestScore !== null ? `Kỷ lục: ${playerBestScore} đ` : "Kỷ lục: --";
+      }
+    }
+
+    if (hudPlaysPill) {
+      hudPlaysPill.textContent = ready ? `Lượt: ${clampedPlays}/${maxPlays}` : "Chưa định danh";
+    }
+    if (practiceNotice) practiceNotice.classList.toggle("hidden", !practice);
+    if (practiceBanner) practiceBanner.classList.toggle("hidden", !practice);
+
+    if (lockOverlay) lockOverlay.classList.toggle("hidden", ready);
+    if (playArea) {
+      playArea.classList.toggle("hidden", !ready || isGameOver);
+    }
+    if (!ready) {
+      const overModal = document.getElementById("reigns-gameover-modal");
+      const winModal = document.getElementById("reigns-victory-modal");
+      if (overModal) overModal.classList.add("hidden");
+      if (winModal) winModal.classList.add("hidden");
+    }
+  }
+
+  function setLeaderboardStatusBadge(mode, isLoading) {
+    const badge = document.getElementById("leaderboard-status-badge");
+    if (!badge) return;
+    badge.classList.remove("lb-status-online", "lb-status-offline");
+    if (isLoading) {
+      badge.textContent = "Đang tải...";
+      badge.classList.add("lb-status-offline");
+      return;
+    }
+    if (mode === "online") {
+      badge.textContent = "BXH Online";
+      badge.classList.add("lb-status-online");
+    } else {
+      badge.textContent = "Offline";
+      badge.classList.add("lb-status-offline");
+    }
+  }
+
+  function renderLeaderboard(snapshot) {
+    latestLeaderboardSnapshot = snapshot || latestLeaderboardSnapshot;
+    const tbody = document.getElementById("leaderboard-tbody");
+    const selfRankEl = document.getElementById("leaderboard-self-rank");
+    if (!tbody) return;
+
+    const entries = latestLeaderboardSnapshot.entries || [];
+    const allEntries = latestLeaderboardSnapshot.allEntries || entries;
+    setLeaderboardStatusBadge(latestLeaderboardSnapshot.mode, false);
+
+    if (!entries.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="4" class="py-5 text-center text-xs text-slate-500">Chưa có sinh viên nào trên BXH. Hãy là người đầu tiên!</td></tr>';
+      if (selfRankEl) selfRankEl.classList.add("hidden");
+      return;
+    }
+
+    const activeMssv = activePlayer ? activePlayer.mssv : "";
+    tbody.innerHTML = entries
+      .map((entry, idx) => {
+        const rank = idx + 1;
+        const isSelf = activeMssv && entry.mssv === activeMssv;
+        const rankClass =
+          rank <= 3
+            ? `leaderboard-rank-badge leaderboard-rank-${rank}`
+            : "leaderboard-rank-badge text-slate-500";
+        const safeName = escapeHtml(entry.name);
+        const safeMssv = escapeHtml(entry.mssv);
+        return `<tr class="${isSelf ? "leaderboard-row-self" : "hover:bg-slate-100/70"}">
+          <td class="text-center"><span class="${rankClass}">${rank}</span></td>
+          <td>
+            <div class="leaderboard-student-cell">
+              <span class="leaderboard-name" title="${safeName} (${safeMssv})">${safeName}</span>
+              <span class="leaderboard-mssv">${safeMssv}</span>
+            </div>
+          </td>
+          <td class="text-center font-mono text-slate-600">${entry.years}/${maxYears}</td>
+          <td class="text-right font-mono font-extrabold text-slate-900 pr-1">${entry.score}</td>
+        </tr>`;
+      })
+      .join("");
+
+    if (selfRankEl) {
+      if (activeMssv) {
+        const fullIdx = allEntries.findIndex((item) => item.mssv === activeMssv);
+        const inTop = entries.some((item) => item.mssv === activeMssv);
+        if (fullIdx >= 0 && !inTop) {
+          const selfEntry = allEntries[fullIdx];
+          selfRankEl.innerHTML = `<span>Hạng của bạn: <strong>#${fullIdx + 1}/${allEntries.length}</strong></span><span class="font-mono">${selfEntry.score} đ (${selfEntry.years}/${maxYears} năm)</span>`;
+          selfRankEl.classList.remove("hidden");
+          return;
+        }
+      }
+      selfRankEl.classList.add("hidden");
+    }
+  }
+
+  async function syncLeaderboardAndPlayer() {
+    if (!leaderboardClient || isRefreshingLeaderboard) return;
+    isRefreshingLeaderboard = true;
+    setLeaderboardStatusBadge(latestLeaderboardSnapshot.mode, true);
+    const refreshBtn = document.getElementById("btn-leaderboard-refresh");
+    if (refreshBtn) refreshBtn.disabled = true;
+
+    try {
+      const targetMssv = activePlayer ? activePlayer.mssv : "";
+      const [lbResult, playerResult] = await Promise.all([
+        leaderboardClient.fetchLeaderboard(),
+        targetMssv
+          ? leaderboardClient.fetchPlayerRecord(targetMssv)
+          : Promise.resolve(null),
+      ]);
+
+      if (activePlayer && activePlayer.mssv === targetMssv) {
+        const record =
+          (playerResult && playerResult.entry) ||
+          (lbResult.allEntries || []).find((item) => item.mssv === targetMssv) ||
+          null;
+        playerPlaysUsed = record ? record.plays : 0;
+        playerBestScore = record ? record.score : null;
+        updatePlayerPanelUI();
+      }
+      renderLeaderboard(lbResult);
+    } finally {
+      isRefreshingLeaderboard = false;
+      if (refreshBtn) refreshBtn.disabled = false;
+    }
+  }
+
+  async function handleRunFinished({ yearsSurvived, isVictory, scoreInfo }) {
+    if (!leaderboardClient || !activePlayer) return;
+    const prefix = isVictory ? "victory" : "gameover";
+    const statusEl = document.getElementById(`${prefix}-submit-status`);
+    const maxPlays = getMaxScoredPlays();
+
+    if (playerPlaysUsed >= maxPlays) {
+      if (statusEl) {
+        statusEl.textContent =
+          "Đã hết 5 lượt tính điểm — lượt này chơi tự do, không tính điểm và không ghi lên BXH.";
+      }
+      return;
+    }
+
+    const submittedPlayer = { ...activePlayer };
+    const result = await leaderboardClient.submitPlayResult({
+      mssv: submittedPlayer.mssv,
+      name: submittedPlayer.name,
+      score: scoreInfo.totalScore,
+      years: yearsSurvived,
+      balanceScore: scoreInfo.balanceScore,
+      isVictory,
+    });
+
+    if (activePlayer && activePlayer.mssv === submittedPlayer.mssv) {
+      playerPlaysUsed = result.playsUsed;
+      if (result.entry) {
+        playerBestScore = result.entry.score;
+      }
+      updatePlayerPanelUI();
+    }
+
+    if (statusEl) {
+      if (result.isPractice) {
+        statusEl.textContent =
+          "Đã hết 5 lượt tính điểm — lượt này không ghi lên BXH.";
+      } else if (result.mode === "online") {
+        statusEl.textContent = result.isNewBest
+          ? `Kỷ lục mới ${result.entry.score}đ! Đã lưu lên BXH Online (Lượt ${result.playsUsed}/${result.maxScoredPlays}).`
+          : `Đã lưu lượt ${result.playsUsed}/${result.maxScoredPlays} (giữ kỷ lục ${result.entry.score}đ).`;
+      } else {
+        statusEl.textContent = result.isNewBest
+          ? `Offline: đã lưu tạm ${result.entry.score}đ trên máy (Lượt ${result.playsUsed}/${result.maxScoredPlays}).`
+          : `Offline: đã ghi nhận lượt ${result.playsUsed}/${result.maxScoredPlays}.`;
+      }
+    }
+
+    const updatedLb = await leaderboardClient.fetchLeaderboard();
+    renderLeaderboard(updatedLb);
+  }
+
+  function linkFieldError(inputEl, shown) {
+    const errorId = inputEl && inputEl.dataset ? inputEl.dataset.error : "";
+    if (!errorId) return;
+    const existingIds = (inputEl.getAttribute("aria-describedby") || "")
+      .split(/\s+/)
+      .filter((id) => id && id !== errorId);
+    if (shown) existingIds.push(errorId);
+    if (existingIds.length) {
+      inputEl.setAttribute("aria-describedby", existingIds.join(" "));
+    } else {
+      inputEl.removeAttribute("aria-describedby");
+    }
+  }
+
+  function announceFormError(inputEl, message) {
+    const announcer = document.getElementById("game-sr-announcer");
+    if (!announcer || !message) return;
+    clearTimeout(srAnnounceTimer);
+    announcer.textContent = "";
+    lastAnnouncedField = inputEl;
+    srAnnounceTimer = setTimeout(() => {
+      announcer.textContent = message;
+    }, 500);
+  }
+
+  function syncPlayerFormValidation({ showErrors = false, announce = false } = {}) {
+    const nameInput = document.getElementById("player-name-input");
+    const mssvInput = document.getElementById("player-mssv-input");
+    if (!nameInput || !mssvInput) return { valid: false };
+
+    const check = validatePlayerIdentity(nameInput.value, mssvInput.value);
+    const pairs = [
+      { input: nameInput, errorMsg: check.errors.name },
+      { input: mssvInput, errorMsg: check.errors.mssv },
+    ];
+
+    pairs.forEach(({ input, errorMsg }) => {
+      input.setCustomValidity(errorMsg || "");
+      const state = fieldInteractionState.get(input) || {
+        touched: false,
+        blurred: false,
+      };
+      const shouldShow = showErrors || state.blurred;
+      const isInvalid = Boolean(errorMsg) && shouldShow;
+      const errorEl = document.getElementById(input.dataset.error || "");
+
+      input.classList.toggle("user-invalid-fallback", isInvalid);
+      input.classList.toggle(
+        "user-valid-fallback",
+        !errorMsg && (showErrors || state.blurred || state.touched),
+      );
+      input.setAttribute("aria-invalid", isInvalid ? "true" : "false");
+      linkFieldError(input, isInvalid);
+
+      if (errorEl) {
+        errorEl.textContent = isInvalid ? errorMsg : "";
+        errorEl.classList.toggle("is-visible", isInvalid);
+      }
+
+      if (!errorMsg && lastAnnouncedField === input) {
+        clearTimeout(srAnnounceTimer);
+        const announcer = document.getElementById("game-sr-announcer");
+        if (announcer) announcer.textContent = "";
+      }
+    });
+
+    if (announce && !check.valid) {
+      const firstErr = check.errors.name || check.errors.mssv;
+      const firstEl = check.errors.name ? nameInput : mssvInput;
+      announceFormError(firstEl, firstErr);
+    }
+
+    return check;
+  }
+
+  function clearPlayerFormErrors() {
+    const nameInput = document.getElementById("player-name-input");
+    const mssvInput = document.getElementById("player-mssv-input");
+    [nameInput, mssvInput].forEach((input) => {
+      if (!input) return;
+      fieldInteractionState.delete(input);
+      input.setCustomValidity("");
+      input.classList.remove("user-invalid-fallback", "user-valid-fallback");
+      input.setAttribute("aria-invalid", "false");
+      linkFieldError(input, false);
+      const errorEl = document.getElementById(input.dataset.error || "");
+      if (errorEl) {
+        errorEl.textContent = "";
+        errorEl.classList.remove("is-visible");
+      }
+    });
+  }
+
+  function onTabActivated() {
+    renderCard();
+    updatePlayerPanelUI();
+    syncLeaderboardAndPlayer();
+  }
+
   function init() {
+    leaderboardClient = createLeaderboardClient();
+
     const card = document.getElementById("reigns-card");
     const btnLeft = document.getElementById("btn-reigns-left");
     const btnRight = document.getElementById("btn-reigns-right");
     const pillLeft = document.getElementById("choice-pill-left");
     const pillRight = document.getElementById("choice-pill-right");
     const soundBtn = document.getElementById("btn-game-sound-toggle");
+    const rulesToggleBtn = document.getElementById("btn-game-rules-toggle");
+    const rulesCloseBtn = document.getElementById("btn-game-rules-close");
+    const refreshLbBtn = document.getElementById("btn-leaderboard-refresh");
+    const playerForm = document.getElementById("game-player-form");
+    const nameInput = document.getElementById("player-name-input");
+    const mssvInput = document.getElementById("player-mssv-input");
+    const changePlayerBtn = document.getElementById("btn-change-player");
+    const cancelPlayerBtn = document.getElementById("btn-player-cancel");
+    const focusFormBtn = document.getElementById("btn-focus-player-form");
+
+    const saved = leaderboardClient.loadSavedPlayer();
+    if (saved) {
+      activePlayer = saved;
+      isEditingPlayer = false;
+      const localRecord = leaderboardClient.getLocalEntry(saved.mssv);
+      playerPlaysUsed = localRecord ? localRecord.plays : 0;
+      playerBestScore = localRecord ? localRecord.score : null;
+    } else {
+      activePlayer = null;
+      isEditingPlayer = false;
+    }
 
     const filterButtons = document.querySelectorAll(".game-filter-btn");
     filterButtons.forEach((btn) => {
@@ -1033,17 +1462,134 @@ window.ReignsGame = (() => {
       soundBtn.addEventListener("click", toggleSound);
     }
 
+    if (rulesToggleBtn) {
+      rulesToggleBtn.addEventListener("click", () => {
+        const isCurrentlyOpen =
+          rulesToggleBtn.getAttribute("aria-expanded") === "true";
+        setRulesPanelVisible(!isCurrentlyOpen);
+      });
+    }
+
+    if (rulesCloseBtn) {
+      rulesCloseBtn.addEventListener("click", () => setRulesPanelVisible(false));
+    }
+
+    if (refreshLbBtn) {
+      refreshLbBtn.addEventListener("click", () => syncLeaderboardAndPlayer());
+    }
+
+    if (focusFormBtn) {
+      focusFormBtn.addEventListener("click", focusPlayerForm);
+    }
+
+    function bindPlayerFieldEvents(inputEl, transformFn) {
+      if (!inputEl) return;
+      inputEl.addEventListener("input", () => {
+        if (transformFn) {
+          const next = transformFn(inputEl.value);
+          if (inputEl.value !== next) inputEl.value = next;
+        }
+        const st = fieldInteractionState.get(inputEl) || {
+          touched: false,
+          blurred: false,
+        };
+        st.touched = true;
+        fieldInteractionState.set(inputEl, st);
+        syncPlayerFormValidation();
+      });
+
+      inputEl.addEventListener("blur", () => {
+        const st = fieldInteractionState.get(inputEl) || {
+          touched: false,
+          blurred: false,
+        };
+        if (st.touched || inputEl.value.length > 0) {
+          st.blurred = true;
+          fieldInteractionState.set(inputEl, st);
+          syncPlayerFormValidation({ announce: true });
+        }
+      });
+    }
+
+    bindPlayerFieldEvents(mssvInput, sanitizeMssvInput);
+    bindPlayerFieldEvents(nameInput, null);
+
+    if (playerForm) {
+      playerForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (mssvInput) {
+          mssvInput.value = sanitizeMssvInput(mssvInput.value);
+        }
+        [nameInput, mssvInput].forEach((input) => {
+          if (input) {
+            fieldInteractionState.set(input, { touched: true, blurred: true });
+          }
+        });
+
+        const validation = syncPlayerFormValidation({
+          showErrors: true,
+          announce: false,
+        });
+        if (!validation.valid) {
+          const firstInvalid = validation.errors.name ? nameInput : mssvInput;
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+
+        const isDifferentPlayer =
+          !activePlayer || activePlayer.mssv !== validation.mssv;
+        const confirmed = leaderboardClient.savePlayer({
+          name: validation.name,
+          mssv: validation.mssv,
+        });
+        activePlayer = confirmed;
+        isEditingPlayer = false;
+        clearPlayerFormErrors();
+
+        const localEntry = leaderboardClient.getLocalEntry(confirmed.mssv);
+        playerPlaysUsed = localEntry ? localEntry.plays : 0;
+        playerBestScore = localEntry ? localEntry.score : null;
+
+        if (isDifferentPlayer || isGameOver) {
+          resetGame();
+        } else {
+          updatePlayerPanelUI();
+        }
+        await syncLeaderboardAndPlayer();
+      });
+    }
+
+    if (changePlayerBtn) {
+      changePlayerBtn.addEventListener("click", () => {
+        isEditingPlayer = true;
+        clearPlayerFormErrors();
+        if (nameInput) nameInput.value = "";
+        if (mssvInput) mssvInput.value = "";
+        updatePlayerPanelUI();
+        if (nameInput) nameInput.focus();
+      });
+    }
+
+    if (cancelPlayerBtn) {
+      cancelPlayerBtn.addEventListener("click", () => {
+        if (!activePlayer) return;
+        isEditingPlayer = false;
+        clearPlayerFormErrors();
+        updatePlayerPanelUI();
+      });
+    }
+
     btnLeft.addEventListener("click", () => applyChoice("left"));
     btnRight.addEventListener("click", () => applyChoice("right"));
 
     btnLeft.addEventListener("mouseenter", () => {
-      if (!isGameOver && deck[currentCardIndex])
+      if (isPlayerReadyToPlay() && !isGameOver && deck[currentCardIndex])
         showStatDots(deck[currentCardIndex].left.effects);
     });
     btnLeft.addEventListener("mouseleave", clearStatDots);
 
     btnRight.addEventListener("mouseenter", () => {
-      if (!isGameOver && deck[currentCardIndex])
+      if (isPlayerReadyToPlay() && !isGameOver && deck[currentCardIndex])
         showStatDots(deck[currentCardIndex].right.effects);
     });
     btnRight.addEventListener("mouseleave", clearStatDots);
@@ -1053,7 +1599,7 @@ window.ReignsGame = (() => {
     let currentX = 0;
 
     function onDragStart(e) {
-      if (isGameOver) return;
+      if (!isPlayerReadyToPlay() || isGameOver) return;
       isDragging = true;
       currentX = 0;
       startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
@@ -1122,10 +1668,18 @@ window.ReignsGame = (() => {
       if (qrModal && !qrModal.classList.contains("hidden")) {
         return;
       }
+      const activeTag =
+        document.activeElement && document.activeElement.tagName
+          ? document.activeElement.tagName.toUpperCase()
+          : "";
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(activeTag)) {
+        return;
+      }
       const gameSection = document.getElementById("section-game");
       if (
         gameSection &&
         !gameSection.classList.contains("hidden") &&
+        isPlayerReadyToPlay() &&
         !isGameOver
       ) {
         if (e.key === "ArrowLeft") applyChoice("left");
@@ -1143,14 +1697,621 @@ window.ReignsGame = (() => {
     buildDeck();
     updateHUDStats();
     renderCard();
+    updatePlayerPanelUI();
+    syncLeaderboardAndPlayer();
+  }
+
+  // ================= BẢNG XẾP HẠNG ONLINE & QUY TẮC ĐỊNH DANH =================
+  const MSSV_REGEX = /^\d{8}$/;
+  const DEFAULT_LEADERBOARD_CONFIG = {
+    firebaseDbUrl: "",
+    maxScoredPlays: 5,
+    topLimit: 10,
+    requestTimeoutMs: 7000,
+    storageKeys: {
+      player: "ktct_game_player_v1",
+      localLeaderboard: "ktct_game_leaderboard_local_v1",
+    },
+  };
+
+  function resolveLeaderboardConfig(overrideConfig) {
+    const globalCfg =
+      typeof window !== "undefined" && window.GAME_LEADERBOARD_CONFIG
+        ? window.GAME_LEADERBOARD_CONFIG
+        : typeof globalThis !== "undefined" && globalThis.GAME_LEADERBOARD_CONFIG
+          ? globalThis.GAME_LEADERBOARD_CONFIG
+          : null;
+    const merged = {
+      ...DEFAULT_LEADERBOARD_CONFIG,
+      ...(globalCfg || {}),
+      ...(overrideConfig || {}),
+    };
+    merged.storageKeys = {
+      ...DEFAULT_LEADERBOARD_CONFIG.storageKeys,
+      ...(globalCfg && globalCfg.storageKeys ? globalCfg.storageKeys : {}),
+      ...(overrideConfig && overrideConfig.storageKeys
+        ? overrideConfig.storageKeys
+        : {}),
+    };
+    return merged;
+  }
+
+  function normalizeDbUrl(url) {
+    return typeof url === "string" ? url.trim().replace(/\/+$/, "") : "";
+  }
+
+  function sanitizePlayerName(raw) {
+    return typeof raw === "string" ? raw.trim().replace(/\s+/g, " ") : "";
+  }
+
+  function sanitizeMssvInput(raw) {
+    if (raw === null || raw === undefined) return "";
+    return String(raw).replace(/\D/g, "").slice(0, 8);
+  }
+
+  function buildLeaderboardUrls(baseUrl, mssv) {
+    const cleanBase = normalizeDbUrl(baseUrl);
+    const cleanMssv = sanitizeMssvInput(mssv);
+    return {
+      baseUrl: cleanBase,
+      listUrl: cleanBase ? `${cleanBase}/leaderboard.json` : "",
+      entryUrl:
+        cleanBase && MSSV_REGEX.test(cleanMssv)
+          ? `${cleanBase}/leaderboard/${cleanMssv}.json`
+          : "",
+    };
+  }
+
+  function validatePlayerIdentity(rawName, rawMssv) {
+    const name = sanitizePlayerName(rawName);
+    const mssv = rawMssv === null || rawMssv === undefined ? "" : String(rawMssv).trim();
+    let nameError = "";
+    let mssvError = "";
+
+    if (!name) {
+      nameError = "Nhập Họ và tên.";
+    } else if (name.length < 2 || name.length > 40) {
+      nameError = "Tên từ 2–40 ký tự.";
+    }
+
+    if (!mssv) {
+      mssvError = "Nhập MSSV (8 số).";
+    } else if (!MSSV_REGEX.test(mssv)) {
+      mssvError = "MSSV phải đúng 8 chữ số.";
+    }
+
+    return {
+      valid: !nameError && !mssvError,
+      name,
+      mssv,
+      errors: {
+        name: nameError,
+        mssv: mssvError,
+      },
+    };
+  }
+
+  function escapeHtml(text) {
+    return String(text ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function calculateGameScore({ yearsSurvived, stats, isVictory }) {
+    const safeYears = Math.max(0, Math.min(maxYears, Number(yearsSurvived) || 0));
+    const yearScore = safeYears * 100;
+    const statKeys = ["growth", "equity", "environment", "stability"];
+    const deviation = statKeys.reduce((sum, key) => {
+      const rawVal = stats && typeof stats[key] === "number" ? stats[key] : 50;
+      const clampedVal = Math.max(0, Math.min(100, rawVal));
+      return sum + Math.abs(clampedVal - 50);
+    }, 0);
+    const balanceScore = Math.max(0, 200 - deviation);
+    const victoryBonus = isVictory ? 200 : 0;
+    const totalScore = yearScore + balanceScore + victoryBonus;
+    return {
+      yearScore,
+      balanceScore,
+      victoryBonus,
+      totalScore,
+      deviation,
+    };
+  }
+
+  function normalizeLeaderboardEntry(rawEntry, fallbackMssv) {
+    if (!rawEntry || typeof rawEntry !== "object") return null;
+    const rawMssv =
+      typeof rawEntry.mssv === "string"
+        ? rawEntry.mssv.trim()
+        : typeof fallbackMssv === "string"
+          ? fallbackMssv.trim()
+          : "";
+    if (!MSSV_REGEX.test(rawMssv)) return null;
+    if (typeof rawEntry.score !== "number" || !Number.isFinite(rawEntry.score)) {
+      return null;
+    }
+
+    const name = sanitizePlayerName(rawEntry.name) || "Ẩn danh";
+    const score = Math.max(0, Math.min(1400, Math.round(rawEntry.score)));
+    const plays = Math.max(0, Math.round(Number(rawEntry.plays) || 0));
+    const years = Math.max(0, Math.min(maxYears, Math.round(Number(rawEntry.years) || 0)));
+    const balanceScore = Math.max(
+      0,
+      Math.min(200, Math.round(Number(rawEntry.balanceScore) || 0)),
+    );
+    const isVictory = Boolean(rawEntry.isVictory);
+    const updatedAt =
+      Number(rawEntry.updatedAt) > 0 ? Number(rawEntry.updatedAt) : 0;
+
+    return {
+      mssv: rawMssv,
+      name,
+      score,
+      plays,
+      years,
+      balanceScore,
+      isVictory,
+      updatedAt,
+    };
+  }
+
+  function sortLeaderboardEntries(rawMapOrArray, topLimit = 10) {
+    if (!rawMapOrArray || typeof rawMapOrArray !== "object") return [];
+
+    const byMssv = new Map();
+    const pairs = Array.isArray(rawMapOrArray)
+      ? rawMapOrArray.map((item) => [item && item.mssv, item])
+      : Object.entries(rawMapOrArray);
+
+    pairs.forEach(([key, item]) => {
+      const normalized = normalizeLeaderboardEntry(item, typeof key === "string" ? key : "");
+      if (!normalized) return;
+      const prev = byMssv.get(normalized.mssv);
+      if (!prev || normalized.score > prev.score) {
+        byMssv.set(normalized.mssv, normalized);
+      }
+    });
+
+    const sorted = Array.from(byMssv.values()).sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      if (b.years !== a.years) return b.years - a.years;
+      if (b.balanceScore !== a.balanceScore) {
+        return b.balanceScore - a.balanceScore;
+      }
+      if (a.updatedAt !== b.updatedAt) return a.updatedAt - b.updatedAt;
+      return a.mssv.localeCompare(b.mssv);
+    });
+
+    if (typeof topLimit === "number" && Number.isFinite(topLimit) && topLimit > 0) {
+      return sorted.slice(0, topLimit);
+    }
+    return sorted;
+  }
+
+  function mergeLeaderboardSubmission(existingEntry, candidate, maxScoredPlays = 5) {
+    const cleanMssv = sanitizeMssvInput(candidate && candidate.mssv);
+    const existing = existingEntry
+      ? normalizeLeaderboardEntry(existingEntry, cleanMssv)
+      : null;
+    const oldPlays = existing ? existing.plays : 0;
+
+    if (oldPlays >= maxScoredPlays) {
+      return {
+        shouldSubmit: false,
+        isPractice: true,
+        isNewBest: false,
+        entry: existing,
+      };
+    }
+
+    const nextPlays = oldPlays + 1;
+    const cleanName =
+      sanitizePlayerName(candidate && candidate.name) ||
+      (existing ? existing.name : "Ẩn danh");
+    const cleanScore = Math.max(
+      0,
+      Math.min(1400, Math.round(Number(candidate && candidate.score) || 0)),
+    );
+    const cleanYears = Math.max(
+      0,
+      Math.min(maxYears, Math.round(Number(candidate && candidate.years) || 0)),
+    );
+    const cleanBalance = Math.max(
+      0,
+      Math.min(200, Math.round(Number(candidate && candidate.balanceScore) || 0)),
+    );
+    const cleanVictory = Boolean(candidate && candidate.isVictory);
+    const timestamp =
+      Number(candidate && candidate.now) > 0 ? Number(candidate.now) : Date.now();
+    const isNewBest = !existing || cleanScore > existing.score;
+
+    const entry = isNewBest
+      ? {
+          mssv: cleanMssv,
+          name: cleanName,
+          score: cleanScore,
+          plays: nextPlays,
+          years: cleanYears,
+          balanceScore: cleanBalance,
+          isVictory: cleanVictory,
+          updatedAt: timestamp,
+        }
+      : {
+          mssv: cleanMssv,
+          name: cleanName,
+          score: existing.score,
+          plays: nextPlays,
+          years: existing.years,
+          balanceScore: existing.balanceScore,
+          isVictory: existing.isVictory,
+          updatedAt: existing.updatedAt,
+        };
+
+    return {
+      shouldSubmit: true,
+      isPractice: false,
+      isNewBest,
+      entry,
+    };
+  }
+
+  function getSafeBrowserStorage(kind) {
+    try {
+      if (typeof window === "undefined" || !window[kind]) return null;
+      return window[kind];
+    } catch (_) {
+      return null;
+    }
+  }
+
+  async function fetchJsonWithTimeout(url, options, timeoutMs, fetchImpl) {
+    if (!url || typeof fetchImpl !== "function") {
+      throw new Error("Fetch unavailable");
+    }
+    const canAbort = typeof AbortController === "function";
+    const controller = canAbort ? new AbortController() : null;
+    const timer =
+      canAbort && timeoutMs > 0
+        ? setTimeout(() => controller.abort(), timeoutMs)
+        : null;
+    try {
+      const fetchOpts = controller
+        ? { ...(options || {}), signal: controller.signal }
+        : { ...(options || {}) };
+      const response = await fetchImpl(url, fetchOpts);
+      if (!response || !response.ok) {
+        throw new Error(`HTTP ${response ? response.status : "ERR"}`);
+      }
+      return await response.json();
+    } finally {
+      if (timer !== null) {
+        clearTimeout(timer);
+      }
+    }
+  }
+
+  function createLeaderboardClient(options = {}) {
+    const cfg = resolveLeaderboardConfig(options.config);
+    const maxScoredPlays =
+      Number(cfg.maxScoredPlays) > 0 ? Number(cfg.maxScoredPlays) : 5;
+    const topLimit = Number(cfg.topLimit) > 0 ? Number(cfg.topLimit) : 10;
+    const timeoutMs =
+      Number(cfg.requestTimeoutMs) > 0 ? Number(cfg.requestTimeoutMs) : 7000;
+    const playerKey = cfg.storageKeys.player;
+    const localLbKey = cfg.storageKeys.localLeaderboard;
+    const fetcher =
+      options.fetchImpl ||
+      (typeof fetch === "function" ? fetch.bind(globalThis) : null);
+    const localStore = options.storage || getSafeBrowserStorage("localStorage");
+    const sessionStore =
+      options.sessionStorage || getSafeBrowserStorage("sessionStorage");
+
+    function readJsonStorage(store, key) {
+      if (!store || !key) return null;
+      try {
+        const raw = store.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function writeJsonStorage(store, key, value) {
+      if (!store || !key) return;
+      try {
+        store.setItem(key, JSON.stringify(value));
+      } catch (_) {}
+    }
+
+    function removeStorageKey(store, key) {
+      if (!store || !key) return;
+      try {
+        store.removeItem(key);
+      } catch (_) {}
+    }
+
+    function readLocalMap() {
+      const parsed = readJsonStorage(localStore, localLbKey);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return {};
+      }
+      const clean = {};
+      Object.entries(parsed).forEach(([key, val]) => {
+        const entry = normalizeLeaderboardEntry(val, key);
+        if (entry) clean[entry.mssv] = entry;
+      });
+      return clean;
+    }
+
+    function writeLocalMap(map) {
+      writeJsonStorage(localStore, localLbKey, map || {});
+    }
+
+    function getLocalEntry(mssv) {
+      if (!MSSV_REGEX.test(String(mssv || ""))) return null;
+      const map = readLocalMap();
+      return map[mssv] || null;
+    }
+
+    function setLocalEntry(entry) {
+      if (!entry || !MSSV_REGEX.test(entry.mssv)) return;
+      const map = readLocalMap();
+      map[entry.mssv] = entry;
+      writeLocalMap(map);
+    }
+
+    function savePlayer(player) {
+      const check = validatePlayerIdentity(
+        player && player.name,
+        player && player.mssv,
+      );
+      if (!check.valid) return null;
+      const clean = { name: check.name, mssv: check.mssv };
+      writeJsonStorage(sessionStore, playerKey, clean);
+      writeJsonStorage(localStore, playerKey, clean);
+      return clean;
+    }
+
+    function loadSavedPlayer() {
+      const fromSession = readJsonStorage(sessionStore, playerKey);
+      const fromLocal = readJsonStorage(localStore, playerKey);
+      const candidate = fromSession || fromLocal;
+      if (!candidate || typeof candidate !== "object") return null;
+      const check = validatePlayerIdentity(candidate.name, candidate.mssv);
+      return check.valid ? { name: check.name, mssv: check.mssv } : null;
+    }
+
+    function clearSavedPlayer() {
+      removeStorageKey(sessionStore, playerKey);
+      removeStorageKey(localStore, playerKey);
+    }
+
+    async function fetchLeaderboard() {
+      const urls = buildLeaderboardUrls(cfg.firebaseDbUrl, "");
+      if (urls.listUrl && fetcher) {
+        try {
+          const remoteRaw = await fetchJsonWithTimeout(
+            urls.listUrl,
+            { method: "GET" },
+            timeoutMs,
+            fetcher,
+          );
+          const cleanRemoteMap = {};
+          if (remoteRaw && typeof remoteRaw === "object") {
+            Object.entries(remoteRaw).forEach(([key, val]) => {
+              const entry = normalizeLeaderboardEntry(val, key);
+              if (entry) cleanRemoteMap[entry.mssv] = entry;
+            });
+          }
+          writeLocalMap(cleanRemoteMap);
+          const allEntries = sortLeaderboardEntries(cleanRemoteMap, Infinity);
+          return {
+            mode: "online",
+            entries: allEntries.slice(0, topLimit),
+            allEntries,
+            totalPlayers: allEntries.length,
+          };
+        } catch (_) {}
+      }
+
+      const localMap = readLocalMap();
+      const allEntries = sortLeaderboardEntries(localMap, Infinity);
+      return {
+        mode: "offline",
+        entries: allEntries.slice(0, topLimit),
+        allEntries,
+        totalPlayers: allEntries.length,
+      };
+    }
+
+    async function fetchPlayerRecord(mssv) {
+      const cleanMssv = sanitizeMssvInput(mssv);
+      if (!MSSV_REGEX.test(cleanMssv)) {
+        return { mode: "offline", entry: null };
+      }
+      const urls = buildLeaderboardUrls(cfg.firebaseDbUrl, cleanMssv);
+      if (urls.entryUrl && fetcher) {
+        try {
+          const remoteRaw = await fetchJsonWithTimeout(
+            urls.entryUrl,
+            { method: "GET" },
+            timeoutMs,
+            fetcher,
+          );
+          const remoteEntry = remoteRaw
+            ? normalizeLeaderboardEntry(remoteRaw, cleanMssv)
+            : null;
+          if (remoteEntry) {
+            setLocalEntry(remoteEntry);
+          }
+          return { mode: "online", entry: remoteEntry };
+        } catch (_) {}
+      }
+      return { mode: "offline", entry: getLocalEntry(cleanMssv) };
+    }
+
+    async function submitPlayResult(payload) {
+      const check = validatePlayerIdentity(
+        payload && payload.name,
+        payload && payload.mssv,
+      );
+      const runScore = Math.max(
+        0,
+        Math.min(1400, Math.round(Number(payload && payload.score) || 0)),
+      );
+      if (!check.valid) {
+        return {
+          submitted: false,
+          isPractice: false,
+          isNewBest: false,
+          mode: "invalid",
+          entry: null,
+          playsUsed: 0,
+          maxScoredPlays,
+          runScore,
+        };
+      }
+
+      const candidate = {
+        mssv: check.mssv,
+        name: check.name,
+        score: runScore,
+        years: payload && payload.years,
+        balanceScore: payload && payload.balanceScore,
+        isVictory: Boolean(payload && payload.isVictory),
+        now: payload && payload.now,
+      };
+
+      const urls = buildLeaderboardUrls(cfg.firebaseDbUrl, check.mssv);
+      if (urls.entryUrl && fetcher) {
+        try {
+          const remoteRaw = await fetchJsonWithTimeout(
+            urls.entryUrl,
+            { method: "GET" },
+            timeoutMs,
+            fetcher,
+          );
+          const remoteEntry = remoteRaw
+            ? normalizeLeaderboardEntry(remoteRaw, check.mssv)
+            : null;
+          const merged = mergeLeaderboardSubmission(
+            remoteEntry,
+            candidate,
+            maxScoredPlays,
+          );
+
+          if (!merged.shouldSubmit) {
+            if (remoteEntry) setLocalEntry(remoteEntry);
+            return {
+              submitted: false,
+              isPractice: true,
+              isNewBest: false,
+              mode: "online",
+              entry: remoteEntry,
+              playsUsed: maxScoredPlays,
+              maxScoredPlays,
+              runScore,
+            };
+          }
+
+          await fetchJsonWithTimeout(
+            urls.entryUrl,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(merged.entry),
+            },
+            timeoutMs,
+            fetcher,
+          );
+
+          setLocalEntry(merged.entry);
+          return {
+            submitted: true,
+            isPractice: false,
+            isNewBest: merged.isNewBest,
+            mode: "online",
+            entry: merged.entry,
+            playsUsed: merged.entry.plays,
+            maxScoredPlays,
+            runScore,
+          };
+        } catch (_) {}
+      }
+
+      const localEntry = getLocalEntry(check.mssv);
+      const offlineMerged = mergeLeaderboardSubmission(
+        localEntry,
+        candidate,
+        maxScoredPlays,
+      );
+      if (!offlineMerged.shouldSubmit) {
+        return {
+          submitted: false,
+          isPractice: true,
+          isNewBest: false,
+          mode: "offline",
+          entry: localEntry,
+          playsUsed: maxScoredPlays,
+          maxScoredPlays,
+          runScore,
+        };
+      }
+
+      setLocalEntry(offlineMerged.entry);
+      return {
+        submitted: true,
+        isPractice: false,
+        isNewBest: offlineMerged.isNewBest,
+        mode: "offline",
+        entry: offlineMerged.entry,
+        playsUsed: offlineMerged.entry.plays,
+        maxScoredPlays,
+        runScore,
+      };
+    }
+
+    return {
+      fetchLeaderboard,
+      fetchPlayerRecord,
+      submitPlayResult,
+      loadSavedPlayer,
+      savePlayer,
+      clearSavedPlayer,
+      getLocalEntry,
+    };
   }
 
   return {
     init,
     resetGame,
     setCategory,
+    onTabActivated,
     stopAllSounds,
     stopConfetti,
     getDeckCount: () => reignsDeck.length,
+    _leaderboard: {
+      normalizeDbUrl,
+      buildLeaderboardUrls,
+      sanitizePlayerName,
+      sanitizeMssvInput,
+      validatePlayerIdentity,
+      escapeHtml,
+      calculateGameScore,
+      normalizeLeaderboardEntry,
+      sortLeaderboardEntries,
+      mergeLeaderboardSubmission,
+      createLeaderboardClient,
+    },
   };
 })();
+
+if (typeof window !== "undefined") {
+  window.ReignsGame = ReignsGame;
+}
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = ReignsGame;
+}

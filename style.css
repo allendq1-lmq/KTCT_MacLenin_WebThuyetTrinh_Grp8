@@ -288,12 +288,44 @@ svg {
   scrollbar-width: none;
 }
 
-/* Khung Game Thể Chế: ôm sát nội dung, cuộn dọc mượt trên màn hình nhỏ / landscape */
+/* Khung Game Thể Chế: 1 khung hình không cuộn trên desktop, cuộn tự nhiên trên mobile/màn hình thấp */
 #section-game:not(.hidden) {
   height: auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-block: clamp(0.65rem, 1.5dvh, 1.25rem);
+  overflow-x: clip;
+  overflow-y: visible;
+  padding-block: clamp(0.5rem, 1.2dvh, 1rem);
+}
+
+@media (min-width: 1024px) and (min-height: 600px) {
+  #section-game:not(.hidden) {
+    height: calc(100vh - var(--navbar-height));
+    height: calc(100dvh - var(--navbar-height));
+    overflow: hidden;
+    padding-block: 0.625rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #game-layout-grid {
+    flex: 1 1 0%;
+    min-height: 0;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  #game-left-panel,
+  #game-board-container {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+#reigns-gameover-modal:not(.hidden),
+#reigns-victory-modal:not(.hidden),
+#game-rules-box:not(.hidden),
+#game-lock-overlay:not(.hidden) {
+  display: flex;
 }
 
 /* Tối ưu khung hiển thị Nội Dung & Bảo Tàng 3D toàn vùng nhìn */
@@ -710,4 +742,145 @@ body.reveal-full-page {
   .quiz-card-wrong-shake {
     animation: cardShakeWrong 0.5s ease-in-out;
   }
+}
+
+/* ================= BXH ONLINE & VALIDATION GAME THỂ CHẾ ================= */
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.game-field-error {
+  display: block;
+  min-height: 1rem;
+  line-height: 1rem;
+  visibility: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.game-input:is(:user-invalid, .user-invalid-fallback) {
+  border-color: #e11d48 !important;
+  background-color: #fff1f2 !important;
+}
+
+.game-input:is(:user-invalid, .user-invalid-fallback) + .game-field-error,
+.game-field-error.is-visible {
+  visibility: visible;
+}
+
+.game-input:is(:user-valid, .user-valid-fallback) {
+  border-color: #10b981;
+}
+
+@media (max-width: 767px) {
+  .game-input {
+    font-size: 16px;
+    min-height: 44px;
+  }
+}
+
+.lb-status-online {
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.lb-status-offline {
+  background-color: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.leaderboard-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.leaderboard-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 150ms ease;
+}
+
+.leaderboard-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-table tbody td {
+  padding: 0.2rem 0.35rem;
+  font-size: 11.5px;
+  line-height: 1.25;
+  vertical-align: middle;
+}
+
+.leaderboard-student-cell {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  min-inline-size: 0;
+}
+
+.leaderboard-name {
+  display: block;
+  min-inline-size: 0;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.leaderboard-mssv {
+  flex-shrink: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  color: #64748b;
+}
+
+.leaderboard-row-self {
+  background-color: #fff7ed !important;
+  box-shadow: inset 3px 0 0 #df7a28;
+}
+
+.leaderboard-row-self .leaderboard-name,
+.leaderboard-row-self .leaderboard-mssv {
+  color: #9a3412;
+}
+
+.leaderboard-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.leaderboard-rank-1 {
+  background-color: #df7a28;
+  color: #ffffff;
+}
+
+.leaderboard-rank-2 {
+  background-color: #fed7aa;
+  color: #9a3412;
+}
+
+.leaderboard-rank-3 {
+  background-color: #ffedd5;
+  color: #c4661b;
 }

@@ -594,61 +594,6 @@ const ReignsGame = (() => {
     },
   ];
 
-  // Hệ thống âm thanh từ thư mục assets/sounds/
-  let soundEnabled = true;
-  const gameSounds =
-    typeof Audio !== "undefined"
-      ? {
-          correct: new Audio("assets/sounds/correct.mp3"),
-          wrong: new Audio("assets/sounds/wrong.mp3"),
-          lose: new Audio("assets/sounds/lose.mp3"),
-          win: new Audio("assets/sounds/win.mp3"),
-        }
-      : {};
-
-  Object.values(gameSounds).forEach((aud) => {
-    if (aud) aud.preload = "auto";
-  });
-
-  function stopAllSounds() {
-    Object.values(gameSounds).forEach((aud) => {
-      try {
-        aud.pause();
-        aud.currentTime = 0;
-      } catch (_) {}
-    });
-  }
-
-  function playGameSound(type) {
-    if (!soundEnabled || !gameSounds[type]) return;
-    stopAllSounds();
-    try {
-      const p = gameSounds[type].play();
-      if (p && typeof p.catch === "function") {
-        p.catch(() => {});
-      }
-    } catch (_) {}
-  }
-
-  const SOUND_ON_SVG =
-    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>';
-  const SOUND_OFF_SVG =
-    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6m0-6l6 6"></path></svg>';
-
-  function toggleSound() {
-    soundEnabled = !soundEnabled;
-    if (!soundEnabled) {
-      stopAllSounds();
-    }
-    const btn = document.getElementById("btn-game-sound-toggle");
-    const icon = document.getElementById("game-sound-icon");
-    const label = document.getElementById("game-sound-label");
-    if (btn) btn.setAttribute("aria-pressed", String(soundEnabled));
-    if (icon) icon.innerHTML = soundEnabled ? SOUND_ON_SVG : SOUND_OFF_SVG;
-    if (label)
-      label.textContent = soundEnabled ? "Âm thanh: BẬT" : "Âm thanh: TẮT";
-  }
-
   // Hiệu ứng Pháo giấy (Confetti) chúc mừng khi Thắng (vượt qua đủ 10 năm)
   let confettiAnimId = null;
   let confettiParticles = [];
@@ -964,7 +909,6 @@ const ReignsGame = (() => {
           .getElementById("reigns-victory-modal")
           .classList.remove("hidden");
         startConfetti();
-        playGameSound("win");
       } else {
         document.getElementById("gameover-cause").textContent = failureReason;
         document.getElementById("gameover-years").textContent =
@@ -974,7 +918,6 @@ const ReignsGame = (() => {
           .getElementById("reigns-gameover-modal")
           .classList.remove("hidden");
         triggerLoseVisualEffect();
-        playGameSound("lose");
       }
 
       if (!hasSubmittedCurrentRun) {
@@ -1021,12 +964,10 @@ const ReignsGame = (() => {
       currentCardIndex++;
       renderCard();
       triggerChoiceVisualFeedback(quality);
-      playGameSound(quality);
     }
   }
 
   function resetGame() {
-    stopAllSounds();
     stopConfetti();
     currentYear = 1;
     currentCardIndex = 0;
@@ -1164,20 +1105,90 @@ const ReignsGame = (() => {
   }
 
   function setLeaderboardStatusBadge(mode, isLoading) {
-    const badge = document.getElementById("leaderboard-status-badge");
-    if (!badge) return;
-    badge.classList.remove("lb-status-online", "lb-status-offline");
-    if (isLoading) {
-      badge.textContent = "Đang tải...";
-      badge.classList.add("lb-status-offline");
+    const badges = [
+      document.getElementById("leaderboard-status-badge"),
+      document.getElementById("leaderboard-full-status-badge"),
+    ];
+    badges.forEach((badge) => {
+      if (!badge) return;
+      badge.classList.remove("lb-status-online", "lb-status-offline");
+      if (isLoading) {
+        badge.textContent = "Đang tải...";
+        badge.classList.add("lb-status-offline");
+      } else if (mode === "online") {
+        badge.textContent = "BXH Online";
+        badge.classList.add("lb-status-online");
+      } else {
+        badge.textContent = "Offline";
+        badge.classList.add("lb-status-offline");
+      }
+    });
+  }
+
+  function renderFullLeaderboard(snapshot) {
+    const data = snapshot || latestLeaderboardSnapshot;
+    const fullTbody = document.getElementById("leaderboard-full-tbody");
+    const countEl = document.getElementById("leaderboard-full-count");
+    const allEntries = data.allEntries || data.entries || [];
+    const maxPlays = getMaxScoredPlays();
+
+    if (countEl) {
+      countEl.textContent = `${allEntries.length} sinh viên`;
+    }
+    if (!fullTbody) return;
+
+    if (!allEntries.length) {
+      fullTbody.innerHTML =
+        '<tr><td colspan="6" class="py-8 text-center text-xs sm:text-sm text-slate-500">Chưa có sinh viên nào trên BXH. Hãy là người đầu tiên!</td></tr>';
       return;
     }
-    if (mode === "online") {
-      badge.textContent = "BXH Online";
-      badge.classList.add("lb-status-online");
+
+    const activeMssv = activePlayer ? activePlayer.mssv : "";
+    fullTbody.innerHTML = allEntries
+      .map((entry, idx) => {
+        const rank = idx + 1;
+        const isSelf = activeMssv && entry.mssv === activeMssv;
+        const rankClass =
+          rank <= 3
+            ? `leaderboard-rank-badge leaderboard-rank-${rank}`
+            : "leaderboard-rank-badge text-slate-500";
+        const safeName = escapeHtml(entry.name);
+        const safeMssv = escapeHtml(entry.mssv);
+        const playsCount = Math.min(maxPlays, Math.max(0, Number(entry.plays) || 0));
+        return `<tr class="${isSelf ? "leaderboard-row-self" : "hover:bg-slate-50"}">
+          <td class="text-center"><span class="${rankClass}">${rank}</span></td>
+          <td class="font-bold text-slate-900">
+            <span class="block leading-snug">${safeName}</span>
+            <span class="sm:hidden block font-mono text-[10.5px] font-normal text-slate-500 mt-0.5">${safeMssv}</span>
+          </td>
+          <td class="hidden sm:table-cell font-mono text-slate-600">${safeMssv}</td>
+          <td class="text-center font-mono text-slate-600">${playsCount}/${maxPlays}</td>
+          <td class="text-center font-mono text-slate-600">${entry.years}/${maxYears}</td>
+          <td class="text-right font-mono font-extrabold text-slate-900 pr-2">${entry.score}</td>
+        </tr>`;
+      })
+      .join("");
+  }
+
+  function openFullLeaderboardModal() {
+    const dialog = document.getElementById("leaderboard-full-modal");
+    if (!dialog) return;
+    renderFullLeaderboard(latestLeaderboardSnapshot);
+    if (typeof dialog.showModal === "function") {
+      if (!dialog.open) dialog.showModal();
     } else {
-      badge.textContent = "Offline";
-      badge.classList.add("lb-status-offline");
+      dialog.setAttribute("open", "open");
+    }
+    syncLeaderboardAndPlayer();
+  }
+
+  function closeFullLeaderboardModal() {
+    const dialog = document.getElementById("leaderboard-full-modal");
+    if (!dialog) return;
+    if (typeof dialog.close === "function") {
+      if (dialog.open) dialog.close();
+    } else {
+      dialog.removeAttribute("open");
     }
   }
 
@@ -1185,11 +1196,12 @@ const ReignsGame = (() => {
     latestLeaderboardSnapshot = snapshot || latestLeaderboardSnapshot;
     const tbody = document.getElementById("leaderboard-tbody");
     const selfRankEl = document.getElementById("leaderboard-self-rank");
+    setLeaderboardStatusBadge(latestLeaderboardSnapshot.mode, false);
+    renderFullLeaderboard(latestLeaderboardSnapshot);
     if (!tbody) return;
 
     const entries = latestLeaderboardSnapshot.entries || [];
     const allEntries = latestLeaderboardSnapshot.allEntries || entries;
-    setLeaderboardStatusBadge(latestLeaderboardSnapshot.mode, false);
 
     if (!entries.length) {
       tbody.innerHTML =
@@ -1243,7 +1255,9 @@ const ReignsGame = (() => {
     isRefreshingLeaderboard = true;
     setLeaderboardStatusBadge(latestLeaderboardSnapshot.mode, true);
     const refreshBtn = document.getElementById("btn-leaderboard-refresh");
+    const fullRefreshBtn = document.getElementById("btn-leaderboard-full-refresh");
     if (refreshBtn) refreshBtn.disabled = true;
+    if (fullRefreshBtn) fullRefreshBtn.disabled = true;
 
     try {
       const targetMssv = activePlayer ? activePlayer.mssv : "";
@@ -1267,6 +1281,7 @@ const ReignsGame = (() => {
     } finally {
       isRefreshingLeaderboard = false;
       if (refreshBtn) refreshBtn.disabled = false;
+      if (fullRefreshBtn) fullRefreshBtn.disabled = false;
     }
   }
 
@@ -1428,16 +1443,18 @@ const ReignsGame = (() => {
     const btnRight = document.getElementById("btn-reigns-right");
     const pillLeft = document.getElementById("choice-pill-left");
     const pillRight = document.getElementById("choice-pill-right");
-    const soundBtn = document.getElementById("btn-game-sound-toggle");
     const rulesToggleBtn = document.getElementById("btn-game-rules-toggle");
     const rulesCloseBtn = document.getElementById("btn-game-rules-close");
     const refreshLbBtn = document.getElementById("btn-leaderboard-refresh");
+    const expandLbBtn = document.getElementById("btn-leaderboard-expand");
+    const fullLbModal = document.getElementById("leaderboard-full-modal");
+    const fullLbCloseBtn = document.getElementById("btn-leaderboard-full-close");
+    const fullLbRefreshBtn = document.getElementById("btn-leaderboard-full-refresh");
     const playerForm = document.getElementById("game-player-form");
     const nameInput = document.getElementById("player-name-input");
     const mssvInput = document.getElementById("player-mssv-input");
     const changePlayerBtn = document.getElementById("btn-change-player");
     const cancelPlayerBtn = document.getElementById("btn-player-cancel");
-    const focusFormBtn = document.getElementById("btn-focus-player-form");
 
     const saved = leaderboardClient.loadSavedPlayer();
     if (saved) {
@@ -1458,10 +1475,6 @@ const ReignsGame = (() => {
       });
     });
 
-    if (soundBtn) {
-      soundBtn.addEventListener("click", toggleSound);
-    }
-
     if (rulesToggleBtn) {
       rulesToggleBtn.addEventListener("click", () => {
         const isCurrentlyOpen =
@@ -1478,8 +1491,34 @@ const ReignsGame = (() => {
       refreshLbBtn.addEventListener("click", () => syncLeaderboardAndPlayer());
     }
 
-    if (focusFormBtn) {
-      focusFormBtn.addEventListener("click", focusPlayerForm);
+    if (expandLbBtn) {
+      expandLbBtn.addEventListener("click", openFullLeaderboardModal);
+    }
+
+    if (fullLbCloseBtn) {
+      fullLbCloseBtn.addEventListener("click", closeFullLeaderboardModal);
+    }
+
+    if (fullLbRefreshBtn) {
+      fullLbRefreshBtn.addEventListener("click", () => syncLeaderboardAndPlayer());
+    }
+
+    // Fallback light-dismiss cho trình duyệt chưa hỗ trợ thuộc tính closedby="any"
+    if (
+      fullLbModal &&
+      typeof HTMLDialogElement !== "undefined" &&
+      !("closedBy" in HTMLDialogElement.prototype)
+    ) {
+      fullLbModal.addEventListener("click", (event) => {
+        if (event.target !== fullLbModal) return;
+        const rect = fullLbModal.getBoundingClientRect();
+        const inside =
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width;
+        if (!inside) closeFullLeaderboardModal();
+      });
     }
 
     function bindPlayerFieldEvents(inputEl, transformFn) {
@@ -1666,6 +1705,10 @@ const ReignsGame = (() => {
     window.addEventListener("keydown", (e) => {
       const qrModal = document.getElementById("qr-modal");
       if (qrModal && !qrModal.classList.contains("hidden")) {
+        return;
+      }
+      const fullLb = document.getElementById("leaderboard-full-modal");
+      if (fullLb && fullLb.open) {
         return;
       }
       const activeTag =
@@ -2290,8 +2333,9 @@ const ReignsGame = (() => {
     resetGame,
     setCategory,
     onTabActivated,
-    stopAllSounds,
     stopConfetti,
+    openFullLeaderboardModal,
+    closeFullLeaderboardModal,
     getDeckCount: () => reignsDeck.length,
     _leaderboard: {
       normalizeDbUrl,

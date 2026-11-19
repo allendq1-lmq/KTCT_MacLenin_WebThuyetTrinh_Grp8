@@ -6,24 +6,6 @@ window.InteractiveQuiz = (() => {
   const OPTION_LETTERS = ["A", "B", "C", "D"];
   const QUIZ_ROUND_SIZE = 5;
 
-  // Nguồn âm thanh công cộng (Google Actions Sound Library - thân thiện CORS)
-  // kèm cơ chế tự động fallback sang Web Audio API nếu trình duyệt chặn / ngoại tuyến
-  const QUIZ_SOUND_URLS = {
-    correct:
-      "https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg",
-    wrong: "https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg",
-    complete:
-      "https://actions.google.com/sounds/v1/crowds/battle_crowd_celebrate_stutter.ogg",
-  };
-
-  const SOUND_ON_SVG =
-    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>';
-  const SOUND_OFF_SVG =
-    '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6m0-6l6 6"></path></svg>';
-
-  let soundEnabled = true;
-  let audioContext = null;
-  let activeAudios = {};
   let cardAnimTimer = null;
   let confettiAnimId = null;
   let confettiTimerId = null;
@@ -59,151 +41,6 @@ window.InteractiveQuiz = (() => {
       buildQuizRound();
     }
     return activeQuestions;
-  }
-
-  function ensureAudioElements() {
-    if (typeof Audio !== "function") return activeAudios;
-    Object.keys(QUIZ_SOUND_URLS).forEach((key) => {
-      if (!activeAudios[key]) {
-        const aud = new Audio(QUIZ_SOUND_URLS[key]);
-        aud.preload = "auto";
-        aud.crossOrigin = "anonymous";
-        activeAudios[key] = aud;
-      }
-    });
-    return activeAudios;
-  }
-
-  function getAudioContext() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return null;
-    if (!audioContext) {
-      audioContext = new AudioCtx();
-    }
-    if (
-      audioContext &&
-      audioContext.state === "suspended" &&
-      typeof audioContext.resume === "function"
-    ) {
-      audioContext.resume().catch(() => {});
-    }
-    return audioContext;
-  }
-
-  // Fallback tổng hợp âm thanh vui nhộn bằng Web Audio API
-  function synthesizeQuizTone(type) {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    const now = ctx.currentTime || 0;
-    const playStep = (freq, startOffset, duration, waveType, peakGain, slideToFreq) => {
-      try {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = waveType || "sine";
-        osc.frequency.setValueAtTime(freq, now + startOffset);
-        if (slideToFreq) {
-          osc.frequency.exponentialRampToValueAtTime(
-            slideToFreq,
-            now + startOffset + duration,
-          );
-        }
-        gain.gain.setValueAtTime(0.001, now + startOffset);
-        gain.gain.exponentialRampToValueAtTime(
-          peakGain || 0.16,
-          now + startOffset + 0.02,
-        );
-        gain.gain.exponentialRampToValueAtTime(
-          0.001,
-          now + startOffset + duration,
-        );
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + startOffset);
-        osc.stop(now + startOffset + duration + 0.02);
-      } catch (_) {}
-    };
-
-    if (type === "correct") {
-      // Tiếng chuông vui nhộn tăng dần (C5 - E5 - G5 - C6)
-      playStep(523.25, 0, 0.11, "triangle", 0.16);
-      playStep(659.25, 0.08, 0.12, "triangle", 0.17);
-      playStep(783.99, 0.16, 0.13, "triangle", 0.18);
-      playStep(1046.5, 0.24, 0.24, "sine", 0.2);
-    } else if (type === "wrong") {
-      // Tiếng "boing / kèn buồn hài hước" đi xuống
-      playStep(311.13, 0, 0.16, "sawtooth", 0.11, 246.94);
-      playStep(261.63, 0.17, 0.28, "sawtooth", 0.11, 164.81);
-    } else if (type === "complete") {
-      // Fanfare chúc mừng hoàn thành bài
-      playStep(523.25, 0, 0.14, "triangle", 0.17);
-      playStep(659.25, 0.12, 0.14, "triangle", 0.17);
-      playStep(783.99, 0.24, 0.14, "triangle", 0.18);
-      playStep(1046.5, 0.36, 0.35, "triangle", 0.22);
-      playStep(1318.51, 0.52, 0.42, "sine", 0.18);
-    }
-  }
-
-  function stopAllSounds() {
-    Object.values(activeAudios).forEach((aud) => {
-      try {
-        aud.pause();
-        aud.currentTime = 0;
-      } catch (_) {}
-    });
-  }
-
-  function playQuizSound(type) {
-    if (!soundEnabled) return;
-    stopAllSounds();
-
-    const audios = ensureAudioElements();
-    const aud = audios[type];
-    if (!aud) {
-      synthesizeQuizTone(type);
-      return;
-    }
-
-    let fallbackFired = false;
-    const triggerFallback = () => {
-      if (fallbackFired) return;
-      fallbackFired = true;
-      synthesizeQuizTone(type);
-    };
-
-    try {
-      aud.currentTime = 0;
-      const playPromise = aud.play();
-      if (playPromise && typeof playPromise.catch === "function") {
-        playPromise.catch(triggerFallback);
-      }
-    } catch (_) {
-      triggerFallback();
-    }
-  }
-
-  function syncSoundButtonUI() {
-    const btn = document.getElementById("btn-quiz-sound-toggle");
-    const icon = document.getElementById("quiz-sound-icon");
-    const label = document.getElementById("quiz-sound-label");
-    if (btn) btn.setAttribute("aria-pressed", String(soundEnabled));
-    if (icon) icon.innerHTML = soundEnabled ? SOUND_ON_SVG : SOUND_OFF_SVG;
-    if (label) {
-      label.textContent = soundEnabled ? "Âm thanh: BẬT" : "Âm thanh: TẮT";
-    }
-  }
-
-  function toggleSound() {
-    soundEnabled = !soundEnabled;
-    if (!soundEnabled) {
-      stopAllSounds();
-    }
-    syncSoundButtonUI();
-    return soundEnabled;
-  }
-
-  function isSoundEnabled() {
-    return soundEnabled;
   }
 
   // Hiệu ứng Pháo giấy (mini burst khi đúng từng câu, toàn màn hình khi đạt từ 90% trở lên)
@@ -636,9 +473,6 @@ window.InteractiveQuiz = (() => {
 
     if (isCorrect) {
       triggerMiniConfetti();
-      playQuizSound("correct");
-    } else {
-      playQuizSound("wrong");
     }
 
     return true;
@@ -703,7 +537,6 @@ window.InteractiveQuiz = (() => {
     if (total > 0 && score / total >= 0.9) {
       startFullConfetti();
     }
-    playQuizSound("complete");
   }
 
   function nextQuestion() {
@@ -718,7 +551,6 @@ window.InteractiveQuiz = (() => {
   }
 
   function restartQuiz() {
-    stopAllSounds();
     stopConfetti();
     currentIndex = 0;
     score = 0;
@@ -731,14 +563,10 @@ window.InteractiveQuiz = (() => {
     if (isInitialized) return;
     isInitialized = true;
 
-    const soundBtn = document.getElementById("btn-quiz-sound-toggle");
     const nextBtn = document.getElementById("btn-quiz-next");
     const restartBtn = document.getElementById("btn-quiz-restart");
     const backMuseumBtn = document.getElementById("btn-quiz-back-museum");
 
-    if (soundBtn) {
-      soundBtn.addEventListener("click", toggleSound);
-    }
     if (nextBtn) {
       nextBtn.addEventListener("click", nextQuestion);
     }
@@ -754,7 +582,6 @@ window.InteractiveQuiz = (() => {
     }
 
     buildQuizRound();
-    syncSoundButtonUI();
     renderQuestion();
   }
 
@@ -764,10 +591,6 @@ window.InteractiveQuiz = (() => {
     nextQuestion,
     restartQuiz,
     getFeedbackForScore,
-    toggleSound,
-    isSoundEnabled,
-    playQuizSound,
-    stopAllSounds,
     stopConfetti,
     getState: () => {
       const questions = getQuestions();

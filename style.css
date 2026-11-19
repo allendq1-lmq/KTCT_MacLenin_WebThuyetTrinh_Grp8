@@ -690,7 +690,6 @@ body.reveal-full-page {
 }
 
 .quiz-option-btn:focus-visible,
-#btn-quiz-sound-toggle:focus-visible,
 #btn-quiz-next:focus-visible,
 #btn-quiz-restart:focus-visible,
 #btn-quiz-back-museum:focus-visible {
@@ -883,4 +882,68 @@ body.reveal-full-page {
 .leaderboard-rank-3 {
   background-color: #ffedd5;
   color: #c4661b;
+}
+
+/* Modal Bảng Xếp Hạng Phóng To Toàn Màn Hình */
+.leaderboard-full-dialog {
+  width: min(calc(100vw - 1.5rem), 1120px);
+  height: calc(100dvh - 1.5rem);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  overflow: hidden;
+}
+
+.leaderboard-full-dialog:modal {
+  overscroll-behavior: contain;
+}
+
+.leaderboard-full-dialog::backdrop {
+  background-color: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+#leaderboard-full-scroll-body {
+  -webkit-overflow-scrolling: touch;
+}
+
+.leaderboard-full-table {
+  width: 100%;
+  min-width: 440px;
+  border-collapse: collapse;
+}
+
+.leaderboard-full-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 150ms ease;
+}
+
+.leaderboard-full-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-full-table tbody td {
+  padding: 0.55rem 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  vertical-align: middle;
+}
+
+@media (max-width: 639px) {
+  .leaderboard-full-dialog {
+    width: calc(100vw - 0.75rem);
+    height: calc(100dvh - 0.75rem);
+    border-radius: 0.875rem;
+  }
+
+  .leaderboard-full-table {
+    min-width: 340px;
+  }
+
+  .leaderboard-full-table tbody td {
+    padding: 0.45rem 0.35rem;
+    font-size: 0.75rem;
+  }
 }

@@ -184,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (targetTab !== "game" && window.ReignsGame) {
-      if (window.ReignsGame.stopAllSounds) window.ReignsGame.stopAllSounds();
       if (window.ReignsGame.stopConfetti) window.ReignsGame.stopConfetti();
     } else if (
       targetTab === "game" &&
@@ -195,8 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (targetTab !== "quiz" && window.InteractiveQuiz) {
-      if (window.InteractiveQuiz.stopAllSounds)
-        window.InteractiveQuiz.stopAllSounds();
       if (window.InteractiveQuiz.stopConfetti)
         window.InteractiveQuiz.stopConfetti();
     }

@@ -603,47 +603,6 @@ window.MuseumControls = (() => {
       );
     }
 
-    // Nút bật / tắt hiệu ứng âm thanh bước chân
-    const soundToggleBtn = document.getElementById("btn-museum-sound-toggle");
-    const soundToggleLabel = document.getElementById("sound-toggle-label");
-    const soundIconOn = document.getElementById("sound-icon-on");
-    const soundIconOff = document.getElementById("sound-icon-off");
-
-    const syncSoundToggleUi = () => {
-      const enabled =
-        window.MuseumAvatar &&
-        typeof window.MuseumAvatar.isSoundEnabled === "function"
-          ? window.MuseumAvatar.isSoundEnabled()
-          : true;
-      if (soundToggleBtn) {
-        soundToggleBtn.setAttribute("aria-pressed", enabled ? "true" : "false");
-        soundToggleBtn.classList.toggle("sound-muted", !enabled);
-        soundToggleBtn.classList.toggle("text-emerald-300", enabled);
-        soundToggleBtn.classList.toggle("border-emerald-500/35", enabled);
-      }
-      if (soundToggleLabel) {
-        soundToggleLabel.textContent = enabled ? "BẬT" : "TẮT";
-      }
-      if (soundIconOn) soundIconOn.classList.toggle("hidden", !enabled);
-      if (soundIconOff) soundIconOff.classList.toggle("hidden", enabled);
-    };
-
-    if (soundToggleBtn) {
-      syncSoundToggleUi();
-      soundToggleBtn.addEventListener("click", () => {
-        if (
-          window.MuseumAvatar &&
-          typeof window.MuseumAvatar.setSoundEnabled === "function" &&
-          typeof window.MuseumAvatar.isSoundEnabled === "function"
-        ) {
-          window.MuseumAvatar.setSoundEnabled(
-            !window.MuseumAvatar.isSoundEnabled(),
-          );
-          syncSoundToggleUi();
-        }
-      });
-    }
-
     document.addEventListener("pointerlockchange", () => {
       const isLocked = document.pointerLockElement === domElement;
       if (shiftLockLabel) {
@@ -765,12 +724,6 @@ window.MuseumControls = (() => {
       }
       if (e.data.type === "MUSEUM_SET_ACTIVE") {
         isActiveState = Boolean(e.data.active);
-        if (
-          window.MuseumAvatar &&
-          typeof window.MuseumAvatar.setSystemMuted === "function"
-        ) {
-          window.MuseumAvatar.setSystemMuted(!isActiveState);
-        }
         if (!isActiveState) {
           resetAllKeys();
         }
@@ -818,12 +771,6 @@ window.MuseumControls = (() => {
     resetAllKeys,
     setActive: (active) => {
       isActiveState = Boolean(active);
-      if (
-        window.MuseumAvatar &&
-        typeof window.MuseumAvatar.setSystemMuted === "function"
-      ) {
-        window.MuseumAvatar.setSystemMuted(!isActiveState);
-      }
       if (!isActiveState) resetAllKeys();
     },
     getKeysState,

@@ -1,13 +1,36 @@
+:root {
+  --canva-bg: #faf8f5;
+  --canva-surface: #ffffff;
+  --canva-ink: #1e293b;
+  --canva-heading: #0f172a;
+  --canva-muted: #475569;
+  --canva-border: #e2e8f0;
+  --canva-amber: #d97706;
+  --canva-emerald: #059669;
+  --canva-sky: #0284c7;
+  --canva-rose: #e11d48;
+  --canva-violet: #7c3aed;
+
+  --slide-accent: #d97706;
+  --slide-accent-soft: #fffbeb;
+  --slide-accent-border: #fde68a;
+  --slide-accent-ink: #92400e;
+}
+
 * {
   box-sizing: border-box;
 }
 
+body.canva-body,
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
+  background-color: var(--canva-bg);
+  color: var(--canva-ink);
+  font-family: "Be Vietnam Pro", "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -18,12 +41,7 @@ body {
   scrollbar-width: none;
 }
 
-.room-btn.active {
-  background-color: #d97706 !important;
-  color: #ffffff !important;
-}
-
-/* ================= GIAO DIỆN THUYẾT TRÌNH NỀN SÁNG CỐ ĐỊNH (HIGH-CONTRAST LIGHT MODE) ================= */
+/* ================= NỀN BIÊN TẬP CANVA & HỌA TIẾT HÌNH HỌC ================= */
 #presentation-panel {
   position: fixed;
   inset: 0;
@@ -31,9 +49,36 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: #f8fafc;
-  color: #1e293b;
-  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(245, 158, 11, 0.08), transparent 42%),
+    radial-gradient(circle at 92% 88%, rgba(5, 150, 105, 0.07), transparent 45%),
+    linear-gradient(155deg, #faf8f5 0%, #f5f2eb 52%, #faf8f5 100%);
+  color: var(--canva-ink);
+  font-family: "Be Vietnam Pro", "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.canva-bg-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.canva-decor-tl {
+  position: absolute;
+  top: -70px;
+  left: -60px;
+  width: clamp(220px, 24vw, 380px);
+  height: auto;
+}
+
+.canva-decor-br {
+  position: absolute;
+  bottom: -60px;
+  right: -70px;
+  width: clamp(240px, 26vw, 420px);
+  height: auto;
 }
 
 #presentation-panel h2,
@@ -47,210 +92,1026 @@ body {
 }
 
 #presentation-panel svg {
-  width: 1rem;
-  height: 1rem;
   flex-shrink: 0;
   display: inline-block;
   vertical-align: middle;
 }
 
-#pres-top-bar {
+#presentation-panel button:focus-visible,
+#presentation-panel select:focus-visible,
+#pres-reveal:focus-visible {
+  outline: 2px solid var(--canva-amber);
+  outline-offset: 2px;
+}
+
+/* ================= KHUNG REVEAL.JS NHÚNG (EMBEDDED DECK + CSS FALLBACK) ================= */
+#pres-main-scroll {
+  flex: 1;
+  min-height: 0;
   position: relative;
-  width: 100%;
-  height: 48px;
-  min-height: 48px;
-  max-height: 48px;
-  display: flex;
-  align-items: center;
-  padding: 0 0.75rem;
-  background-color: #ffffff;
-  border-bottom: 1px solid #cbd5e1;
-  flex-shrink: 0;
+  overflow: hidden;
+  padding-bottom: 52px;
 }
 
-#pres-top-bar > div:first-child {
-  max-width: 1680px;
-  width: 100%;
-  margin: 0 auto;
+#pres-reveal.reveal {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: normal !important;
+  color: var(--canva-ink) !important;
+  text-align: left !important;
+  touch-action: pan-y;
+}
+
+#pres-reveal.reveal:focus {
+  outline: none;
+}
+
+#pres-reveal.reveal .slides {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  inset: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  transform: none !important;
+  perspective: 1200px;
+}
+
+#pres-reveal.reveal .slides > section.pres-slide-section {
+  position: absolute !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column;
+  text-align: left !important;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  transition:
+    transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.36s ease;
+}
+
+#pres-reveal.reveal .slides > section.pres-slide-section.past {
+  transform: translate3d(-100%, 0, 0) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 1;
+}
+
+#pres-reveal.reveal .slides > section.pres-slide-section.present {
+  transform: translate3d(0, 0, 0) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 2;
+}
+
+#pres-reveal.reveal .slides > section.pres-slide-section.future {
+  transform: translate3d(100%, 0, 0) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 1;
+}
+
+/* Hiển thị ngay toàn bộ luận điểm trên slide */
+#pres-reveal.reveal .slides section .fragment,
+#pres-reveal.reveal .slides section .fragment.visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #pres-reveal.reveal .slides > section.pres-slide-section,
+  #pres-reveal.reveal .slides section .fragment {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ================= TYPOGRAPHY & SURFACE TOKENS CHUẨN CANVA ================= */
+.canva-card-surface,
+.pres-title-banner,
+.pres-summary-col,
+.pres-detail-col {
+  background-color: var(--canva-surface);
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  border-radius: 1.15rem;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 28px -14px rgba(15, 23, 42, 0.11);
+}
+
+.pres-title-banner {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(0.45rem, 0.95vh, 0.8rem) clamp(0.85rem, 1.35vw, 1.35rem);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.9rem;
+  border-left: 5px solid var(--slide-accent);
+  background: linear-gradient(125deg, #ffffff 0%, var(--slide-accent-soft) 140%);
 }
 
-#pres-top-bar > div:first-child > div {
+.canva-banner-main {
+  min-width: 0;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.canva-banner-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
+  gap: 0.45rem;
+  margin-bottom: 0.18rem;
 }
 
-#pres-top-bar [role="group"] {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15rem;
-}
-
-#pres-title-banner,
-#pres-summary-col,
-#pres-detail-col {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.75rem;
-}
-
-#pres-title-banner {
-  border-left: 6px solid #d97706;
-  padding: clamp(0.38rem, 0.85vh, 0.75rem) clamp(0.75rem, 1.2vw, 1.25rem);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-#pres-slide-title {
-  color: #0f172a;
-  font-size: clamp(1.1rem, 2.2vh, 1.65rem);
-  line-height: 1.22;
-}
-
-#pres-slide-subtitle {
-  color: #d97706;
-  font-size: clamp(0.75rem, 1.35vh, 0.95rem);
-}
-
-.pres-col-heading {
-  font-size: clamp(0.76rem, 1.35vh, 0.95rem);
+.pres-slide-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.68rem;
+  border-radius: 9999px;
+  background-color: var(--slide-accent-soft);
+  color: var(--slide-accent-ink);
+  border: 1px solid var(--slide-accent-border);
+  white-space: nowrap;
 }
 
-#pres-summary-col > div:first-child > div:first-child,
-#pres-detail-col > div:first-child {
+.pres-slide-subtitle {
+  color: var(--slide-accent-ink);
+  font-size: clamp(0.82rem, 1.05vw, 1rem);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.pres-slide-title {
+  color: var(--canva-heading);
+  font-size: clamp(1.45rem, 2.5vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+.canva-banner-visual {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.canva-theme-badge-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 0.88rem;
+  background-color: var(--slide-accent-soft);
+  border: 1px solid var(--slide-accent-border);
+  color: var(--slide-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.1);
+}
+
+.canva-theme-svg {
+  width: 24px;
+  height: 24px;
+}
+
+.canva-room-watermark {
+  font-size: clamp(2.8rem, 5vw, 4.75rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--slide-accent);
+  opacity: 0.1;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* Tiêu đề panel */
+.canva-panel-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 0.3rem;
-  margin-bottom: 0.35rem;
-  border-bottom: 1px solid #e2e8f0;
+  gap: 0.5rem;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.42rem;
+  border-bottom: 1px dashed #cbd5e1;
   flex-shrink: 0;
 }
 
-#pres-summary-col,
-#pres-detail-col {
-  padding: clamp(0.55rem, 1.1vh, 1rem) clamp(0.7rem, 1.1vw, 1.15rem);
+.pres-col-heading {
+  font-size: clamp(0.75rem, 0.95vw, 0.9rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--canva-heading);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
+.canva-count-chip {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.56rem;
+  border-radius: 9999px;
+  background-color: var(--slide-accent-soft);
+  color: var(--slide-accent-ink);
+  border: 1px solid var(--slide-accent-border);
+  white-space: nowrap;
+}
+
+.canva-topic-chip {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.18rem 0.56rem;
+  border-radius: 9999px;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  white-space: nowrap;
+}
+
+.pres-summary-col,
+.pres-detail-col {
+  padding: clamp(0.55rem, 1.05vh, 0.95rem) clamp(0.75rem, 1.2vw, 1.15rem);
+}
+
+/* Thẻ luận điểm chính */
 .pres-key-points-list {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.3rem, 0.65vh, 0.55rem);
+  gap: clamp(0.32rem, 0.62vh, 0.52rem);
 }
 
 .pres-key-card {
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  color: #0f172a;
-  padding: clamp(0.35rem, 0.7vh, 0.6rem) clamp(0.5rem, 0.8vw, 0.75rem);
-  border-radius: 0.6rem;
+  background-color: #fafaf9;
+  border: 1px solid #e2e8f0;
+  border-left: 3.5px solid var(--slide-accent);
+  color: var(--canva-heading);
+  padding: clamp(0.36rem, 0.68vh, 0.56rem) clamp(0.55rem, 0.85vw, 0.78rem);
+  border-radius: 0.78rem;
   display: flex;
   align-items: flex-start;
-  gap: 0.45rem;
+  gap: 0.55rem;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
 }
 
 .pres-key-card > span:first-child {
   flex-shrink: 0;
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.45rem;
+  height: 1.45rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.35rem;
-  font-size: 0.72rem;
+  border-radius: 9999px;
+  font-size: 0.74rem;
   font-weight: 800;
-  background-color: #fffbeb;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background-color: var(--slide-accent);
+  color: #ffffff;
+  margin-top: 0.1rem;
 }
 
 .pres-key-card p {
-  color: #0f172a;
-  font-size: clamp(0.76rem, 1.35vh, 0.95rem);
-  line-height: 1.32;
+  color: var(--canva-heading);
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  font-weight: 600;
+  line-height: 1.55;
 }
 
-#pres-summary-desc-box {
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  color: #1e293b;
-  padding: clamp(0.4rem, 0.75vh, 0.65rem) clamp(0.55rem, 0.8vw, 0.8rem);
+/* Hộp Khái quát nội dung / Quote Card */
+.pres-summary-desc-box {
+  position: relative;
+  background: linear-gradient(145deg, #f8fafc 0%, #fffbeb 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 0.88rem;
+  color: var(--canva-ink);
+  padding: clamp(0.45rem, 0.82vh, 0.72rem) clamp(0.65rem, 0.95vw, 0.9rem);
 }
 
-#pres-summary-desc-box span {
-  color: #0284c7;
+.canva-quote-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--slide-accent-ink);
+  margin-bottom: 0.16rem;
 }
 
-#pres-slide-desc {
-  color: #1e293b;
-  font-size: clamp(0.74rem, 1.28vh, 0.9rem);
-  line-height: 1.36;
+.pres-slide-desc {
+  color: #334155;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  line-height: 1.55;
 }
 
-/* Nội dung chi tiết bên phải co giãn linh hoạt theo khung nhìn */
+/* Nội dung phân tích & subcards */
 .pres-projector-content {
-  font-size: clamp(0.78rem, 1.38vh, 0.96rem);
-  line-height: 1.4;
-  color: #1e293b;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  line-height: 1.55;
+  color: var(--canva-ink);
 }
 
 .pres-detail-stack {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.4rem, 0.85vh, 0.75rem);
+  gap: clamp(0.4rem, 0.85vh, 0.72rem);
 }
 
 .pres-subcard {
-  padding: clamp(0.45rem, 0.85vh, 0.75rem) clamp(0.6rem, 0.9vw, 0.9rem);
-  border-radius: 0.65rem;
+  position: relative;
+  padding: clamp(0.5rem, 0.92vh, 0.8rem) clamp(0.68rem, 1.05vw, 1rem);
+  border-radius: 1rem;
+  box-shadow: 0 3px 12px -4px rgba(15, 23, 42, 0.06);
+  border-width: 1px;
+}
+
+/* Huy hiệu số thứ tự tròn + SVG icon trên góc phải mỗi thẻ subcard */
+.canva-subcard-head {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  pointer-events: none;
+}
+
+.canva-subcard-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.45rem;
+  height: 1.45rem;
+  padding: 0 0.28rem;
+  border-radius: 9999px;
+  background-color: var(--slide-accent);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.canva-subcard-index::before {
+  content: attr(data-subcard-num);
+}
+
+.canva-subcard-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--slide-accent-border);
+  color: var(--slide-accent);
+}
+
+.canva-subcard-icon svg {
+  width: 0.86rem;
+  height: 0.86rem;
+}
+
+.pres-subcard:has(.canva-subcard-head) > h4:first-of-type,
+.pres-subcard:has(.canva-subcard-head) > strong:first-of-type,
+.pres-subcard:has(.canva-subcard-head) > span:first-of-type {
+  padding-right: 3.35rem;
 }
 
 .pres-projector-content h4 {
-  font-size: clamp(0.82rem, 1.45vh, 1.02rem) !important;
-  line-height: 1.28 !important;
-  margin-bottom: 0.15rem !important;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.32 !important;
+  margin-bottom: 0.22rem !important;
+  letter-spacing: -0.01em;
 }
 
 .pres-projector-content p,
 .pres-projector-content li,
 .pres-projector-content blockquote {
-  font-size: clamp(0.76rem, 1.34vh, 0.94rem) !important;
-  line-height: 1.38 !important;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem) !important;
+  line-height: 1.55 !important;
 }
 
-/* Bảng so sánh 6 tiêu chí vừa khít 1 màn hình */
+/* ================= HUY HIỆU SỐ LIỆU KPI & KHUNG THỰC TIỄN VIỆT NAM ================= */
+.canva-kpi-wrap {
+  display: inline;
+  white-space: nowrap;
+}
+
+.canva-kpi-pill {
+  display: inline;
+  padding: 0.05rem 0.4rem;
+  margin: 0;
+  border-radius: 0.38rem;
+  background-color: #fef3c7;
+  color: #78350f;
+  border: 1px solid #f59e0b;
+  font-weight: 800;
+  white-space: nowrap;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.canva-vn-tag {
+  display: inline-block;
+  padding: 0.05rem 0.46rem;
+  border-radius: 9999px;
+  background-color: #059669;
+  color: #ffffff !important;
+  font-size: 0.78em;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-right: 0.28rem;
+}
+
+.canva-vn-callout {
+  margin-top: 0.38rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.68rem;
+  background: linear-gradient(135deg, #ffffff 0%, #ecfdf5 100%);
+  border: 1px solid #a7f3d0;
+  border-left: 3.5px solid #059669;
+  color: #064e3b;
+}
+
+/* ================= 6 KIẾN TRÚC BỐ CỤC CANVA RIÊNG BIỆT ================= */
+
+/* 1. HERO COVER: Poster bất đối xứng bên trái (5-col) + Lưới 2x2 & phân tích bên phải (7-col) */
+.canva-layout-hero {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.55rem, 1vw, 1rem);
+}
+
+.canva-hero-poster {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: clamp(0.75rem, 1.4vh, 1.25rem) clamp(0.9rem, 1.5vw, 1.45rem);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at 86% 16%, color-mix(in srgb, var(--slide-accent) 18%, transparent), transparent 52%),
+    linear-gradient(155deg, #ffffff 0%, var(--slide-accent-soft) 100%);
+  border: 1px solid var(--slide-accent-border);
+  border-top: 6px solid var(--slide-accent);
+  box-shadow: 0 14px 32px -16px rgba(15, 23, 42, 0.16);
+}
+
+.canva-hero-poster .pres-title-banner {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  display: block;
+}
+
+.canva-hero-visual-stage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--slide-accent-border);
+}
+
+.canva-hero-illustration {
+  width: clamp(66px, 6vw, 94px);
+  height: clamp(66px, 6vw, 94px);
+  filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.12));
+}
+
+.canva-hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.45rem, 0.85vh, 0.8rem);
+  min-height: 0;
+}
+
+.canva-hero-right .pres-key-points-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+/* 2. LƯỚI THẺ TOÀN CHIỀU RỘNG: Tầng Header + Quote ngang -> Dải tóm tắt -> Lưới thẻ */
+.canva-layout-grid {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vh, 0.72rem);
+}
+
+.canva-grid-header-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.45rem, 0.9vw, 0.85rem);
+  flex-shrink: 0;
+}
+
+.canva-grid-strip {
+  flex-shrink: 0;
+  padding: clamp(0.4rem, 0.75vh, 0.62rem) clamp(0.65rem, 1vw, 0.9rem);
+}
+
+.canva-grid-strip .pres-key-points-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.42rem;
+}
+
+.canva-grid-canvas {
+  flex: 1;
+  min-height: 0;
+}
+
+.canva-grid-canvas .pres-subcard {
+  border-top: 3.5px solid var(--slide-accent);
+  border-radius: 1.05rem;
+}
+
+/* 3. SPLIT EDITORIAL + CONNECTED TIMELINE */
+.canva-layout-timeline {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.42rem, 0.85vh, 0.8rem);
+}
+
+.canva-quote-card {
+  background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 140%) !important;
+  border: 1px solid #fcd34d !important;
+  border-left: 4.5px solid #d97706 !important;
+  padding-left: 1rem !important;
+}
+
+.canva-quote-card::before {
+  content: "“";
+  position: absolute;
+  top: -0.2rem;
+  right: 0.7rem;
+  font-size: 3rem;
+  line-height: 1;
+  font-family: Georgia, serif;
+  color: #d97706;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.canva-timeline-rail {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.canva-timeline-rail::before {
+  content: "";
+  position: absolute;
+  left: 0.44rem;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  width: 3px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, var(--slide-accent), #059669);
+  opacity: 0.5;
+}
+
+.canva-timeline-rail > * {
+  position: relative;
+}
+
+.canva-timeline-rail > *::before {
+  content: "";
+  position: absolute;
+  left: -1.28rem;
+  top: 0.95rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  border: 3px solid var(--slide-accent);
+  box-shadow: 0 0 0 4px var(--slide-accent-soft);
+  z-index: 2;
+}
+
+/* 4. FEATURE PILLARS: Đảo chiều Editorial (Showcase 8 cột bên trái + Sidebar 4 cột bên phải) */
+.canva-layout-pillars {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.42rem, 0.85vh, 0.8rem);
+}
+
+.canva-pillars-showcase {
+  border-top: 4px solid var(--slide-accent);
+  background: linear-gradient(180deg, #ffffff 0%, var(--slide-accent-soft) 180%);
+}
+
+.canva-pillars-sidebar {
+  background: linear-gradient(180deg, var(--slide-accent-soft) 0%, #ffffff 42%);
+}
+
+/* 5. SPOTLIGHT COMPARISON MATRIX (r3-table) */
+.canva-layout-matrix {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.38rem, 0.75vh, 0.65rem);
+}
+
+.canva-layout-matrix .canva-grid-strip .pres-key-points-list {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.38rem;
+}
+
+.canva-layout-matrix .pres-detail-col {
+  border: 2px solid #f59e0b;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbeb 160%);
+}
+
 .pres-comp-table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: clamp(0.72rem, 1.24vh, 0.88rem) !important;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: clamp(0.78rem, 1.02vw, 0.96rem) !important;
+}
+
+.pres-comp-table thead tr th:first-child {
+  border-top-left-radius: 0.65rem;
+}
+
+.pres-comp-table thead tr th:last-child {
+  border-top-right-radius: 0.65rem;
 }
 
 .pres-comp-table th,
 .pres-comp-table td {
-  padding: clamp(0.28rem, 0.58vh, 0.52rem) clamp(0.45rem, 0.75vw, 0.8rem) !important;
-  line-height: 1.28 !important;
+  padding: clamp(0.32rem, 0.6vh, 0.56rem) clamp(0.5rem, 0.85vw, 0.9rem) !important;
+  line-height: 1.38 !important;
   vertical-align: top;
 }
 
-/* Danh sách 10 tài liệu tham khảo ở Slide 20 */
-.pres-ref-list {
-  padding-left: 1.1rem;
+/* 6. ACADEMIC CITATION GRID (r3-verdict) */
+.canva-layout-citations {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.38rem, 0.75vh, 0.65rem);
 }
 
-.pres-ref-list li {
-  font-size: clamp(0.68rem, 1.14vh, 0.8rem) !important;
-  line-height: 1.25 !important;
+.canva-layout-citations .canva-verdict-box {
+  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 70%, #ecfdf5 100%);
+  border: 2px solid #f59e0b;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.pres-ref-list {
+  padding-left: 0 !important;
+  list-style: none !important;
+}
+
+.canva-citation-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  padding: 0.36rem 0.54rem;
+  border-radius: 0.72rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+  font-size: clamp(0.72rem, 0.9vw, 0.85rem) !important;
+  line-height: 1.36 !important;
+  color: #334155;
+}
+
+.canva-citation-num {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1rem 0.38rem;
+  border-radius: 0.42rem;
+  background-color: #df7a28;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+  margin-top: 0.08rem;
+}
+
+.canva-citation-num::before {
+  content: attr(data-cite-num);
+}
+
+.canva-citation-body {
+  min-width: 0;
+  flex: 1;
+}
+
+/* ================= FLOATING PRESENTER DOCK (THANH CÔNG CỤ NỔI TỐI GIẢN) ================= */
+.canva-dock-shell {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  padding: 0 0.75rem;
+  pointer-events: none;
+}
+
+.canva-presenter-dock {
+  pointer-events: auto;
+  max-width: min(1240px, 100%);
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow:
+    0 10px 28px -8px rgba(15, 23, 42, 0.18),
+    0 2px 6px rgba(15, 23, 42, 0.06);
+  overflow-x: auto;
+}
+
+.canva-dock-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.canva-room-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.16rem;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}
+
+.room-btn {
+  padding: 0.22rem 0.58rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #475569;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.room-btn:hover {
+  color: #0f172a;
+}
+
+.room-btn.active {
+  background-color: #df7a28 !important;
+  color: #ffffff !important;
+  box-shadow: none;
+}
+
+.canva-room-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #475569;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.canva-slide-select {
+  background-color: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  max-width: clamp(115px, 17vw, 240px);
+  cursor: pointer;
+}
+
+.canva-slide-select:hover {
+  border-color: #d97706;
+}
+
+.canva-dock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.24rem 0.65rem;
+  min-block-size: 30px;
+  border-radius: 9999px;
+  font-size: 0.73rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease,
+    transform 120ms ease;
+}
+
+.canva-dock-btn:active {
+  transform: scale(0.96);
+}
+
+.canva-dock-btn-ghost {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.canva-dock-btn-ghost:hover {
+  background-color: #e2e8f0;
+}
+
+.canva-dock-btn-soft {
+  background-color: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.canva-dock-btn-soft:hover {
+  background-color: #fef3c7;
+}
+
+.canva-dock-btn-primary {
+  background-color: #df7a28;
+  color: #ffffff;
+  border: 1px solid #b85d14;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
+.canva-dock-btn-primary:hover {
+  background-color: #c4661b;
+}
+
+.canva-dock-btn-dark {
+  background-color: #df7a28;
+  color: #ffffff;
+  border: 1px solid #b85d14;
+}
+
+.canva-dock-btn-dark:hover {
+  background-color: #c4661b;
+}
+
+.canva-dock-btn-dark[aria-pressed="true"] {
+  background-color: #c4661b;
+  color: #ffffff;
+  border-color: #9a4a0f;
+}
+
+.canva-counter-pill {
+  padding: 0.24rem 0.7rem;
+  border-radius: 9999px;
+  background-color: #df7a28;
+  color: #ffffff;
+  border: 1px solid #b85d14;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
+/* Nút thoát toàn màn hình tối giản, bán trong suốt tinh tế ở góc trên bên phải */
+.pres-exit-fs-btn {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.85rem;
+  z-index: 60;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
+  opacity: 0.35;
+  cursor: pointer;
+  transition:
+    opacity 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 140ms ease;
+}
+
+.pres-exit-fs-btn:hover,
+.pres-exit-fs-btn:focus-visible {
+  opacity: 0.92;
+  background-color: rgba(223, 122, 40, 0.92);
+  border-color: rgba(255, 255, 255, 0.48);
+}
+
+.pres-exit-fs-btn:active {
+  transform: scale(0.94);
+}
+
+.pres-exit-fs-btn.hidden {
+  display: none !important;
+}
+
+#presentation-panel.pres-fullscreen-active #pres-dock-shell,
+#presentation-panel.pres-fullscreen-active #pres-top-bar,
+#presentation-panel.pres-fullscreen-active .canva-progress-track {
+  display: none !important;
+}
+
+#presentation-panel.pres-fullscreen-active #pres-main-scroll {
+  padding-bottom: 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+}
+
+.canva-frag-pill {
+  padding: 0.22rem 0.55rem;
+  border-radius: 9999px;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Thanh tiến độ đáy */
+.canva-progress-track {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3.5px;
+  background-color: rgba(203, 213, 225, 0.55);
+  z-index: 35;
+}
+
+.canva-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 55%, #059669 100%);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Fallback Grid helpers inside #presentation-panel (hoạt động cả khi offline không có CDN) */
@@ -264,13 +1125,15 @@ body {
   gap: 0.55rem;
 }
 #presentation-panel .gap-x-4 {
-  column-gap: 1rem;
+  column-gap: 0.85rem;
 }
 #presentation-panel .gap-y-1 {
-  row-gap: 0.22rem;
+  row-gap: 0.32rem;
 }
 @media (min-width: 640px) {
-  #presentation-panel .sm\:grid-cols-2 {
+  #presentation-panel .sm\:grid-cols-2,
+  .canva-hero-right .pres-key-points-list,
+  .canva-grid-strip .pres-key-points-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   #presentation-panel .sm\:grid-cols-4 {
@@ -289,59 +1152,82 @@ body {
   }
 }
 
-/* ================= BỐ CỤC MÁY TÍNH (>= 1024px): TUYỆT ĐỐI KHÔNG CUỘN DỌC (ZERO VERTICAL SCROLL) ================= */
+/* ================= BỐ CỤC MÁY TÍNH (>= 1024px): ĐA DẠNG 6 KIẾN TRÚC KHÔNG TRÀN KHUNG ================= */
 @media (min-width: 1024px) {
   #presentation-panel {
     height: 100vh;
     overflow: hidden;
   }
 
-  #pres-main-scroll {
-    flex: 1;
-    min-height: 0;
+  #pres-reveal.reveal .slides > section.pres-slide-section {
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(0.4rem, 0.9vh, 0.85rem) clamp(0.75rem, 1.4vw, 1.5rem);
+    padding: clamp(0.45rem, 1vh, 0.9rem) clamp(0.85rem, 1.5vw, 1.65rem) 0.35rem;
   }
 
   .pres-slide-stage {
     flex: 1;
     min-height: 0;
-    max-width: 1680px;
+    max-width: 1640px;
     width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: clamp(0.4rem, 0.85vh, 0.8rem);
+    gap: clamp(0.42rem, 0.9vh, 0.85rem);
     overflow: hidden;
   }
 
-  #pres-content-grid {
+  .pres-content-grid {
     flex: 1;
     min-height: 0;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     align-items: stretch;
-    gap: clamp(0.5rem, 0.95vw, 0.95rem);
+    gap: clamp(0.55rem, 1vw, 1rem);
     overflow: hidden;
   }
 
-  #pres-summary-col.lg\:col-span-4 {
-    grid-column: span 4 / span 4;
+  /* Hero Cover: Poster 5 cột trái + Nội dung 7 cột phải */
+  .canva-layout-hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: stretch;
+    overflow: hidden;
   }
-  #pres-detail-col.lg\:col-span-8 {
-    grid-column: span 8 / span 8;
+  .canva-hero-poster {
+    grid-column: span 5 / span 5;
+    min-height: 0;
+    overflow-y: auto;
   }
-  #pres-summary-col.lg\:col-span-3 {
-    grid-column: span 3 / span 3;
+  .canva-hero-right {
+    grid-column: span 7 / span 7;
+    min-height: 0;
+    overflow: hidden;
   }
-  #pres-detail-col.lg\:col-span-9 {
-    grid-column: span 9 / span 9;
+  .canva-hero-right .pres-summary-col {
+    flex-shrink: 0;
+  }
+  .canva-hero-right .pres-detail-col {
+    flex: 1;
+    min-height: 0;
   }
 
-  #pres-summary-col,
-  #pres-detail-col {
+  /* Lưới Thẻ, Ma Trận So Sánh & Nguồn Tham Khảo: Header + Strip 4 cột ngang + Canvas 12 cột rộng */
+  .canva-grid-header-row {
+    grid-template-columns: 7fr 5fr;
+    align-items: stretch;
+  }
+  .canva-grid-strip .pres-key-points-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pres-summary-col.lg\:col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+  .pres-detail-col.lg\:col-span-8 {
+    grid-column: span 8 / span 8;
+  }
+
+  .pres-summary-col,
+  .pres-detail-col {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -349,7 +1235,7 @@ body {
     overflow: hidden;
   }
 
-  #pres-slide-body {
+  .pres-slide-body {
     flex: 1;
     min-height: 0;
     display: flex;
@@ -361,27 +1247,81 @@ body {
     padding-right: 0.25rem;
   }
 
-  /* Căn giữa an toàn khi nội dung ngắn, tự neo sát mép trên để cuộn đủ khi tràn trên màn hình 1366x768 */
-  #pres-slide-body > * {
+  .pres-slide-body > * {
     width: 100%;
   }
 
-  #pres-slide-body > :first-child {
+  .pres-slide-body > :first-child {
     margin-top: auto;
   }
 
-  #pres-slide-body > :last-child {
+  .pres-slide-body > :last-child {
     margin-bottom: auto;
+  }
+}
+
+/* Tinh chỉnh thông minh theo chiều cao gọn của laptop (1366x768) giữ nguyên readability và không tràn */
+@media (min-width: 1024px) and (max-height: 790px) {
+  #pres-main-scroll {
+    padding-bottom: 48px;
+  }
+
+  .pres-slide-title {
+    font-size: clamp(1.22rem, 1.85vw, 1.58rem);
+  }
+
+  .pres-key-card {
+    padding: 0.34rem 0.52rem;
+  }
+
+  .pres-key-card p {
+    font-size: 0.84rem;
+    line-height: 1.34;
+  }
+
+  .pres-slide-desc {
+    font-size: 0.81rem;
+    line-height: 1.38;
+  }
+
+  .pres-projector-content p,
+  .pres-projector-content li,
+  .pres-projector-content blockquote {
+    font-size: 0.83rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .pres-subcard {
+    padding: 0.42rem 0.65rem;
+  }
+
+  .canva-vn-callout {
+    margin-top: 0.24rem;
+    padding: 0.26rem 0.45rem;
+  }
+
+  .pres-comp-table th,
+  .pres-comp-table td {
+    padding: 0.26rem 0.48rem !important;
+    font-size: 0.77rem !important;
+  }
+
+  .canva-citation-card {
+    padding: 0.26rem 0.45rem;
+    font-size: 0.71rem !important;
   }
 }
 
 /* ================= BỐ CỤC MOBILE & TABLET (< 1024px) ================= */
 @media (max-width: 1023px) {
   #pres-main-scroll {
-    flex: 1;
+    padding-bottom: 54px;
+  }
+
+  #pres-reveal.reveal .slides > section.pres-slide-section.present {
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0.65rem;
+    padding: 0.65rem 0.65rem 1.2rem;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -391,22 +1331,135 @@ body {
     gap: 0.65rem;
   }
 
-  #pres-content-grid {
+  .pres-content-grid {
     gap: 0.65rem;
+  }
+
+  .canva-room-watermark,
+  .canva-hero-visual-stage {
+    display: none;
+  }
+
+  .canva-dock-shell {
+    bottom: 6px;
+    padding: 0 0.45rem;
+  }
+
+  .canva-presenter-dock {
+    width: 100%;
+    padding: 0.3rem 0.45rem;
+    gap: 0.3rem;
+  }
+
+  .canva-frag-pill {
+    display: none;
+  }
+
+  .canva-dock-btn {
+    min-block-size: 32px;
+    padding: 0.26rem 0.5rem;
   }
 }
 
-#pres-main-scroll::-webkit-scrollbar,
-#pres-slide-body::-webkit-scrollbar {
+@media (max-width: 767px), (max-height: 520px) {
+  .canva-dock-right {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .canva-presenter-dock {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.25rem 0.38rem;
+    gap: 0.25rem;
+    overflow: visible;
+    justify-content: space-between;
+  }
+
+  .canva-dock-left {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 0.22rem;
+  }
+
+  .canva-room-pills {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .room-btn {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.68rem;
+  }
+
+  .canva-slide-select {
+    flex: 1 1 56px;
+    min-width: 52px;
+    max-width: 120px;
+    padding: 0.2rem 0.35rem;
+    font-size: 0.68rem;
+  }
+
+  .canva-dock-center {
+    gap: 0.2rem;
+  }
+
+  .canva-counter-pill {
+    padding: 0.2rem 0.45rem;
+    font-size: 0.67rem;
+  }
+
+  .canva-dock-btn {
+    min-block-size: 30px;
+    padding: 0.22rem 0.42rem;
+  }
+}
+
+@media (max-height: 520px) {
+  #pres-main-scroll {
+    padding-bottom: 44px;
+  }
+
+  #pres-reveal.reveal .slides > section.pres-slide-section.present {
+    padding: 0.45rem 0.6rem 0.9rem;
+  }
+
+  .pres-title-banner {
+    padding: 0.42rem 0.7rem;
+  }
+
+  .pres-slide-title {
+    font-size: 1.15rem;
+  }
+
+  .canva-dock-shell {
+    bottom: 4px;
+  }
+
+  .canva-presenter-dock {
+    width: fit-content;
+    padding: 0.22rem 0.45rem;
+    gap: 0.35rem;
+  }
+
+  .canva-dock-btn {
+    min-block-size: 28px;
+    padding: 0.18rem 0.48rem;
+  }
+}
+
+#pres-reveal.reveal .slides > section.pres-slide-section::-webkit-scrollbar,
+.pres-slide-body::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-#pres-main-scroll::-webkit-scrollbar-track,
-#pres-slide-body::-webkit-scrollbar-track {
+#pres-reveal.reveal .slides > section.pres-slide-section::-webkit-scrollbar-track,
+.pres-slide-body::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
-#pres-main-scroll::-webkit-scrollbar-thumb,
-#pres-slide-body::-webkit-scrollbar-thumb {
+#pres-reveal.reveal .slides > section.pres-slide-section::-webkit-scrollbar-thumb,
+.pres-slide-body::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 3px;
 }

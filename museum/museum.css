@@ -35,7 +35,7 @@ body {
 }
 
 .room-btn.active {
-  background-color: #d97706 !important;
+  background-color: #df7a28 !important;
   color: #ffffff !important;
 }
 
@@ -129,23 +129,184 @@ body {
 
 .dpad-btn:active,
 .dpad-btn.dpad-active {
-  background-color: #f59e0b !important;
-  color: #000000 !important;
-  border-color: #fbbf24 !important;
+  background-color: #df7a28 !important;
+  color: #ffffff !important;
+  border-color: #b85d14 !important;
   transform: scale(0.92);
 }
 
-/* Tối ưu Mobile (< 768px): thu gọn Virtual D-Pad không che vùng nhìn */
+.drawer-visual-showcase {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+.drawer-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.drawer-visual-grid.single-panel {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.drawer-visual-card {
+  background: #0f172a;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-visual-card img {
+  width: 100%;
+  height: 185px;
+  object-fit: cover;
+  display: block;
+  background: #090f1d;
+}
+
+.drawer-visual-card.is-infographic img {
+  object-fit: contain;
+}
+
+.drawer-visual-card-label {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fde68a;
+  background: #111827;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.drawer-visual-caption {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #475569;
+  font-style: italic;
+  text-align: center;
+}
+
+#btn-museum-sound-toggle.sound-muted {
+  color: #fda4af;
+  border-color: rgba(244, 63, 94, 0.45);
+  background-color: rgba(30, 41, 59, 0.92);
+}
+
+/* Tối ưu Mobile Portrait (< 768px): giữ thanh Phòng, Âm thanh và Shift-Lock trên 1 hàng gọn, thu gọn D-Pad */
+@media (max-width: 1023px) {
+  .museum-sound-detail {
+    display: none;
+  }
+}
+
 @media (max-width: 767px) {
   .virtual-dpad-container {
-    bottom: 14px;
+    bottom: 12px;
     left: 10px;
   }
 
   .dpad-btn {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 10px;
+  }
+
+  .drawer-visual-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .drawer-visual-card img {
+    height: 155px;
+  }
+}
+
+@media (max-width: 639px) {
+  .museum-shiftlock-detail,
+  .museum-sound-detail {
+    display: none !important;
+  }
+
+  #museum-top-bar {
+    top: 8px !important;
+    left: 6px !important;
+    right: 6px !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+  }
+
+  #museum-top-bar > div {
+    padding: 3px !important;
+    gap: 3px !important;
+  }
+
+  .room-btn {
+    padding: 0.28rem 0.42rem !important;
+    font-size: 0.68rem !important;
+    white-space: nowrap !important;
+    margin-left: 0 !important;
+  }
+
+  #btn-shiftlock-status,
+  #btn-museum-sound-toggle {
+    padding: 0.28rem 0.4rem !important;
+    font-size: 0.68rem !important;
+    gap: 3px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Tối ưu Mobile Landscape (chiều cao thấp <= 520px, ví dụ 812x375, 844x390): không bao giờ đè giữa thanh Phòng và D-pad */
+@media (max-height: 520px) {
+  #museum-top-bar {
+    top: 6px !important;
+    left: 8px !important;
+    right: 8px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .museum-room-short {
+    display: inline !important;
+  }
+
+  .museum-room-full,
+  .museum-shiftlock-detail,
+  .museum-sound-detail {
+    display: none !important;
+  }
+
+  .room-btn {
+    padding: 0.28rem 0.58rem !important;
+    font-size: 0.7rem !important;
+    white-space: nowrap !important;
+  }
+
+  #btn-shiftlock-status,
+  #btn-museum-sound-toggle {
+    padding: 0.28rem 0.52rem !important;
+    font-size: 0.7rem !important;
+    white-space: nowrap !important;
+  }
+
+  .virtual-dpad-container {
+    bottom: 8px;
+    left: 10px;
+    gap: 4px;
+  }
+
+  .dpad-row {
+    gap: 4px;
+  }
+
+  .dpad-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
   }
 }
 

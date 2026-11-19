@@ -18,139 +18,146 @@
     <!-- Header & Điều hướng -->
     <header
       id="app-header"
-      class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white h-20 flex items-center"
+      class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white flex items-center"
     >
       <div
-        class="max-w-[1600px] w-full mx-auto px-3 sm:px-6 flex items-center justify-between gap-2"
+        id="header-inner"
+        class="max-w-[1600px] w-full mx-auto px-2.5 sm:px-5 lg:px-6"
       >
-        <div class="flex items-center space-x-3 min-w-0">
+        <div
+          id="header-brand"
+          class="flex items-center space-x-2 sm:space-x-3 min-w-0"
+        >
           <div
-            class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-lg shrink-0 shadow-md shadow-amber-500/20"
+            class="header-logo-badge w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-xl bg-[#df7a28] text-white font-black flex items-center justify-center text-base sm:text-lg shrink-0 shadow-sm border border-[#c4661b]"
           >
             8
           </div>
-          <div class="truncate">
+          <div class="min-w-0">
             <span
-              class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-amber-400 block"
-              >Học phần: KTCT Mác - Lênin • Nhóm 8</span
+              id="header-brand-kicker"
+              class="text-[10.5px] sm:text-xs font-bold tracking-wide text-amber-300 block leading-tight"
+              >Kinh tế chính trị Mác - Lênin Nhóm 8</span
             >
             <h1
-              class="text-sm sm:text-base md:text-lg font-bold text-white tracking-tight truncate"
+              id="header-brand-title"
+              class="text-[10.5px] sm:text-[11.5px] xl:text-[13px] font-bold text-white tracking-tight leading-tight"
             >
-              KTTT Định Hướng XHCN &amp; Giới Hạn Lịch Sử CNTB
+              Kinh tế thị trường định hướng xã hội chủ nghĩa &amp; Giới hạn lịch sử của chủ nghĩa tư bản
             </h1>
           </div>
         </div>
 
-        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 min-w-0">
-          <nav
-            class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/80 space-x-1 overflow-x-auto max-w-[58vw] sm:max-w-none"
-            aria-label="Điều hướng chính"
+        <nav
+          id="header-nav"
+          class="bg-slate-800/90 p-1 rounded-xl border border-slate-700/80"
+          aria-label="Điều hướng chính"
+        >
+          <button
+            data-tab="content"
+            class="nav-tab active px-2 sm:px-3 xl:px-3.5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-xs xl:text-sm font-bold transition-all flex items-center justify-center gap-1.5"
           >
-            <button
-              data-tab="content"
-              class="nav-tab active px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all whitespace-nowrap flex items-center gap-1.5"
+            <svg
+              class="nav-tab-icon w-4 h-4 hidden xl:inline-block"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                class="w-4 h-4 hidden sm:inline-block"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
-                ></path>
-              </svg>
-              <span>Nội Dung</span>
-            </button>
-            <button
-              data-tab="idea2"
-              class="nav-tab px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all whitespace-nowrap flex items-center gap-1.5"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+              ></path>
+            </svg>
+            <span>Nội Dung</span>
+          </button>
+          <button
+            data-tab="idea2"
+            class="nav-tab px-2 sm:px-3 xl:px-3.5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-xs xl:text-sm font-bold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+          >
+            <svg
+              class="nav-tab-icon w-4 h-4 hidden xl:inline-block"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                class="w-4 h-4 hidden sm:inline-block"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                ></path>
-              </svg>
-              <span>Bảo Tàng 3D</span>
-            </button>
-            <button
-              data-tab="game"
-              class="nav-tab px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all whitespace-nowrap flex items-center gap-1.5"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              ></path>
+            </svg>
+            <span>Bảo Tàng 3D</span>
+          </button>
+          <button
+            data-tab="game"
+            class="nav-tab px-2 sm:px-3 xl:px-3.5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-xs xl:text-sm font-bold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+          >
+            <svg
+              class="nav-tab-icon w-4 h-4 hidden xl:inline-block"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                class="w-4 h-4 hidden sm:inline-block"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                ></path>
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-              <span>Game Thể Chế</span>
-            </button>
-            <button
-              data-tab="quiz"
-              class="nav-tab px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all whitespace-nowrap flex items-center gap-1.5"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>Game Thể Chế</span>
+          </button>
+          <button
+            data-tab="quiz"
+            class="nav-tab px-2 sm:px-3 xl:px-3.5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-xs xl:text-sm font-bold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+          >
+            <svg
+              class="nav-tab-icon w-4 h-4 hidden xl:inline-block"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
             >
-              <svg
-                class="w-4 h-4 hidden sm:inline-block"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                ></path>
-              </svg>
-              <span>Trắc Nghiệm</span>
-            </button>
-            <button
-              data-tab="members"
-              class="nav-tab px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition-all whitespace-nowrap flex items-center gap-1.5"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              ></path>
+            </svg>
+            <span>Trắc Nghiệm</span>
+          </button>
+          <button
+            data-tab="members"
+            class="nav-tab px-2 sm:px-3 xl:px-3.5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-xs xl:text-sm font-bold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+          >
+            <svg
+              class="nav-tab-icon w-4 h-4 hidden xl:inline-block"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                class="w-4 h-4 hidden sm:inline-block"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-                ></path>
-              </svg>
-              <span>Nhóm Tác Giả</span>
-            </button>
-          </nav>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+              ></path>
+            </svg>
+            <span>Nhóm Tác Giả</span>
+          </button>
+        </nav>
 
+        <div id="header-actions" class="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <!-- Nút Mã QR truy cập nhanh phục vụ thuyết trình -->
           <button
             id="btn-qr-modal"
@@ -159,7 +166,7 @@
             aria-expanded="false"
             aria-controls="qr-modal"
             title="Hiển thị Mã QR truy cập trang web"
-            class="px-2.5 sm:px-3.5 py-2 rounded-xl bg-slate-800/90 hover:bg-white text-slate-100 hover:text-slate-950 border border-slate-700 hover:border-white text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-slate-800/90 hover:bg-white text-slate-100 hover:text-slate-950 border border-slate-700 hover:border-white text-[11px] sm:text-xs xl:text-sm font-bold transition-all flex items-center gap-1.5 shrink-0 shadow-sm whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
           >
             <svg
               class="w-4 h-4 shrink-0"
@@ -178,13 +185,13 @@
             <span>Mã QR</span>
           </button>
 
-          <!-- Nút Toàn màn hình (Fullscreen) phục vụ trình chiếu trên lớp (chỉ hiển thị trên desktop >= 768px) -->
+          <!-- Nút Toàn màn hình (Fullscreen) phục vụ trình chiếu trên lớp (chỉ hiển thị trên desktop >= 768px & chiều cao > 520px) -->
           <button
             id="btn-fullscreen-museum"
             type="button"
             title="Toàn màn hình trình chiếu (Phím F)"
             aria-pressed="false"
-            class="px-2.5 sm:px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 border border-amber-500/40 text-xs sm:text-sm font-bold transition-all hidden md:flex items-center gap-1.5 shrink-0"
+            class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white border border-[#b85d14] text-xs xl:text-sm font-bold transition-all hidden md:flex items-center gap-1.5 shrink-0 whitespace-nowrap"
           >
             <svg
               id="icon-fullscreen-enter"
@@ -216,7 +223,7 @@
                 d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
               ></path>
             </svg>
-            <span class="hidden md:inline whitespace-nowrap" id="label-fullscreen-btn"
+            <span class="hidden lg:inline whitespace-nowrap" id="label-fullscreen-btn"
               >Toàn Màn Hình</span
             >
           </button>
@@ -260,10 +267,10 @@
         </div>
       </section>
 
-      <!-- ================= TAB 3: TRÒ CHƠI THỂ CHẾ (REIGNS - 30 THẺ NGẪU NHIÊN 10 NĂM) ================= -->
+      <!-- ================= TAB 3: TRÒ CHƠI THỂ CHẾ (REIGNS - 30 THẺ NGẪU NHIÊN 10 NĂM - ZERO SCROLL) ================= -->
       <section
         id="section-game"
-        class="tab-content hidden max-w-6xl mx-auto p-4 sm:p-6 md:p-8 space-y-6 relative"
+        class="tab-content hidden max-w-7xl w-full mx-auto px-3 sm:px-6 py-2.5 sm:py-3 relative"
       >
         <!-- Lớp phủ chớp đỏ màn hình khi Thua (Game Over) -->
         <div
@@ -271,640 +278,659 @@
           class="pointer-events-none fixed inset-0 z-40 opacity-0"
         ></div>
 
-        <!-- Canvas hiệu ứng pháo giấy (Confetti) khi Thắng ( vượt qua 10 năm ) -->
+        <!-- Canvas hiệu ứng pháo giấy (Confetti) khi Thắng (vượt qua 10 năm) -->
         <canvas
           id="game-confetti-canvas"
           class="pointer-events-none fixed inset-0 z-40 hidden w-full h-full"
         ></canvas>
 
-        <!-- Tiêu đề & Thanh công cụ góc trên (Chế độ NGẪU NHIÊN duy nhất + Nút Bật/Tắt Âm thanh) -->
+        <!-- Bố cục 2 cột vừa khít nội dung (Fit Content) -->
         <div
-          class="border-b border-slate-200 pb-4 flex flex-col md:flex-row items-center justify-between gap-4"
+          class="w-full h-auto grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-start"
         >
-          <div class="text-center md:text-left">
-            <span
-              class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-600 block mb-1"
-              >Mô Phỏng Hoạch Định Thể Chế • 30 Tình Huống Thực Tiễn</span
-            >
-            <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
-              Chiếc Ghế Thể Chế: Cân Bằng Thị Trường &amp; Định Hướng XHCN
-            </h2>
-            <p class="text-slate-600 text-sm md:text-base mt-1">
-              Quyết định chính sách qua từng năm nhiệm kỳ. Giữ 4 chỉ số vĩ mô
-              trong vùng an toàn suốt 10 năm!
-            </p>
-          </div>
-
-          <!-- Cụm nút góc trên: Duy nhất 1 nút chế độ NGẪU NHIÊN + Nút Bật/Tắt âm thanh -->
+          <!-- Cột Trái: Tiêu đề, Bộ điều khiển & Tóm tắt Luật chơi -->
           <div
-            id="game-category-filters"
-            class="flex flex-wrap items-center justify-center gap-2.5 shrink-0"
+            class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col gap-3 h-auto"
           >
-            <button
-              id="btn-game-mode-random"
-              type="button"
-              data-category="all"
-              title="Trộn ngẫu nhiên 10 thẻ từ bộ 30 tình huống cho nhiệm kỳ 10 năm"
-              class="game-filter-btn active px-4 py-2.5 rounded-xl border-2 text-xs sm:text-sm font-extrabold transition flex items-center gap-2 shadow-sm"
-            >
-              <svg
-                class="w-4 h-4 shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                ></path>
-              </svg>
-              <span>NGẪU NHIÊN</span>
-              <span
-                class="text-[11px] px-2 py-0.5 rounded-full bg-slate-900/15 font-mono font-bold"
-                >10 năm / 30 thẻ</span
-              >
-            </button>
-
-            <button
-              id="btn-game-sound-toggle"
-              type="button"
-              aria-pressed="true"
-              title="Bật / Tắt hiệu ứng âm thanh trong Game"
-              class="px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm"
-            >
-              <span id="game-sound-icon" class="inline-flex items-center justify-center w-4 h-4">
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
+            <div class="space-y-2.5 shrink-0">
+              <div>
+                <span
+                  class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#c4661b] block mb-1"
+                  >Mô Phỏng Hoạch Định Thể Chế</span
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
-                  ></path>
-                </svg>
-              </span>
-              <span id="game-sound-label">Âm thanh: BẬT</span>
-            </button>
-          </div>
-        </div>
+                <h2
+                  class="text-lg sm:text-xl md:text-2xl font-extrabold text-slate-900 leading-snug"
+                >
+                  Chiếc Ghế Thể Chế: Cân Bằng Thị Trường &amp; Định Hướng XHCN
+                </h2>
+              </div>
 
-        <!-- Khung Giải Thích Luật Chơi rõ ràng, dễ đọc ngay trong tab Game Thể Chế -->
-        <div
-          id="game-rules-box"
-          class="bg-white rounded-2xl border border-amber-200/90 p-4 sm:p-5 shadow-sm"
-        >
+              <!-- Cụm nút chế độ NGẪU NHIÊN + Âm thanh -->
+              <div
+                id="game-category-filters"
+                class="flex flex-wrap items-center gap-2"
+              >
+                <button
+                  id="btn-game-mode-random"
+                  type="button"
+                  data-category="all"
+                  title="Trộn ngẫu nhiên 10 thẻ từ bộ 30 tình huống cho nhiệm kỳ 10 năm"
+                  class="game-filter-btn active px-3.5 py-2 rounded-xl border text-xs font-extrabold transition flex items-center gap-1.5"
+                >
+                  <svg
+                    class="w-4 h-4 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    ></path>
+                  </svg>
+                  <span>NGẪU NHIÊN</span>
+                  <span
+                    class="text-[11px] px-2 py-0.5 rounded-full bg-white/20 text-white font-mono font-bold"
+                    >10 năm / 30 thẻ</span
+                  >
+                </button>
+
+                <button
+                  id="btn-game-sound-toggle"
+                  type="button"
+                  aria-pressed="true"
+                  title="Bật / Tắt hiệu ứng âm thanh trong Game"
+                  class="px-3 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold transition flex items-center gap-1.5"
+                >
+                  <span
+                    id="game-sound-icon"
+                    class="inline-flex items-center justify-center w-4 h-4"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
+                      ></path>
+                    </svg>
+                  </span>
+                  <span id="game-sound-label">Âm thanh: BẬT</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Khung Giải Thích Luật Chơi ôm sát nội dung -->
+            <div
+              id="game-rules-box"
+              class="bg-slate-50/80 rounded-xl border border-slate-200 p-3 sm:p-3.5 h-auto flex flex-col gap-2.5"
+            >
+              <div
+                class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2 shrink-0"
+              >
+                <h3
+                  class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-1.5"
+                >
+                  <span
+                    class="w-5 h-5 rounded-md bg-[#df7a28] text-white flex items-center justify-center text-[11px] font-black"
+                    >?</span
+                  >
+                  <span>Luật Chơi &amp; Nguyên Tắc Vĩ Mô</span>
+                </h3>
+                <span
+                  id="game-mode-subtitle"
+                  class="text-[11px] font-bold text-[#9a3412] bg-[#fff7ed] border border-[#fed7aa] px-2.5 py-0.5 rounded-full"
+                >
+                  Chế độ: NGẪU NHIÊN (10 năm / 30 thẻ bài)
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 gap-2 text-xs leading-relaxed">
+                <div
+                  class="p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200 text-slate-700"
+                >
+                  <strong class="text-emerald-800 font-bold"
+                    >1. Mục tiêu 10 năm:</strong
+                  >
+                  Giữ cả 4 chỉ số (<em>Tăng trưởng, Công bằng, Môi trường, Ổn định</em>)
+                  trong <strong>khoảng an toàn (20 – 80)</strong> suốt 10 năm.
+                </div>
+
+                <div
+                  class="p-2.5 rounded-xl bg-rose-50/80 border border-rose-200 text-slate-700"
+                >
+                  <strong class="text-rose-800 font-bold"
+                    >2. Thua ngay lập tức:</strong
+                  >
+                  Chỉ số <strong>chạm 0</strong> (suy sụp, khủng hoảng) hoặc
+                  <strong>chạm 100</strong> (phát triển quá nóng, cào bằng cực đoan).
+                </div>
+
+                <div
+                  class="p-2.5 rounded-xl bg-sky-50/80 border border-sky-200 text-slate-700"
+                >
+                  <strong class="text-sky-800 font-bold"
+                    >3. Ra quyết sách:</strong
+                  >
+                  Chọn 1 trong 2 phương án chính sách cho từng tình huống; chấm tròn cam
+                  trên đỉnh cột báo trước chỉ số sẽ thay đổi.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột Phải: 4 Thanh Chỉ Số Vĩ Mô, Thẻ Chính Sách & Modals Kết Quả -->
           <div
-            class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5 mb-3"
+            id="game-board-container"
+            class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-3.5 sm:p-4 shadow-sm flex flex-col gap-2.5 select-none relative overflow-hidden h-auto"
           >
-            <h3
-              class="text-sm sm:text-base font-extrabold uppercase tracking-wider text-slate-900 flex items-center gap-2"
+            <!-- Thanh đầu: Chức danh & Tiến độ năm -->
+            <div
+              class="w-full flex items-center justify-between gap-2 border-b border-slate-100 pb-2 shrink-0"
             >
               <span
-                class="w-6 h-6 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center text-xs font-black"
-                >?</span
+                class="text-xs sm:text-sm text-slate-600 font-extrabold uppercase tracking-wider"
+                >NHÀ HOẠCH ĐỊNH KINH TẾ</span
               >
-              <span>Giải Thích Luật Chơi &amp; Nguyên Tắc Điều Tiết Vĩ Mô</span>
-            </h3>
-            <span
-              id="game-mode-subtitle"
-              class="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full"
-            >
-              Chế độ: NGẪU NHIÊN (10 năm / 30 thẻ bài)
-            </span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sm:text-sm">
-            <div
-              class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 text-slate-700 leading-relaxed"
-            >
-              <strong class="text-emerald-800 block mb-1 font-bold"
-                >1. Mục tiêu nhiệm kỳ 10 năm:</strong
-              >
-              Duy trì cả <strong>4 chỉ số vĩ mô</strong> (<em>Tăng trưởng, Công bằng, Môi trường, Ổn định</em>) luôn nằm trong <strong>khoảng an toàn (20 – 80)</strong> qua đủ 10 năm nhiệm kỳ để giành chiến thắng.
-            </div>
-
-            <div
-              class="p-3 rounded-xl bg-rose-50/70 border border-rose-200 text-slate-700 leading-relaxed"
-            >
-              <strong class="text-rose-800 block mb-1 font-bold"
-                >2. Điều kiện thua ngay lập tức:</strong
-              >
-              Nếu bất kỳ chỉ số nào <strong>chạm mức 0</strong> (suy sụp, khủng hoảng) hoặc <strong>chạm mức 100</strong> (phát triển quá nóng, cào bằng cực đoan) thì <strong>thua ngay lập tức</strong>. Dưới 20 hoặc trên 80 là vùng nguy hiểm!
-            </div>
-
-            <div
-              class="p-3 rounded-xl bg-sky-50/70 border border-sky-200 text-slate-700 leading-relaxed"
-            >
-              <strong class="text-sky-800 block mb-1 font-bold"
-                >3. Cách ra quyết sách:</strong
-              >
-              <strong>Kéo thẻ bài</strong> sang Trái/Phải, hoặc <strong>bấm 2 nút phương án</strong> bên dưới, hoặc nhấn phím mũi tên <strong>[←] / [→]</strong>. Chấm tròn vàng trên đỉnh cột báo trước chỉ số sẽ biến động.
-            </div>
-          </div>
-        </div>
-
-        <div
-          id="game-board-container"
-          class="max-w-md md:max-w-lg mx-auto bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col items-center select-none relative overflow-hidden"
-        >
-          <!-- 4 Thanh chỉ số HUD -->
-          <div class="w-full grid grid-cols-4 gap-2 mb-5 text-center">
-            <div class="flex flex-col items-center stat-hud" data-stat="growth">
               <span
-                class="stat-dot w-2 h-2 rounded-full bg-amber-500 opacity-0 mb-1"
-              ></span>
-              <div
-                class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
+                id="game-year-display"
+                class="bg-[#df7a28] text-white px-3 py-1 rounded-full font-mono text-xs sm:text-sm font-bold shrink-0"
+                >Năm thứ 1 / 10</span
               >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  ></path>
-                </svg>
-              </div>
-              <span
-                class="text-xs md:text-sm font-bold text-slate-600 mt-1 uppercase"
-                >Tăng Trưởng</span
-              >
-              <div
-                class="w-full bg-slate-100 h-2 rounded-full mt-1.5 overflow-hidden border border-slate-200"
-              >
+            </div>
+
+            <!-- 4 Thanh chỉ số HUD -->
+            <div class="w-full grid grid-cols-4 gap-2 text-center shrink-0">
+              <div class="flex flex-col items-center min-w-0 stat-hud" data-stat="growth">
+                <span
+                  class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"
+                ></span>
                 <div
-                  id="stat-bar-growth"
-                  class="bg-amber-500 h-full transition-all duration-300"
-                  style="width: 50%"
-                ></div>
-              </div>
-              <span
-                id="stat-val-growth"
-                class="text-xs md:text-sm font-bold text-slate-800 mt-0.5"
-                >50</span
-              >
-            </div>
-
-            <div class="flex flex-col items-center stat-hud" data-stat="equity">
-              <span
-                class="stat-dot w-2 h-2 rounded-full bg-amber-500 opacity-0 mb-1"
-              ></span>
-              <div
-                class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-                  ></path>
-                </svg>
-              </div>
-              <span
-                class="text-xs md:text-sm font-bold text-slate-600 mt-1 uppercase"
-                >Công Bằng</span
-              >
-              <div
-                class="w-full bg-slate-100 h-2 rounded-full mt-1.5 overflow-hidden border border-slate-200"
-              >
-                <div
-                  id="stat-bar-equity"
-                  class="bg-amber-500 h-full transition-all duration-300"
-                  style="width: 50%"
-                ></div>
-              </div>
-              <span
-                id="stat-val-equity"
-                class="text-xs md:text-sm font-bold text-slate-800 mt-0.5"
-                >50</span
-              >
-            </div>
-
-            <div
-              class="flex flex-col items-center stat-hud"
-              data-stat="environment"
-            >
-              <span
-                class="stat-dot w-2 h-2 rounded-full bg-amber-500 opacity-0 mb-1"
-              ></span>
-              <div
-                class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                    ></path>
+                  </svg>
+                </div>
+                <span
+                  class="text-[11px] sm:text-xs font-bold text-slate-600 mt-1 uppercase truncate max-w-full"
+                  >Tăng Trưởng</span
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                  ></path>
-                </svg>
-              </div>
-              <span
-                class="text-xs md:text-sm font-bold text-slate-600 mt-1 uppercase"
-                >Môi Trường</span
-              >
-              <div
-                class="w-full bg-slate-100 h-2 rounded-full mt-1.5 overflow-hidden border border-slate-200"
-              >
                 <div
-                  id="stat-bar-environment"
-                  class="bg-amber-500 h-full transition-all duration-300"
-                  style="width: 50%"
-                ></div>
-              </div>
-              <span
-                id="stat-val-environment"
-                class="text-xs md:text-sm font-bold text-slate-800 mt-0.5"
-                >50</span
-              >
-            </div>
-
-            <div
-              class="flex flex-col items-center stat-hud"
-              data-stat="stability"
-            >
-              <span
-                class="stat-dot w-2 h-2 rounded-full bg-amber-500 opacity-0 mb-1"
-              ></span>
-              <div
-                class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
-              >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  class="w-full bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden border border-slate-200"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  ></path>
-                </svg>
+                  <div
+                    id="stat-bar-growth"
+                    class="bg-[#df7a28] h-full transition-all duration-300"
+                    style="width: 50%"
+                  ></div>
+                </div>
+                <span
+                  id="stat-val-growth"
+                  class="text-xs font-bold text-slate-800 mt-0.5"
+                  >50</span
+                >
               </div>
-              <span
-                class="text-xs md:text-sm font-bold text-slate-600 mt-1 uppercase"
-                >Ổn Định</span
-              >
-              <div
-                class="w-full bg-slate-100 h-2 rounded-full mt-1.5 overflow-hidden border border-slate-200"
-              >
+
+              <div class="flex flex-col items-center min-w-0 stat-hud" data-stat="equity">
+                <span
+                  class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"
+                ></span>
                 <div
-                  id="stat-bar-stability"
-                  class="bg-amber-500 h-full transition-all duration-300"
-                  style="width: 50%"
-                ></div>
+                  class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+                    ></path>
+                  </svg>
+                </div>
+                <span
+                  class="text-[11px] sm:text-xs font-bold text-slate-600 mt-1 uppercase truncate max-w-full"
+                  >Công Bằng</span
+                >
+                <div
+                  class="w-full bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden border border-slate-200"
+                >
+                  <div
+                    id="stat-bar-equity"
+                    class="bg-[#df7a28] h-full transition-all duration-300"
+                    style="width: 50%"
+                  ></div>
+                </div>
+                <span
+                  id="stat-val-equity"
+                  class="text-xs font-bold text-slate-800 mt-0.5"
+                  >50</span
+                >
               </div>
-              <span
-                id="stat-val-stability"
-                class="text-xs md:text-sm font-bold text-slate-800 mt-0.5"
-                >50</span
-              >
-            </div>
-          </div>
 
-          <div
-            class="w-full flex items-center justify-between border-b border-slate-100 pb-2 mb-4"
-          >
-            <span
-              class="text-xs md:text-sm text-slate-500 font-bold uppercase tracking-wider"
-              >NHÀ HOẠCH ĐỊNH KINH TẾ</span
-            >
-            <span
-              id="game-year-display"
-              class="text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full font-mono text-xs md:text-sm font-bold"
-              >Năm thứ 1 / 10</span
-            >
-          </div>
-
-          <!-- Khung Kéo Thẻ -->
-          <div id="game-play-area" class="w-full flex flex-col items-center">
-            <!-- Thông báo phản hồi nhanh Chọn Đúng / Chọn Sai -->
-            <div
-              id="card-feedback-banner"
-              class="hidden w-full mb-3 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold text-center transition-all"
-            ></div>
-
-            <div
-              class="relative w-full min-h-[430px] flex items-center justify-center mb-4"
-            >
               <div
-                class="absolute w-[92%] h-[92%] bg-slate-100 rounded-2xl border border-slate-200 translate-y-2 pointer-events-none"
+                class="flex flex-col items-center min-w-0 stat-hud"
+                data-stat="environment"
+              >
+                <span
+                  class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"
+                ></span>
+                <div
+                  class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                    ></path>
+                  </svg>
+                </div>
+                <span
+                  class="text-[11px] sm:text-xs font-bold text-slate-600 mt-1 uppercase truncate max-w-full"
+                  >Môi Trường</span
+                >
+                <div
+                  class="w-full bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden border border-slate-200"
+                >
+                  <div
+                    id="stat-bar-environment"
+                    class="bg-[#df7a28] h-full transition-all duration-300"
+                    style="width: 50%"
+                  ></div>
+                </div>
+                <span
+                  id="stat-val-environment"
+                  class="text-xs font-bold text-slate-800 mt-0.5"
+                  >50</span
+                >
+              </div>
+
+              <div
+                class="flex flex-col items-center min-w-0 stat-hud"
+                data-stat="stability"
+              >
+                <span
+                  class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"
+                ></span>
+                <div
+                  class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    ></path>
+                  </svg>
+                </div>
+                <span
+                  class="text-[11px] sm:text-xs font-bold text-slate-600 mt-1 uppercase truncate max-w-full"
+                  >Ổn Định</span
+                >
+                <div
+                  class="w-full bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden border border-slate-200"
+                >
+                  <div
+                    id="stat-bar-stability"
+                    class="bg-[#df7a28] h-full transition-all duration-300"
+                    style="width: 50%"
+                  ></div>
+                </div>
+                <span
+                  id="stat-val-stability"
+                  class="text-xs font-bold text-slate-800 mt-0.5"
+                  >50</span
+                >
+              </div>
+            </div>
+
+            <!-- Khung Kéo Thẻ -->
+            <div
+              id="game-play-area"
+              class="w-full h-auto flex flex-col gap-2.5"
+            >
+              <!-- Thông báo phản hồi nhanh Chọn Đúng / Chọn Sai -->
+              <div
+                id="card-feedback-banner"
+                class="hidden w-full px-3 py-1.5 rounded-xl text-xs font-extrabold text-center transition-all shrink-0"
               ></div>
 
               <div
-                id="reigns-card"
-                class="relative w-full min-h-[430px] bg-white rounded-2xl border-2 border-slate-300 p-4 sm:p-6 shadow-md flex flex-col justify-between cursor-grab touch-none"
+                class="relative w-full flex items-center justify-center pb-1.5"
               >
                 <div
-                  id="choice-pill-left"
-                  class="choice-pill absolute top-4 left-4 bg-slate-900 text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full opacity-0 pointer-events-none transition-opacity shadow-lg max-w-[230px] truncate z-10"
-                >
-                  LỰA CHỌN TRÁI
-                </div>
-                <div
-                  id="choice-pill-right"
-                  class="choice-pill absolute top-4 right-4 bg-amber-600 text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full opacity-0 pointer-events-none transition-opacity shadow-lg max-w-[230px] truncate z-10"
-                >
-                  LỰA CHỌN PHẢI
-                </div>
+                  class="absolute inset-x-3 inset-y-1 bg-slate-100 rounded-2xl border border-slate-200 translate-y-1.5 pointer-events-none"
+                ></div>
 
-                <!-- Nhãn tên nhóm chủ đề & nhân vật -->
-                <div class="text-center space-y-1">
-                  <div class="flex items-center justify-center gap-1.5">
-                    <span
-                      id="card-topic-badge"
-                      class="inline-block text-[11px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-900 text-amber-400"
-                    >
-                      Nhóm 1: Sở hữu &amp; Thành phần kinh tế
-                    </span>
-                    <span
-                      id="card-id-badge"
-                      class="inline-block text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200"
-                    >
-                      #01
-                    </span>
+                <div
+                  id="reigns-card"
+                  class="reigns-card-container relative w-full h-auto bg-white rounded-2xl border-2 border-slate-300 p-3.5 sm:p-4 shadow-sm flex flex-col gap-2.5 cursor-grab touch-pan-y"
+                >
+                  <div
+                    id="choice-pill-left"
+                    class="choice-pill absolute top-3 left-3 bg-slate-800 text-white text-xs font-bold px-3 py-1 rounded-full opacity-0 pointer-events-none transition-opacity shadow-md max-w-[220px] truncate z-10"
+                  >
+                    LỰA CHỌN TRÁI
                   </div>
-                  <h3
-                    id="card-speaker-title"
-                    class="text-xs sm:text-sm font-bold text-amber-600 uppercase tracking-wider pt-1"
+                  <div
+                    id="choice-pill-right"
+                    class="choice-pill absolute top-3 right-3 bg-[#df7a28] text-white text-xs font-bold px-3 py-1 rounded-full opacity-0 pointer-events-none transition-opacity shadow-md max-w-[220px] truncate z-10"
                   >
-                    Ủy ban Quản lý vốn Nhà nước
-                  </h3>
-                  <span
-                    id="card-speaker-name"
-                    class="text-base sm:text-lg font-bold text-slate-800 block"
-                    >Trần Đình Nam</span
-                  >
-                </div>
+                    LỰA CHỌN PHẢI
+                  </div>
 
+                  <!-- Phần đầu thẻ: Nhãn nhóm + Avatar + Nhân vật gọn chiều cao -->
+                  <div class="flex flex-col items-center gap-2 shrink-0">
+                    <div class="flex flex-wrap items-center justify-center gap-1.5">
+                      <span
+                        id="card-topic-badge"
+                        class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa]"
+                      >
+                        Nhóm 1: Sở hữu &amp; Thành phần kinh tế
+                      </span>
+                      <span
+                        id="card-id-badge"
+                        class="inline-block text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200"
+                      >
+                        #01
+                      </span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-3">
+                      <div
+                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center p-1.5 overflow-hidden relative shrink-0"
+                      >
+                        <svg
+                          id="card-avatar-svg"
+                          class="w-full h-full text-slate-300"
+                          viewBox="0 0 100 100"
+                        >
+                          <circle cx="50" cy="45" r="28" fill="#cbd5e1"></circle>
+                          <path
+                            d="M22 88 C22 68, 78 68, 78 88 Z"
+                            fill="#475569"
+                          ></path>
+                          <rect
+                            x="36"
+                            y="38"
+                            width="6"
+                            height="6"
+                            fill="#0f172a"
+                          ></rect>
+                          <rect
+                            x="58"
+                            y="38"
+                            width="6"
+                            height="6"
+                            fill="#0f172a"
+                          ></rect>
+                          <path
+                            d="M42 55 L58 55"
+                            stroke="#0f172a"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                          ></path>
+                          <polygon
+                            points="50,15 35,32 65,32"
+                            fill="#df7a28"
+                          ></polygon>
+                        </svg>
+                      </div>
+                      <div class="text-left min-w-0">
+                        <h3
+                          id="card-speaker-title"
+                          class="text-xs font-bold text-[#c4661b] uppercase tracking-wider leading-tight"
+                        >
+                          Ủy ban Quản lý vốn Nhà nước
+                        </h3>
+                        <span
+                          id="card-speaker-name"
+                          class="text-sm sm:text-base font-bold text-slate-900 block leading-tight mt-0.5"
+                          >Trần Đình Nam</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Nội dung tình huống -->
+                  <div
+                    class="bg-slate-50 rounded-xl p-3 sm:p-3.5 border border-slate-200 text-center flex items-center justify-center"
+                  >
+                    <p
+                      id="card-dialogue"
+                      class="text-xs sm:text-sm md:text-[15px] text-slate-700 leading-relaxed font-medium"
+                    >
+                      Đang tải tình huống hoạch định chính sách...
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2 nút ra quyết sách -->
+              <div class="w-full grid grid-cols-2 gap-2.5 shrink-0">
+                <button
+                  id="btn-reigns-left"
+                  type="button"
+                  class="min-h-[44px] p-2.5 sm:p-3 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-left transition flex flex-col justify-between"
+                >
+                  <span
+                    class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-0.5"
+                    >← Lựa chọn Trái</span
+                  >
+                  <span
+                    id="btn-label-left"
+                    class="text-xs sm:text-sm font-bold text-slate-800 leading-snug"
+                    >Phương án A</span
+                  >
+                </button>
+                <button
+                  id="btn-reigns-right"
+                  type="button"
+                  class="min-h-[44px] p-2.5 sm:p-3 rounded-xl border border-[#fed7aa] bg-[#fff7ed] hover:bg-[#ffedd5] text-left transition flex flex-col justify-between"
+                >
+                  <span
+                    class="text-[11px] font-bold text-[#c4661b] uppercase tracking-wider block mb-0.5"
+                    >Lựa chọn Phải →</span
+                  >
+                  <span
+                    id="btn-label-right"
+                    class="text-xs sm:text-sm font-bold text-slate-800 leading-snug"
+                    >Phương án B</span
+                  >
+                </button>
+              </div>
+            </div>
+
+            <!-- Modal Game Over -->
+            <div
+              id="reigns-gameover-modal"
+              class="hidden w-full h-auto bg-white rounded-2xl p-4 sm:p-5 flex-col gap-3 items-center text-center animate-fade-in z-30 border-2 border-rose-300"
+            >
+              <div class="w-full">
                 <div
-                  class="w-24 h-24 sm:w-28 sm:h-28 mx-auto my-2 rounded-2xl bg-slate-900 border-2 border-slate-800 flex items-center justify-center p-2 shadow-inner overflow-hidden relative shrink-0"
+                  class="w-11 h-11 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-2"
                 >
                   <svg
-                    id="card-avatar-svg"
-                    class="w-full h-full text-slate-300"
-                    viewBox="0 0 100 100"
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <circle cx="50" cy="45" r="28" fill="#cbd5e1"></circle>
                     <path
-                      d="M22 88 C22 68, 78 68, 78 88 Z"
-                      fill="#334155"
-                    ></path>
-                    <rect
-                      x="36"
-                      y="38"
-                      width="6"
-                      height="6"
-                      fill="#0f172a"
-                    ></rect>
-                    <rect
-                      x="58"
-                      y="38"
-                      width="6"
-                      height="6"
-                      fill="#0f172a"
-                    ></rect>
-                    <path
-                      d="M42 55 L58 55"
-                      stroke="#0f172a"
-                      stroke-width="3"
                       stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                     ></path>
-                    <polygon
-                      points="50,15 35,32 65,32"
-                      fill="#f59e0b"
-                    ></polygon>
                   </svg>
                 </div>
-
-                <div
-                  class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 text-center"
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-rose-600 block mb-0.5"
+                  >Thể Chế Mất Cân Bằng</span
                 >
-                  <p
-                    id="card-dialogue"
-                    class="text-sm md:text-base text-slate-700 leading-relaxed font-medium"
+                <h3
+                  id="gameover-title"
+                  class="text-lg sm:text-xl font-bold text-slate-900 mb-2"
+                >
+                  Nhiệm Kỳ Kết Thúc Sớm
+                </h3>
+                <p
+                  id="gameover-cause"
+                  class="text-xs sm:text-sm text-slate-700 leading-relaxed bg-rose-50/70 p-3.5 rounded-xl border border-rose-200 text-left"
+                ></p>
+              </div>
+              <div class="w-full space-y-2.5 shrink-0">
+                <div class="text-xs sm:text-sm font-mono text-slate-600">
+                  Thời gian tại vị:
+                  <span id="gameover-years" class="font-bold text-slate-900"
+                    >1 năm</span
                   >
-                    Đang tải tình huống hoạch định chính sách...
-                  </p>
+                </div>
+                <button
+                  id="btn-reigns-retry"
+                  type="button"
+                  class="w-full py-3 bg-[#df7a28] hover:bg-[#c4661b] text-white font-bold text-sm uppercase tracking-wider rounded-xl transition"
+                >
+                  Bắt Đầu Nhiệm Kỳ Mới
+                </button>
+              </div>
+            </div>
+
+            <!-- Modal Victory -->
+            <div
+              id="reigns-victory-modal"
+              class="hidden w-full h-auto bg-white rounded-2xl p-4 sm:p-5 flex-col gap-3 items-center text-center animate-fade-in z-30 border-2 border-emerald-400"
+            >
+              <div class="w-full">
+                <div
+                  class="w-11 h-11 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2"
+                >
+                  <svg
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-emerald-600 block mb-0.5"
+                  >Nhiệm Kỳ Hoàn Thành Xuất Sắc</span
+                >
+                <h3
+                  id="victory-title-years"
+                  class="text-lg sm:text-xl font-bold text-slate-900 mb-2"
+                >
+                  Vượt Qua Đủ 10 Năm Nhiệm Kỳ!
+                </h3>
+                <p
+                  class="text-xs sm:text-sm text-slate-700 leading-relaxed bg-emerald-50/70 p-3 rounded-xl border border-emerald-200 text-left mb-2"
+                >
+                  Ngài đã dẫn dắt nền kinh tế vượt qua các cú sốc thị trường, kiểm
+                  soát độc quyền tư bản, bảo đảm an sinh xã hội và giữ gìn môi
+                  trường sinh thái. Cả 4 chỉ số vĩ mô đều duy trì trong vùng cân
+                  bằng an toàn suốt 10 năm!
+                </p>
+                <div
+                  class="bg-[#fff7ed] p-3 rounded-xl border border-[#fed7aa] text-left text-xs sm:text-sm text-slate-800 leading-relaxed"
+                >
+                  <span class="font-bold text-[#9a3412] block mb-0.5"
+                    >Kết luận lý luận:</span
+                  >
+                  Mô hình Kinh tế Thị trường Định hướng Xã hội Chủ nghĩa chứng
+                  minh tính ưu việt: Không phó mặc xã hội cho "Bàn tay vô hình" tự
+                  phát của thị trường tư bản, nhưng cũng không dùng mệnh lệnh hành
+                  chính triệt tiêu động lực cạnh tranh và đổi mới sáng tạo.
                 </div>
               </div>
-            </div>
-
-            <div class="w-full grid grid-cols-2 gap-3 mb-2">
-              <button
-                id="btn-reigns-left"
-                type="button"
-                class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 text-left transition flex flex-col justify-between"
-              >
-                <span
-                  class="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1"
-                  >← Lựa chọn Trái</span
+              <div class="w-full pt-1 shrink-0">
+                <button
+                  id="btn-reigns-win-restart"
+                  type="button"
+                  class="w-full py-3 bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-sm uppercase tracking-wider rounded-xl transition shadow-sm"
                 >
-                <span
-                  id="btn-label-left"
-                  class="text-xs sm:text-sm md:text-base font-bold text-slate-800 leading-tight"
-                  >Phương án A</span
-                >
-              </button>
-              <button
-                id="btn-reigns-right"
-                type="button"
-                class="p-3.5 rounded-xl border border-amber-200 bg-amber-50/70 hover:bg-amber-100/70 hover:border-amber-300 text-left transition flex flex-col justify-between"
-              >
-                <span
-                  class="text-[11px] sm:text-xs font-bold text-amber-600 uppercase tracking-wider block mb-1"
-                  >Lựa chọn Phải →</span
-                >
-                <span
-                  id="btn-label-right"
-                  class="text-xs sm:text-sm md:text-base font-bold text-slate-800 leading-tight"
-                  >Phương án B</span
-                >
-              </button>
-            </div>
-            <span class="text-xs md:text-sm text-slate-500 text-center mt-1"
-              >Kéo thẻ sang hai bên hoặc dùng phím mũi tên [Trái] / [Phải]</span
-            >
-          </div>
-
-          <!-- Modal Game Over -->
-          <div
-            id="reigns-gameover-modal"
-            class="hidden w-full bg-white rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-center text-center animate-fade-in z-30 border-2 border-rose-300"
-          >
-            <div class="w-full">
-              <div
-                class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3"
-              >
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  ></path>
-                </svg>
+                  Chơi Lại Mô Phỏng
+                </button>
               </div>
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-rose-600 block mb-1"
-                >Thể Chế Mất Cân Bằng</span
-              >
-              <h3
-                id="gameover-title"
-                class="text-xl md:text-2xl font-bold text-slate-900 mb-3"
-              >
-                Nhiệm Kỳ Kết Thúc Sớm
-              </h3>
-              <p
-                id="gameover-cause"
-                class="text-sm md:text-base text-slate-700 leading-relaxed bg-rose-50/60 p-4 sm:p-5 rounded-xl border border-rose-200 text-left"
-              ></p>
-            </div>
-            <div class="w-full space-y-3 mt-5">
-              <div class="text-sm font-mono text-slate-600">
-                Thời gian tại vị:
-                <span id="gameover-years" class="font-bold text-slate-900"
-                  >1 năm</span
-                >
-              </div>
-              <button
-                id="btn-reigns-retry"
-                type="button"
-                class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm md:text-base uppercase tracking-wider rounded-xl transition"
-              >
-                Bắt Đầu Nhiệm Kỳ Mới
-              </button>
-            </div>
-          </div>
-
-          <!-- Modal Victory -->
-          <div
-            id="reigns-victory-modal"
-            class="hidden w-full bg-white rounded-2xl p-4 sm:p-5 flex flex-col justify-between items-center text-center animate-fade-in z-30 border-2 border-emerald-400"
-          >
-            <div class="w-full overflow-y-auto max-h-[420px] pr-1">
-              <div
-                class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3"
-              >
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </div>
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-emerald-600 block mb-1"
-                >Nhiệm Kỳ Hoàn Thành Xuất Sắc</span
-              >
-              <h3
-                id="victory-title-years"
-                class="text-xl md:text-2xl font-bold text-slate-900 mb-2"
-              >
-                Vượt Qua Đủ 10 Năm Nhiệm Kỳ!
-              </h3>
-              <p
-                class="text-sm md:text-base text-slate-700 leading-relaxed bg-emerald-50/60 p-4 sm:p-5 rounded-xl border border-emerald-200 text-left mb-3"
-              >
-                Ngài đã dẫn dắt nền kinh tế vượt qua các cú sốc thị trường, kiểm
-                soát độc quyền tư bản, bảo đảm an sinh xã hội và giữ gìn môi
-                trường sinh thái. Cả 4 chỉ số vĩ mô đều duy trì trong vùng cân
-                bằng an toàn suốt 10 năm!
-              </p>
-              <div
-                class="bg-amber-50/80 p-4 sm:p-5 rounded-xl border border-amber-200 text-left text-sm md:text-base text-slate-800 leading-relaxed"
-              >
-                <span class="font-bold text-amber-800 block mb-1"
-                  >Kết luận lý luận:</span
-                >
-                Mô hình Kinh tế Thị trường Định hướng Xã hội Chủ nghĩa chứng
-                minh tính ưu việt: Không phó mặc xã hội cho "Bàn tay vô hình" tự
-                phát của thị trường tư bản, nhưng cũng không dùng mệnh lệnh hành
-                chính triệt tiêu động lực cạnh tranh và đổi mới sáng tạo.
-              </div>
-            </div>
-            <div class="w-full pt-4">
-              <button
-                id="btn-reigns-win-restart"
-                type="button"
-                class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm md:text-base uppercase tracking-wider rounded-xl transition shadow-md"
-              >
-                Chơi Lại Mô Phỏng
-              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ================= TAB 4: TRẮC NGHIỆM TƯƠNG TÁC (5 CÂU MẪU, KHÔNG BẢNG XẾP HẠNG) ================= -->
+      <!-- ================= TAB 4: TRẮC NGHIỆM TƯƠNG TÁC (5 CÂU NGẪU NHIÊN TỪ 30 CÂU) ================= -->
       <section
         id="section-quiz"
         class="tab-content hidden max-w-6xl w-full mx-auto relative"
       >
-        <!-- Canvas hiệu ứng pháo giấy (Confetti) mini & toàn màn hình khi 5/5 -->
+        <!-- Canvas hiệu ứng pháo giấy (Confetti) -->
         <canvas
           id="quiz-confetti-canvas"
           class="pointer-events-none fixed inset-0 z-40 hidden w-full h-full"
         ></canvas>
 
-        <!-- Thanh trạng thái gọn 1 khối: Tiêu đề, tiến độ, 5 bước, điểm trực tiếp & Bật/Tắt Âm thanh -->
+        <!-- Thanh trạng thái gọn 1 khối -->
         <div
           id="quiz-top-bar"
           class="bg-white rounded-xl sm:rounded-2xl border border-slate-200 px-3 py-2 sm:px-4 sm:py-2.5 shadow-sm shrink-0 space-y-1.5"
         >
-          <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
-            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
               <span
-                class="hidden md:inline-block text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100/90 border border-amber-300 px-2.5 py-1 rounded-lg shrink-0"
+                class="hidden md:inline-block text-xs font-extrabold uppercase tracking-wider text-[#9a3412] bg-[#fff7ed] border border-[#fed7aa] px-2.5 py-1 rounded-lg shrink-0"
                 >Trắc Nghiệm KTCT</span
               >
               <span
                 id="quiz-progress-label"
-                class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-800 whitespace-nowrap"
+                class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-800 whitespace-nowrap shrink-0"
               >
                 Câu 1 / 5
               </span>
               <div
                 id="quiz-step-indicators"
-                class="flex items-center gap-1 sm:gap-1.5"
+                class="flex items-center gap-1 shrink-0 py-0.5"
                 aria-label="Tiến độ các câu hỏi"
               ></div>
             </div>
@@ -912,16 +938,16 @@
             <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
               <span
                 id="quiz-score-badge"
-                class="px-2.5 sm:px-3 py-1.5 rounded-lg sm:rounded-xl bg-amber-100 border border-amber-300 text-amber-950 font-extrabold text-xs sm:text-sm font-mono shadow-sm whitespace-nowrap"
+                class="px-2.5 sm:px-3 py-1.5 rounded-lg sm:rounded-xl bg-[#fff7ed] border border-[#fed7aa] text-[#9a3412] font-extrabold text-xs sm:text-sm font-mono shadow-sm whitespace-nowrap"
               >
-                Điểm: 0 / 5
+                0 / 5 đúng
               </span>
               <button
                 id="btn-quiz-sound-toggle"
                 type="button"
                 aria-pressed="true"
                 title="Bật / Tắt âm thanh hiệu ứng Trắc nghiệm"
-                class="min-h-[44px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer shrink-0"
+                class="min-h-[40px] sm:min-h-[44px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer shrink-0"
               >
                 <span
                   id="quiz-sound-icon"
@@ -952,27 +978,24 @@
           >
             <div
               id="quiz-progress-bar"
-              class="h-full bg-amber-500 transition-all duration-300"
-              style="width: 20%"
+              class="h-full bg-[#df7a28] transition-all duration-300"
+              style="width: 3%"
             ></div>
           </div>
         </div>
 
-        <!-- Thẻ câu hỏi chính: co giãn vừa khít 100dvh, không layout shift -->
+        <!-- Thẻ câu hỏi chính: ôm sát nội dung (Fit Content) -->
         <div
           id="quiz-question-card"
-          class="bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200 p-3 sm:p-4 md:p-5 shadow-md transition-all flex-1 min-h-0 flex flex-col justify-between gap-2 sm:gap-3"
+          class="w-full h-auto bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200 p-3.5 sm:p-5 shadow-md transition-all flex flex-col gap-3"
         >
           <div class="space-y-1.5 sm:space-y-2 shrink-0">
             <div class="flex items-center justify-between gap-2">
               <span
                 id="quiz-section-badge"
-                class="inline-block text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-900 text-amber-400"
+                class="inline-block text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa]"
               >
-                Mục 1.1a
-              </span>
-              <span class="text-[11px] sm:text-xs font-semibold text-slate-500">
-                Chọn 1 đáp án đúng nhất
+                Đúng / Sai • Câu 1
               </span>
             </div>
 
@@ -984,43 +1007,21 @@
             </h3>
           </div>
 
-          <!-- Lưới 4 đáp án: 1 cột trên mobile, 2x2 trên desktop/tablet (>= 768px) -->
-          <div class="flex-1 min-h-0 flex items-center">
+          <!-- Lưới đáp án (2 hoặc 4 phương án) -->
+          <div class="w-full">
             <div
               id="quiz-options-list"
-              class="w-full grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-2.5 md:gap-3"
+              class="w-full grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-2.5 md:gap-3"
             ></div>
           </div>
 
-          <!-- Vùng đặt sẵn cố định cho phản hồi, giải thích chi tiết & nút chuyển câu -->
-          <div class="quiz-feedback-dock shrink-0">
-            <!-- Trạng thái chờ trước khi chọn đáp án (giữ chỗ cố định chống giật nhảy bố cục) -->
-            <div
-              id="quiz-explanation-placeholder"
-              class="quiz-dock-panel rounded-xl sm:rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 p-2.5 sm:p-3.5 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4 text-slate-500"
-            >
-              <div class="space-y-0.5 min-w-0">
-                <span
-                  class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block"
-                >
-                  Khung chấm điểm &amp; giải thích tức thì
-                </span>
-                <p class="quiz-explanation-body text-slate-500">
-                  Chọn một phương án A, B, C hoặc D ở trên để kiểm tra đáp án và mở phần giải thích từ Bảo Tàng 3D.
-                </p>
-              </div>
-              <span
-                aria-hidden="true"
-                class="min-h-[44px] px-4 py-2 rounded-xl bg-slate-200/80 text-slate-400 font-extrabold text-xs sm:text-sm inline-flex items-center justify-center shrink-0"
-              >
-                Câu tiếp theo →
-              </span>
-            </div>
+          <!-- Khung giải thích đáp án (chỉ hiển thị sau khi chọn) -->
+          <div id="quiz-feedback-dock" class="quiz-feedback-dock hidden shrink-0">
+            <div id="quiz-explanation-placeholder" class="hidden"></div>
 
-            <!-- Khung giải thích đáp án (thay thế đúng vị trí placeholder ngay sau khi chọn) -->
             <div
               id="quiz-explanation-box"
-              class="quiz-dock-panel hidden rounded-xl sm:rounded-2xl bg-amber-50/90 border-2 border-amber-200 p-2.5 sm:p-3.5 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4 animate-fade-in"
+              class="quiz-dock-panel hidden rounded-xl sm:rounded-2xl bg-[#fff7ed] border-2 border-[#fed7aa] p-3 sm:p-3.5 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-2.5 md:gap-4 animate-fade-in"
             >
               <div class="flex-1 min-w-0 space-y-1">
                 <div
@@ -1038,7 +1039,7 @@
                 <button
                   id="btn-quiz-next"
                   type="button"
-                  class="min-h-[44px] w-full md:w-auto px-4 sm:px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm transition shadow-md cursor-pointer whitespace-nowrap"
+                  class="min-h-[44px] w-full md:w-auto px-4 sm:px-5 py-2.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-xs sm:text-sm transition shadow-sm cursor-pointer whitespace-nowrap"
                 >
                   Câu tiếp theo →
                 </button>
@@ -1047,27 +1048,27 @@
           </div>
         </div>
 
-        <!-- Thẻ tổng kết sau khi hoàn thành cả 5 câu -->
+        <!-- Thẻ tổng kết sau khi hoàn thành 5 câu -->
         <div
           id="quiz-summary-card"
-          class="hidden bg-white rounded-2xl sm:rounded-3xl border-2 border-amber-300 p-4 sm:p-6 shadow-lg text-center flex-1 min-h-0 flex-col justify-between gap-2.5 sm:gap-4 animate-fade-in"
+          class="hidden w-full h-auto bg-white rounded-2xl sm:rounded-3xl border-2 border-[#fed7aa] p-4 sm:p-6 shadow-lg text-center flex-col gap-3 sm:gap-4 animate-fade-in"
         >
           <div class="space-y-1 shrink-0">
             <span
               id="quiz-summary-badge"
-              class="inline-block text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border bg-amber-100 text-amber-800 border-amber-300"
+              class="inline-block text-[11px] sm:text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border bg-[#fff7ed] text-[#9a3412] border-[#fed7aa]"
             >
               Tổng kết bài thi
             </span>
             <div
               id="quiz-summary-score"
-              class="text-3xl sm:text-5xl font-black tracking-tight my-1 text-slate-900"
+              class="text-3xl sm:text-4xl font-black tracking-tight my-1 text-slate-900"
             >
               0 / 5
             </div>
             <h3
               id="quiz-summary-title"
-              class="text-lg sm:text-2xl font-extrabold text-slate-900"
+              class="text-lg sm:text-xl font-extrabold text-slate-900"
             >
               Hoàn Thành Bài Trắc Nghiệm
             </h3>
@@ -1075,28 +1076,28 @@
 
           <p
             id="quiz-summary-message"
-            class="max-w-3xl mx-auto text-xs sm:text-sm md:text-base text-slate-700 leading-relaxed bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl p-3 sm:p-4"
+            class="max-w-3xl mx-auto text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50 border border-slate-200 rounded-xl p-2.5 sm:p-3 shrink-0"
           ></p>
 
           <div
             id="quiz-summary-breakdown"
-            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 sm:gap-2.5 text-left"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 text-left"
           ></div>
 
           <div
-            class="pt-1 grid grid-cols-2 sm:flex sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3 shrink-0"
+            class="pt-1 grid grid-cols-1 sm:flex sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3 shrink-0"
           >
             <button
               id="btn-quiz-restart"
               type="button"
-              class="min-h-[44px] px-3 sm:px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs sm:text-base transition shadow-md cursor-pointer"
+              class="min-h-[44px] px-4 sm:px-6 py-2.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-xs sm:text-base transition shadow-sm cursor-pointer"
             >
-              Làm lại từ đầu
+              Làm lại bộ 5 câu mới
             </button>
             <button
               id="btn-quiz-back-museum"
               type="button"
-              class="min-h-[44px] px-3 sm:px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-base transition shadow-sm cursor-pointer"
+              class="min-h-[44px] px-4 sm:px-6 py-2.5 rounded-xl bg-[#fff7ed] hover:bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa] font-bold text-xs sm:text-base transition shadow-sm cursor-pointer"
             >
               Quay lại Bảo Tàng 3D
             </button>
@@ -1109,23 +1110,16 @@
         id="section-members"
         class="tab-content hidden max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-8"
       >
-        <div class="border-b border-slate-200 pb-6">
-          <div class="flex items-center space-x-3 mb-2">
+        <div class="border-b border-slate-200 pb-5">
+          <div class="flex items-center space-x-3">
             <span
-              class="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm"
+              class="w-8 h-8 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm"
               >8</span
             >
             <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
               Nhóm Tác Giả &amp; Phân Công Nhiệm Vụ (Nhóm 8)
             </h2>
           </div>
-          <p
-            class="text-slate-600 text-base md:text-lg max-w-4xl leading-relaxed"
-          >
-            Danh sách 16 thành viên thực hiện đề tài môn học Kinh tế Chính trị
-            Mác - Lênin thuộc Nhóm 8. Phân bổ công việc gắn liền với chuyên
-            ngành Công nghệ thông tin và nghiên cứu học thuyết.
-          </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -1136,12 +1130,12 @@
             <div>
               <div class="flex items-center justify-between gap-2 mb-4">
                 <div
-                  class="w-10 h-10 rounded-full bg-slate-900 text-amber-400 font-extrabold flex items-center justify-center text-sm md:text-base shadow-sm ring-2 ring-amber-400/50 shrink-0"
+                  class="w-10 h-10 rounded-full bg-amber-600 text-white font-extrabold flex items-center justify-center text-sm md:text-base shadow-sm shrink-0"
                 >
                   1
                 </div>
                 <span
-                  class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-slate-900 text-amber-300 border border-amber-400/40 shrink-0"
+                  class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#df7a28] text-white shrink-0"
                 >
                   Nhóm trưởng
                 </span>
@@ -1653,58 +1647,57 @@
       role="dialog"
       aria-modal="true"
       aria-labelledby="qr-modal-title"
-      class="fixed inset-0 z-[100] hidden flex-col items-center bg-white text-slate-950 pt-14 pb-4 px-4 sm:py-5 sm:px-8 overflow-y-auto overflow-x-hidden overscroll-contain select-none animate-fade-in"
+      class="fixed inset-0 z-[100] hidden flex-col items-center p-3 sm:p-6 bg-white text-slate-950 overflow-y-auto overflow-x-hidden overscroll-contain select-none animate-fade-in"
     >
-      <!-- Nút Đóng (Esc) nổi bật ở góc trên bên phải -->
-      <button
-        id="btn-close-qr-modal"
-        type="button"
-        aria-label="Đóng giao diện Mã QR (Esc)"
-        title="Đóng (Esc)"
-        class="fixed top-4 right-4 sm:top-6 sm:right-8 z-10 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-base flex items-center gap-2 shadow-lg transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-500"
-      >
-        <svg
-          class="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
+      <!-- Thanh nút Đóng (Esc) tách riêng phía trên để không bao giờ che chữ trên mobile đứng/ngang -->
+      <div class="w-full max-w-5xl flex justify-end shrink-0 mb-2 sm:mb-3">
+        <button
+          id="btn-close-qr-modal"
+          type="button"
+          aria-label="Đóng giao diện Mã QR (Esc)"
+          title="Đóng (Esc)"
+          class="min-h-[44px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-2xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-xs sm:text-base flex items-center gap-2 shadow-sm transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-500"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2.5"
-            d="M6 18L18 6M6 6l12 12"
-          ></path>
-        </svg>
-        <span>Đóng (Esc)</span>
-      </button>
+          <svg
+            class="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2.5"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+          <span>Đóng (Esc)</span>
+        </button>
+      </div>
 
       <!-- Khối nội dung trung tâm: Tiêu đề + Mã QR siêu lớn + Đường dẫn URL -->
       <div
-        class="w-full max-w-5xl flex flex-col items-center justify-center text-center gap-3 sm:gap-5 my-auto"
+        class="w-full max-w-5xl flex flex-col items-center justify-center text-center gap-2.5 sm:gap-5 my-auto"
       >
         <div class="space-y-1 sm:space-y-2 max-w-3xl px-2">
           <span
-            class="inline-block text-[11px] sm:text-sm font-black uppercase tracking-widest text-amber-800 bg-amber-100 border-2 border-amber-300 px-3.5 py-1 rounded-full"
+            class="inline-block text-[11px] sm:text-sm font-black uppercase tracking-widest text-[#9a3412] bg-[#fff7ed] border-2 border-[#fed7aa] px-3.5 py-1 rounded-full"
           >
-            Học phần KTCT Mác - Lênin • Nhóm 8
+            Kinh tế chính trị Mác - Lênin Nhóm 8
           </span>
           <h2
             id="qr-modal-title"
-            class="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight"
+            class="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight"
           >
             Quét Mã QR Để Trải Nghiệm Trực Tiếp
           </h2>
-          <p class="text-xs sm:text-base md:text-xl font-semibold text-slate-600">
-            Mở camera điện thoại để truy cập Bảo Tàng 3D &amp; Game Thể Chế
-          </p>
         </div>
 
         <!-- Vùng viền trắng an toàn (Quiet Zone) bao quanh mã QR siêu lớn -->
         <div
           id="qr-quiet-zone"
-          class="p-4 sm:p-6 bg-white rounded-3xl border-4 border-slate-950 shadow-[0_12px_40px_rgba(0,0,0,0.12)] flex items-center justify-center shrink-0"
+          class="p-3 sm:p-6 bg-white rounded-3xl border-4 border-slate-950 shadow-[0_12px_40px_rgba(0,0,0,0.12)] flex items-center justify-center shrink-0"
         >
           <div
             id="qr-code-container"
@@ -1718,7 +1711,7 @@
           href="https://allendq1-lmq.github.io/KTCT_MacLenin_WebThuyetTrinh_Grp8/"
           target="_blank"
           rel="noopener noreferrer"
-          class="max-w-full bg-slate-100 hover:bg-amber-50 border-2 border-slate-900 rounded-2xl px-4 sm:px-7 py-2 sm:py-3 text-xs sm:text-lg md:text-2xl font-mono font-black text-slate-950 break-all transition-colors select-all shadow-sm"
+          class="max-w-full bg-slate-100 hover:bg-[#fff7ed] border-2 border-slate-900 rounded-2xl px-3.5 sm:px-7 py-2 sm:py-3 text-xs sm:text-lg md:text-2xl font-mono font-black text-slate-950 break-all transition-colors select-all shadow-sm"
         >
           https://allendq1-lmq.github.io/KTCT_MacLenin_WebThuyetTrinh_Grp8/
         </a>

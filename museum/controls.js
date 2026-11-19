@@ -2,9 +2,11 @@
 window.MuseumControls = (() => {
   let raycaster, mouse;
   let isInitialized = false;
+  let isActiveState = true;
   let currentExhibitIndex = 0;
   let currentExhibitData = null;
   let boundKeys = { w: false, a: false, s: false, d: false };
+  let drawerRequestToken = 0;
 
   // Ngưỡng chuẩn phân biệt thao tác Chạm (Tap mở hiện vật) và Kéo (Drag xoay góc nhìn) trên Mobile (C4)
   const TAP_MAX_DISTANCE_PX = 12;
@@ -56,6 +58,13 @@ window.MuseumControls = (() => {
         if (btn.classList) btn.classList.remove("dpad-active");
       });
     }
+
+    if (
+      window.MuseumAvatar &&
+      typeof window.MuseumAvatar.stopFootsteps === "function"
+    ) {
+      window.MuseumAvatar.stopFootsteps();
+    }
   }
 
   function getKeysState() {
@@ -91,9 +100,98 @@ window.MuseumControls = (() => {
     });
   }
 
+  function buildDrawerVisualShowcase(data, requestToken) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "drawer-visual-showcase";
+
+    const grid = document.createElement("div");
+    grid.className = "drawer-visual-grid single-panel";
+
+    // Thẻ 1 (Cách 1): Đồ họa / Infographic Canvas vẽ trực tiếp, luôn hiển thị ngay lập tức
+    const infoUrl =
+      window.MuseumEngine &&
+      typeof window.MuseumEngine.renderInfographicDataUrl === "function"
+        ? window.MuseumEngine.renderInfographicDataUrl(data)
+        : "";
+    if (infoUrl) {
+      const infoCard = document.createElement("div");
+      infoCard.className = "drawer-visual-card is-infographic";
+      const infoHeader = document.createElement("div");
+      infoHeader.className = "drawer-visual-card-label";
+      infoHeader.textContent = "Sơ đồ & Biểu đồ trực quan";
+      const infoImg = document.createElement("img");
+      infoImg.src = infoUrl;
+      infoImg.alt = data.title || "Infographic hiện vật";
+      infoCard.appendChild(infoHeader);
+      infoCard.appendChild(infoImg);
+      grid.appendChild(infoCard);
+    }
+
+    wrapper.appendChild(grid);
+
+    if (data.imageCaption) {
+      const captionEl = document.createElement("p");
+      captionEl.className = "drawer-visual-caption";
+      captionEl.textContent = data.imageCaption;
+      wrapper.appendChild(captionEl);
+    }
+
+    // Thẻ 2 (Cách 2): Nạp ảnh tư liệu local/CORS; thành công -> hiện song song, lỗi/offline -> giữ gọn Infographic
+    if (
+      window.MuseumEngine &&
+      typeof window.MuseumEngine.loadExhibitImageWithFallback === "function" &&
+      (data.localImagePath || data.imageUrl)
+    ) {
+      window.MuseumEngine.loadExhibitImageWithFallback(data)
+        .then((res) => {
+          if (requestToken !== drawerRequestToken || !res || !res.ok || !res.src) {
+            return;
+          }
+          if (!wrapper.isConnected) return;
+
+          const photoCard = document.createElement("div");
+          photoCard.className = "drawer-visual-card";
+          const photoHeader = document.createElement("div");
+          photoHeader.className = "drawer-visual-card-label";
+          photoHeader.textContent =
+            res.sourceType === "local"
+              ? "Ảnh tư liệu lưu trữ"
+              : "Tư liệu minh họa (Wikimedia)";
+
+          const photoImg = document.createElement("img");
+          photoImg.alt = data.imageCaption || data.title || "Tư liệu minh họa";
+          if (/\.svg(\.png)?(\?.*)?$/i.test(res.src)) {
+            photoImg.style.objectFit = "contain";
+            photoImg.style.padding = "6px";
+          }
+          photoImg.onerror = () => {
+            photoCard.remove();
+            if (grid.children.length <= 1) {
+              grid.classList.add("single-panel");
+            }
+          };
+          photoImg.src = res.src;
+
+          photoCard.appendChild(photoHeader);
+          photoCard.appendChild(photoImg);
+          grid.appendChild(photoCard);
+          if (grid.children.length > 1) {
+            grid.classList.remove("single-panel");
+          }
+        })
+        .catch(() => {});
+    }
+
+    return wrapper;
+  }
+
   function openDetailDrawer(exhibit) {
     const data = exhibit || currentExhibitData;
     if (!data) return;
+
+    resetAllKeys();
+    drawerRequestToken++;
+    const currentToken = drawerRequestToken;
 
     if (document.pointerLockElement && document.exitPointerLock) {
       document.exitPointerLock();
@@ -112,6 +210,10 @@ window.MuseumControls = (() => {
       body.innerHTML =
         data.fullHtml ||
         `<p class="text-slate-800 leading-relaxed">${data.desc || ""}</p>`;
+      const showcase = buildDrawerVisualShowcase(data, currentToken);
+      if (showcase && showcase.childNodes && showcase.childNodes.length > 0) {
+        body.prepend(showcase);
+      }
       body.scrollTop = 0;
     }
     if (modal) modal.classList.remove("hidden");
@@ -501,6 +603,47 @@ window.MuseumControls = (() => {
       );
     }
 
+    // Nút bật / tắt hiệu ứng âm thanh bước chân
+    const soundToggleBtn = document.getElementById("btn-museum-sound-toggle");
+    const soundToggleLabel = document.getElementById("sound-toggle-label");
+    const soundIconOn = document.getElementById("sound-icon-on");
+    const soundIconOff = document.getElementById("sound-icon-off");
+
+    const syncSoundToggleUi = () => {
+      const enabled =
+        window.MuseumAvatar &&
+        typeof window.MuseumAvatar.isSoundEnabled === "function"
+          ? window.MuseumAvatar.isSoundEnabled()
+          : true;
+      if (soundToggleBtn) {
+        soundToggleBtn.setAttribute("aria-pressed", enabled ? "true" : "false");
+        soundToggleBtn.classList.toggle("sound-muted", !enabled);
+        soundToggleBtn.classList.toggle("text-emerald-300", enabled);
+        soundToggleBtn.classList.toggle("border-emerald-500/35", enabled);
+      }
+      if (soundToggleLabel) {
+        soundToggleLabel.textContent = enabled ? "BẬT" : "TẮT";
+      }
+      if (soundIconOn) soundIconOn.classList.toggle("hidden", !enabled);
+      if (soundIconOff) soundIconOff.classList.toggle("hidden", enabled);
+    };
+
+    if (soundToggleBtn) {
+      syncSoundToggleUi();
+      soundToggleBtn.addEventListener("click", () => {
+        if (
+          window.MuseumAvatar &&
+          typeof window.MuseumAvatar.setSoundEnabled === "function" &&
+          typeof window.MuseumAvatar.isSoundEnabled === "function"
+        ) {
+          window.MuseumAvatar.setSoundEnabled(
+            !window.MuseumAvatar.isSoundEnabled(),
+          );
+          syncSoundToggleUi();
+        }
+      });
+    }
+
     document.addEventListener("pointerlockchange", () => {
       const isLocked = document.pointerLockElement === domElement;
       if (shiftLockLabel) {
@@ -560,10 +703,16 @@ window.MuseumControls = (() => {
 
     // Sự kiện bàn phím: Shift-Lock & Di chuyển (W, A, S, D / Mũi tên)
     window.addEventListener("keydown", (e) => {
+      if (!isActiveState) return;
       const k = (e.key || "").toLowerCase();
 
       if (k === "escape") {
         closeDetailDrawer();
+        if (document.pointerLockElement && document.exitPointerLock) {
+          try {
+            document.exitPointerLock();
+          } catch (_) {}
+        }
         return;
       }
 
@@ -600,6 +749,7 @@ window.MuseumControls = (() => {
     });
 
     window.addEventListener("keyup", (e) => {
+      if (!isActiveState) return;
       const k = (e.key || "").toLowerCase();
       if (k === "w" || k === "arrowup") keys.w = false;
       if (k === "a" || k === "arrowleft") keys.a = false;
@@ -613,11 +763,21 @@ window.MuseumControls = (() => {
         resetAllKeys();
         return;
       }
-      if (e.data.type === "MUSEUM_SET_ACTIVE" && !e.data.active) {
-        resetAllKeys();
+      if (e.data.type === "MUSEUM_SET_ACTIVE") {
+        isActiveState = Boolean(e.data.active);
+        if (
+          window.MuseumAvatar &&
+          typeof window.MuseumAvatar.setSystemMuted === "function"
+        ) {
+          window.MuseumAvatar.setSystemMuted(!isActiveState);
+        }
+        if (!isActiveState) {
+          resetAllKeys();
+        }
         return;
       }
       if (e.data.type === "PARENT_KEY_EVENT") {
+        if (!isActiveState) return;
         const evtType = e.data.eventType || "keydown";
         const keyVal = (e.data.key || "").toLowerCase();
         if (evtType === "keydown") {
@@ -656,6 +816,16 @@ window.MuseumControls = (() => {
     openDetailDrawer,
     closeDetailDrawer,
     resetAllKeys,
+    setActive: (active) => {
+      isActiveState = Boolean(active);
+      if (
+        window.MuseumAvatar &&
+        typeof window.MuseumAvatar.setSystemMuted === "function"
+      ) {
+        window.MuseumAvatar.setSystemMuted(!isActiveState);
+      }
+      if (!isActiveState) resetAllKeys();
+    },
     getKeysState,
     classifyTouchInteraction,
     TAP_MAX_DISTANCE_PX,

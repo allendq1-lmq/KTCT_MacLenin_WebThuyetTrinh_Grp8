@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bảo Tàng 3D Kinh Tế Chính Trị Mác - Lênin</title>
+    <link rel="icon" href="data:," />
     <!-- Tailwind CSS & Three.js CDN (Hệ thống Camera 3D Shift-Lock góc nhìn thứ ba qua vai) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -26,31 +27,73 @@
           class="room-btn active px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition"
           data-room="1"
         >
-          <span class="sm:hidden">Phòng 1</span>
-          <span class="hidden sm:inline">Phòng 1: Tổng Quan</span>
+          <span class="museum-room-short sm:hidden">Phòng 1</span>
+          <span class="museum-room-full hidden sm:inline">Phòng 1: Tổng Quan</span>
         </button>
         <button
           type="button"
           class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
           data-room="2"
         >
-          <span class="sm:hidden">Phòng 2</span>
-          <span class="hidden sm:inline">Phòng 2: 5 Đặc Trưng</span>
+          <span class="museum-room-short sm:hidden">Phòng 2</span>
+          <span class="museum-room-full hidden sm:inline">Phòng 2: 5 Đặc Trưng</span>
         </button>
         <button
           type="button"
           class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
           data-room="3"
         >
-          <span class="sm:hidden">Phòng 3</span>
-          <span class="hidden sm:inline">Phòng 3: Giới Hạn &amp; Giải Pháp</span>
+          <span class="museum-room-short sm:hidden">Phòng 3</span>
+          <span class="museum-room-full hidden sm:inline">Phòng 3: Giới Hạn &amp; Giải Pháp</span>
         </button>
       </div>
 
-      <!-- Cụm Phải: Trạng thái Shift-Lock -->
+      <!-- Cụm Phải: Trạng thái Shift-Lock & Bật/Tắt Âm bước chân -->
       <div
-        class="pointer-events-auto flex items-center bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
+        id="museum-status-controls"
+        class="pointer-events-auto flex items-center gap-1 sm:gap-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
       >
+        <button
+          id="btn-museum-sound-toggle"
+          type="button"
+          aria-pressed="true"
+          title="Bật hoặc tắt hiệu ứng âm thanh bước chân khi di chuyển"
+          class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-emerald-300 border border-emerald-500/35 hover:bg-slate-700 transition"
+        >
+          <svg
+            id="sound-icon-on"
+            class="w-3.5 h-3.5 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+            ></path>
+          </svg>
+          <svg
+            id="sound-icon-off"
+            class="w-3.5 h-3.5 shrink-0 hidden"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"
+            ></path>
+          </svg>
+          <span class="museum-sound-detail">Âm bước chân:</span>
+          <span id="sound-toggle-label">BẬT</span>
+        </button>
+
         <button
           id="btn-shiftlock-status"
           type="button"
@@ -71,8 +114,9 @@
               d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
             ></path>
           </svg>
-          <span>Shift-Lock:</span>
-          <span id="shiftlock-state-label">Giữ chuột / Phím Shift</span>
+          <span>Shift-Lock</span>
+          <span class="museum-shiftlock-detail">:</span>
+          <span id="shiftlock-state-label" class="museum-shiftlock-detail">Giữ chuột / Phím Shift</span>
         </button>
       </div>
     </header>
@@ -86,7 +130,7 @@
       class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none"
     >
       <div
-        class="w-3.5 h-3.5 rounded-full border-2 border-amber-400/90 bg-slate-950/40 shadow-[0_0_8px_rgba(245,158,11,0.8)]"
+        class="w-3.5 h-3.5 rounded-full border-2 border-amber-400/90 bg-slate-950/40 shadow-sm"
       ></div>
     </div>
 
@@ -121,7 +165,7 @@
           <button
             id="btn-close-detail-drawer"
             type="button"
-            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-600 text-white font-bold text-xs sm:text-sm transition shrink-0 flex items-center gap-1"
+            class="px-3 py-1.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-bold text-xs sm:text-sm transition shrink-0 flex items-center gap-1"
           >
             <svg
               class="w-3.5 h-3.5 shrink-0"
@@ -149,6 +193,7 @@
 
     <!-- Bộ scripts thành phần của Bảo tàng 3D -->
     <script src="data.js"></script>
+    <script src="visuals.js"></script>
     <script src="avatar.js"></script>
     <script src="room1.js"></script>
     <script src="room2.js"></script>

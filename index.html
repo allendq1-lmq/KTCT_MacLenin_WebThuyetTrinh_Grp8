@@ -346,35 +346,6 @@
                 </button>
 
                 <button
-                  id="btn-game-sound-toggle"
-                  type="button"
-                  aria-pressed="true"
-                  title="Bật / Tắt hiệu ứng âm thanh trong Game"
-                  class="px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-[11px] font-bold transition flex items-center gap-1"
-                >
-                  <span
-                    id="game-sound-icon"
-                    class="inline-flex items-center justify-center w-3.5 h-3.5"
-                  >
-                    <svg
-                      class="w-3.5 h-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span id="game-sound-label">Âm thanh: BẬT</span>
-                </button>
-
-                <button
                   id="btn-game-rules-toggle"
                   type="button"
                   aria-expanded="false"
@@ -548,7 +519,7 @@
                   </h3>
                 </div>
 
-                <div class="flex items-center gap-1.5 shrink-0">
+                <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
                   <span
                     id="leaderboard-status-badge"
                     class="lb-status-pill lb-status-online text-[10px] font-bold px-2 py-0.5 rounded-full border"
@@ -559,6 +530,7 @@
                     id="btn-leaderboard-refresh"
                     type="button"
                     title="Làm mới BXH Online"
+                    aria-label="Làm mới bảng xếp hạng"
                     class="px-2 py-1 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-bold transition inline-flex items-center gap-1"
                   >
                     <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -569,7 +541,26 @@
                         d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                       ></path>
                     </svg>
-                    <span>Làm mới</span>
+                    <span class="hidden sm:inline">Làm mới</span>
+                  </button>
+                  <button
+                    id="btn-leaderboard-expand"
+                    type="button"
+                    aria-haspopup="dialog"
+                    aria-controls="leaderboard-full-modal"
+                    aria-label="Phóng to xem toàn bộ bảng xếp hạng"
+                    title="Phóng to xem toàn bộ danh sách BXH"
+                    class="px-2 py-1 rounded-lg border border-[#fed7aa] bg-[#fff7ed] hover:bg-[#ffedd5] text-[#9a3412] text-[11px] font-bold transition inline-flex items-center gap-1"
+                  >
+                    <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                      ></path>
+                    </svg>
+                    <span>Phóng to</span>
                   </button>
                 </div>
               </div>
@@ -914,13 +905,6 @@
                   Mỗi MSSV được ghi nhận tối đa <strong>5 lượt tính điểm</strong> lên Bảng Xếp Hạng Online Toàn Lớp.
                 </p>
               </div>
-              <button
-                id="btn-focus-player-form"
-                type="button"
-                class="px-4 py-2 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white text-xs font-extrabold transition"
-              >
-                Nhập thông tin ngay
-              </button>
             </div>
 
             <!-- Khung Kéo Thẻ -->
@@ -1277,34 +1261,6 @@
               >
                 0 / 5 đúng
               </span>
-              <button
-                id="btn-quiz-sound-toggle"
-                type="button"
-                aria-pressed="true"
-                title="Bật / Tắt âm thanh hiệu ứng Trắc nghiệm"
-                class="min-h-[40px] sm:min-h-[44px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer shrink-0"
-              >
-                <span
-                  id="quiz-sound-icon"
-                  class="inline-flex items-center justify-center w-4 h-4"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"
-                    ></path>
-                  </svg>
-                </span>
-                <span id="quiz-sound-label">Âm thanh: BẬT</span>
-              </button>
             </div>
           </div>
 
@@ -1443,533 +1399,352 @@
       <!-- ================= TAB 5: NHÓM TÁC GIẢ (16 THÀNH VIÊN - NHÓM 8) ================= -->
       <section
         id="section-members"
-        class="tab-content hidden max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-8"
+        class="tab-content hidden max-w-7xl mx-auto p-3.5 sm:p-6 md:p-8 space-y-5 sm:space-y-7"
       >
-        <div class="border-b border-slate-200 pb-5">
+        <div class="border-b border-slate-200 pb-4 flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center space-x-3">
             <span
-              class="w-8 h-8 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm"
+              class="w-8 h-8 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm shrink-0"
               >8</span
             >
-            <h2 class="text-2xl md:text-3xl font-bold text-slate-900">
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900">
               Nhóm Tác Giả &amp; Phân Công Nhiệm Vụ (Nhóm 8)
             </h2>
           </div>
+          <span
+            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa]"
+          >
+            16 thành viên
+          </span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <!-- 1. Trần Thanh Duy (Nhóm trưởng) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
+          <!-- 1. Nguyễn Hoàng Phúc -->
           <div
-            class="bg-gradient-to-br from-amber-50/70 via-white to-white rounded-2xl border-2 border-amber-400/90 p-5 sm:p-6 shadow-md ring-1 ring-amber-200/60 flex flex-col justify-between transition-shadow hover:shadow-lg"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div class="flex items-center justify-between gap-2 mb-4">
-                <div
-                  class="w-10 h-10 rounded-full bg-amber-600 text-white font-extrabold flex items-center justify-center text-sm md:text-base shadow-sm shrink-0"
-                >
-                  1
-                </div>
-                <span
-                  class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#df7a28] text-white shrink-0"
-                >
-                  Nhóm trưởng
-                </span>
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
+                1
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Trần Thanh Duy
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Nguyễn Hoàng Phúc</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 24521388
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-amber-200/80">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base font-semibold text-slate-800 mt-1.5 leading-relaxed"
-              >
-                Nhóm trưởng Nhóm 8 (Làm web)
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm nội dung</p>
             </div>
           </div>
 
           <!-- 2. Nguyễn Công Thành (Leader) -->
           <div
-            class="bg-gradient-to-b from-amber-50/35 to-white rounded-2xl border border-amber-300/90 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
+            class="bg-gradient-to-b from-amber-50/40 to-white rounded-2xl border border-[#fed7aa] p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
           >
             <div>
-              <div class="flex items-center justify-between gap-2 mb-4">
-                <div
-                  class="w-10 h-10 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm md:text-base shadow-sm shrink-0"
-                >
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="w-9 h-9 rounded-full bg-[#c4661b] text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
                   2
                 </div>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300/80 shrink-0"
-                >
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa] shrink-0">
                   Leader
                 </span>
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Nguyễn Công Thành
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Nguyễn Công Thành</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 24521624
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-amber-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base font-medium text-slate-800 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung (Leader)
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-amber-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm font-medium text-slate-800 mt-1 leading-relaxed">Làm nội dung (Leader)</p>
             </div>
           </div>
 
-          <!-- 3. Đỗ Thành Danh (Leader) -->
+          <!-- 3. Hoành Anh -->
           <div
-            class="bg-gradient-to-b from-amber-50/35 to-white rounded-2xl border border-amber-300/90 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div class="flex items-center justify-between gap-2 mb-4">
-                <div
-                  class="w-10 h-10 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm md:text-base shadow-sm shrink-0"
-                >
-                  3
-                </div>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300/80 shrink-0"
-                >
-                  Leader
-                </span>
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
+                3
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Đỗ Thành Danh
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Hoành Anh</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520048
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-amber-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base font-medium text-slate-800 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung (Leader)
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm nội dung</p>
             </div>
           </div>
 
-          <!-- 4. Nguyễn Hoàng Phúc -->
+          <!-- 4. Thái Viết Bắc -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
                 4
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Nguyễn Hoàng Phúc
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Thái Viết Bắc</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520108
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm nội dung</p>
             </div>
           </div>
 
-          <!-- 5. Hoàng Anh -->
+          <!-- 5. Đỗ Thành Danh (Leader) -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-gradient-to-b from-amber-50/40 to-white rounded-2xl border border-[#fed7aa] p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
-                5
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="w-9 h-9 rounded-full bg-[#c4661b] text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
+                  5
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa] shrink-0">
+                  Leader
+                </span>
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Hoàng Anh
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Đỗ Thành Danh</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520247
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-amber-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm font-medium text-slate-800 mt-1 leading-relaxed">Làm nội dung (Leader)</p>
             </div>
           </div>
 
-          <!-- 6. Thái Viết Bắc -->
+          <!-- 6. Nguyễn Anh Đức -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
                 6
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Thái Viết Bắc
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Nguyễn Anh Đức</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520335
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm web</p>
             </div>
           </div>
 
-          <!-- 7. Phạm Quang Duy -->
+          <!-- 7. Ngô Trí Dũng -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
                 7
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Phạm Quang Duy
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Ngô Trí Dũng</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520361
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm web</p>
             </div>
           </div>
 
-          <!-- 8. Phan Đức Hải -->
+          <!-- 8. Lê Thanh Duy (Leader) -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-gradient-to-b from-amber-50/40 to-white rounded-2xl border border-[#fed7aa] p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
-                8
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="w-9 h-9 rounded-full bg-[#c4661b] text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
+                  8
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa] shrink-0">
+                  Leader
+                </span>
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Phan Đức Hải
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Lê Thanh Duy</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520420
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-amber-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm font-medium text-slate-800 mt-1 leading-relaxed">Thuyết trình (Leader)</p>
             </div>
           </div>
 
-          <!-- 9. Trần Thùy Linh -->
+          <!-- 9. Phạm Quang Duy -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
                 9
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Trần Thùy Linh
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Phạm Quang Duy</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520442
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm nội dung</p>
             </div>
           </div>
 
-          <!-- 10. Lê Nguyễn Trí Quân -->
+          <!-- 10. Trần Thanh Duy (Nhóm trưởng) -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-gradient-to-br from-[#fff7ed] via-white to-white rounded-2xl border-2 border-[#df7a28] p-4 sm:p-5 shadow-md ring-1 ring-[#fed7aa] flex flex-col justify-between transition-shadow hover:shadow-lg"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
-                10
-              </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Lê Nguyễn Trí Quân
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
-              </p>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm nội dung
-              </p>
-            </div>
-          </div>
-
-          <!-- 11. Lê Minh Quân (Leader) -->
-          <div
-            class="bg-gradient-to-b from-amber-50/35 to-white rounded-2xl border border-amber-300/90 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
-          >
-            <div>
-              <div class="flex items-center justify-between gap-2 mb-4">
-                <div
-                  class="w-10 h-10 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm md:text-base shadow-sm shrink-0"
-                >
-                  11
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-extrabold flex items-center justify-center text-sm shadow-sm shrink-0">
+                  10
                 </div>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300/80 shrink-0"
-                >
-                  Leader
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#df7a28] text-white shrink-0">
+                  Nhóm trưởng
                 </span>
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Lê Minh Quân
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Trần Thanh Duy</h3>
+              <p class="text-xs sm:text-sm text-[#9a3412] font-mono font-bold mt-0.5">
+                MSSV: 25520449
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-amber-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base font-medium text-slate-800 mt-1.5 leading-relaxed"
-              >
-                Làm web (Leader)
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-[#fed7aa]">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm font-semibold text-slate-800 mt-1 leading-relaxed">Nhóm trưởng Nhóm 8 (Làm web)</p>
             </div>
           </div>
 
-          <!-- 12. Nguyễn Anh Đức -->
+          <!-- 11. Phan Đức Hải -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
+                11
+              </div>
+              <h3 class="font-bold text-base text-slate-900">Phan Đức Hải</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520488
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm nội dung</p>
+            </div>
+          </div>
+
+          <!-- 12. Mai Lê Hoàng Huy -->
+          <div
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+          >
+            <div>
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
                 12
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Nguyễn Anh Đức
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Mai Lê Hoàng Huy</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25520702
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm web
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Thuyết trình</p>
             </div>
           </div>
 
-          <!-- 13. Ngô Trí Dũng -->
+          <!-- 13. Trần Thùy Linh -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
                 13
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Ngô Trí Dũng
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Trần Thùy Linh</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25521010
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Làm web
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm nội dung</p>
             </div>
           </div>
 
-          <!-- 14. Lê Thanh Duy (Leader) -->
+          <!-- 14. Đặng Hoàng Phúc -->
           <div
-            class="bg-gradient-to-b from-amber-50/35 to-white rounded-2xl border border-amber-300/90 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div class="flex items-center justify-between gap-2 mb-4">
-                <div
-                  class="w-10 h-10 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm md:text-base shadow-sm shrink-0"
-                >
-                  14
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
+                14
+              </div>
+              <h3 class="font-bold text-base text-slate-900">Đặng Hoàng Phúc</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25521417
+              </p>
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Thuyết trình</p>
+            </div>
+          </div>
+
+          <!-- 15. Lê Minh Quân (Leader) -->
+          <div
+            class="bg-gradient-to-b from-amber-50/40 to-white rounded-2xl border border-[#fed7aa] p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
+          >
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="w-9 h-9 rounded-full bg-[#c4661b] text-white font-bold flex items-center justify-center text-sm shadow-sm shrink-0">
+                  15
                 </div>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300/80 shrink-0"
-                >
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa] shrink-0">
                   Leader
                 </span>
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Lê Thanh Duy
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Lê Minh Quân</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25521492
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-amber-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-700 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base font-medium text-slate-800 mt-1.5 leading-relaxed"
-              >
-                Thuyết trình (Leader)
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-amber-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm font-medium text-slate-800 mt-1 leading-relaxed">Làm web (Leader)</p>
             </div>
           </div>
 
-          <!-- 15. Mai Lê Hoàng Huy -->
+          <!-- 16. Lê Nguyễn Trí Quân -->
           <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
+            class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
           >
             <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
-                15
-              </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Mai Lê Hoàng Huy
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
-              </p>
-            </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Thuyết trình
-              </p>
-            </div>
-          </div>
-
-          <!-- 16. Đặng Hoàng Phúc -->
-          <div
-            class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col justify-between transition-shadow hover:border-slate-300 hover:shadow-md"
-          >
-            <div>
-              <div
-                class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center text-sm md:text-base mb-4"
-              >
+              <div class="w-9 h-9 rounded-full bg-[#df7a28] text-white font-bold flex items-center justify-center text-sm mb-3">
                 16
               </div>
-              <h3 class="font-bold text-base md:text-lg text-slate-900">
-                Đặng Hoàng Phúc
-              </h3>
-              <p class="text-xs md:text-sm text-slate-500 font-mono mt-0.5">
-                MSSV: [MSSV]
+              <h3 class="font-bold text-base text-slate-900">Lê Nguyễn Trí Quân</h3>
+              <p class="text-xs sm:text-sm text-slate-600 font-mono font-semibold mt-0.5">
+                MSSV: 25521493
               </p>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-100">
-              <span
-                class="text-xs md:text-sm font-bold uppercase tracking-wider text-amber-600 block"
-                >Nhiệm vụ đảm nhiệm</span
-              >
-              <p
-                class="text-sm md:text-base text-slate-700 mt-1.5 leading-relaxed"
-              >
-                Thuyết trình
-              </p>
+            <div class="mt-3 pt-2.5 border-t border-slate-100">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#c4661b] block">Nhiệm vụ đảm nhiệm</span>
+              <p class="text-sm text-slate-700 mt-1 leading-relaxed">Làm nội dung</p>
             </div>
           </div>
         </div>
@@ -2052,6 +1827,115 @@
         </a>
       </div>
     </div>
+
+    <!-- Modal Bảng Xếp Hạng Phóng To Toàn Màn Hình (Hiển thị toàn bộ danh sách sinh viên có thanh cuộn dọc) -->
+    <dialog
+      id="leaderboard-full-modal"
+      closedby="any"
+      aria-labelledby="leaderboard-full-title"
+      class="leaderboard-full-dialog p-0 bg-white text-slate-900 rounded-2xl border border-slate-200 shadow-2xl"
+    >
+      <div class="flex flex-col h-full min-h-0">
+        <div
+          class="flex flex-wrap items-center justify-between gap-2 px-3.5 sm:px-5 py-3 border-b border-slate-200 bg-slate-50 shrink-0"
+        >
+          <div class="flex items-center gap-2 min-w-0">
+            <span
+              class="w-7 h-7 rounded-lg bg-[#df7a28] text-white inline-flex items-center justify-center shrink-0"
+              aria-hidden="true"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                ></path>
+              </svg>
+            </span>
+            <div class="min-w-0">
+              <h2
+                id="leaderboard-full-title"
+                class="text-sm sm:text-base font-extrabold text-slate-900 truncate"
+              >
+                Bảng Xếp Hạng Online Toàn Lớp
+              </h2>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span
+                  id="leaderboard-full-count"
+                  class="text-[11px] font-mono font-bold text-[#9a3412] bg-[#fff7ed] border border-[#fed7aa] px-2 py-0.5 rounded-full"
+                  >0 sinh viên</span
+                >
+                <span
+                  id="leaderboard-full-status-badge"
+                  class="lb-status-pill lb-status-online text-[10.5px] font-bold px-2 py-0.5 rounded-full border"
+                  >BXH Online</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button
+              id="btn-leaderboard-full-refresh"
+              type="button"
+              class="min-h-[40px] px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold transition inline-flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                ></path>
+              </svg>
+              <span>Làm mới</span>
+            </button>
+            <button
+              id="btn-leaderboard-full-close"
+              type="button"
+              aria-label="Đóng bảng xếp hạng mở rộng (Esc)"
+              class="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white text-xs font-extrabold transition inline-flex items-center gap-1.5"
+            >
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+              <span>Đóng</span>
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="leaderboard-full-scroll-body"
+          class="flex-1 min-h-0 overflow-y-auto overflow-x-auto overscroll-contain px-2.5 sm:px-5 py-2.5"
+        >
+          <table class="leaderboard-full-table" aria-label="Toàn bộ bảng xếp hạng Game Thể Chế">
+            <thead>
+              <tr class="text-[11px] uppercase tracking-wider text-slate-500 border-b border-slate-200 bg-white sticky top-0 z-10">
+                <th scope="col" class="py-2 px-1.5 sm:px-2 text-center font-bold w-11 sm:w-12">Hạng</th>
+                <th scope="col" class="py-2 px-1.5 sm:px-2 text-left font-bold">Họ và tên</th>
+                <th scope="col" class="hidden sm:table-cell py-2 px-2 text-left font-bold w-28">MSSV</th>
+                <th scope="col" class="py-2 px-1.5 sm:px-2 text-center font-bold w-14 sm:w-20">Lượt</th>
+                <th scope="col" class="py-2 px-1.5 sm:px-2 text-center font-bold w-14 sm:w-20">Năm</th>
+                <th scope="col" class="py-2 px-1.5 sm:px-2 text-right font-bold w-16 sm:w-24">Điểm</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-full-tbody">
+              <tr>
+                <td colspan="6" class="py-8 text-center text-xs sm:text-sm text-slate-500">
+                  Đang tải toàn bộ bảng xếp hạng...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </dialog>
 
     <!-- Scripts -->
     <script src="js/leaderboard-config.js"></script>

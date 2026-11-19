@@ -192,19 +192,7 @@ body {
   text-align: center;
 }
 
-#btn-museum-sound-toggle.sound-muted {
-  color: #fda4af;
-  border-color: rgba(244, 63, 94, 0.45);
-  background-color: rgba(30, 41, 59, 0.92);
-}
-
-/* Tối ưu Mobile Portrait (< 768px): giữ thanh Phòng, Âm thanh và Shift-Lock trên 1 hàng gọn, thu gọn D-Pad */
-@media (max-width: 1023px) {
-  .museum-sound-detail {
-    display: none;
-  }
-}
-
+/* Tối ưu Mobile Portrait (< 768px): giữ thanh Phòng và Shift-Lock trên 1 hàng gọn, thu gọn D-Pad */
 @media (max-width: 767px) {
   .virtual-dpad-container {
     bottom: 12px;
@@ -227,8 +215,7 @@ body {
 }
 
 @media (max-width: 639px) {
-  .museum-shiftlock-detail,
-  .museum-sound-detail {
+  .museum-shiftlock-detail {
     display: none !important;
   }
 
@@ -252,8 +239,7 @@ body {
     margin-left: 0 !important;
   }
 
-  #btn-shiftlock-status,
-  #btn-museum-sound-toggle {
+  #btn-shiftlock-status {
     padding: 0.28rem 0.4rem !important;
     font-size: 0.68rem !important;
     gap: 3px !important;
@@ -275,8 +261,7 @@ body {
   }
 
   .museum-room-full,
-  .museum-shiftlock-detail,
-  .museum-sound-detail {
+  .museum-shiftlock-detail {
     display: none !important;
   }
 
@@ -286,8 +271,7 @@ body {
     white-space: nowrap !important;
   }
 
-  #btn-shiftlock-status,
-  #btn-museum-sound-toggle {
+  #btn-shiftlock-status {
     padding: 0.28rem 0.52rem !important;
     font-size: 0.7rem !important;
     white-space: nowrap !important;

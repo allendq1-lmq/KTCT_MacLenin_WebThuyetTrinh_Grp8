@@ -1489,22 +1489,10 @@ window.MuseumEngine = (() => {
     keys.a = false;
     keys.s = false;
     keys.d = false;
-    if (
-      window.MuseumAvatar &&
-      typeof window.MuseumAvatar.setSystemMuted === "function"
-    ) {
-      window.MuseumAvatar.setSystemMuted(true);
-    }
   }
 
   function resumeRenderLoop() {
     if (shouldPauseRender() || !renderer || !scene || !camera) return;
-    if (
-      window.MuseumAvatar &&
-      typeof window.MuseumAvatar.setSystemMuted === "function"
-    ) {
-      window.MuseumAvatar.setSystemMuted(false);
-    }
     if (animId === null) {
       lastFrameTime =
         typeof performance !== "undefined" && performance.now
@@ -1637,12 +1625,6 @@ window.MuseumEngine = (() => {
         window.parent.getCurrentActiveTab() !== "idea2"
       ) {
         isManualPaused = true;
-        if (
-          window.MuseumAvatar &&
-          typeof window.MuseumAvatar.setSystemMuted === "function"
-        ) {
-          window.MuseumAvatar.setSystemMuted(true);
-        }
       }
     } catch (_) {}
 

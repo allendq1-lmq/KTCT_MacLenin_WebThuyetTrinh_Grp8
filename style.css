@@ -12,7 +12,6 @@
 }
 
 html {
-  scrollbar-gutter: stable;
   height: 100vh;
   height: 100dvh;
   max-height: 100vh;
@@ -1001,16 +1000,16 @@ body.reveal-full-page {
 }
 
 .member-name {
-  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+  font-size: clamp(0.98rem, 1.15vw, 1.2rem);
   line-height: 1.22;
 }
 
 .member-mssv {
-  font-size: clamp(0.9rem, 1.05vw, 1.1rem);
+  font-size: clamp(0.85rem, 0.98vw, 1.02rem);
   line-height: 1.25;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .members-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1097,9 +1096,9 @@ body.reveal-full-page {
 .group8-showcase-card {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 52%, #7c2d12 100%);
-  border: 1.5px solid rgba(251, 146, 60, 0.55);
-  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #3b1d08 100%);
+  border: 1.5px solid #df7a28;
+  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.55), inset 0 1px 0 rgba(245, 158, 11, 0.28);
   color: #f8fafc;
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 240ms ease,
@@ -1108,8 +1107,8 @@ body.reveal-full-page {
 
 .group8-showcase-card:hover {
   transform: translateY(-2px);
-  border-color: #fb923c;
-  box-shadow: 0 14px 30px -8px rgba(223, 122, 40, 0.45), 0 0 0 1px rgba(251, 146, 60, 0.35);
+  border-color: #f59e0b;
+  box-shadow: 0 14px 30px -8px rgba(223, 122, 40, 0.5), 0 0 0 1px rgba(245, 158, 11, 0.45);
 }
 
 .group8-showcase-shimmer {

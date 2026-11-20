@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Thể Chế — Mô Phỏng Hoạch Định Chính Sách KTCT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans overflow-x-hidden">
+    <!-- ================= CỔNG ĐĂNG NHẬP BẮT BUỘC (TÊN + MSSV 8 SỐ) ================= -->
+    <main
+      id="login-gate"
+      class="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-[#fff7ed] via-slate-50 to-amber-50"
+    >
+      <section
+        aria-labelledby="login-title"
+        class="w-full max-w-md bg-white rounded-3xl border border-[#fed7aa] shadow-xl p-6 sm:p-8 flex flex-col gap-5"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-11 h-11 rounded-2xl bg-[#df7a28] text-white font-black text-xl flex items-center justify-center shadow-sm border border-[#c4661b] shrink-0"
+          >
+            8
+          </div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-[#c4661b] block">
+              KTCT Mác - Lênin • Nhóm 8
+            </span>
+            <h1 id="login-title" class="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight">
+              Game Thể Chế Kinh Tế
+            </h1>
+          </div>
+        </div>
+
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Đăng nhập bằng <strong>Họ và tên</strong> và <strong>MSSV (đúng 8 chữ số)</strong> để đồng bộ lượt chơi và ghi nhận thành tích lên Bảng Xếp Hạng Toàn Lớp.
+        </p>
+
+        <form id="login-form" class="flex flex-col gap-4" novalidate>
+          <div class="flex flex-col gap-1.5">
+            <label for="login-name" class="text-sm font-bold text-slate-800">
+              Họ và tên <span class="text-rose-600" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="login-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              minlength="2"
+              maxlength="40"
+              required
+              placeholder="Ví dụ: Nguyễn Văn An"
+              aria-describedby="login-name-hint login-name-error"
+              class="w-full min-h-[48px] px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-base focus:border-[#df7a28] focus:outline-none"
+            />
+            <span id="login-name-hint" class="text-xs text-slate-500">Độ dài từ 2–40 ký tự.</span>
+            <p id="login-name-error" class="text-xs font-bold text-rose-600 min-h-[1rem]" aria-live="polite"></p>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="login-mssv" class="text-sm font-bold text-slate-800">
+              Mã số sinh viên (MSSV) <span class="text-rose-600" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="login-mssv"
+              name="mssv"
+              type="text"
+              inputmode="numeric"
+              pattern="\d{8}"
+              maxlength="8"
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              required
+              placeholder="Nhập đúng 8 chữ số (VD: 23520123)"
+              aria-describedby="login-mssv-hint login-mssv-error"
+              class="w-full min-h-[48px] px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 font-mono text-base tracking-wider focus:border-[#df7a28] focus:outline-none"
+            />
+            <span id="login-mssv-hint" class="text-xs text-slate-500">
+              Mỗi MSSV là 1 tài khoản duy nhất (tối đa 5 lượt tính điểm).
+            </span>
+            <p id="login-mssv-error" class="text-xs font-bold text-rose-600 min-h-[1rem]" aria-live="polite"></p>
+          </div>
+
+          <button
+            id="btn-login-submit"
+            type="submit"
+            class="w-full min-h-[48px] mt-1 px-4 py-3 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-sm sm:text-base shadow-sm transition cursor-pointer"
+          >
+            Đăng nhập &amp; Vào Game
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <!-- ================= ỨNG DỤNG CHÍNH (3 TAB + HEADER ĐĂNG XUẤT) ================= -->
+    <div id="app-shell" class="hidden min-h-screen flex flex-col">
+      <header
+        id="app-header"
+        class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white"
+      >
+        <div
+          id="header-inner"
+          class="max-w-6xl w-full mx-auto px-3 sm:px-5 py-2 flex flex-wrap items-center justify-between gap-2"
+        >
+          <!-- Thương hiệu -->
+          <div id="header-brand" class="flex items-center gap-2.5 min-w-0">
+            <div
+              class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#df7a28] text-white font-black flex items-center justify-center text-base shrink-0 border border-[#c4661b]"
+            >
+              8
+            </div>
+            <div class="min-w-0">
+              <span class="text-[10px] sm:text-xs font-bold text-amber-300 block leading-tight truncate">
+                KTCT Mác - Lênin Nhóm 8
+              </span>
+              <span class="text-xs sm:text-sm font-extrabold text-white block leading-tight truncate">
+                Game Thể Chế
+              </span>
+            </div>
+          </div>
+
+          <!-- 3 Tab nhiệm vụ tách biệt -->
+          <nav id="header-nav" aria-label="Điều hướng nhiệm vụ" class="order-3 sm:order-2 w-full sm:w-auto">
+            <div
+              role="tablist"
+              aria-label="Các mục chính"
+              class="tablist-scroll flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/80 gap-1"
+            >
+              <button
+                id="tab-rules"
+                type="button"
+                role="tab"
+                data-tab="rules"
+                aria-selected="false"
+                class="game-tab flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition whitespace-nowrap"
+              >
+                Luật chơi
+              </button>
+              <button
+                id="tab-play"
+                type="button"
+                role="tab"
+                data-tab="play"
+                aria-selected="true"
+                focusgroupstart
+                class="game-tab flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition whitespace-nowrap"
+              >
+                Chơi Game Thể Chế
+              </button>
+              <button
+                id="tab-leaderboard"
+                type="button"
+                role="tab"
+                data-tab="leaderboard"
+                aria-selected="false"
+                class="game-tab flex-1 sm:flex-none px-3 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-300 hover:text-white transition whitespace-nowrap"
+              >
+                BXH Toàn Lớp
+              </button>
+            </div>
+          </nav>
+
+          <!-- Góc trên bên phải: Thông tin tài khoản + Logo hình người Đăng xuất -->
+          <div id="header-user" class="order-2 sm:order-3 flex items-center gap-2 shrink-0">
+            <div class="text-right leading-tight max-w-[130px] sm:max-w-[180px]">
+              <span id="header-player-name" class="block text-xs sm:text-sm font-bold text-white truncate">
+                Sinh viên
+              </span>
+              <span id="header-player-mssv" class="block text-[11px] font-mono text-amber-300">
+                00000000
+              </span>
+            </div>
+            <button
+              id="btn-logout"
+              type="button"
+              aria-label="Đăng xuất và xóa dữ liệu"
+              title="Đăng xuất"
+              class="w-11 h-11 rounded-xl bg-slate-800 hover:bg-rose-600/90 border border-slate-700 hover:border-rose-400 text-amber-300 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 w-full max-w-4xl mx-auto px-3 sm:px-5 py-4 sm:py-6">
+        <!-- ================= TAB 1: LUẬT CHƠI GAME ================= -->
+        <section
+          id="panel-rules"
+          role="tabpanel"
+          data-panel="rules"
+          aria-labelledby="tab-rules"
+          hidden
+        >
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-7 flex flex-col gap-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-[#c4661b]">
+                  Hướng dẫn &amp; Quy chế
+                </span>
+                <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">
+                  Luật Chơi Game Thể Chế
+                </h1>
+              </div>
+              <button
+                type="button"
+                data-goto-tab="play"
+                class="min-h-[44px] px-4 py-2 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white text-sm font-extrabold transition cursor-pointer"
+              >
+                Vào chơi ngay →
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <article class="p-4 rounded-2xl bg-[#fff7ed] border border-[#fed7aa]">
+                <h2 class="text-sm font-extrabold text-[#9a3412] uppercase tracking-wide mb-2">
+                  1. Nhiệm kỳ 10 năm &amp; 30 Thẻ bài
+                </h2>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  Mỗi lượt chơi kéo dài <strong>10 năm nhiệm kỳ</strong>, rút ngẫu nhiên 10 tình huống hoạch định chính sách từ kho <strong>30 thẻ bài</strong> thuộc 6 nhóm chủ đề Kinh tế Chính trị. Kéo thẻ hoặc bấm nút để chọn phương án Trái / Phải.
+                </p>
+              </article>
+
+              <article class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wide mb-2">
+                  2. Cân bằng 4 Chỉ số Vĩ mô
+                </h2>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  4 chỉ số (<strong>Tăng trưởng, Công bằng, Môi trường, Ổn định</strong>) đều khởi điểm ở mức <strong>50</strong>. Giữ trong khoảng an toàn <strong>20–80</strong>. Nếu bất kỳ chỉ số nào chạm <strong>0</strong> hoặc <strong>100</strong>, nhiệm kỳ kết thúc ngay lập tức!
+                </p>
+              </article>
+
+              <article class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wide mb-2">
+                  3. Công thức tính điểm (Tối đa 1400)
+                </h2>
+                <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Điểm thâm niên:</strong> Số năm vượt qua × 100 (tối đa 1000).</li>
+                  <li><strong>Điểm cân bằng:</strong> 200 − Tổng độ lệch |chỉ số − 50| (tối đa 200).</li>
+                  <li><strong>Thưởng hoàn thành:</strong> +200 điểm nếu trụ vững đủ 10 năm.</li>
+                </ul>
+              </article>
+
+              <article class="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+                <h2 class="text-sm font-extrabold text-amber-900 uppercase tracking-wide mb-2">
+                  4. Quy định 5 lượt tính điểm / MSSV
+                </h2>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  Mỗi MSSV chỉ có <strong>tối đa 5 lượt tính điểm</strong> để ghi nhận kỷ lục cao nhất lên <strong>BXH Toàn Lớp</strong>. Từ lượt thứ 6 trở đi, bạn vẫn có thể chơi tự do để luyện tập nhưng không tính điểm và không cập nhật DB.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 2: CHƠI GAME THỂ CHẾ ================= -->
+        <section
+          id="panel-play"
+          role="tabpanel"
+          data-panel="play"
+          aria-labelledby="tab-play"
+          tabindex="0"
+        >
+          <div class="relative bg-white rounded-3xl border border-slate-200 shadow-sm p-3.5 sm:p-5 flex flex-col gap-3 overflow-hidden">
+            <canvas id="confetti-canvas" class="pointer-events-none absolute inset-0 w-full h-full z-30"></canvas>
+            <div id="game-red-flash-overlay" class="pointer-events-none absolute inset-0 z-30 opacity-0"></div>
+
+            <!-- Thanh trạng thái lượt chơi & điều khiển -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+              <div class="flex flex-wrap items-center gap-2">
+                <span
+                  id="play-count-badge"
+                  class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa]"
+                >
+                  Lượt tính điểm: 0 / 5
+                </span>
+                <span
+                  id="play-best-badge"
+                  class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200"
+                >
+                  Kỷ lục: --
+                </span>
+                <span
+                  id="game-year-display"
+                  class="px-2.5 py-1 rounded-full text-xs font-extrabold bg-slate-900 text-white"
+                >
+                  Năm thứ 1 / 10
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  id="btn-sound-toggle"
+                  type="button"
+                  aria-pressed="false"
+                  class="min-h-[36px] px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 cursor-pointer"
+                >
+                  🔊 Âm thanh
+                </button>
+                <button
+                  id="btn-reigns-reset"
+                  type="button"
+                  class="min-h-[36px] px-2.5 py-1 rounded-lg border border-[#fed7aa] bg-[#fff7ed] hover:bg-[#ffedd5] text-xs font-bold text-[#c4661b] cursor-pointer"
+                >
+                  ↺ Chơi lại
+                </button>
+              </div>
+            </div>
+
+            <!-- Banner chế độ chơi tự do (từ lượt 6) -->
+            <div
+              id="game-practice-banner"
+              class="hidden w-full px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold text-center"
+            >
+              Đã hết 5 lượt tính điểm — lượt này chơi tự do, không tính điểm và không ghi lên BXH.
+            </div>
+
+            <!-- 4 Chỉ số Vĩ mô HUD -->
+            <div class="grid grid-cols-4 gap-2 sm:gap-3 bg-slate-50 p-2.5 sm:p-3 rounded-2xl border border-slate-200">
+              <div class="flex flex-col items-center min-w-0 stat-hud" data-stat="growth">
+                <span class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"></span>
+                <span class="text-[11px] sm:text-xs font-bold text-slate-600 uppercase truncate max-w-full">Tăng Trưởng</span>
+                <div class="w-full bg-slate-200 h-2 rounded-full mt-1 overflow-hidden">
+                  <div id="stat-bar-growth" class="bg-[#df7a28] h-full transition-all duration-300" style="width: 50%"></div>
+                </div>
+                <span id="stat-val-growth" class="text-xs font-extrabold text-slate-800 mt-0.5">50</span>
+              </div>
+
+              <div class="flex flex-col items-center min-w-0 stat-hud" data-stat="equity">
+                <span class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"></span>
+                <span class="text-[11px] sm:text-xs font-bold text-slate-600 uppercase truncate max-w-full">Công Bằng</span>
+                <div class="w-full bg-slate-200 h-2 rounded-full mt-1 overflow-hidden">
+                  <div id="stat-bar-equity" class="bg-[#df7a28] h-full transition-all duration-300" style="width: 50%"></div>
+                </div>
+                <span id="stat-val-equity" class="text-xs font-extrabold text-slate-800 mt-0.5">50</span>
+              </div>
+
+              <div class="flex flex-col items-center min-w-0 stat-hud" data-stat="environment">
+                <span class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"></span>
+                <span class="text-[11px] sm:text-xs font-bold text-slate-600 uppercase truncate max-w-full">Môi Trường</span>
+                <div class="w-full bg-slate-200 h-2 rounded-full mt-1 overflow-hidden">
+                  <div id="stat-bar-environment" class="bg-[#df7a28] h-full transition-all duration-300" style="width: 50%"></div>
+                </div>
+                <span id="stat-val-environment" class="text-xs font-extrabold text-slate-800 mt-0.5">50</span>
+              </div>
+
+              <div class="flex flex-col items-center min-w-0 stat-hud" data-stat="stability">
+                <span class="stat-dot w-2 h-2 rounded-full bg-[#df7a28] opacity-0 mb-0.5"></span>
+                <span class="text-[11px] sm:text-xs font-bold text-slate-600 uppercase truncate max-w-full">Ổn Định</span>
+                <div class="w-full bg-slate-200 h-2 rounded-full mt-1 overflow-hidden">
+                  <div id="stat-bar-stability" class="bg-[#df7a28] h-full transition-all duration-300" style="width: 50%"></div>
+                </div>
+                <span id="stat-val-stability" class="text-xs font-extrabold text-slate-800 mt-0.5">50</span>
+              </div>
+            </div>
+
+            <!-- Khu vực Thẻ bài -->
+            <div id="game-play-area" class="flex flex-col gap-3">
+              <div id="card-feedback-banner" class="hidden"></div>
+
+              <div class="relative w-full flex items-center justify-center">
+                <div
+                  id="reigns-card"
+                  class="reigns-card-container relative w-full bg-white rounded-2xl border-2 border-slate-300 p-4 sm:p-5 shadow-sm flex flex-col gap-3 cursor-grab touch-pan-y select-none"
+                >
+                  <div
+                    id="choice-pill-left"
+                    class="choice-pill absolute top-3 left-3 bg-slate-800 text-white text-xs font-bold px-3 py-1 rounded-full opacity-0 pointer-events-none transition-opacity shadow-md max-w-[220px] truncate z-10"
+                  >
+                    TRÁI
+                  </div>
+                  <div
+                    id="choice-pill-right"
+                    class="choice-pill absolute top-3 right-3 bg-[#df7a28] text-white text-xs font-bold px-3 py-1 rounded-full opacity-0 pointer-events-none transition-opacity shadow-md max-w-[220px] truncate z-10"
+                  >
+                    PHẢI
+                  </div>
+
+                  <div class="flex flex-col items-center gap-2">
+                    <div class="flex flex-wrap items-center justify-center gap-1.5">
+                      <span
+                        id="card-topic-badge"
+                        class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#fff7ed] text-[#9a3412] border border-[#fed7aa]"
+                      >
+                        Nhóm 1
+                      </span>
+                      <span
+                        id="card-id-badge"
+                        class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200"
+                      >
+                        Thẻ #01
+                      </span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-3">
+                      <div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center p-1.5 shrink-0">
+                        <svg class="w-full h-full" viewBox="0 0 100 100" aria-hidden="true">
+                          <circle cx="50" cy="45" r="28" fill="#cbd5e1"></circle>
+                          <path d="M22 88 C22 68, 78 68, 78 88 Z" fill="#475569"></path>
+                          <rect x="36" y="38" width="6" height="6" fill="#0f172a"></rect>
+                          <rect x="58" y="38" width="6" height="6" fill="#0f172a"></rect>
+                          <path d="M42 55 L58 55" stroke="#0f172a" stroke-width="3" stroke-linecap="round"></path>
+                          <polygon points="50,15 35,32 65,32" fill="#df7a28"></polygon>
+                        </svg>
+                      </div>
+                      <div class="text-left min-w-0">
+                        <h2 id="card-speaker-title" class="text-xs font-bold text-[#c4661b] uppercase tracking-wider">
+                          Cơ quan đề xuất
+                        </h2>
+                        <span id="card-speaker-name" class="text-sm sm:text-base font-extrabold text-slate-900 block">
+                          Đại diện
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-slate-50 rounded-xl p-3.5 sm:p-4 border border-slate-200 text-center">
+                    <p id="card-dialogue" class="text-sm sm:text-base text-slate-700 leading-relaxed font-medium">
+                      Đang tải tình huống...
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2 nút lựa chọn -->
+              <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+                <button
+                  id="btn-reigns-left"
+                  type="button"
+                  class="min-h-[54px] p-3 rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-left transition flex flex-col justify-between cursor-pointer"
+                >
+                  <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">← Lựa chọn Trái</span>
+                  <span id="btn-label-left" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug mt-0.5">
+                    Phương án A
+                  </span>
+                </button>
+                <button
+                  id="btn-reigns-right"
+                  type="button"
+                  class="min-h-[54px] p-3 rounded-xl border border-[#fed7aa] bg-[#fff7ed] hover:bg-[#ffedd5] text-left transition flex flex-col justify-between cursor-pointer"
+                >
+                  <span class="text-[11px] font-bold text-[#c4661b] uppercase tracking-wider block">Lựa chọn Phải →</span>
+                  <span id="btn-label-right" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug mt-0.5">
+                    Phương án B
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Màn hình Thua cuộc -->
+            <div
+              id="reigns-gameover-modal"
+              class="hidden bg-rose-50/70 rounded-2xl border-2 border-rose-300 p-5 text-center flex flex-col items-center gap-3"
+            >
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-rose-600 text-white uppercase">
+                Mất cân bằng thể chế
+              </span>
+              <h2 id="gameover-years" class="text-xl font-extrabold text-slate-900">0 / 10 năm</h2>
+              <p id="gameover-cause" class="text-sm text-slate-700 max-w-lg leading-relaxed"></p>
+              <div class="bg-white rounded-xl border border-rose-200 px-4 py-3 w-full max-w-md">
+                <div id="gameover-total-score" class="text-2xl font-black text-[#c4661b]">0 điểm</div>
+                <div id="gameover-score-breakdown" class="text-xs text-slate-500 mt-0.5"></div>
+                <div id="gameover-submit-note" class="text-xs font-bold text-slate-700 mt-1.5"></div>
+              </div>
+              <div class="flex flex-wrap justify-center gap-2.5 mt-1">
+                <button
+                  id="btn-reigns-retry"
+                  type="button"
+                  class="min-h-[44px] px-5 py-2.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-sm cursor-pointer"
+                >
+                  Chơi lại nhiệm kỳ mới
+                </button>
+                <button
+                  type="button"
+                  data-goto-tab="leaderboard"
+                  class="min-h-[44px] px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-sm cursor-pointer"
+                >
+                  Xem BXH Toàn Lớp
+                </button>
+              </div>
+            </div>
+
+            <!-- Màn hình Chiến thắng -->
+            <div
+              id="reigns-victory-modal"
+              class="hidden bg-emerald-50/70 rounded-2xl border-2 border-emerald-300 p-5 text-center flex flex-col items-center gap-3"
+            >
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-600 text-white uppercase">
+                Chiến thắng nhiệm kỳ
+              </span>
+              <h2 id="victory-title-years" class="text-xl font-extrabold text-slate-900">
+                Hoàn Thành Xuất Sắc 10 Năm Nhiệm Kỳ!
+              </h2>
+              <div class="bg-white rounded-xl border border-emerald-200 px-4 py-3 w-full max-w-md">
+                <div id="victory-total-score" class="text-2xl font-black text-[#c4661b]">0 điểm</div>
+                <div id="victory-score-breakdown" class="text-xs text-slate-500 mt-0.5"></div>
+                <div id="victory-submit-note" class="text-xs font-bold text-emerald-700 mt-1.5"></div>
+              </div>
+              <div class="flex flex-wrap justify-center gap-2.5 mt-1">
+                <button
+                  id="btn-reigns-win-restart"
+                  type="button"
+                  class="min-h-[44px] px-5 py-2.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-sm cursor-pointer"
+                >
+                  Chơi nhiệm kỳ mới
+                </button>
+                <button
+                  type="button"
+                  data-goto-tab="leaderboard"
+                  class="min-h-[44px] px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-sm cursor-pointer"
+                >
+                  Xem BXH Toàn Lớp
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 3: BXH TOÀN LỚP ================= -->
+        <section
+          id="panel-leaderboard"
+          role="tabpanel"
+          data-panel="leaderboard"
+          aria-labelledby="tab-leaderboard"
+          hidden
+        >
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-6 flex flex-col gap-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h1 class="text-lg sm:text-xl font-extrabold text-slate-900">
+                  Bảng Xếp Hạng Toàn Lớp
+                </h1>
+                <div class="flex items-center gap-2 mt-1">
+                  <span id="leaderboard-total-count" class="text-xs font-bold text-slate-600">0 sinh viên</span>
+                  <span id="leaderboard-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
+                    Đang tải...
+                  </span>
+                </div>
+              </div>
+              <button
+                id="btn-leaderboard-refresh"
+                type="button"
+                class="min-h-[40px] px-3.5 py-2 rounded-xl border border-[#fed7aa] bg-[#fff7ed] hover:bg-[#ffedd5] text-xs font-extrabold text-[#c4661b] cursor-pointer"
+              >
+                ↻ Làm mới
+              </button>
+            </div>
+
+            <search>
+              <label for="leaderboard-search" class="sr-only">Tìm kiếm theo Tên hoặc MSSV</label>
+              <input
+                id="leaderboard-search"
+                type="search"
+                placeholder="Tìm nhanh theo Họ tên hoặc MSSV..."
+                class="w-full min-h-[44px] px-3.5 py-2 rounded-xl border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:border-[#df7a28] focus:outline-none"
+              />
+            </search>
+
+            <div class="leaderboard-scroll-wrap border border-slate-200 rounded-2xl overflow-auto">
+              <table class="w-full text-left border-collapse min-w-[520px]" aria-label="Bảng xếp hạng toàn lớp">
+                <thead class="sticky top-0 bg-slate-100 text-slate-700 text-xs uppercase tracking-wider z-10">
+                  <tr>
+                    <th scope="col" class="py-3 px-3 text-center w-14">Hạng</th>
+                    <th scope="col" class="py-3 px-3">Họ và tên</th>
+                    <th scope="col" class="py-3 px-3">MSSV</th>
+                    <th scope="col" class="py-3 px-3 text-right">Điểm</th>
+                    <th scope="col" class="py-3 px-3 text-center">Lượt</th>
+                    <th scope="col" class="py-3 px-3 text-center">Nhiệm kỳ</th>
+                  </tr>
+                </thead>
+                <tbody id="leaderboard-tbody" class="text-sm divide-y divide-slate-100">
+                  <tr>
+                    <td colspan="6" class="py-8 text-center text-slate-500">Đang tải bảng xếp hạng...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ================= MODAL CẢNH BÁO ĐĂNG XUẤT & XÓA DỮ LIỆU ================= -->
+    <dialog
+      id="logout-confirm-dialog"
+      aria-labelledby="logout-dialog-title"
+      class="w-[min(92vw,440px)] rounded-3xl border-2 border-rose-300 bg-white p-6 shadow-2xl m-auto"
+    >
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+              ></path>
+            </svg>
+          </div>
+          <h2 id="logout-dialog-title" class="text-lg font-extrabold text-slate-900">
+            Xác nhận đăng xuất
+          </h2>
+        </div>
+
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Cảnh báo: Khi đăng xuất, toàn bộ dữ liệu lượt chơi và điểm số của MSSV
+          <strong id="logout-dialog-mssv" class="font-mono text-rose-700">--------</strong>
+          sẽ bị <strong>XÓA VĨNH VIỄN</strong> khỏi cơ sở dữ liệu và Bảng Xếp Hạng toàn lớp. Bạn có chắc chắn muốn đăng xuất?
+        </p>
+
+        <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 pt-1">
+          <button
+            id="btn-logout-cancel"
+            type="button"
+            autofocus
+            class="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-sm font-bold cursor-pointer"
+          >
+            Hủy
+          </button>
+          <button
+            id="btn-logout-confirm"
+            type="button"
+            class="min-h-[44px] px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-extrabold cursor-pointer"
+          >
+            Xác nhận đăng xuất &amp; Xóa dữ liệu
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="config.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>

@@ -35,6 +35,7 @@ window.MuseumRoom1 = (() => {
           ex.title,
           ex.subtitle,
           ex,
+          2.6,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           2.6,

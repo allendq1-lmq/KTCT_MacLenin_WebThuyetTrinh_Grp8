@@ -23,21 +23,102 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Tab indicator (WCAG 1.4.1 non-color underline + active fill) */
+/* ================= PRESENTATION-SCALE FLUID TYPOGRAPHY (clamp) ================= */
+.game-main-shell {
+  max-width: min(94vw, 1180px);
+}
+
+.brand-kicker {
+  font-size: clamp(0.68rem, 0.95vw, 0.85rem);
+}
+
+.brand-title {
+  font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+}
+
 .game-tab {
   position: relative;
   cursor: pointer;
+  font-size: clamp(0.82rem, 1.15vw, 1.1rem);
 }
 
+.rules-heading {
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+}
+
+.rules-card-title {
+  font-size: clamp(0.9rem, 1.15vw, 1.1rem);
+}
+
+.rules-body {
+  font-size: clamp(0.95rem, 1.2vw, 1.18rem);
+}
+
+.play-badge {
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+}
+
+.hud-label {
+  font-size: clamp(0.68rem, 0.95vw, 0.9rem);
+}
+
+.hud-val {
+  font-size: clamp(0.9rem, 1.25vw, 1.15rem);
+}
+
+.card-dialogue-text {
+  font-size: clamp(1.05rem, 1.45vw, 1.38rem);
+}
+
+.choice-btn-label {
+  font-size: clamp(0.95rem, 1.2vw, 1.18rem);
+}
+
+.leaderboard-table-text {
+  font-size: clamp(0.9rem, 1.15vw, 1.12rem);
+}
+
+/* ================= KEYBOARD SHORTCUT BADGES ================= */
+.kbd-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.4rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background-color: #e2e8f0;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 0 #94a3b8;
+  line-height: 1.2;
+}
+
+.kbd-hint-light {
+  background-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: none;
+}
+
+@media (hover: none) {
+  .kbd-hint {
+    display: none;
+  }
+}
+
+/* ================= TAB INDICATOR (WCAG 1.4.1) ================= */
 .game-tab[aria-selected="true"] {
   background-color: var(--warm-orange);
   color: #ffffff;
+  box-shadow: 0 2px 8px rgba(223, 122, 40, 0.35);
 }
 
 .game-tab[aria-selected="true"]::after {
   content: "";
   position: absolute;
-  inset: auto 0.5rem 0.15rem;
+  inset: auto 0.6rem 0.15rem;
   border-block-end: 3px solid #fde68a;
   border-radius: 999px;
 }
@@ -50,19 +131,34 @@ body {
   display: none;
 }
 
-/* Native <dialog> scroll containment & backdrop */
+/* ================= NATIVE <dialog> & QR MODAL ================= */
 dialog:modal {
   overscroll-behavior: contain;
 }
 
 dialog::backdrop {
-  background-color: rgba(15, 23, 42, 0.6);
+  background-color: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(3px);
   overflow: hidden;
   overscroll-behavior: contain;
 }
 
-/* Full-class Leaderboard vertical scroll */
+#qr-code-container {
+  width: clamp(180px, 42vmin, 460px);
+  height: clamp(180px, 42vmin, 460px);
+}
+
+#qr-code-container img,
+#qr-code-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain;
+  image-rendering: crisp-edges;
+}
+
+/* ================= LEADERBOARD VERTICAL SCROLL ================= */
 .leaderboard-scroll-wrap {
   max-height: 62vh;
   overflow-y: auto;
@@ -70,7 +166,7 @@ dialog::backdrop {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Card & HUD animations */
+/* ================= CARD & HUD ANIMATIONS ================= */
 #reigns-card {
   transition: transform 0.12s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 }
@@ -129,20 +225,27 @@ dialog::backdrop {
   100% { opacity: 0; }
 }
 
-/* Mobile Landscape (e.g., 812x375, 844x390) */
+/* ================= MOBILE LANDSCAPE (e.g., 812x375, 844x390) ================= */
+@media (max-height: 520px) {
+  #qr-code-container {
+    width: clamp(120px, 35dvh, 210px);
+    height: clamp(120px, 35dvh, 210px);
+  }
+}
+
 @media (max-height: 500px) and (orientation: landscape) {
   #header-inner {
     padding-block: 0.35rem;
   }
   .game-tab {
     padding-block: 0.35rem;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
   }
   .leaderboard-scroll-wrap {
     max-height: 50vh;
   }
   #reigns-card {
-    padding: 0.75rem 1rem;
+    padding: 0.85rem 1.1rem;
     gap: 0.5rem;
   }
 }

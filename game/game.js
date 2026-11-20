@@ -2050,6 +2050,8 @@ const StandaloneReignsGame = (() => {
     }
 
     setupCardDragAndKeyboard();
+    setupQrModal();
+    setupGlobalShortcuts();
 
     // Auto-restore session if saved
     const saved = client.loadSavedPlayer();
@@ -2057,6 +2059,178 @@ const StandaloneReignsGame = (() => {
       completeLogin(saved, false);
     } else {
       showLoginGate();
+    }
+  }
+
+  function resolveGameQrUrl(loc) {
+    const source =
+      loc || (typeof window !== "undefined" ? window.location : null);
+    if (!source || !source.origin) return "";
+    return `${source.origin}${source.pathname || "/"}`;
+  }
+
+  function resolveKeyboardShortcutAction(eventLike, context) {
+    if (!eventLike || !context) return null;
+    if (!context.isLoggedIn || context.currentTab !== "play") return null;
+    if (context.hasOpenDialog || context.isTypingTarget) return null;
+
+    if (!context.isGameOver) {
+      if (eventLike.key === "ArrowLeft") return "choose_left";
+      if (eventLike.key === "ArrowRight") return "choose_right";
+      return null;
+    }
+
+    if (eventLike.code === "Space" || eventLike.key === " ") {
+      return "restart_term";
+    }
+    return null;
+  }
+
+  function isTextInputElement(el) {
+    if (!el || typeof el.tagName !== "string") return false;
+    const tag = el.tagName.toUpperCase();
+    return (
+      tag === "INPUT" ||
+      tag === "TEXTAREA" ||
+      tag === "SELECT" ||
+      Boolean(el.isContentEditable)
+    );
+  }
+
+  function setupGlobalShortcuts() {
+    document.addEventListener("keydown", (e) => {
+      const action = resolveKeyboardShortcutAction(e, {
+        isLoggedIn: Boolean(activePlayer),
+        currentTab,
+        hasOpenDialog: Boolean(document.querySelector("dialog[open]")),
+        isTypingTarget: isTextInputElement(document.activeElement),
+        isGameOver,
+      });
+
+      if (!action) return;
+      if (action === "choose_left") {
+        e.preventDefault();
+        applyChoice("left");
+      } else if (action === "choose_right") {
+        e.preventDefault();
+        applyChoice("right");
+      } else if (action === "restart_term") {
+        e.preventDefault();
+        resetGame();
+      }
+    });
+  }
+
+  function setupQrModal() {
+    const qrModal = document.getElementById("qr-modal");
+    const qrContainer = document.getElementById("qr-code-container");
+    const qrUrlLink = document.getElementById("qr-target-url-link");
+    const btnCloseQr = document.getElementById("btn-close-qr-modal");
+    const btnCopyQr = document.getElementById("btn-copy-qr-url");
+    const qrTriggers = [
+      document.getElementById("btn-qr-modal"),
+      document.getElementById("btn-login-qr"),
+    ].filter(Boolean);
+
+    if (!qrModal) return;
+    let qrRendered = false;
+    let activeTrigger = null;
+
+    function getTargetUrl() {
+      return (
+        resolveGameQrUrl() ||
+        "https://allendq1-lmq.github.io/KTCT_MacLenin_WebThuyetTrinh_Grp8/game/"
+      );
+    }
+
+    function renderQrIfNeeded() {
+      const targetUrl = getTargetUrl();
+      if (qrUrlLink) {
+        qrUrlLink.href = targetUrl;
+        qrUrlLink.textContent = targetUrl;
+      }
+      if (qrContainer) {
+        qrContainer.setAttribute("aria-label", `Mã QR dẫn tới ${targetUrl}`);
+      }
+      if (qrRendered || !qrContainer || typeof QRCode === "undefined") return;
+      qrContainer.innerHTML = "";
+      new QRCode(qrContainer, {
+        text: targetUrl,
+        width: 600,
+        height: 600,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+      qrRendered = true;
+    }
+
+    function openQr(triggerEl) {
+      activeTrigger = triggerEl || null;
+      renderQrIfNeeded();
+      if (activeTrigger) activeTrigger.setAttribute("aria-expanded", "true");
+      qrModal.returnValue = "";
+      qrModal.showModal();
+    }
+
+    qrTriggers.forEach((btn) => {
+      btn.addEventListener("click", () => openQr(btn));
+    });
+
+    if (btnCloseQr) {
+      btnCloseQr.addEventListener("click", () => qrModal.close("close"));
+    }
+
+    qrModal.addEventListener("close", () => {
+      qrModal.returnValue = "";
+      qrTriggers.forEach((btn) => btn.setAttribute("aria-expanded", "false"));
+      if (activeTrigger) activeTrigger.focus();
+    });
+
+    // Light-dismiss fallback for browsers without <dialog closedby="any">
+    if (!("closedBy" in HTMLDialogElement.prototype)) {
+      let pressedOutside = false;
+      const isOutside = (e) => {
+        const r = qrModal.getBoundingClientRect();
+        return (
+          e.clientX < r.left ||
+          e.clientX > r.right ||
+          e.clientY < r.top ||
+          e.clientY > r.bottom
+        );
+      };
+      qrModal.addEventListener("pointerdown", (e) => {
+        pressedOutside = isOutside(e);
+      });
+      qrModal.addEventListener("pointerup", (e) => {
+        if (pressedOutside && isOutside(e)) qrModal.close("backdrop");
+      });
+    }
+
+    if (btnCopyQr) {
+      btnCopyQr.addEventListener("click", async () => {
+        const url = getTargetUrl();
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(url);
+          } else {
+            const tmp = document.createElement("textarea");
+            tmp.value = url;
+            tmp.setAttribute("readonly", "");
+            tmp.style.position = "fixed";
+            tmp.style.opacity = "0";
+            document.body.appendChild(tmp);
+            tmp.select();
+            document.execCommand("copy");
+            document.body.removeChild(tmp);
+          }
+          const orig = btnCopyQr.textContent;
+          btnCopyQr.textContent = "✓ Đã sao chép liên kết!";
+          setTimeout(() => {
+            btnCopyQr.textContent = orig;
+          }, 2000);
+        } catch (_) {}
+      });
     }
   }
 
@@ -2080,6 +2254,8 @@ const StandaloneReignsGame = (() => {
       sortLeaderboardEntries,
       mergeLeaderboardSubmission,
       createLeaderboardClient,
+      resolveGameQrUrl,
+      resolveKeyboardShortcutAction,
     },
   };
 })();

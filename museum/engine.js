@@ -248,7 +248,7 @@ window.MuseumEngine = (() => {
     descLines,
     exhibitMeta,
   ) {
-    // Tối ưu độ phân giải <= 1024px (1024x700) kết hợp bố cục 2 cột (Cách 1 Infographic + Cách 2 Ảnh tư liệu)
+    // Khung tranh lớn chỉ hiển thị duy nhất bức ảnh tư liệu/minh họa phủ kín (cover), tuyệt đối không vẽ chữ hay biểu đồ
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
     canvas.height = 700;
@@ -263,151 +263,16 @@ window.MuseumEngine = (() => {
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, 1024, 700);
 
-    // Lớp bo passepartout chống lóa tạo chiều sâu cho tranh
-    ctx.fillStyle = "rgba(255, 255, 255, 0.025)";
-    ctx.fillRect(20, 20, 984, 660);
+    const photoRect = { x: 18, y: 18, w: 988, h: 664 };
+    ctx.fillStyle = "#0b111e";
+    ctx.fillRect(photoRect.x, photoRect.y, photoRect.w, photoRect.h);
     ctx.strokeStyle = "rgba(245, 158, 11, 0.28)";
     ctx.lineWidth = 2;
-    ctx.strokeRect(26, 26, 972, 648);
-
-    ctx.fillStyle = accentColor;
-    ctx.fillRect(44, 42, 10, 102);
-
-    ctx.fillStyle = accentColor;
-    ctx.font = "bold 19px 'Segoe UI', Tahoma, sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText((badgeText || "CHỦ ĐỀ LÝ LUẬN").toUpperCase(), 66, 63);
-
-    ctx.fillStyle = "#f8fafc";
-    ctx.font = "bold 30px 'Segoe UI', Tahoma, sans-serif";
-    wrapCanvasText(ctx, title, 66, 102, 910, 36, 1);
-
-    ctx.fillStyle = "#cbd5e1";
-    ctx.font = "italic 18px 'Segoe UI', Tahoma, sans-serif";
-    wrapCanvasText(ctx, subtitle, 66, 138, 910, 24, 1);
-
-    ctx.strokeStyle = accentColor;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(44, 164);
-    ctx.lineTo(980, 164);
-    ctx.stroke();
-
-    // CỘT TRÁI (44..540): Hiển thị 4 luận điểm cốt lõi trong khung thẻ sắc nét
-    const leftX = 44;
-    const leftW = 496;
-    const lines = Array.isArray(descLines) ? descLines.slice(0, 4) : [];
-    const slotStartY = 182;
-    const slotGap = 12;
-    const slotH = 109;
-
-    lines.forEach((line, idx) => {
-      const cardY = slotStartY + idx * (slotH + slotGap);
-      if (window.MuseumVisuals && window.MuseumVisuals.fillCard) {
-        window.MuseumVisuals.fillCard(
-          ctx,
-          leftX,
-          cardY,
-          leftW,
-          slotH,
-          10,
-          "rgba(15, 23, 42, 0.78)",
-          "rgba(148, 163, 184, 0.24)",
-          1.2,
-        );
-        ctx.fillStyle = accentColor;
-        ctx.fillRect(leftX, cardY + 12, 5, slotH - 24);
-      } else {
-        ctx.fillStyle = "rgba(15, 23, 42, 0.78)";
-        ctx.fillRect(leftX, cardY, leftW, slotH);
-      }
-
-      ctx.fillStyle = "#f1f5f9";
-      ctx.font = "500 20px 'Segoe UI', Tahoma, sans-serif";
-      ctx.textAlign = "left";
-      wrapCanvasText(ctx, line, leftX + 18, cardY + 36, leftW - 32, 28, 3);
-    });
-
-    // CỘT PHẢI (556..980): Khung đồ họa Infographic (Cách 1) + Ảnh tư liệu bất đồng bộ (Cách 2)
-    const rightX = 556;
-    const rightY = 182;
-    const rightW = 424;
-    const rightH = 472;
-
-    if (window.MuseumVisuals && window.MuseumVisuals.fillCard) {
-      window.MuseumVisuals.fillCard(
-        ctx,
-        rightX,
-        rightY,
-        rightW,
-        rightH,
-        12,
-        "#0b111e",
-        `${accentColor}66`,
-        1.5,
-      );
-    } else {
-      ctx.fillStyle = "#0b111e";
-      ctx.fillRect(rightX, rightY, rightW, rightH);
-    }
-
-    // Nhãn đầu cột phải
-    ctx.fillStyle = "#fde68a";
-    ctx.font = "bold 13px 'Segoe UI', Tahoma, sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(
-      "MINH HỌA TRỰC QUAN & TƯ LIỆU",
-      rightX + rightW / 2,
-      rightY + 23,
-    );
-
-    const visualRect = {
-      x: rightX + 8,
-      y: rightY + 34,
-      w: rightW - 16,
-      h: rightH - 86,
-    };
-
-    if (
-      window.MuseumVisuals &&
-      typeof window.MuseumVisuals.drawExhibitInfographic === "function"
-    ) {
-      window.MuseumVisuals.drawExhibitInfographic(
-        ctx,
-        visualType,
-        visualRect,
-        accentColor,
-      );
-    }
-
-    // Chú thích chân khung phải
-    const captionText = meta.imageCaption || subtitle || title || "";
-    ctx.save();
-    ctx.fillStyle = "#0c1322";
-    ctx.fillRect(rightX + 8, visualRect.y + visualRect.h + 4, rightW - 16, 42);
-    if (window.MuseumVisuals && window.MuseumVisuals.drawCenterLines) {
-      window.MuseumVisuals.drawCenterLines(
-        ctx,
-        captionText,
-        rightX + rightW / 2,
-        visualRect.y + visualRect.h + 25,
-        rightW - 28,
-        15,
-        "italic 12px 'Segoe UI', Tahoma, sans-serif",
-        "#cbd5e1",
-        2,
-      );
-    }
-    ctx.restore();
-
-    ctx.strokeStyle = "rgba(255,255,255,0.14)";
-    ctx.lineWidth = 5;
-    ctx.strokeRect(11, 11, 1002, 678);
+    ctx.strokeRect(photoRect.x, photoRect.y, photoRect.w, photoRect.h);
 
     const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
     const captureEpoch = sceneEpoch;
 
-    // Nạp bất đồng bộ ảnh local/Wikimedia (Cách 2): thành công -> kết hợp vào khung phải; lỗi/offline -> giữ nguyên Cách 1
     if (
       window.MuseumVisuals &&
       typeof window.MuseumVisuals.loadExhibitImageWithFallback === "function" &&
@@ -422,10 +287,10 @@ window.MuseumEngine = (() => {
             ctx,
             res.img,
             res.src,
-            visualRect,
+            photoRect,
             visualType,
             accentColor,
-            meta.imageCaption,
+            "",
           );
           tex.needsUpdate = true;
         })
@@ -435,36 +300,43 @@ window.MuseumEngine = (() => {
     return tex;
   }
 
-  function createPlacardTexture(title, subtitle) {
-    // Tối ưu độ phân giải <= 1024px (512x180) cho bảng chú thích 3D (B2)
+  function createPlacardTexture(title, subtitle, exhibitMeta) {
+    // Bảng tên rộng 100% khung tranh (1024x220), hiển thị duy nhất tiêu đề ngắn gọn, cỡ chữ lớn, in đậm, tương phản cao
     const canvas = document.createElement("canvas");
-    canvas.width = 512;
-    canvas.height = 180;
+    canvas.width = 1024;
+    canvas.height = 220;
     const ctx = canvas.getContext("2d");
+    const meta = resolveExhibitMeta(title, null, exhibitMeta);
+    const displayTitle = String(meta.plaqueTitle || title || "")
+      .trim()
+      .toUpperCase();
 
-    // Nền bảng chú thích tối dịu (dark gallery plaque) chống cháy sáng, tương phản chữ cao
     const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    bgGrad.addColorStop(0, "#161f30");
-    bgGrad.addColorStop(1, "#0f172a");
+    bgGrad.addColorStop(0, "#141d2f");
+    bgGrad.addColorStop(1, "#0b101d");
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.strokeStyle = "#d97706";
-    ctx.lineWidth = 4;
-    ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+    ctx.strokeStyle = "#f59e0b";
+    ctx.lineWidth = 6;
+    ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
 
-    ctx.strokeStyle = "rgba(251, 191, 36, 0.35)";
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
+    ctx.strokeStyle = "rgba(251, 191, 36, 0.42)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(18, 18, canvas.width - 36, canvas.height - 36);
 
-    ctx.fillStyle = "#f8fafc";
-    ctx.font = "bold 21px 'Segoe UI', Tahoma, sans-serif";
+    const maxTextWidth = canvas.width - 80;
+    let fontSize = 54;
+    ctx.font = `bold ${fontSize}px 'Segoe UI', Tahoma, sans-serif`;
+    while (fontSize > 44 && ctx.measureText(displayTitle).width > maxTextWidth) {
+      fontSize -= 2;
+      ctx.font = `bold ${fontSize}px 'Segoe UI', Tahoma, sans-serif`;
+    }
+
+    ctx.fillStyle = "#fef3c7";
     ctx.textAlign = "center";
-    ctx.fillText(String(title).slice(0, 44), canvas.width / 2, 76);
-
-    ctx.fillStyle = "#cbd5e1";
-    ctx.font = "16px 'Segoe UI', Tahoma, sans-serif";
-    ctx.fillText(String(subtitle).slice(0, 56), canvas.width / 2, 118);
+    ctx.textBaseline = "middle";
+    ctx.fillText(displayTitle, canvas.width / 2, canvas.height / 2);
 
     return configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
   }
@@ -638,31 +510,33 @@ window.MuseumEngine = (() => {
     canvasMesh.position.z = 0.052;
     group.add(canvasMesh);
 
-    // Đế bảng chú thích 3D nổi có độ dày và góc nghiêng nhẹ chống chói
-    const placardY = -(height / 2 + 0.29);
+    // Đế bảng tên (bottom plaque) có chiều ngang bằng 100% khung tranh bên trên (width + 0.2 / width)
+    const placardOuterH = 0.42;
+    const placardInnerH = 0.34;
+    const placardY = -(height / 2 + 0.1 + placardOuterH / 2 + 0.05);
     const placardBaseGeo = getSharedGeometry(
-      "placard-base-geo",
-      () => new THREE.BoxGeometry(0.94, 0.34, 0.036),
+      `placard-base-${width}`,
+      () => new THREE.BoxGeometry(width + 0.2, placardOuterH, 0.042),
     );
     const placardBaseMat = getSharedMaterial(
       "placard-base-mat",
       () =>
         new THREE.MeshStandardMaterial({
-          color: 0x27272a,
-          roughness: 0.55,
-          metalness: 0.4,
+          color: 0x1c2026,
+          roughness: 0.52,
+          metalness: 0.45,
         }),
     );
     const placardBase = new THREE.Mesh(placardBaseGeo, placardBaseMat);
     placardBase.position.set(0, placardY, 0.038);
-    placardBase.rotation.x = -0.06;
+    placardBase.rotation.x = -0.05;
     placardBase.castShadow = true;
     group.add(placardBase);
 
-    // Mặt bảng chú thích 3D nhám hoàn toàn, chữ sắc nét tương phản cao
+    // Mặt bảng tên 3D nhám hoàn toàn, khớp 100% chiều rộng lọt lòng khung tranh (width), chữ to sắc nét
     const placardGeo = getSharedGeometry(
-      "placard-plane-geo",
-      () => new THREE.PlaneGeometry(0.88, 0.29),
+      `placard-plane-${width}`,
+      () => new THREE.PlaneGeometry(width, placardInnerH),
     );
     const placardMat = new THREE.MeshStandardMaterial({
       map: placardTexture,
@@ -670,8 +544,8 @@ window.MuseumEngine = (() => {
       metalness: 0.0,
     });
     const placardMesh = new THREE.Mesh(placardGeo, placardMat);
-    placardMesh.position.set(0, placardY, 0.058);
-    placardMesh.rotation.x = -0.06;
+    placardMesh.position.set(0, placardY, 0.062);
+    placardMesh.rotation.x = -0.05;
     group.add(placardMesh);
 
     canvasMesh.userData = data;

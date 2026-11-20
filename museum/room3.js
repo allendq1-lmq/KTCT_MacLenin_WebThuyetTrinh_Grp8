@@ -42,6 +42,8 @@ window.MuseumRoom3 = (() => {
         sectionCode: ex.sectionCode,
         visualType: ex.visualType,
         localImagePath: ex.localImagePath,
+        preferLocal: ex.preferLocal,
+        plaqueTitle: ex.plaqueTitle,
         imageUrl: ex.imageUrl,
         imageCaption: ex.imageCaption,
         badge: ex.badge,
@@ -54,14 +56,19 @@ window.MuseumRoom3 = (() => {
       };
 
       if (ex.id === "r3-table") {
-        // Bảng so sánh đối chiếu 6 tiêu chí kích thước lớn ở chính giữa tường sau
-        const boardTex = window.MuseumEngine.createComparisonBoardTexture(
-          "BẢNG SO SÁNH ĐỐI CHIẾU 6 TIÊU CHÍ: KTTT TBCN VS. KTTT ĐHXHCN VIỆT NAM",
-          tableRows,
+        // Khung tranh lớn ở chính giữa tường sau Phòng 3 hiển thị ảnh tư liệu toàn khung, bảng chữ đối chiếu mở trong modal
+        const boardTex = window.MuseumEngine.createArtworkTexture(
+          ex.title,
+          ex.subtitle,
+          ex.badge,
+          ex.color,
+          ex.lines,
+          ex,
         );
         const placardTex = window.MuseumEngine.createPlacardTexture(
           ex.title,
           ex.subtitle,
+          ex,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           5.6,
@@ -111,6 +118,7 @@ window.MuseumRoom3 = (() => {
         const placardTex = window.MuseumEngine.createPlacardTexture(
           ex.title,
           ex.subtitle,
+          ex,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           2.5,
@@ -150,6 +158,7 @@ window.MuseumRoom3 = (() => {
         const placardTex = window.MuseumEngine.createPlacardTexture(
           ex.title,
           ex.subtitle,
+          ex,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           3.4,

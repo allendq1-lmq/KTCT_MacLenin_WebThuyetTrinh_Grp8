@@ -86,7 +86,9 @@ window.MuseumData = (() => {
       lookPos: { x: -8.85, y: 2.15, z: 2.4 },
       sectionCode: "1.1a",
       visualType: "r1-1a",
-      localImagePath: "images/r1-1a.jpg",
+      localImagePath: "assets/exhibits/r1-1a.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.1a • KINH TẾ THỊ TRƯỜNG NÓI CHUNG",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
       imageCaption:
@@ -154,7 +156,9 @@ window.MuseumData = (() => {
       lookPos: { x: -8.85, y: 2.15, z: -2.4 },
       sectionCode: "1.1b",
       visualType: "r1-1b",
-      localImagePath: "images/r1-1b.jpg",
+      localImagePath: "assets/exhibits/r1-1b.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.1b • KHÁI NIỆM KTTT ĐỊNH HƯỚNG XHCN",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/960px-Flag_of_Vietnam.svg.png",
       imageCaption:
@@ -207,7 +211,9 @@ window.MuseumData = (() => {
       lookPos: { x: -5.6, y: 2.15, z: -6.85 },
       sectionCode: "1.2a",
       visualType: "r1-2a",
-      localImagePath: "images/r1-2a.jpg",
+      localImagePath: "assets/exhibits/r1-2a.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.2a • GIAI ĐOẠN TRƯỚC ĐỔI MỚI (1986)",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Agricultural_output_Vietnam.svg/960px-Agricultural_output_Vietnam.svg.png",
       imageCaption:
@@ -265,7 +271,9 @@ window.MuseumData = (() => {
       lookPos: { x: 0, y: 2.15, z: -6.85 },
       sectionCode: "1.2b",
       visualType: "r1-2b",
-      localImagePath: "images/r1-2b.jpg",
+      localImagePath: "assets/exhibits/r1-2b.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.2b • TƯ DUY ĐỔI MỚI (1986 – 2000)",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Ho_Chi_Minh_City%2C_City_Hall%2C_2020-01_CN-03.jpg/960px-Ho_Chi_Minh_City%2C_City_Hall%2C_2020-01_CN-03.jpg",
       imageCaption:
@@ -322,7 +330,9 @@ window.MuseumData = (() => {
       lookPos: { x: 5.6, y: 2.15, z: -6.85 },
       sectionCode: "1.2c",
       visualType: "r1-2c",
-      localImagePath: "images/r1-2c.jpg",
+      localImagePath: "assets/exhibits/r1-2c.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.2c • HOÀN THIỆN THỂ CHẾ (2001 – 2026)",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Hanoi_skyline_with_Ba_Vi_Mountain.jpg/960px-Hanoi_skyline_with_Ba_Vi_Mountain.jpg",
       imageCaption:
@@ -380,7 +390,9 @@ window.MuseumData = (() => {
       lookPos: { x: 8.85, y: 2.15, z: -3.2 },
       sectionCode: "1.3",
       visualType: "r1-3",
-      localImagePath: "images/r1-3.jpg",
+      localImagePath: "assets/exhibits/r1-3.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.3 • TÍNH TẤT YẾU KHÁCH QUAN KTTT ĐHXHCN",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Ho_Chi_Minh_City_-_DJI_0124-HDR.jpg/960px-Ho_Chi_Minh_City_-_DJI_0124-HDR.jpg",
       imageCaption:
@@ -448,7 +460,9 @@ window.MuseumData = (() => {
       lookPos: { x: 8.85, y: 2.15, z: 0.2 },
       sectionCode: "1.4a",
       visualType: "r1-4a",
-      localImagePath: "images/r1-4a.jpg",
+      localImagePath: "assets/exhibits/r1-4a.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.4a • VAI TRÒ QUẢN LÝ VĨ MÔ CỦA NHÀ NƯỚC",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg/960px-%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg",
       imageCaption:
@@ -507,7 +521,9 @@ window.MuseumData = (() => {
       lookPos: { x: 8.85, y: 2.15, z: 3.6 },
       sectionCode: "1.4b",
       visualType: "r1-4b",
-      localImagePath: "images/r1-4b.jpg",
+      localImagePath: "assets/exhibits/r1-4b.jpg",
+      preferLocal: true,
+      plaqueTitle: "1.4b • BỐN VAI TRÒ LÃNH ĐẠO CỦA ĐẢNG CSVN",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Communist_Party_of_Vietnam_flag_logo.svg/960px-Communist_Party_of_Vietnam_flag_logo.svg.png",
       imageCaption:
@@ -567,7 +583,9 @@ window.MuseumData = (() => {
     lookPos: { x: 0, y: 1.35, z: -0.8 },
     sectionCode: "2.a",
     visualType: "r2-a",
-    localImagePath: "images/r2-a.jpg",
+    localImagePath: "assets/exhibits/r2-a.jpg",
+    preferLocal: true,
+    plaqueTitle: "2.a • ĐẶC ĐIỂM CHUNG CỦA KINH TẾ THỊ TRƯỜNG",
     imageUrl:
       "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/TR%C3%8AN_S%C3%94NG_S%C3%80I_G%C3%92N_-_panoramio.jpg/960px-TR%C3%8AN_S%C3%94NG_S%C3%80I_G%C3%92N_-_panoramio.jpg",
     imageCaption:
@@ -619,7 +637,9 @@ window.MuseumData = (() => {
       angleDeg: 180,
       sectionCode: "2.b.1",
       visualType: "r2-b1",
-      localImagePath: "images/r2-b1.jpg",
+      localImagePath: "assets/exhibits/r2-b1.jpg",
+      preferLocal: true,
+      plaqueTitle: "ĐẶC TRƯNG 1 • VỀ MỤC TIÊU PHÁT TRIỂN",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Ho_Chi_Minh_City_panorama_2019_%28cropped%29.jpg/960px-Ho_Chi_Minh_City_panorama_2019_%28cropped%29.jpg",
       imageCaption:
@@ -666,7 +686,9 @@ window.MuseumData = (() => {
       angleDeg: 225,
       sectionCode: "2.b.2",
       visualType: "r2-b2",
-      localImagePath: "images/r2-b2.jpg",
+      localImagePath: "assets/exhibits/r2-b2.jpg",
+      preferLocal: true,
+      plaqueTitle: "ĐẶC TRƯNG 2 • SỞ HỮU & THÀNH PHẦN KINH TẾ",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Newone_-_Hung_An_-_VinFast_2020.jpg/960px-Newone_-_Hung_An_-_VinFast_2020.jpg",
       imageCaption:
@@ -714,7 +736,9 @@ window.MuseumData = (() => {
       angleDeg: 270,
       sectionCode: "2.b.3",
       visualType: "r2-b3",
-      localImagePath: "images/r2-b3.jpg",
+      localImagePath: "assets/exhibits/r2-b3.jpg",
+      preferLocal: true,
+      plaqueTitle: "ĐẶC TRƯNG 3 • QUAN HỆ QUẢN LÝ NỀN KINH TẾ",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg/960px-%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg",
       imageCaption:
@@ -761,7 +785,9 @@ window.MuseumData = (() => {
       angleDeg: 315,
       sectionCode: "2.b.4",
       visualType: "r2-b4",
-      localImagePath: "images/r2-b4.jpg",
+      localImagePath: "assets/exhibits/r2-b4.jpg",
+      preferLocal: true,
+      plaqueTitle: "ĐẶC TRƯNG 4 • QUAN HỆ PHÂN PHỐI CÔNG BẰNG",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/C%E1%BA%A7u_Cao_L%C3%A3nh.jpg/960px-C%E1%BA%A7u_Cao_L%C3%A3nh.jpg",
       imageCaption:
@@ -807,7 +833,9 @@ window.MuseumData = (() => {
       angleDeg: 360,
       sectionCode: "2.b.5",
       visualType: "r2-b5",
-      localImagePath: "images/r2-b5.jpg",
+      localImagePath: "assets/exhibits/r2-b5.jpg",
+      preferLocal: true,
+      plaqueTitle: "ĐẶC TRƯNG 5 • TĂNG TRƯỞNG & TIẾN BỘ XÃ HỘI",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12%2C_Qu%E1%BA%ADn_5%2C_TPHCM%2C_Vi%E1%BB%87t_Nam_-_panoramio.jpg/960px-Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12%2C_Qu%E1%BA%ADn_5%2C_TPHCM%2C_Vi%E1%BB%87t_Nam_-_panoramio.jpg",
       imageCaption:
@@ -858,7 +886,9 @@ window.MuseumData = (() => {
       lookPos: { x: -9.85, y: 2.2, z: -2.8 },
       sectionCode: "3.1",
       visualType: "r3-1",
-      localImagePath: "images/r3-1.jpg",
+      localImagePath: "assets/exhibits/r3-1.jpg",
+      preferLocal: true,
+      plaqueTitle: "3.1 • NĂM GIỚI HẠN LỊCH SỬ CỦA CNTB",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927.jpg/960px-Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927.jpg",
       imageCaption:
@@ -913,7 +943,9 @@ window.MuseumData = (() => {
       lookPos: { x: 9.85, y: 2.2, z: -2.8 },
       sectionCode: "3.2",
       visualType: "r3-2",
-      localImagePath: "images/r3-2.jpg",
+      localImagePath: "assets/exhibits/r3-2.jpg",
+      preferLocal: true,
+      plaqueTitle: "3.2 • NĂM TRỤ CỘT KHẮC PHỤC CỦA VIỆT NAM",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Windmills_D1-D4_%28Thornton_Bank%29.jpg/960px-Windmills_D1-D4_%28Thornton_Bank%29.jpg",
       imageCaption:
@@ -968,7 +1000,9 @@ window.MuseumData = (() => {
       lookPos: { x: 0, y: 2.25, z: -6.85 },
       sectionCode: "3.BẢNG",
       visualType: "r3-table",
-      localImagePath: "images/r3-table.jpg",
+      localImagePath: "assets/exhibits/r3-table.jpg",
+      preferLocal: true,
+      plaqueTitle: "3.BẢNG • ĐỐI CHIẾU KTTT TBCN & KTTT ĐHXHCN",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/DJI_0550-HDR-Pano_Bitexco_Financial_Tower.jpg/960px-DJI_0550-HDR-Pano_Bitexco_Financial_Tower.jpg",
       imageCaption:
@@ -1002,7 +1036,9 @@ window.MuseumData = (() => {
       lookPos: { x: -9.85, y: 2.2, z: 2.8 },
       sectionCode: "3.3a",
       visualType: "r3-3a",
-      localImagePath: "images/r3-3a.jpg",
+      localImagePath: "assets/exhibits/r3-3a.jpg",
+      preferLocal: true,
+      plaqueTitle: "3.3a • BỐN HẠN CHẾ THỰC TIỄN HIỆN NAY",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
       imageCaption:
@@ -1061,7 +1097,9 @@ window.MuseumData = (() => {
       lookPos: { x: 9.85, y: 2.2, z: 2.8 },
       sectionCode: "3.3b",
       visualType: "r3-3b",
-      localImagePath: "images/r3-3b.jpg",
+      localImagePath: "assets/exhibits/r3-3b.jpg",
+      preferLocal: true,
+      plaqueTitle: "3.3b • BỐN GIẢI PHÁP HOÀN THIỆN ĐỒNG BỘ",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Khu_trung_t%C3%A2m_th%C3%A0nh_ph%E1%BB%91_H%E1%BB%93_Ch%C3%AD_Minh%2C_nh%C3%ACn_t%E1%BB%AB_ph%C3%ADa_qu%E1%BA%ADn_2.JPG/960px-Khu_trung_t%C3%A2m_th%C3%A0nh_ph%E1%BB%91_H%E1%BB%93_Ch%C3%AD_Minh%2C_nh%C3%ACn_t%E1%BB%AB_ph%C3%ADa_qu%E1%BA%ADn_2.JPG",
       imageCaption:
@@ -1120,7 +1158,9 @@ window.MuseumData = (() => {
       lookPos: { x: 0, y: 1.35, z: 1.6 },
       sectionCode: "3.KẾT",
       visualType: "r3-verdict",
-      localImagePath: "images/r3-verdict.jpg",
+      localImagePath: "assets/exhibits/r3-verdict.jpg",
+      preferLocal: true,
+      plaqueTitle: "3.KẾT • PHÁN QUYẾT TỔNG KẾT & THAM KHẢO",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/960px-Flag_of_Vietnam.svg.png",
       imageCaption:

@@ -191,7 +191,6 @@ window.MuseumControls = (() => {
 
     resetAllKeys();
     drawerRequestToken++;
-    const currentToken = drawerRequestToken;
 
     if (document.pointerLockElement && document.exitPointerLock) {
       document.exitPointerLock();
@@ -207,13 +206,10 @@ window.MuseumControls = (() => {
     if (title) title.textContent = data.title || "";
     if (subtitle) subtitle.textContent = data.subtitle || "";
     if (body) {
+      // Modal chi tiết chỉ hiển thị thuần nội dung văn bản (text-only), không chèn ảnh, sơ đồ hay biểu đồ
       body.innerHTML =
         data.fullHtml ||
         `<p class="text-slate-800 leading-relaxed">${data.desc || ""}</p>`;
-      const showcase = buildDrawerVisualShowcase(data, currentToken);
-      if (showcase && showcase.childNodes && showcase.childNodes.length > 0) {
-        body.prepend(showcase);
-      }
       body.scrollTop = 0;
     }
     if (modal) modal.classList.remove("hidden");

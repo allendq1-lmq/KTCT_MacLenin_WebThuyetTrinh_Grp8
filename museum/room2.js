@@ -47,6 +47,7 @@ window.MuseumRoom2 = (() => {
       const centerPlacardTex = window.MuseumEngine.createPlacardTexture(
         centerData.title,
         centerData.subtitle,
+        centerData,
       );
       const centerFrame = window.MuseumEngine.createGalleryFrame(
         2.3,
@@ -59,6 +60,8 @@ window.MuseumRoom2 = (() => {
           sectionCode: centerData.sectionCode,
           visualType: centerData.visualType,
           localImagePath: centerData.localImagePath,
+          preferLocal: centerData.preferLocal,
+          plaqueTitle: centerData.plaqueTitle,
           imageUrl: centerData.imageUrl,
           imageCaption: centerData.imageCaption,
           badge: centerData.badge,
@@ -220,6 +223,7 @@ window.MuseumRoom2 = (() => {
         const placardTex = window.MuseumEngine.createPlacardTexture(
           p.title,
           p.subtitle,
+          p,
         );
 
         const frame = window.MuseumEngine.createGalleryFrame(
@@ -233,6 +237,8 @@ window.MuseumRoom2 = (() => {
             sectionCode: p.sectionCode,
             visualType: p.visualType,
             localImagePath: p.localImagePath,
+            preferLocal: p.preferLocal,
+            plaqueTitle: p.plaqueTitle,
             imageUrl: p.imageUrl,
             imageCaption: p.imageCaption,
             badge: p.badge,

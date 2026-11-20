@@ -1351,146 +1351,29 @@ window.MuseumVisuals = (() => {
     accentColor,
     caption,
   ) {
-    const r = rect || { x: 564, y: 222, w: 404, h: 376 };
-    // Phủ nền tối đồng bộ khung phải trước khi kết hợp Ảnh + Mini Infographic & KPI
-    ctx.fillStyle = "#0b111e";
-    ctx.fillRect(r.x, r.y, r.w, r.h);
-    drawBlueprintGrid(ctx, r.x, r.y, r.w, r.h, accentColor);
-
-    const photoH = Math.round(r.h * 0.56);
-    const photoX = r.x + 8;
-    const photoY = r.y + 8;
-    const photoW = r.w - 16;
-
-    // Vẽ ảnh tư liệu có bo góc và giữ đúng tỷ lệ (contain cho cờ/biểu đồ vector, cover cho ảnh chụp)
+    const r = rect || { x: 18, y: 18, w: 988, h: 664 };
     ctx.save();
-    roundedRectPath(ctx, photoX, photoY, photoW, photoH, 8);
+    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 8);
     ctx.clip();
     ctx.fillStyle = "#09101d";
-    ctx.fillRect(photoX, photoY, photoW, photoH);
+    ctx.fillRect(r.x, r.y, r.w, r.h);
 
-    const iw = img.naturalWidth || img.width || 640;
-    const ih = img.naturalHeight || img.height || 400;
-    const isVectorGraphic = /\.svg(\.png)?(\?.*)?$/i.test(String(src || ""));
-    const scale = isVectorGraphic
-      ? Math.min(photoW / iw, photoH / ih)
-      : Math.max(photoW / iw, photoH / ih);
+    const iw = img.naturalWidth || img.width || 1280;
+    const ih = img.naturalHeight || img.height || 800;
+    const scale = Math.max(r.w / iw, r.h / ih);
     const dw = iw * scale;
     const dh = ih * scale;
-    const dx = photoX + (photoW - dw) / 2;
-    const dy = photoY + (photoH - dh) / 2;
+    const dx = r.x + (r.w - dw) / 2;
+    const dy = r.y + (r.h - dh) / 2;
     ctx.drawImage(img, dx, dy, dw, dh);
     ctx.restore();
 
     ctx.save();
-    roundedRectPath(ctx, photoX, photoY, photoW, photoH, 8);
-    ctx.strokeStyle = "rgba(255,255,255,0.22)";
-    ctx.lineWidth = 1.5;
+    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 8);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+    ctx.lineWidth = 2;
     ctx.stroke();
     ctx.restore();
-
-    // Nhãn nguồn nhỏ góc trên trái ảnh
-    const sourceBadge =
-      src && !/^https?:\/\//i.test(src) ? "TƯ LIỆU LOCAL" : "TƯ LIỆU LỊCH SỬ";
-    fillCard(
-      ctx,
-      photoX + 8,
-      photoY + 8,
-      124,
-      21,
-      5,
-      "rgba(15, 23, 42, 0.88)",
-      accentColor || "#f59e0b",
-      1,
-    );
-    drawCenterLines(
-      ctx,
-      sourceBadge,
-      photoX + 70,
-      photoY + 18.5,
-      114,
-      12,
-      "bold 10px 'Segoe UI', sans-serif",
-      "#fde68a",
-      1,
-    );
-
-    // Phần dưới kết hợp Sơ đồ Infographic thu gọn (bên trái) + Điểm nhấn KPI sắc nét (bên phải)
-    const botY = photoY + photoH + 8;
-    const botH = r.y + r.h - botY - 8;
-    const miniW = Math.round((r.w - 22) * 0.43);
-    const kpiX = r.x + 8 + miniW + 6;
-    const kpiW = r.w - 16 - miniW - 6;
-
-    drawExhibitInfographic(
-      ctx,
-      visualType,
-      { x: r.x + 8, y: botY, w: miniW, h: botH },
-      accentColor,
-    );
-
-    fillCard(
-      ctx,
-      kpiX,
-      botY,
-      kpiW,
-      botH,
-      8,
-      "rgba(15, 23, 42, 0.92)",
-      `${accentColor || "#f59e0b"}88`,
-      1.2,
-    );
-    const highlights = COMPACT_HIGHLIGHTS[visualType] || [
-      "Tổng hợp lý luận",
-      "Minh chứng thực tiễn",
-      "Định hướng XHCN",
-    ];
-    const rowStep = (botH - 12) / highlights.length;
-    highlights.forEach((line, idx) => {
-      const ly = botY + 6 + idx * rowStep + rowStep / 2;
-      fillCard(
-        ctx,
-        kpiX + 6,
-        ly - rowStep * 0.38,
-        kpiW - 12,
-        rowStep * 0.76,
-        6,
-        "#111c33",
-        idx === 0 ? `${accentColor || "#f59e0b"}aa` : "rgba(148,163,184,0.25)",
-        1,
-      );
-      drawCenterLines(
-        ctx,
-        line,
-        kpiX + kpiW / 2,
-        ly,
-        kpiW - 20,
-        14,
-        idx === 0
-          ? "bold 12.5px 'Segoe UI', sans-serif"
-          : "600 11.5px 'Segoe UI', sans-serif",
-        idx === 0 ? "#fde68a" : "#e2e8f0",
-        2,
-      );
-    });
-
-    if (caption) {
-      ctx.save();
-      ctx.fillStyle = "#0c1322";
-      ctx.fillRect(r.x, r.y + r.h + 4, r.w, 42);
-      drawCenterLines(
-        ctx,
-        caption,
-        r.x + r.w / 2,
-        r.y + r.h + 25,
-        r.w - 16,
-        15,
-        "italic 12px 'Segoe UI', sans-serif",
-        "#cbd5e1",
-        2,
-      );
-      ctx.restore();
-    }
   }
 
   function renderInfographicDataUrl(exhibit) {
@@ -1601,21 +1484,23 @@ window.MuseumVisuals = (() => {
     }
 
     const localTimeoutMs =
-      typeof options.localTimeoutMs === "number" ? options.localTimeoutMs : 900;
+      typeof options.localTimeoutMs === "number" ? options.localTimeoutMs : 2500;
     const remoteTimeoutMs =
       typeof options.remoteTimeoutMs === "number"
         ? options.remoteTimeoutMs
         : 4000;
 
     const promise = (async () => {
-      const manifestSet = await getLocalManifest();
-      const shouldTryLocal = Boolean(
+      let shouldTryLocal = Boolean(
         exhibit.localImagePath &&
           (exhibit.preferLocal === true ||
             options.tryLocalFirst === true ||
-            !exhibit.imageUrl ||
-            manifestContains(manifestSet, exhibit.localImagePath)),
+            !exhibit.imageUrl),
       );
+      if (!shouldTryLocal && exhibit.localImagePath) {
+        const manifestSet = await getLocalManifest();
+        shouldTryLocal = manifestContains(manifestSet, exhibit.localImagePath);
+      }
 
       // Bước 1: Ưu tiên ảnh local trước nếu có khai báo trong manifest/preferLocal hoặc không có ảnh mạng
       if (shouldTryLocal) {

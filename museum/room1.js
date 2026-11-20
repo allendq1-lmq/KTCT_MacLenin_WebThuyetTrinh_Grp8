@@ -34,6 +34,7 @@ window.MuseumRoom1 = (() => {
         const placardTex = window.MuseumEngine.createPlacardTexture(
           ex.title,
           ex.subtitle,
+          ex,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           2.6,
@@ -46,6 +47,8 @@ window.MuseumRoom1 = (() => {
             sectionCode: ex.sectionCode,
             visualType: ex.visualType,
             localImagePath: ex.localImagePath,
+            preferLocal: ex.preferLocal,
+            plaqueTitle: ex.plaqueTitle,
             imageUrl: ex.imageUrl,
             imageCaption: ex.imageCaption,
             badge: ex.badge,

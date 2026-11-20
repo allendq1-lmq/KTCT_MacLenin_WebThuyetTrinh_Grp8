@@ -300,45 +300,213 @@ window.MuseumEngine = (() => {
     return tex;
   }
 
-  function createPlacardTexture(title, subtitle, exhibitMeta) {
-    // Bảng tên rộng 100% khung tranh (1024x220), hiển thị duy nhất tiêu đề ngắn gọn, cỡ chữ lớn, in đậm, tương phản cao
-    const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 220;
+  const placardRegistry = [];
+
+  function getPlacardDimensions(frameWidth) {
+    const w = typeof frameWidth === "number" && frameWidth > 0 ? frameWidth : 2.6;
+    const innerH = Math.max(0.36, Math.min(0.56, Number((w * 0.12).toFixed(3))));
+    const outerH = Number((innerH + 0.08).toFixed(3));
+    return {
+      width: w,
+      innerH,
+      outerH,
+      aspectRatio: w / innerH,
+    };
+  }
+
+  function formatMuseumTitleCase(text) {
+    const acronyms = new Set([
+      "KTTT",
+      "XHCN",
+      "ĐHXHCN",
+      "CNTB",
+      "TBCN",
+      "CSVN",
+      "CNXH",
+      "KT-XH",
+      "VN",
+      "UIT",
+      "GR8",
+      "FDI",
+      "DNNN",
+      "DNTN",
+      "GDP",
+      "HDI",
+      "BHYT",
+      "HTX",
+    ]);
+    return String(text || "")
+      .trim()
+      .split(/\s+/)
+      .map((word) => {
+        const clean = word.replace(/^[(["']+|[,.;:)!?"']+$/g, "");
+        if (acronyms.has(clean.toUpperCase())) {
+          return word.toUpperCase();
+        }
+        if (/^[0-9]+([.,–-][0-9]+)*[a-zA-Z]?$/.test(clean)) {
+          return word;
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(" ");
+  }
+
+  function parsePlacardParts(rawTitle) {
+    const raw = String(rawTitle || "").trim();
+    const parts = raw.split(/\s*•\s*/);
+    if (parts.length >= 2) {
+      return {
+        kicker: parts[0].trim().toUpperCase(),
+        main: formatMuseumTitleCase(parts.slice(1).join(" • ")),
+      };
+    }
+    return {
+      kicker: "",
+      main: formatMuseumTitleCase(raw),
+    };
+  }
+
+  function splitBalancedTwoLines(ctx, text, maxW) {
+    if (ctx.measureText(text).width <= maxW) {
+      return [text];
+    }
+    const words = text.split(/\s+/).filter(Boolean);
+    if (words.length <= 1) return [text];
+    let bestLines = null;
+    let bestScore = Infinity;
+    for (let i = 1; i < words.length; i++) {
+      const l1 = words.slice(0, i).join(" ");
+      const l2 = words.slice(i).join(" ");
+      const w1 = ctx.measureText(l1).width;
+      const w2 = ctx.measureText(l2).width;
+      const maxLine = Math.max(w1, w2);
+      const balanceDiff = Math.abs(w1 - w2);
+      const score = (maxLine <= maxW ? 0 : (maxLine - maxW) * 10) + balanceDiff;
+      if (score < bestScore) {
+        bestScore = score;
+        bestLines = [l1, l2];
+      }
+    }
+    return bestLines || [text];
+  }
+
+  function drawPlacardCanvas(canvas, title, subtitle, exhibitMeta, frameWidth) {
+    const dims = getPlacardDimensions(frameWidth);
+    const W = 2048;
+    const H = Math.max(128, Math.round(W / dims.aspectRatio));
+    if (canvas.width !== W || canvas.height !== H) {
+      canvas.width = W;
+      canvas.height = H;
+    }
+
     const ctx = canvas.getContext("2d");
     const meta = resolveExhibitMeta(title, null, exhibitMeta);
-    const displayTitle = String(meta.plaqueTitle || title || "")
-      .trim()
-      .toUpperCase();
+    const { kicker, main } = parsePlacardParts(meta.plaqueTitle || title || "");
 
-    const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
     bgGrad.addColorStop(0, "#141d2f");
     bgGrad.addColorStop(1, "#0b101d");
     ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, W, H);
 
+    const outerInset = 10;
     ctx.strokeStyle = "#f59e0b";
-    ctx.lineWidth = 6;
-    ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+    ctx.lineWidth = 8;
+    ctx.strokeRect(outerInset, outerInset, W - outerInset * 2, H - outerInset * 2);
 
+    const innerInset = 28;
+    const innerBoxWidth = W - innerInset * 2;
+    const innerBoxHeight = H - innerInset * 2;
     ctx.strokeStyle = "rgba(251, 191, 36, 0.42)";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(18, 18, canvas.width - 36, canvas.height - 36);
+    ctx.lineWidth = 3;
+    ctx.strokeRect(innerInset, innerInset, innerBoxWidth, innerBoxHeight);
 
-    const maxTextWidth = canvas.width - 80;
-    let fontSize = 54;
-    ctx.font = `bold ${fontSize}px 'Segoe UI', Tahoma, sans-serif`;
-    while (fontSize > 44 && ctx.measureText(displayTitle).width > maxTextWidth) {
+    const safeWidth = innerBoxWidth * 0.86;
+    const safeHeight = innerBoxHeight * 0.80;
+    const centerX = W / 2;
+    const centerY = H / 2;
+    const fontFamily = "'Be Vietnam Pro', 'Segoe UI', Tahoma, sans-serif";
+
+    const kickerFontSize = kicker ? Math.max(22, Math.min(34, Math.round(safeHeight * 0.21))) : 0;
+    const kickerGap = kicker ? Math.round(kickerFontSize * 0.42) : 0;
+    const maxMainHeight = kicker ? safeHeight - kickerFontSize - kickerGap : safeHeight;
+
+    let fontSize = Math.max(26, Math.round(safeHeight * (kicker ? 0.36 : 0.48)));
+    let lines = [main];
+
+    while (fontSize >= 22) {
+      ctx.font = `700 ${fontSize}px ${fontFamily}`;
+      lines = splitBalancedTwoLines(ctx, main, safeWidth);
+      const lineHeight = Math.round(fontSize * 1.18);
+      const blockHeight = lines.length * lineHeight;
+      const maxLineWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
+      if (maxLineWidth <= safeWidth && blockHeight <= maxMainHeight) {
+        break;
+      }
       fontSize -= 2;
-      ctx.font = `bold ${fontSize}px 'Segoe UI', Tahoma, sans-serif`;
     }
 
-    ctx.fillStyle = "#fef3c7";
+    ctx.font = `700 ${fontSize}px ${fontFamily}`;
+    const lineHeight = Math.round(fontSize * 1.18);
+    const mainBlockHeight = lines.length * lineHeight;
+    const totalBlockHeight = kicker
+      ? kickerFontSize + kickerGap + mainBlockHeight
+      : mainBlockHeight;
+
+    let currentY = centerY - totalBlockHeight / 2;
+
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(displayTitle, canvas.width / 2, canvas.height / 2);
 
-    return configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
+    if (kicker) {
+      ctx.font = `700 ${kickerFontSize}px ${fontFamily}`;
+      ctx.fillStyle = "#fbbf24";
+      ctx.fillText(kicker, centerX, currentY + kickerFontSize / 2);
+      currentY += kickerFontSize + kickerGap;
+    }
+
+    ctx.font = `700 ${fontSize}px ${fontFamily}`;
+    ctx.fillStyle = "#fef3c7";
+    lines.forEach((ln, idx) => {
+      ctx.fillText(ln, centerX, currentY + lineHeight / 2 + idx * lineHeight);
+    });
+
+    const maxLineWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
+    canvas._placardMetrics = {
+      width: W,
+      height: H,
+      aspectRatio: W / H,
+      meshAspectRatio: dims.aspectRatio,
+      safeWidth,
+      safeHeight,
+      maxLineWidth,
+      totalBlockHeight,
+      fits: maxLineWidth <= safeWidth + 0.5 && totalBlockHeight <= safeHeight + 0.5,
+      title: meta.plaqueTitle || title || "",
+    };
+  }
+
+  function redrawAllPlacards() {
+    for (let i = 0; i < placardRegistry.length; i++) {
+      const entry = placardRegistry[i];
+      if (!entry || !entry.canvas || !entry.tex) continue;
+      drawPlacardCanvas(
+        entry.canvas,
+        entry.title,
+        entry.subtitle,
+        entry.exhibitMeta,
+        entry.frameWidth,
+      );
+      entry.tex.needsUpdate = true;
+    }
+  }
+
+  function createPlacardTexture(title, subtitle, exhibitMeta, frameWidth = 2.6) {
+    const canvas = document.createElement("canvas");
+    drawPlacardCanvas(canvas, title, subtitle, exhibitMeta, frameWidth);
+    const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
+    placardRegistry.push({ canvas, tex, title, subtitle, exhibitMeta, frameWidth });
+    return tex;
   }
 
   function createComparisonBoardTexture(title, rows) {
@@ -510,9 +678,10 @@ window.MuseumEngine = (() => {
     canvasMesh.position.z = 0.052;
     group.add(canvasMesh);
 
-    // Đế bảng tên (bottom plaque) có chiều ngang bằng 100% khung tranh bên trên (width + 0.2 / width)
-    const placardOuterH = 0.42;
-    const placardInnerH = 0.34;
+    // Đế bảng tên (bottom plaque) có chiều ngang bằng 100% khung tranh bên trên, chiều cao tỷ lệ chuẩn
+    const placardDims = getPlacardDimensions(width);
+    const placardOuterH = placardDims.outerH;
+    const placardInnerH = placardDims.innerH;
     const placardY = -(height / 2 + 0.1 + placardOuterH / 2 + 0.05);
     const placardBaseGeo = getSharedGeometry(
       `placard-base-${width}`,
@@ -1311,6 +1480,7 @@ window.MuseumEngine = (() => {
   }
 
   function loadRoom(roomNumber) {
+    placardRegistry.length = 0;
     // Hệ ánh sáng phòng trưng bày dịu mắt, có chiều sâu, chống chói lóa (A1)
     const hemiLight = new THREE.HemisphereLight(0xf3e8d2, 0x1b202b, 0.56);
     scene.add(hemiLight);
@@ -1486,6 +1656,12 @@ window.MuseumEngine = (() => {
 
     loadRoom(1);
 
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        redrawAllPlacards();
+      });
+    }
+
     if (window.MuseumControls && window.MuseumControls.init) {
       window.MuseumControls.init(camera, renderer.domElement, keys);
     }
@@ -1531,6 +1707,11 @@ window.MuseumEngine = (() => {
     interactableObjects,
     createArtworkTexture,
     createPlacardTexture,
+    getPlacardDimensions,
+    getPlacardMetrics: () =>
+      placardRegistry.map((entry) =>
+        entry && entry.canvas ? entry.canvas._placardMetrics : null,
+      ),
     createComparisonBoardTexture,
     createGalleryFrame,
     createBench,

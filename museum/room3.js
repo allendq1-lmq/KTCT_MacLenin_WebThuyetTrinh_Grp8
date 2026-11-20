@@ -69,6 +69,7 @@ window.MuseumRoom3 = (() => {
           ex.title,
           ex.subtitle,
           ex,
+          5.6,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           5.6,
@@ -119,6 +120,7 @@ window.MuseumRoom3 = (() => {
           ex.title,
           ex.subtitle,
           ex,
+          2.5,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           2.5,
@@ -127,7 +129,7 @@ window.MuseumRoom3 = (() => {
           placardTex,
           userData,
         );
-        frame.position.set(0, 1.5, 0);
+        frame.position.set(0, 1.92, 0);
         verdictGroup.add(frame);
 
         ped.userData = userData;
@@ -159,6 +161,7 @@ window.MuseumRoom3 = (() => {
           ex.title,
           ex.subtitle,
           ex,
+          3.4,
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           3.4,

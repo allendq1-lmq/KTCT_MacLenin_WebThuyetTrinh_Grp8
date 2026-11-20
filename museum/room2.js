@@ -48,6 +48,7 @@ window.MuseumRoom2 = (() => {
         centerData.title,
         centerData.subtitle,
         centerData,
+        2.3,
       );
       const centerFrame = window.MuseumEngine.createGalleryFrame(
         2.3,
@@ -73,7 +74,7 @@ window.MuseumRoom2 = (() => {
           lookPos: centerData.lookPos,
         },
       );
-      centerFrame.position.set(0, 1.65, 0);
+      centerFrame.position.set(0, 2.08, 0);
       centerGroup.add(centerFrame);
 
       centerPedestal.userData = centerFrame.userData;
@@ -224,6 +225,7 @@ window.MuseumRoom2 = (() => {
           p.title,
           p.subtitle,
           p,
+          2.1,
         );
 
         const frame = window.MuseumEngine.createGalleryFrame(

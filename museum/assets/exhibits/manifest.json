@@ -26,12 +26,12 @@
                                    "id":  "r1-2a",
                                    "file":  "assets/exhibits/r1-2a.jpg",
                                    "source":  "wikimedia",
-                                   "title":  "RiceTerracesVietnam.jpg",
-                                   "license":  "CC-BY-2.0",
-                                   "attribution":  "Jeff Caylor",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:RiceTerracesVietnam.jpg",
-                                   "width":  1440,
-                                   "height":  960
+                                   "title":  "Tem phiếu thời bao cấp.jpg",
+                                   "license":  "CC-BY-SA-3.0",
+                                   "attribution":  "Wikimedia Commons",
+                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Tem_phi%E1%BA%BFu_th%E1%BB%9Di_bao_c%E1%BA%A5p.jpg",
+                                   "width":  1600,
+                                   "height":  1200
                                },
                      "r1-2b":  {
                                    "id":  "r1-2b",
@@ -92,12 +92,12 @@
                                   "id":  "r2-a",
                                   "file":  "assets/exhibits/r2-a.jpg",
                                   "source":  "wikimedia",
-                                  "title":  "Bundesarchiv Bild 183-L0422-0002, Rostock, Überseehafen, Frachter.jpg",
+                                  "title":  "Börse Frankfurt stock exchange - Germany - Luminale 2014 - April 3rd 2014 - 02.jpg",
                                   "license":  "CC-BY-SA-3.0",
-                                  "attribution":  "Jürgen Sindermann",
-                                  "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Bundesarchiv_Bild_183-L0422-0002,_Rostock,_%C3%9Cberseehafen,_Frachter.jpg",
-                                  "width":  1200,
-                                  "height":  910
+                                  "attribution":  "Norbert Nagel",
+                                  "sourceUrl":  "https://commons.wikimedia.org/wiki/File:B%C3%B6rse_Frankfurt_stock_exchange_-_Germany_-_Luminale_2014_-_April_3rd_2014_-_02.jpg",
+                                  "width":  1440,
+                                  "height":  1152
                               },
                      "r2-b1":  {
                                    "id":  "r2-b1",
@@ -113,13 +113,13 @@
                      "r2-b2":  {
                                    "id":  "r2-b2",
                                    "file":  "assets/exhibits/r2-b2.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Vista de Ciudad Ho Chi Minh desde Bitexco Financial Tower, Vietnam, 2013-08-14, DD 06.JPG",
-                                   "license":  "CC-BY-SA-3.0",
-                                   "attribution":  "Diego Delso",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Vista_de_Ciudad_Ho_Chi_Minh_desde_Bitexco_Financial_Tower,_Vietnam,_2013-08-14,_DD_06.JPG",
-                                   "width":  1440,
-                                   "height":  960
+                                   "source":  "openverse",
+                                   "title":  "Electronics industry in Viet Nam",
+                                   "license":  "CC-BY-2.0",
+                                   "attribution":  "ILO Asia-Pacific",
+                                   "sourceUrl":  "https://openverse.org/image/7abc7763",
+                                   "width":  1024,
+                                   "height":  683
                                },
                      "r2-b3":  {
                                    "id":  "r2-b3",
@@ -191,10 +191,10 @@
                                    "id":  "r3-3a",
                                    "file":  "assets/exhibits/r3-3a.jpg",
                                    "source":  "wikimedia",
-                                   "title":  "Another look at the Dong Xuan Market in the Hanoi old quarter (31454085665).jpg",
-                                   "license":  "CC-BY-2.0",
-                                   "attribution":  "shankar s. from Dubai, united arab emirates",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Another_look_at_the_Dong_Xuan_Market_in_the_Hanoi_old_quarter_(31454085665).jpg",
+                                   "title":  "Hanoi Traffic Ba Dinh Dist..jpg",
+                                   "license":  "CC-BY-SA-3.0",
+                                   "attribution":  "Dragfyre",
+                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Hanoi_Traffic_Ba_Dinh_Dist..jpg",
                                    "width":  1440,
                                    "height":  1080
                                },
@@ -213,12 +213,12 @@
                                         "id":  "r3-verdict",
                                         "file":  "assets/exhibits/r3-verdict.jpg",
                                         "source":  "wikimedia",
-                                        "title":  "Vista de Ciudad Ho Chi Minh desde Bitexco Financial Tower, Vietnam, 2013-08-14, DD 05.JPG",
-                                        "license":  "CC-BY-SA-3.0",
-                                        "attribution":  "Diego Delso",
-                                        "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Vista_de_Ciudad_Ho_Chi_Minh_desde_Bitexco_Financial_Tower,_Vietnam,_2013-08-14,_DD_05.JPG",
+                                        "title":  "Ho Chi Minh City Skyline at Night.jpg",
+                                        "license":  "CC-BY-SA-4.0",
+                                        "attribution":  "Wikimedia Commons",
+                                        "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City_Skyline_at_Night.jpg",
                                         "width":  1440,
-                                        "height":  960
+                                        "height":  757
                                     }
                  }
 }

@@ -740,7 +740,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "ĐẶC TRƯNG 3 • QUAN HỆ QUẢN LÝ NỀN KINH TẾ",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg/960px-%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Presidential_Palace%2C_Hanoi%2C_April_2011.jpg/960px-Presidential_Palace%2C_Hanoi%2C_April_2011.jpg",
       imageCaption:
         "Nhà nước pháp quyền XHCN của nhân dân, do nhân dân, vì nhân dân dưới sự lãnh đạo của Đảng",
       badge: "Cột Trụ 03 • Quan Hệ Quản Lý",
@@ -1040,7 +1040,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.3a • BỐN HẠN CHẾ THỰC TIỄN HIỆN NAY",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Hanoi_Traffic_Ba_Dinh_Dist..jpg/960px-Hanoi_Traffic_Ba_Dinh_Dist..jpg",
       imageCaption:
         "Bốn hạn chế thực tiễn: hợp tác xã yếu, thể chế kinh tế số & khoảng cách giàu nghèo",
       badge: "Mảng Tối • Mục 3.3a (Hạn Chế Hiện Nay)",
@@ -1162,7 +1162,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.KẾT • PHÁN QUYẾT TỔNG KẾT & THAM KHẢO",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/960px-Flag_of_Vietnam.svg.png",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Ho_Chi_Minh_City_Skyline_at_Night.jpg/960px-Ho_Chi_Minh_City_Skyline_at_Night.jpg",
       imageCaption:
         "Phán quyết tổng kết: Từng bước khắc phục giới hạn lịch sử của CNTB, tiếp tục kiểm chứng qua thực tiễn",
       badge: "Tổng Kết • Phán Quyết & Tài Liệu Tham Khảo",

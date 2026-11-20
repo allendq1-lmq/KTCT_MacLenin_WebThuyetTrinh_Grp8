@@ -13,6 +13,12 @@
 
 html {
   scrollbar-gutter: stable;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
@@ -22,7 +28,18 @@ body {
   color: #1e293b;
   margin: 0;
   padding: 0;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
+}
+
+#main-container {
+  min-height: 0;
+  overflow: hidden;
 }
 
 svg {
@@ -945,5 +962,247 @@ body.reveal-full-page {
   .leaderboard-full-table tbody td {
     padding: 0.45rem 0.35rem;
     font-size: 0.75rem;
+  }
+}
+
+/* ================= TAB NHÓM TÁC GIẢ & PHÂN CÔNG NHIỆM VỤ (ZERO-SCROLL & PHÂN CẤP) ================= */
+#section-members:not(.hidden) {
+  --members-gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.members-hierarchy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--members-gap);
+  margin-top: 0.75rem;
+}
+
+.members-row-chief {
+  display: flex;
+  justify-content: center;
+}
+
+.member-card-chief {
+  width: 100%;
+}
+
+.members-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--members-gap);
+}
+
+.member-name {
+  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+  line-height: 1.22;
+}
+
+.member-mssv {
+  font-size: clamp(0.9rem, 1.05vw, 1.1rem);
+  line-height: 1.25;
+}
+
+@media (min-width: 640px) {
+  .members-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .member-card-chief {
+    width: calc((100% - var(--members-gap)) / 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  #section-members:not(.hidden) {
+    --members-gap: clamp(0.45rem, 0.9dvh, 0.85rem);
+    overflow: hidden;
+    overscroll-behavior: none;
+    padding-block: clamp(0.45rem, 1.1dvh, 1rem);
+  }
+
+  .members-header {
+    padding-bottom: clamp(0.3rem, 0.7dvh, 0.65rem);
+    flex-shrink: 0;
+  }
+
+  .members-header h2 {
+    font-size: clamp(1.15rem, 1.55vw, 1.75rem);
+    line-height: 1.2;
+  }
+
+  .members-hierarchy {
+    flex: 1 1 0%;
+    min-height: 0;
+    margin-top: clamp(0.35rem, 0.85dvh, 0.75rem);
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 3fr);
+    gap: var(--members-gap);
+  }
+
+  .members-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-height: 0;
+  }
+
+  .members-row-chief {
+    min-height: 0;
+  }
+
+  .member-card-chief {
+    width: calc((100% - 3 * var(--members-gap)) / 4);
+    height: 100%;
+  }
+
+  #section-members .member-card,
+  #section-members .group8-showcase-card {
+    padding: clamp(0.4rem, 0.9dvh, 0.9rem) clamp(0.7rem, 1.1vw, 1.1rem);
+    min-height: 0;
+  }
+
+  #section-members .member-card-top {
+    margin-bottom: clamp(0.15rem, 0.35dvh, 0.45rem);
+  }
+
+  #section-members .member-stt {
+    width: clamp(1.45rem, 2.5dvh, 2.1rem);
+    height: clamp(1.45rem, 2.5dvh, 2.1rem);
+    font-size: clamp(0.7rem, 1.15dvh, 0.875rem);
+  }
+
+  #section-members .member-task {
+    margin-top: clamp(0.15rem, 0.4dvh, 0.5rem);
+    padding-top: clamp(0.15rem, 0.4dvh, 0.45rem);
+  }
+
+  #section-members .member-task-label {
+    font-size: clamp(0.6rem, 0.9dvh, 0.6875rem);
+  }
+
+  #section-members .member-task-value {
+    margin-top: 0.1rem;
+    font-size: clamp(0.76rem, 1.15dvh, 0.875rem);
+    line-height: 1.25;
+  }
+}
+
+/* Thẻ trang trí đặc biệt Nhóm 8 (ô cuối hàng 5) - khác biệt hoàn toàn với 16 thẻ thành viên */
+.group8-showcase-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 52%, #7c2d12 100%);
+  border: 1.5px solid rgba(251, 146, 60, 0.55);
+  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: #f8fafc;
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 240ms ease,
+    border-color 240ms ease;
+}
+
+.group8-showcase-card:hover {
+  transform: translateY(-2px);
+  border-color: #fb923c;
+  box-shadow: 0 14px 30px -8px rgba(223, 122, 40, 0.45), 0 0 0 1px rgba(251, 146, 60, 0.35);
+}
+
+.group8-showcase-shimmer {
+  position: absolute;
+  inset: -40% -60%;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(253, 186, 116, 0.22) 50%,
+    transparent 65%
+  );
+  transform: translateX(-55%);
+  animation: group8Shimmer 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes group8Shimmer {
+  0%, 15% {
+    transform: translateX(-60%);
+  }
+  55%, 100% {
+    transform: translateX(60%);
+  }
+}
+
+.group8-showcase-top,
+.group8-showcase-body {
+  position: relative;
+  z-index: 1;
+}
+
+.group8-emblem {
+  width: clamp(1.9rem, 3.2dvh, 2.4rem);
+  height: clamp(1.9rem, 3.2dvh, 2.4rem);
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #ffffff;
+  font-weight: 900;
+  font-size: clamp(0.95rem, 1.5dvh, 1.15rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.45);
+  border: 1px solid rgba(255, 237, 213, 0.4);
+}
+
+.group8-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.6rem;
+  border-radius: 9999px;
+  color: #fed7aa;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(253, 186, 116, 0.35);
+}
+
+.group8-kicker {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.05vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fdba74;
+}
+
+.group8-motto {
+  margin: 0.25rem 0 0;
+  font-size: clamp(0.75rem, 0.95vw, 0.875rem);
+  font-weight: 500;
+  line-height: 1.35;
+  color: #e2e8f0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group8-showcase-shimmer {
+    animation: none;
+    display: none;
+  }
+
+  .group8-showcase-card:hover {
+    transform: none;
+  }
+}
+
+/* Giữ khả năng cuộn nội bộ cho tab Game/Quiz trên màn hình nhỏ khi body bị khóa cuộn */
+@media (max-width: 1023px), (max-height: 599px) {
+  #section-game:not(.hidden),
+  #section-quiz:not(.hidden) {
+    height: calc(100vh - var(--navbar-height));
+    height: calc(100dvh - var(--navbar-height));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 }

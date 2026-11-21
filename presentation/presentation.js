@@ -26,14 +26,14 @@ window.PresentationApp = (() => {
     "r3-verdict": "Đã khắc phục một phần căn bản giới hạn chủ nghĩa tư bản, nhưng chưa hoàn toàn và cần tiếp tục hoàn thiện.",
   };
 
-  // Tranh minh họa vector đa lớp + hoạt họa lặp liên tục (có clipPath bo góc chuẩn xác)
+  // Tranh minh họa vector đa lớp + hoạt họa lặp liên tục cho tất cả các slide nội dung
   const SLIDE_VISUALS = {
     "r3-1": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 480 280" fill="none" preserveAspectRatio="xMidYMid meet">
           <defs>
             <clipPath id="clipSlide2">
-              <rect x="12" y="10" width="436" height="260" rx="18"/>
+              <rect x="10" y="10" width="460" height="260" rx="18"/>
             </clipPath>
             <linearGradient id="skyDanger" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#4c0519" stop-opacity="0.72"/>
@@ -46,47 +46,47 @@ window.PresentationApp = (() => {
           </defs>
 
           <g clip-path="url(#clipSlide2)">
-            <rect x="12" y="10" width="436" height="260" rx="18" fill="url(#skyDanger)"/>
-            <path d="M12 224 Q135 202 230 224 T448 218 L448 270 L12 270 Z" fill="rgba(244,63,94,0.2)"/>
+            <rect x="10" y="10" width="460" height="260" rx="18" fill="url(#skyDanger)"/>
+            <path d="M10 224 Q140 202 240 224 T470 218 L470 270 L10 270 Z" fill="rgba(244,63,94,0.2)"/>
 
             <g class="svg-float">
-              <rect x="186" y="62" width="88" height="164" rx="8" fill="url(#towerGrad)" stroke="#fda4af" stroke-width="1.5"/>
-              <rect x="202" y="80" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
-              <rect x="242" y="80" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
-              <rect x="202" y="112" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
-              <rect x="242" y="112" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
-              <circle cx="230" cy="44" r="18" fill="#fbbf24" stroke="#fef3c7" stroke-width="2" class="svg-pulse-soft"/>
-              <text x="230" y="49" text-anchor="middle" fill="#78350f" font-size="15" font-weight="900">$</text>
-              <circle cx="154" cy="82" r="14" fill="rgba(148,163,184,0.34)" class="svg-float-alt"/>
-              <circle cx="136" cy="58" r="18" fill="rgba(148,163,184,0.22)" class="svg-float"/>
-              <rect x="148" y="98" width="16" height="128" rx="4" fill="#475569"/>
+              <rect x="196" y="62" width="88" height="164" rx="8" fill="url(#towerGrad)" stroke="#fda4af" stroke-width="1.5"/>
+              <rect x="212" y="80" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
+              <rect x="252" y="80" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
+              <rect x="212" y="112" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
+              <rect x="252" y="112" width="16" height="18" rx="3" fill="#ffe4e6" fill-opacity="0.85"/>
+              <circle cx="240" cy="44" r="18" fill="#fbbf24" stroke="#fef3c7" stroke-width="2" class="svg-pulse-soft"/>
+              <text x="240" y="49" text-anchor="middle" fill="#78350f" font-size="15" font-weight="900">$</text>
+              <circle cx="168" cy="82" r="14" fill="rgba(148,163,184,0.34)" class="svg-float-alt"/>
+              <circle cx="150" cy="58" r="18" fill="rgba(148,163,184,0.22)" class="svg-float"/>
+              <rect x="162" y="98" width="16" height="128" rx="4" fill="#475569"/>
             </g>
 
             <g class="svg-float-alt">
-              <rect x="22" y="28" width="142" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
-              <text x="93" y="48" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Lợi ích thiểu số</text>
+              <rect x="20" y="28" width="154" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
+              <text x="97" y="48" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Lợi ích thiểu số</text>
             </g>
             <g class="svg-float">
-              <rect x="296" y="28" width="142" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
-              <text x="367" y="48" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Tư hữu tư liệu SX</text>
+              <rect x="304" y="28" width="156" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
+              <text x="382" y="48" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Tư hữu tư liệu SX</text>
             </g>
             <g class="svg-float">
-              <rect x="20" y="138" width="144" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
-              <text x="92" y="158" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Ô nhiễm môi trường</text>
+              <rect x="18" y="138" width="158" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
+              <text x="97" y="158" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Ô nhiễm môi trường</text>
             </g>
             <g class="svg-float-alt">
-              <rect x="296" y="108" width="142" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
-              <text x="367" y="128" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Khủng hoảng chu kỳ</text>
+              <rect x="304" y="108" width="156" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
+              <text x="382" y="128" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Khủng hoảng chu kỳ</text>
             </g>
             <g class="svg-float">
-              <rect x="296" y="180" width="142" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
-              <text x="367" y="200" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Phân hóa giàu nghèo</text>
+              <rect x="304" y="180" width="156" height="32" rx="16" fill="rgba(15,23,42,0.88)" stroke="#fb7185"/>
+              <text x="382" y="200" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="800">Phân hóa giàu nghèo</text>
             </g>
 
-            <text x="230" y="251" text-anchor="middle" fill="#fecdd3" font-size="12" font-weight="800">Mâu thuẫn cố hữu từ chiếm hữu tư nhân tư bản chủ nghĩa</text>
+            <text x="240" y="251" text-anchor="middle" fill="#fecdd3" font-size="12" font-weight="800">Mâu thuẫn cố hữu từ chiếm hữu tư nhân tư bản chủ nghĩa</text>
           </g>
 
-          <rect x="12" y="10" width="436" height="260" rx="18" stroke="rgba(251,113,133,0.38)" stroke-width="1.5"/>
+          <rect x="10" y="10" width="460" height="260" rx="18" stroke="rgba(251,113,133,0.38)" stroke-width="1.5"/>
         </svg>
       `,
       metrics: [
@@ -97,36 +97,36 @@ window.PresentationApp = (() => {
     },
     "r1-1b": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 480 280" fill="none" preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="bridgeSky" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#0c4a6e" stop-opacity="0.55"/>
               <stop offset="100%" stop-color="#064e3b" stop-opacity="0.5"/>
             </linearGradient>
           </defs>
-          <rect x="12" y="10" width="436" height="260" rx="18" fill="url(#bridgeSky)" stroke="rgba(56,189,248,0.32)"/>
+          <rect x="10" y="10" width="460" height="260" rx="18" fill="url(#bridgeSky)" stroke="rgba(56,189,248,0.32)"/>
 
-          <circle cx="230" cy="80" r="46" stroke="rgba(251,191,36,0.45)" stroke-width="1.5" stroke-dasharray="6 5" class="svg-spin-slow"/>
-          <circle cx="230" cy="80" r="33" fill="rgba(245,158,11,0.24)" stroke="#fbbf24" stroke-width="2" class="svg-pulse-soft"/>
-          <polygon points="230,55 236,73 255,73 240,84 246,102 230,91 214,102 220,84 205,73 224,73" fill="#fbbf24"/>
+          <circle cx="240" cy="80" r="46" stroke="rgba(251,191,36,0.45)" stroke-width="1.5" stroke-dasharray="6 5" class="svg-spin-slow"/>
+          <circle cx="240" cy="80" r="33" fill="rgba(245,158,11,0.24)" stroke="#fbbf24" stroke-width="2" class="svg-pulse-soft"/>
+          <polygon points="240,55 246,73 265,73 250,84 256,102 240,91 224,102 230,84 215,73 234,73" fill="#fbbf24"/>
 
-          <path d="M40 182 Q230 116 420 182" stroke="rgba(52,211,153,0.3)" stroke-width="4" fill="none"/>
-          <path class="svg-dash-flow" d="M40 182 Q230 116 420 182" stroke="#34d399" stroke-width="4" stroke-dasharray="14 10" fill="none"/>
-          <line x1="40" y1="184" x2="420" y2="184" stroke="#f8fafc" stroke-width="3"/>
-          <line x1="130" y1="154" x2="130" y2="184" stroke="#94a3b8" stroke-width="2"/>
-          <line x1="230" y1="148" x2="230" y2="184" stroke="#94a3b8" stroke-width="2"/>
-          <line x1="330" y1="154" x2="330" y2="184" stroke="#94a3b8" stroke-width="2"/>
+          <path d="M40 182 Q240 116 440 182" stroke="rgba(52,211,153,0.3)" stroke-width="4" fill="none"/>
+          <path class="svg-dash-flow" d="M40 182 Q240 116 440 182" stroke="#34d399" stroke-width="4" stroke-dasharray="14 10" fill="none"/>
+          <line x1="40" y1="184" x2="440" y2="184" stroke="#f8fafc" stroke-width="3"/>
+          <line x1="135" y1="154" x2="135" y2="184" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="240" y1="148" x2="240" y2="184" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="345" y1="154" x2="345" y2="184" stroke="#94a3b8" stroke-width="2"/>
 
           <g class="svg-float">
-            <rect x="24" y="194" width="190" height="58" rx="12" fill="rgba(14,165,233,0.24)" stroke="#38bdf8" stroke-width="1.8"/>
-            <text x="119" y="218" text-anchor="middle" fill="#7dd3fc" font-size="11.5" font-weight="800">QUY LUẬT THỊ TRƯỜNG</text>
-            <text x="119" y="238" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="600">Giá trị • Cung cầu • Cạnh tranh</text>
+            <rect x="20" y="194" width="210" height="58" rx="12" fill="rgba(14,165,233,0.24)" stroke="#38bdf8" stroke-width="1.8"/>
+            <text x="125" y="218" text-anchor="middle" fill="#7dd3fc" font-size="11.5" font-weight="800">QUY LUẬT THỊ TRƯỜNG</text>
+            <text x="125" y="238" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="600">Giá trị • Cung cầu • Cạnh tranh</text>
           </g>
 
           <g class="svg-float-alt">
-            <rect x="246" y="194" width="190" height="58" rx="12" fill="rgba(16,185,129,0.24)" stroke="#10b981" stroke-width="1.8"/>
-            <text x="341" y="218" text-anchor="middle" fill="#6ee7b7" font-size="11.5" font-weight="800">ĐỊNH HƯỚNG XÃ HỘI</text>
-            <text x="341" y="238" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="600">Dân giàu, nước mạnh, công bằng</text>
+            <rect x="250" y="194" width="210" height="58" rx="12" fill="rgba(16,185,129,0.24)" stroke="#10b981" stroke-width="1.8"/>
+            <text x="355" y="218" text-anchor="middle" fill="#6ee7b7" font-size="11.5" font-weight="800">ĐỊNH HƯỚNG XÃ HỘI</text>
+            <text x="355" y="238" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="600">Dân giàu, nước mạnh, công bằng</text>
           </g>
         </svg>
       `,
@@ -138,14 +138,14 @@ window.PresentationApp = (() => {
     },
     "r2-role": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
-          <rect x="12" y="10" width="436" height="260" rx="18" fill="rgba(15,23,42,0.58)" stroke="rgba(245,158,11,0.3)"/>
+        <svg viewBox="0 0 500 280" fill="none" preserveAspectRatio="xMidYMid meet">
+          <rect x="10" y="10" width="480" height="260" rx="18" fill="rgba(15,23,42,0.58)" stroke="rgba(245,158,11,0.3)"/>
           <g class="svg-float">
-            <rect x="22" y="24" width="198" height="232" rx="14" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="2"/>
-            <circle cx="121" cy="56" r="18" fill="#b91c1c" stroke="#fbbf24" stroke-width="2" class="svg-pulse-soft"/>
-            <polygon points="121,44 124,52 133,52 126,57 128,66 121,61 114,66 116,57 109,52 118,52" fill="#fbbf24"/>
-            <text x="121" y="94" text-anchor="middle" fill="#fbbf24" font-size="11.5" font-weight="900">ĐẢNG CỘNG SẢN VIỆT NAM</text>
-            <line x1="38" y1="106" x2="204" y2="106" stroke="rgba(245,158,11,0.35)"/>
+            <rect x="20" y="24" width="220" height="232" rx="14" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="2"/>
+            <circle cx="130" cy="56" r="18" fill="#b91c1c" stroke="#fbbf24" stroke-width="2" class="svg-pulse-soft"/>
+            <polygon points="130,44 133,52 142,52 135,57 137,66 130,61 123,66 125,57 118,52 127,52" fill="#fbbf24"/>
+            <text x="130" y="94" text-anchor="middle" fill="#fbbf24" font-size="11.5" font-weight="900">ĐẢNG CỘNG SẢN VIỆT NAM</text>
+            <line x1="36" y1="106" x2="224" y2="106" stroke="rgba(245,158,11,0.35)"/>
             <text x="34" y="132" fill="#fef3c7" font-size="11" font-weight="700">• Đề ra cương lĩnh, chiến lược</text>
             <text x="34" y="160" fill="#fef3c7" font-size="11" font-weight="700">• Giữ vững định hướng mục tiêu</text>
             <text x="34" y="188" fill="#fef3c7" font-size="11" font-weight="700">• Lãnh đạo thể chế hóa pháp luật</text>
@@ -153,17 +153,17 @@ window.PresentationApp = (() => {
           </g>
 
           <g class="svg-float-alt">
-            <rect x="240" y="24" width="198" height="232" rx="14" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2"/>
-            <circle cx="339" cy="56" r="18" fill="#0369a1" stroke="#7dd3fc" stroke-width="2" class="svg-pulse-soft"/>
-            <path d="M329 62 L349 62 M339 45 L339 62 M331 50 L347 50" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
-            <text x="339" y="94" text-anchor="middle" fill="#38bdf8" font-size="11.5" font-weight="900">NHÀ NƯỚC PHÁP QUYỀN</text>
-            <line x1="256" y1="106" x2="422" y2="106" stroke="rgba(56,189,248,0.35)"/>
-            <text x="252" y="132" fill="#e0f2fe" font-size="11" font-weight="700">• Hoàn thiện hệ thống pháp luật</text>
-            <text x="252" y="160" fill="#e0f2fe" font-size="11" font-weight="700">• Giữ ổn định kinh tế vĩ mô</text>
-            <text x="252" y="188" fill="#e0f2fe" font-size="11" font-weight="700">• Đa phương hóa hội nhập</text>
-            <text x="252" y="216" fill="#e0f2fe" font-size="11" font-weight="700">• Phòng vệ thị trường nội địa</text>
+            <rect x="260" y="24" width="220" height="232" rx="14" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2"/>
+            <circle cx="370" cy="56" r="18" fill="#0369a1" stroke="#7dd3fc" stroke-width="2" class="svg-pulse-soft"/>
+            <path d="M360 62 L380 62 M370 45 L370 62 M362 50 L378 50" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+            <text x="370" y="94" text-anchor="middle" fill="#38bdf8" font-size="11.5" font-weight="900">NHÀ NƯỚC PHÁP QUYỀN</text>
+            <line x1="276" y1="106" x2="464" y2="106" stroke="rgba(56,189,248,0.35)"/>
+            <text x="274" y="132" fill="#e0f2fe" font-size="11" font-weight="700">• Hoàn thiện hệ thống pháp luật</text>
+            <text x="274" y="160" fill="#e0f2fe" font-size="11" font-weight="700">• Giữ ổn định kinh tế vĩ mô</text>
+            <text x="274" y="188" fill="#e0f2fe" font-size="11" font-weight="700">• Đa phương hóa hội nhập</text>
+            <text x="274" y="216" fill="#e0f2fe" font-size="11" font-weight="700">• Phòng vệ thị trường nội địa</text>
           </g>
-          <path class="svg-dash-flow" d="M220 140 L240 140" stroke="#10b981" stroke-width="4" stroke-dasharray="5 4" stroke-linecap="round"/>
+          <path class="svg-dash-flow" d="M240 140 L260 140" stroke="#10b981" stroke-width="4" stroke-dasharray="5 4" stroke-linecap="round"/>
         </svg>
       `,
       metrics: [
@@ -174,10 +174,10 @@ window.PresentationApp = (() => {
     },
     "r2-b1": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 480 280" fill="none" preserveAspectRatio="xMidYMid meet">
           <defs>
             <clipPath id="clipSlide5">
-              <rect x="12" y="10" width="436" height="260" rx="18"/>
+              <rect x="10" y="10" width="460" height="260" rx="18"/>
             </clipPath>
             <linearGradient id="areaGreen" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#10b981" stop-opacity="0.45"/>
@@ -186,37 +186,37 @@ window.PresentationApp = (() => {
           </defs>
 
           <g clip-path="url(#clipSlide5)">
-            <rect x="12" y="10" width="436" height="260" rx="18" fill="rgba(6,78,59,0.32)"/>
+            <rect x="10" y="10" width="460" height="260" rx="18" fill="rgba(6,78,59,0.32)"/>
 
             <!-- Cụm hạ tầng & doanh nghiệp đặt tách biệt ở góc trên bên phải -->
             <g class="svg-float-alt">
-              <rect x="282" y="34" width="24" height="62" rx="4" fill="rgba(56,189,248,0.24)" stroke="#38bdf8"/>
-              <rect x="314" y="22" width="30" height="74" rx="4" fill="rgba(16,185,129,0.26)" stroke="#34d399"/>
-              <rect x="352" y="42" width="26" height="54" rx="4" fill="rgba(245,158,11,0.24)" stroke="#fbbf24"/>
-              <rect x="228" y="102" width="204" height="26" rx="13" fill="rgba(15,23,42,0.85)" stroke="rgba(52,211,153,0.45)"/>
-              <text x="330" y="119" text-anchor="middle" fill="#a7f3d0" font-size="11" font-weight="700">Hạ tầng &amp; Doanh nghiệp phát triển</text>
+              <rect x="292" y="34" width="24" height="62" rx="4" fill="rgba(56,189,248,0.24)" stroke="#38bdf8"/>
+              <rect x="324" y="22" width="30" height="74" rx="4" fill="rgba(16,185,129,0.26)" stroke="#34d399"/>
+              <rect x="362" y="42" width="26" height="54" rx="4" fill="rgba(245,158,11,0.24)" stroke="#fbbf24"/>
+              <rect x="232" y="102" width="222" height="26" rx="13" fill="rgba(15,23,42,0.85)" stroke="rgba(52,211,153,0.45)"/>
+              <text x="343" y="119" text-anchor="middle" fill="#a7f3d0" font-size="11" font-weight="700">Hạ tầng &amp; Doanh nghiệp phát triển</text>
             </g>
 
             <!-- Đường biểu đồ giảm nghèo hạ thấp mượt mà, hoàn toàn không chạm chữ -->
-            <line x1="52" y1="224" x2="412" y2="224" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
-            <path d="M66,74 C128,148 225,196 394,210 L394,224 L66,224 Z" fill="url(#areaGreen)"/>
-            <path d="M66,74 C128,148 225,196 394,210" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
-            <path class="svg-dash-flow" d="M66,74 C128,148 225,196 394,210" stroke="#a7f3d0" stroke-width="2.5" stroke-dasharray="12 12" stroke-linecap="round"/>
+            <line x1="52" y1="224" x2="432" y2="224" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
+            <path d="M68,74 C135,148 238,196 412,210 L412,224 L68,224 Z" fill="url(#areaGreen)"/>
+            <path d="M68,74 C135,148 238,196 412,210" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+            <path class="svg-dash-flow" d="M68,74 C135,148 238,196 412,210" stroke="#a7f3d0" stroke-width="2.5" stroke-dasharray="12 12" stroke-linecap="round"/>
 
             <!-- Nhãn mốc 1993 -->
-            <circle cx="66" cy="74" r="7" fill="#fb7185" stroke="#ffffff" stroke-width="2" class="svg-pulse-soft"/>
-            <rect x="80" y="42" width="132" height="32" rx="8" fill="rgba(244,63,94,0.3)" stroke="#fb7185"/>
-            <text x="146" y="62" text-anchor="middle" fill="#fda4af" font-size="12.5" font-weight="800">Trên 58% (1993)</text>
+            <circle cx="68" cy="74" r="7" fill="#fb7185" stroke="#ffffff" stroke-width="2" class="svg-pulse-soft"/>
+            <rect x="82" y="42" width="138" height="32" rx="8" fill="rgba(244,63,94,0.3)" stroke="#fb7185"/>
+            <text x="151" y="62" text-anchor="middle" fill="#fda4af" font-size="12.5" font-weight="800">Trên 58% (1993)</text>
 
             <!-- Nhãn mốc hiện nay đặt gọn phía trên điểm cuối -->
-            <circle cx="394" cy="210" r="8" fill="#10b981" stroke="#ffffff" stroke-width="2.5" class="svg-pulse-soft"/>
-            <rect x="284" y="156" width="138" height="32" rx="8" fill="rgba(16,185,129,0.32)" stroke="#10b981"/>
-            <text x="353" y="176" text-anchor="middle" fill="#6ee7b7" font-size="13" font-weight="900">Dưới 3% Hiện nay</text>
+            <circle cx="412" cy="210" r="8" fill="#10b981" stroke="#ffffff" stroke-width="2.5" class="svg-pulse-soft"/>
+            <rect x="294" y="156" width="146" height="32" rx="8" fill="rgba(16,185,129,0.32)" stroke="#10b981"/>
+            <text x="367" y="176" text-anchor="middle" fill="#6ee7b7" font-size="13" font-weight="900">Dưới 3% Hiện nay</text>
 
-            <text x="230" y="251" text-anchor="middle" fill="#d1fae5" font-size="12" font-weight="700">Thành tựu giảm nghèo gắn với đa dạng hóa sở hữu tại Việt Nam</text>
+            <text x="240" y="251" text-anchor="middle" fill="#d1fae5" font-size="12" font-weight="700">Thành tựu giảm nghèo gắn với đa dạng hóa sở hữu tại Việt Nam</text>
           </g>
 
-          <rect x="12" y="10" width="436" height="260" rx="18" stroke="rgba(16,185,129,0.35)" stroke-width="1.5"/>
+          <rect x="10" y="10" width="460" height="260" rx="18" stroke="rgba(16,185,129,0.35)" stroke-width="1.5"/>
         </svg>
       `,
       metrics: [
@@ -227,33 +227,33 @@ window.PresentationApp = (() => {
     },
     "r2-b4": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
-          <rect x="12" y="10" width="436" height="260" rx="18" fill="rgba(12,74,110,0.32)" stroke="rgba(56,189,248,0.3)"/>
-          <circle cx="148" cy="140" r="94" stroke="rgba(52,211,153,0.3)" stroke-width="1.5" stroke-dasharray="8 6" class="svg-spin-slow"/>
-          <circle cx="148" cy="140" r="80" stroke="rgba(255,255,255,0.12)" stroke-width="15"/>
-          <circle cx="148" cy="140" r="80" stroke="#10b981" stroke-width="15" stroke-linecap="round"
-            stroke-dasharray="468 502" transform="rotate(-90 148 140)" class="svg-pulse-soft"/>
-          <path d="M148 90 L168 99 V117 C168 130 159 140 148 144 C137 140 128 130 128 117 V99 Z" fill="rgba(16,185,129,0.28)" stroke="#6ee7b7" stroke-width="2"/>
-          <path d="M148 107 V125 M139 116 H157" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-          <text x="148" y="170" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="900">&gt;93%</text>
-          <text x="148" y="188" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="800">BẢO HIỂM Y TẾ</text>
+        <svg viewBox="0 0 480 280" fill="none" preserveAspectRatio="xMidYMid meet">
+          <rect x="10" y="10" width="460" height="260" rx="18" fill="rgba(12,74,110,0.32)" stroke="rgba(56,189,248,0.3)"/>
+          <circle cx="152" cy="140" r="94" stroke="rgba(52,211,153,0.3)" stroke-width="1.5" stroke-dasharray="8 6" class="svg-spin-slow"/>
+          <circle cx="152" cy="140" r="80" stroke="rgba(255,255,255,0.12)" stroke-width="15"/>
+          <circle cx="152" cy="140" r="80" stroke="#10b981" stroke-width="15" stroke-linecap="round"
+            stroke-dasharray="468 502" transform="rotate(-90 152 140)" class="svg-pulse-soft"/>
+          <path d="M152 90 L172 99 V117 C172 130 163 140 152 144 C141 140 132 130 132 117 V99 Z" fill="rgba(16,185,129,0.28)" stroke="#6ee7b7" stroke-width="2"/>
+          <path d="M152 107 V125 M143 116 H161" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+          <text x="152" y="170" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="900">&gt;93%</text>
+          <text x="152" y="188" text-anchor="middle" fill="#6ee7b7" font-size="11" font-weight="800">BẢO HIỂM Y TẾ</text>
 
           <g class="svg-float">
-            <rect x="256" y="38" width="174" height="56" rx="12" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1.8"/>
-            <text x="343" y="62" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="800">ĐIỀU TIẾT VĨ MÔ</text>
-            <text x="343" y="81" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Kiểm soát lạm phát</text>
+            <rect x="266" y="38" width="186" height="56" rx="12" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="1.8"/>
+            <text x="359" y="62" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="800">ĐIỀU TIẾT VĨ MÔ</text>
+            <text x="359" y="81" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Kiểm soát lạm phát</text>
           </g>
 
           <g class="svg-float-alt">
-            <rect x="256" y="112" width="174" height="56" rx="12" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.8"/>
-            <text x="343" y="136" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="800">BÌNH ỔN GIÁ CẢ</text>
-            <text x="343" y="155" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Điện, y tế, giáo dục</text>
+            <rect x="266" y="112" width="186" height="56" rx="12" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="1.8"/>
+            <text x="359" y="136" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="800">BÌNH ỔN GIÁ CẢ</text>
+            <text x="359" y="155" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Điện, y tế, giáo dục</text>
           </g>
 
           <g class="svg-float">
-            <rect x="256" y="186" width="174" height="56" rx="12" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.8"/>
-            <text x="343" y="210" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="800">ĐA KÊNH PHÂN PHỐI</text>
-            <text x="343" y="229" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Lao động và phúc lợi</text>
+            <rect x="266" y="186" width="186" height="56" rx="12" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.8"/>
+            <text x="359" y="210" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="800">ĐA KÊNH PHÂN PHỐI</text>
+            <text x="359" y="229" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Lao động và phúc lợi</text>
           </g>
         </svg>
       `,
@@ -265,38 +265,40 @@ window.PresentationApp = (() => {
     },
     "r2-b5": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="0 0 480 280" fill="none" preserveAspectRatio="xMidYMid meet">
           <defs>
             <clipPath id="clipSlide7">
-              <rect x="12" y="10" width="436" height="260" rx="18"/>
+              <rect x="10" y="10" width="460" height="260" rx="18"/>
             </clipPath>
           </defs>
           <g clip-path="url(#clipSlide7)">
-            <rect x="12" y="10" width="436" height="260" rx="18" fill="rgba(6,78,59,0.34)"/>
-            <path d="M12 218 Q145 174 265 210 T448 198 L448 270 L12 270 Z" fill="rgba(16,185,129,0.28)"/>
+            <rect x="10" y="10" width="460" height="260" rx="18" fill="rgba(6,78,59,0.34)"/>
+            <path d="M10 218 Q150 174 275 210 T470 198 L470 270 L10 270 Z" fill="rgba(16,185,129,0.28)"/>
 
-            <line x1="78" y1="114" x2="78" y2="202" stroke="#e2e8f0" stroke-width="3"/>
+            <line x1="76" y1="112" x2="76" y2="202" stroke="#e2e8f0" stroke-width="3"/>
             <g class="svg-turbine-spin">
-              <path d="M78 114 L62 88 M78 114 L106 110 M78 114 L72 142" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round"/>
-              <circle cx="78" cy="114" r="4" fill="#ffffff"/>
+              <path d="M76 112 L60 86 M76 112 L104 108 M76 112 L70 140" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round"/>
+              <circle cx="76" cy="112" r="4" fill="#ffffff"/>
             </g>
 
-            <rect x="378" y="166" width="8" height="38" fill="#92400e"/>
+            <rect x="400" y="166" width="8" height="38" fill="#92400e"/>
             <g class="svg-sway">
-              <circle cx="382" cy="150" r="24" fill="#10b981" fill-opacity="0.88"/>
-              <circle cx="366" cy="160" r="16" fill="#34d399" fill-opacity="0.88"/>
-              <circle cx="398" cy="160" r="16" fill="#059669" fill-opacity="0.92"/>
+              <circle cx="404" cy="150" r="24" fill="#10b981" fill-opacity="0.88"/>
+              <circle cx="388" cy="160" r="16" fill="#34d399" fill-opacity="0.88"/>
+              <circle cx="420" cy="160" r="16" fill="#059669" fill-opacity="0.92"/>
             </g>
 
-            <circle cx="230" cy="126" r="78" stroke="#34d399" stroke-width="2" stroke-dasharray="7 5" class="svg-spin-slow"/>
-            <circle cx="230" cy="126" r="60" fill="rgba(6,95,70,0.88)" stroke="#6ee7b7" stroke-width="2.5" class="svg-pulse-soft"/>
-            <text x="230" y="118" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="800">CAM KẾT COP26</text>
-            <text x="230" y="142" text-anchor="middle" fill="#ffffff" font-size="19.5" font-weight="900">NET ZERO 2050</text>
+            <!-- Mở rộng vòng tròn trung tâm để chữ NET ZERO 2050 nằm lọt hẳn vào trong -->
+            <circle cx="240" cy="118" r="88" stroke="#34d399" stroke-width="2" stroke-dasharray="7 5" class="svg-spin-slow"/>
+            <circle cx="240" cy="118" r="72" fill="rgba(6,95,70,0.9)" stroke="#6ee7b7" stroke-width="2.5" class="svg-pulse-soft"/>
+            <text x="240" y="109" text-anchor="middle" fill="#a7f3d0" font-size="11.5" font-weight="800">CAM KẾT COP26</text>
+            <text x="240" y="133" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="900">NET ZERO 2050</text>
 
-            <rect x="110" y="224" width="240" height="32" rx="16" fill="rgba(15,23,42,0.85)" stroke="#34d399"/>
-            <text x="230" y="244" text-anchor="middle" fill="#ecfdf5" font-size="11.5" font-weight="800">Luật Bảo vệ môi trường 2020 &amp; Kinh tế tuần hoàn</text>
+            <!-- Mở rộng viên thuốc phía dưới lên 364px để ôm trọn dòng chữ -->
+            <rect x="58" y="222" width="364" height="34" rx="17" fill="rgba(15,23,42,0.88)" stroke="#34d399" stroke-width="1.5"/>
+            <text x="240" y="243" text-anchor="middle" fill="#ecfdf5" font-size="11.5" font-weight="800">Luật Bảo vệ môi trường 2020 &amp; Kinh tế tuần hoàn</text>
           </g>
-          <rect x="12" y="10" width="436" height="260" rx="18" stroke="rgba(52,211,153,0.35)" stroke-width="1.5"/>
+          <rect x="10" y="10" width="460" height="260" rx="18" stroke="rgba(52,211,153,0.35)" stroke-width="1.5"/>
         </svg>
       `,
       metrics: [
@@ -305,36 +307,73 @@ window.PresentationApp = (() => {
         { val: "Ngay từ đầu", lbl: "Tăng trưởng + Công bằng", color: "#a78bfa" },
       ],
     },
+    "r3-table": {
+      svg: `
+        <svg viewBox="0 0 360 330" fill="none" preserveAspectRatio="xMidYMid meet">
+          <rect x="10" y="10" width="340" height="310" rx="18" fill="rgba(15,23,42,0.62)" stroke="rgba(251,191,36,0.32)"/>
+
+          <circle cx="180" cy="70" r="36" stroke="rgba(251,191,36,0.4)" stroke-width="1.5" stroke-dasharray="6 5" class="svg-spin-slow"/>
+          <circle cx="180" cy="70" r="24" fill="rgba(245,158,11,0.22)" stroke="#fbbf24" stroke-width="2" class="svg-pulse-soft"/>
+          <text x="180" y="75" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="900">VS</text>
+
+          <g class="svg-float">
+            <rect x="24" y="122" width="144" height="140" rx="14" fill="rgba(244,63,94,0.16)" stroke="#fb7185" stroke-width="1.8"/>
+            <text x="96" y="149" text-anchor="middle" fill="#fda4af" font-size="11.5" font-weight="900">KTTT TƯ BẢN</text>
+            <line x1="38" y1="160" x2="154" y2="160" stroke="rgba(251,113,133,0.35)"/>
+            <text x="96" y="184" text-anchor="middle" fill="#ffe4e6" font-size="11" font-weight="700">Lợi nhuận thiểu số</text>
+            <text x="96" y="209" text-anchor="middle" fill="#ffe4e6" font-size="11" font-weight="700">Tư hữu thống trị</text>
+            <text x="96" y="234" text-anchor="middle" fill="#ffe4e6" font-size="11" font-weight="700">Phân hóa giàu nghèo</text>
+          </g>
+
+          <g class="svg-float-alt">
+            <rect x="192" y="122" width="144" height="140" rx="14" fill="rgba(16,185,129,0.16)" stroke="#34d399" stroke-width="1.8"/>
+            <text x="264" y="149" text-anchor="middle" fill="#6ee7b7" font-size="11.5" font-weight="900">ĐỊNH HƯỚNG XHCN</text>
+            <line x1="206" y1="160" x2="322" y2="160" stroke="rgba(52,211,153,0.35)"/>
+            <text x="264" y="184" text-anchor="middle" fill="#ecfdf5" font-size="11" font-weight="700">Vì hạnh phúc nhân dân</text>
+            <text x="264" y="209" text-anchor="middle" fill="#ecfdf5" font-size="11" font-weight="700">Đa dạng hình thức sở hữu</text>
+            <text x="264" y="234" text-anchor="middle" fill="#ecfdf5" font-size="11" font-weight="700">Công bằng &amp; Bền vững</text>
+          </g>
+
+          <rect x="34" y="276" width="292" height="30" rx="15" fill="rgba(245,158,11,0.2)" stroke="rgba(251,191,36,0.45)"/>
+          <text x="180" y="295" text-anchor="middle" fill="#fde68a" font-size="11.5" font-weight="800">Đối chiếu bản chất trên 6 phương diện cốt lõi</text>
+        </svg>
+      `,
+      metrics: [
+        { val: "6 Tiêu chí", lbl: "So sánh toàn diện", color: "#fbbf24" },
+        { val: "Khác biệt", lbl: "Mục tiêu & Sở hữu", color: "#fb7185" },
+        { val: "Ưu việt", lbl: "Định hướng nhân văn", color: "#10b981" },
+      ],
+    },
     "r3-3a": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
-          <rect x="12" y="10" width="436" height="260" rx="18" fill="rgba(76,5,25,0.34)" stroke="rgba(251,113,133,0.3)"/>
+        <svg viewBox="0 0 480 280" fill="none" preserveAspectRatio="xMidYMid meet">
+          <rect x="10" y="10" width="460" height="260" rx="18" fill="rgba(76,5,25,0.34)" stroke="rgba(251,113,133,0.3)"/>
           <g class="svg-float">
-            <rect x="24" y="24" width="198" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
+            <rect x="22" y="24" width="210" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
             <text x="38" y="51" fill="#fda4af" font-size="10.8" font-weight="800">YẾU TỐ XÃ HỘI CHỦ NGHĨA</text>
             <text x="38" y="76" fill="#ffffff" font-size="13.5" font-weight="800">Hợp tác xã còn yếu</text>
             <text x="38" y="100" fill="#cbd5e1" font-size="11.2">Hàng giả, đa cấp, ô nhiễm</text>
           </g>
 
           <g class="svg-float-alt">
-            <rect x="238" y="24" width="198" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
-            <text x="252" y="51" fill="#fda4af" font-size="10.8" font-weight="800">KINH TẾ SỐ CÔNG NGHỆ 4.0</text>
-            <text x="252" y="76" fill="#ffffff" font-size="13.5" font-weight="800">Thể chế chưa theo kịp</text>
-            <text x="252" y="100" fill="#cbd5e1" font-size="11.2">Quản lý thuế nền tảng số</text>
+            <rect x="248" y="24" width="210" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
+            <text x="264" y="51" fill="#fda4af" font-size="10.8" font-weight="800">KINH TẾ SỐ CÔNG NGHỆ 4.0</text>
+            <text x="264" y="76" fill="#ffffff" font-size="13.5" font-weight="800">Thể chế chưa theo kịp</text>
+            <text x="264" y="100" fill="#cbd5e1" font-size="11.2">Quản lý thuế nền tảng số</text>
           </g>
 
           <g class="svg-float-alt">
-            <rect x="24" y="148" width="198" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
+            <rect x="22" y="148" width="210" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
             <text x="38" y="175" fill="#fda4af" font-size="10.8" font-weight="800">TIẾP CẬN NGUỒN LỰC</text>
             <text x="38" y="200" fill="#ffffff" font-size="13.5" font-weight="800">Chưa thật bình đẳng</text>
             <text x="38" y="224" fill="#cbd5e1" font-size="11.2">Khó vốn; thất thoát vốn công</text>
           </g>
 
           <g class="svg-float">
-            <rect x="238" y="148" width="198" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
-            <text x="252" y="175" fill="#fda4af" font-size="10.8" font-weight="800">XÃ HỘI VÀ QUẢN LÝ</text>
-            <text x="252" y="200" fill="#ffffff" font-size="13.5" font-weight="800">Phân hóa &amp; Lợi ích nhóm</text>
-            <text x="252" y="224" fill="#cbd5e1" font-size="11.2">Chênh lệch đô thị – nông thôn</text>
+            <rect x="248" y="148" width="210" height="108" rx="14" fill="rgba(15,23,42,0.82)" stroke="#fb7185" stroke-width="1.8"/>
+            <text x="264" y="175" fill="#fda4af" font-size="10.8" font-weight="800">XÃ HỘI VÀ QUẢN LÝ</text>
+            <text x="264" y="200" fill="#ffffff" font-size="13.5" font-weight="800">Phân hóa &amp; Lợi ích nhóm</text>
+            <text x="264" y="224" fill="#cbd5e1" font-size="11.2">Chênh lệch đô thị – nông thôn</text>
           </g>
         </svg>
       `,
@@ -346,49 +385,49 @@ window.PresentationApp = (() => {
     },
     "r3-3b": {
       svg: `
-        <svg viewBox="0 0 460 280" fill="none" preserveAspectRatio="xMidYMid meet">
-          <rect x="12" y="10" width="436" height="260" rx="18" fill="rgba(12,74,110,0.34)" stroke="rgba(56,189,248,0.3)"/>
-          <rect x="30" y="22" width="400" height="42" rx="12" fill="rgba(56,189,248,0.26)" stroke="#38bdf8" stroke-width="1.8" class="svg-pulse-soft"/>
-          <text x="230" y="48" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="900">BỐN NHÓM GIẢI PHÁP KHẮC PHỤC ĐỒNG BỘ</text>
+        <svg viewBox="0 0 480 280" fill="none" preserveAspectRatio="xMidYMid meet">
+          <rect x="10" y="10" width="460" height="260" rx="18" fill="rgba(12,74,110,0.34)" stroke="rgba(56,189,248,0.3)"/>
+          <rect x="26" y="22" width="428" height="42" rx="12" fill="rgba(56,189,248,0.26)" stroke="#38bdf8" stroke-width="1.8" class="svg-pulse-soft"/>
+          <text x="240" y="48" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="900">BỐN NHÓM GIẢI PHÁP KHẮC PHỤC ĐỒNG BỘ</text>
 
           <g class="svg-float">
-            <rect x="32" y="82" width="90" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#38bdf8" stroke-width="1.8"/>
-            <circle cx="77" cy="114" r="16" fill="rgba(56,189,248,0.25)"/>
-            <text x="77" y="119" text-anchor="middle" fill="#38bdf8" font-size="14.5" font-weight="900">I</text>
-            <text x="77" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">Giám sát</text>
-            <text x="77" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">thị trường</text>
-            <text x="77" y="194" text-anchor="middle" fill="#bae6fd" font-size="11.2" font-weight="700">Đổi mới</text>
-            <text x="77" y="211" text-anchor="middle" fill="#bae6fd" font-size="11.2" font-weight="700">hợp tác xã</text>
+            <rect x="26" y="82" width="98" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#38bdf8" stroke-width="1.8"/>
+            <circle cx="75" cy="114" r="16" fill="rgba(56,189,248,0.25)"/>
+            <text x="75" y="119" text-anchor="middle" fill="#38bdf8" font-size="14.5" font-weight="900">I</text>
+            <text x="75" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">Giám sát</text>
+            <text x="75" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">thị trường</text>
+            <text x="75" y="194" text-anchor="middle" fill="#bae6fd" font-size="11.2" font-weight="700">Đổi mới</text>
+            <text x="75" y="211" text-anchor="middle" fill="#bae6fd" font-size="11.2" font-weight="700">hợp tác xã</text>
           </g>
 
           <g class="svg-float-alt">
-            <rect x="134" y="82" width="90" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#10b981" stroke-width="1.8"/>
-            <circle cx="179" cy="114" r="16" fill="rgba(16,185,129,0.25)"/>
-            <text x="179" y="119" text-anchor="middle" fill="#10b981" font-size="14.5" font-weight="900">II</text>
-            <text x="179" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">Pháp luật</text>
-            <text x="179" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">&amp; Thuế số</text>
-            <text x="179" y="194" text-anchor="middle" fill="#6ee7b7" font-size="11.2" font-weight="700">Kinh tế</text>
-            <text x="179" y="211" text-anchor="middle" fill="#6ee7b7" font-size="11.2" font-weight="700">nền tảng 4.0</text>
+            <rect x="136" y="82" width="98" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#10b981" stroke-width="1.8"/>
+            <circle cx="185" cy="114" r="16" fill="rgba(16,185,129,0.25)"/>
+            <text x="185" y="119" text-anchor="middle" fill="#10b981" font-size="14.5" font-weight="900">II</text>
+            <text x="185" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">Pháp luật</text>
+            <text x="185" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">&amp; Thuế số</text>
+            <text x="185" y="194" text-anchor="middle" fill="#6ee7b7" font-size="11.2" font-weight="700">Kinh tế</text>
+            <text x="185" y="211" text-anchor="middle" fill="#6ee7b7" font-size="11.2" font-weight="700">nền tảng 4.0</text>
           </g>
 
           <g class="svg-float">
-            <rect x="236" y="82" width="90" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#f59e0b" stroke-width="1.8"/>
-            <circle cx="281" cy="114" r="16" fill="rgba(245,158,11,0.25)"/>
-            <text x="281" y="119" text-anchor="middle" fill="#fbbf24" font-size="14.5" font-weight="900">III</text>
-            <text x="281" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">Bình đẳng</text>
-            <text x="281" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">nguồn lực</text>
-            <text x="281" y="194" text-anchor="middle" fill="#fde68a" font-size="11.2" font-weight="700">Minh bạch</text>
-            <text x="281" y="211" text-anchor="middle" fill="#fde68a" font-size="11.2" font-weight="700">vốn công</text>
+            <rect x="246" y="82" width="98" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#f59e0b" stroke-width="1.8"/>
+            <circle cx="295" cy="114" r="16" fill="rgba(245,158,11,0.25)"/>
+            <text x="295" y="119" text-anchor="middle" fill="#fbbf24" font-size="14.5" font-weight="900">III</text>
+            <text x="295" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">Bình đẳng</text>
+            <text x="295" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">nguồn lực</text>
+            <text x="295" y="194" text-anchor="middle" fill="#fde68a" font-size="11.2" font-weight="700">Minh bạch</text>
+            <text x="295" y="211" text-anchor="middle" fill="#fde68a" font-size="11.2" font-weight="700">vốn công</text>
           </g>
 
           <g class="svg-float-alt">
-            <rect x="338" y="82" width="90" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#a78bfa" stroke-width="1.8"/>
-            <circle cx="383" cy="114" r="16" fill="rgba(167,139,250,0.25)"/>
-            <text x="383" y="119" text-anchor="middle" fill="#a78bfa" font-size="14.5" font-weight="900">IV</text>
-            <text x="383" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">An sinh</text>
-            <text x="383" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">bền vững</text>
-            <text x="383" y="194" text-anchor="middle" fill="#ddd6fe" font-size="11.2" font-weight="700">Chống tham</text>
-            <text x="383" y="211" text-anchor="middle" fill="#ddd6fe" font-size="11.2" font-weight="700">nhũng triệt để</text>
+            <rect x="356" y="82" width="98" height="168" rx="12" fill="rgba(15,23,42,0.8)" stroke="#a78bfa" stroke-width="1.8"/>
+            <circle cx="405" cy="114" r="16" fill="rgba(167,139,250,0.25)"/>
+            <text x="405" y="119" text-anchor="middle" fill="#a78bfa" font-size="14.5" font-weight="900">IV</text>
+            <text x="405" y="152" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">An sinh</text>
+            <text x="405" y="170" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">bền vững</text>
+            <text x="405" y="194" text-anchor="middle" fill="#ddd6fe" font-size="11.2" font-weight="700">Chống tham</text>
+            <text x="405" y="211" text-anchor="middle" fill="#ddd6fe" font-size="11.2" font-weight="700">nhũng triệt để</text>
           </g>
         </svg>
       `,
@@ -435,7 +474,7 @@ window.PresentationApp = (() => {
     }
   }
 
-  // Slide 01: Trang bìa mở đầu (Thay "Đơn vị thực hiện" -> "Nhóm thực hiện", thay nút bằng sơ đồ 5 chặng trực quan)
+  // Slide 01: Trang bìa mở đầu
   function buildIntroSceneMarkup(slide, animClass) {
     return `
       <article class="slide-scene intro-hero-scene is-current ${animClass}">
@@ -499,7 +538,7 @@ window.PresentationApp = (() => {
           <div class="intro-meta-grid">
             <div class="intro-meta-card">
               <div class="meta-icon-box" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                   <circle cx="9" cy="7" r="4"/>
                   <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
@@ -514,7 +553,7 @@ window.PresentationApp = (() => {
 
             <div class="intro-meta-card">
               <div class="meta-icon-box is-emerald" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                 </svg>
@@ -527,7 +566,7 @@ window.PresentationApp = (() => {
 
             <div class="intro-meta-card">
               <div class="meta-icon-box is-sky" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                   <path d="M6 12v5c3 3 9 3 12 0v-5"/>
                 </svg>
@@ -539,7 +578,6 @@ window.PresentationApp = (() => {
             </div>
           </div>
 
-          <!-- Bổ sung sơ đồ trực quan 5 chặng lập luận thay cho nút Bắt đầu thuyết trình -->
           <div class="intro-roadmap-strip" aria-label="Sơ đồ 5 chặng lập luận">
             <button type="button" class="roadmap-node is-rose" onclick="window.PresentationApp.goToSlide(1)">
               <span class="rm-step">01</span>
@@ -576,7 +614,7 @@ window.PresentationApp = (() => {
     `;
   }
 
-  // Slide 11: Slide Phán quyết cuối cùng độc lập (Bỏ nút Quay về, bổ sung khung đồ họa & lời cảm ơn)
+  // Slide 11: Slide Phán quyết cuối cùng độc lập & Lời cảm ơn
   function buildVerdictSceneMarkup(slide, animClass) {
     return `
       <article class="slide-scene verdict-hero-scene is-current ${animClass}">
@@ -658,10 +696,9 @@ window.PresentationApp = (() => {
             </div>
           </div>
 
-          <!-- Bổ sung khung đồ họa & Lời cảm ơn cuối bài thay cho nút Quay về -->
           <div class="verdict-thanks-card">
             <div class="thanks-emblem" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                 <circle cx="18" cy="18" r="16" fill="rgba(245,158,11,0.22)" stroke="#fbbf24" stroke-width="1.6"/>
                 <polygon points="18,7 21.1,13.6 28.4,14.5 23,19.6 24.4,26.8 18,23.3 11.6,26.8 13,19.6 7.6,14.5 14.9,13.6" fill="#fbbf24"/>
               </svg>
@@ -705,25 +742,42 @@ window.PresentationApp = (() => {
     const isMatrix = slide.id === "r3-table";
     const visual = SLIDE_VISUALS[slide.id];
 
+    const metricsHtml = visual
+      ? visual.metrics
+          .map(
+            (m) => `
+            <div class="metric-chip" style="--chip-color:${m.color}">
+              <div class="metric-chip-val">${m.val}</div>
+              <div class="metric-chip-lbl">${m.lbl}</div>
+            </div>
+          `,
+          )
+          .join("")
+      : "";
+
+    let leftColumnHtml = `
+      <div id="pres-key-points" class="keyword-list">${keywordsHtml}</div>
+      <div class="thesis-strip">
+        <span class="thesis-dot"></span>
+        <p id="pres-slide-desc" class="thesis-line">${shortDesc}</p>
+      </div>
+    `;
+
     let rightColumnHtml = "";
     if (isMatrix) {
-      rightColumnHtml = `
+      // Slide 08: Bảng so sánh lớn trải dài toàn bộ chiều cao bên trái + minh họa động bên phải
+      leftColumnHtml = `
         <div class="dark-matrix-wrap">
           ${(window.PresentationData && window.PresentationData.comparisonTableHtml) || ""}
         </div>
+        <div id="pres-key-points" class="sr-only">${keywordsHtml}</div>
+        <p id="pres-slide-desc" class="sr-only">${shortDesc}</p>
+      `;
+      rightColumnHtml = `
+        <div class="art-stage-box">${visual.svg}</div>
+        <div class="visual-metrics-row">${metricsHtml}</div>
       `;
     } else if (visual) {
-      const metricsHtml = visual.metrics
-        .map(
-          (m) => `
-          <div class="metric-chip" style="--chip-color:${m.color}">
-            <div class="metric-chip-val">${m.val}</div>
-            <div class="metric-chip-lbl">${m.lbl}</div>
-          </div>
-        `,
-        )
-        .join("");
-
       rightColumnHtml = `
         <div class="art-stage-box">${visual.svg}</div>
         <div class="visual-metrics-row">${metricsHtml}</div>
@@ -742,13 +796,9 @@ window.PresentationApp = (() => {
           <h2 id="pres-slide-title" class="scene-title">${slide.title || ""}</h2>
         </div>
 
-        <div id="slide-stage-grid" class="scene-grid ${isMatrix ? "is-matrix-layout" : ""}">
-          <div class="scene-keywords-col ${isMatrix ? "hidden" : ""}">
-            <div id="pres-key-points" class="keyword-list">${keywordsHtml}</div>
-            <div class="thesis-strip">
-              <span class="thesis-dot"></span>
-              <p id="pres-slide-desc" class="thesis-line">${shortDesc}</p>
-            </div>
+        <div id="slide-stage-grid" class="scene-grid ${isMatrix ? "is-matrix-split" : ""}">
+          <div class="scene-keywords-col">
+            ${leftColumnHtml}
           </div>
 
           <div class="scene-visual-col">

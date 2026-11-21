@@ -1126,6 +1126,17 @@ window.PresentationApp = (() => {
     }
   }
 
+  function syncOrientationLayout() {
+    const panel = document.getElementById("presentation-panel");
+    const isLandscape = window.innerWidth > window.innerHeight;
+    if (panel) {
+      panel.setAttribute("data-orientation", isLandscape ? "landscape" : "portrait");
+    }
+    const stage = getStageFromIndex(currentSlideIndex);
+    requestAnimationFrame(() => updateStepperGlider(stage));
+    setTimeout(() => updateStepperGlider(stage), 140);
+  }
+
   function init() {
     if (isInitialized) return;
     isInitialized = true;
@@ -1196,8 +1207,11 @@ window.PresentationApp = (() => {
       );
     }
 
-    window.addEventListener("resize", () => updateStepperGlider(getStageFromIndex(currentSlideIndex)));
-    ["fullscreenchange", "webkitfullscreenchange"].forEach((evt) => {
+window.addEventListener("resize", syncOrientationLayout);
+    window.addEventListener("orientationchange", syncOrientationLayout);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", syncOrientationLayout);
+    }    ["fullscreenchange", "webkitfullscreenchange"].forEach((evt) => {
       document.addEventListener(evt, () => syncFullscreenButtonState());
     });
 

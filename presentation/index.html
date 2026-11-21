@@ -2,356 +2,146 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nội Dung Thuyết Trình: KTTT Định Hướng XHCN Việt Nam</title>
-    <!-- Google Fonts hỗ trợ đầy đủ dấu tiếng Việt chuẩn biên tập Canva -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Thuyết Trình Kinh Tế Chính Trị Mác - Lênin | Nhóm 8 - SS008.R12</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&family=JetBrains+Mono:wght@600;700;800&display=swap"
       rel="stylesheet"
-    />
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Reveal.js CSS CDN (kèm CSS fallback trong presentation.css) -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css"
     />
     <link rel="stylesheet" href="presentation.css" />
   </head>
-  <body
-    class="canva-body h-screen w-screen overflow-hidden select-none m-0 p-0"
-  >
-    <!-- ================= GIAO DIỆN TRÌNH CHIẾU CANVA PRESENTATION + REVEAL.JS ================= -->
+  <body class="projector-dark-body">
     <section
       id="presentation-panel"
-      aria-label="Giao diện Trình chiếu Slideshow Phong cách Canva"
-      class="fixed inset-0 z-40 flex flex-col overflow-hidden pointer-events-auto"
+      aria-label="Giao diện Trình chiếu Máy chiếu Cao cấp"
+      class="obsidian-stage is-intro-active"
     >
-      <!-- Họa tiết hình học nền biên tập tối giản -->
-      <div class="canva-bg-decor" aria-hidden="true">
-        <svg
-          class="canva-decor-tl"
-          viewBox="0 0 360 360"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="80" cy="80" r="140" fill="#F59E0B" fill-opacity="0.09" />
-          <circle
-            cx="150"
-            cy="120"
-            r="96"
-            stroke="#D97706"
-            stroke-opacity="0.14"
-            stroke-width="2"
-            stroke-dasharray="6 8"
-          />
-          <pattern id="canva-dots" width="16" height="16" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="1.5" fill="#D97706" fill-opacity="0.16" />
-          </pattern>
-          <rect x="180" y="18" width="128" height="64" rx="12" fill="url(#canva-dots)" />
-        </svg>
-        <svg
-          class="canva-decor-br"
-          viewBox="0 0 420 420"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="320" cy="310" r="165" fill="#059669" fill-opacity="0.07" />
-          <circle cx="210" cy="340" r="92" fill="#0284C7" fill-opacity="0.06" />
-          <path
-            d="M270 150L380 260"
-            stroke="#059669"
-            stroke-opacity="0.14"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-dasharray="5 9"
-          />
-        </svg>
+      <div class="ambient-backdrop" aria-hidden="true">
+        <div class="ambient-orb orb-primary"></div>
+        <div class="ambient-orb orb-secondary"></div>
+        <div class="ambient-grid"></div>
       </div>
 
-      <!-- VÙNG CANVAS SLIDESHOW REVEAL.JS (>= 90% DIỆN TÍCH MÀN HÌNH) -->
-      <div
-        id="pres-main-scroll"
-        class="relative z-10 flex-1 min-h-0 select-text overflow-hidden"
-      >
-        <div
-          id="pres-reveal"
-          class="reveal pres-reveal-deck"
-          tabindex="0"
-          aria-label="Trình chiếu Slide Nội dung Kinh tế Chính trị Mác - Lênin"
-        >
-          <div id="pres-reveal-slides" class="slides">
-            <!-- Slide 1 mặc định (presentation.js sẽ tự động dựng đủ 20 <section> slides theo 6 kiến trúc layout Canva) -->
-            <section
-              class="pres-slide-section present"
-              data-slide-index="0"
-              data-slide-id="r1-1a"
-              data-room="1"
-              data-layout="hero-cover"
-              data-transition="slide"
-            >
-              <div class="pres-slide-stage max-w-[1640px] w-full mx-auto">
-                <div
-                  id="pres-title-banner"
-                  class="pres-title-banner canva-hero-banner"
-                >
-                  <div class="min-w-0">
-                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                      <span id="pres-slide-badge" class="pres-slide-badge">
-                        Mục 1.1a • Khái Niệm Nền Tảng
-                      </span>
-                      <p id="pres-slide-subtitle" class="pres-slide-subtitle">
-                        Thành tựu phát triển chung của văn minh nhân loại
-                      </p>
-                    </div>
-                    <h2 id="pres-slide-title" class="pres-slide-title">
-                      1.1a. Kinh Tế Thị Trường Nói Chung
-                    </h2>
-                  </div>
-                </div>
-
-                <div
-                  id="pres-content-grid"
-                  class="pres-content-grid grid grid-cols-1 lg:grid-cols-12 items-stretch"
-                >
-                  <div
-                    id="pres-summary-col"
-                    class="pres-summary-col lg:col-span-4 flex flex-col justify-between"
-                  >
-                    <div class="flex flex-col min-h-0">
-                      <div class="canva-panel-head">
-                        <h3 class="pres-col-heading">Trọng Tâm Luận Điểm</h3>
-                      </div>
-                      <div id="pres-key-points" class="pres-key-points-list">
-                        <div class="pres-key-card">
-                          <span>1</span>
-                          <p>
-                            Quan hệ SX, trao đổi, phân phối, tiêu dùng đều qua thị trường.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div id="pres-summary-desc-box" class="pres-summary-desc-box">
-                      <span class="canva-quote-label">Khái quát nội dung</span>
-                      <p id="pres-slide-desc" class="pres-slide-desc"></p>
-                    </div>
-                  </div>
-
-                  <div
-                    id="pres-detail-col"
-                    class="pres-detail-col lg:col-span-8 flex flex-col min-h-0"
-                  >
-                    <div class="canva-panel-head">
-                      <h3 class="pres-col-heading">
-                        Phân Tích Lý Luận &amp; Dẫn Chứng Thực Tiễn
-                      </h3>
-                    </div>
-                    <div
-                      id="pres-slide-body"
-                      class="pres-slide-body pres-projector-content flex-1 min-h-0 flex flex-col justify-center"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
+      <!-- Thanh tiến trình 6 bước: Bỏ chữ "Mở", chỉ giữ lại "Đặt Vấn Đề" -->
+      <header id="stage-topbar" class="stage-topbar" aria-label="Tiến trình thuyết trình">
+        <div id="stage-stepper" class="stepper-track">
+          <div id="stepper-glider" class="stepper-glider" aria-hidden="true"></div>
+          <button type="button" class="step-pill is-intro-pill" data-step-stage="0" data-target-slide="0" title="Trang bìa Đặt vấn đề (Phím 0)">
+            <span class="step-label">Đặt Vấn Đề</span>
+          </button>
+          <button type="button" class="step-pill" data-step-stage="1" data-target-slide="1">
+            <span class="step-num">01</span>
+            <span class="step-label">Bối Cảnh</span>
+          </button>
+          <button type="button" class="step-pill" data-step-stage="2" data-target-slide="2">
+            <span class="step-num">02</span>
+            <span class="step-label">Đường Lối</span>
+          </button>
+          <button type="button" class="step-pill" data-step-stage="3" data-target-slide="4">
+            <span class="step-num">03</span>
+            <span class="step-label">Thực Hiện</span>
+          </button>
+          <button type="button" class="step-pill" data-step-stage="4" data-target-slide="8">
+            <span class="step-num">04</span>
+            <span class="step-label">Kết Quả</span>
+          </button>
+          <button type="button" class="step-pill" data-step-stage="5" data-target-slide="10" title="Phán quyết cuối cùng">
+            <span class="step-num">05</span>
+            <span class="step-label">Phán Quyết</span>
+          </button>
         </div>
-      </div>
+      </header>
 
-      <!-- Nút thoát toàn màn hình tối giản góc trên bên phải (chỉ hiện khi Fullscreen tab Nội Dung) -->
+      <main id="pres-main-scroll" class="stage-viewport">
+        <div id="pres-slides-host" class="slides-host"></div>
+      </main>
+
+      <!-- Ngăn kéo Phản biện & Tài liệu tham khảo (Mở bằng phím D hoặc nút Dẫn chứng) -->
+      <aside
+        id="pres-detail-drawer"
+        class="rebuttal-drawer"
+        aria-hidden="true"
+        aria-label="Tài liệu chi tiết phục vụ phản biện"
+      >
+        <div class="drawer-backdrop" id="drawer-backdrop"></div>
+        <div class="drawer-panel">
+          <div class="drawer-header">
+            <div>
+              <span class="drawer-tag">TƯ LIỆU PHẢN BIỆN &amp; TÀI LIỆU THAM KHẢO</span>
+              <h3 id="drawer-title" class="drawer-title">Chi tiết luận điểm</h3>
+            </div>
+            <button type="button" id="btn-close-drawer" class="drawer-close-btn" aria-label="Đóng">
+              ✕
+            </button>
+          </div>
+          <div id="drawer-body" class="drawer-body"></div>
+        </div>
+      </aside>
+
       <button
         id="btn-exit-pres-fullscreen"
         type="button"
-        aria-label="Thoát toàn màn hình (Esc)"
-        title="Thoát toàn màn hình (Phím F / Esc)"
-        class="pres-exit-fs-btn hidden"
+        aria-label="Thoát toàn màn hình"
+        title="Thoát toàn màn hình (F / Esc)"
+        class="exit-fs-floating hidden"
       >
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2.2"
-            d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
-          ></path>
-        </svg>
+        ✕
       </button>
 
-      <!-- THANH ĐIỀU KHIỂN NỔI TỐI GIẢN (FLOATING PRESENTER DOCK) -->
-      <div id="pres-dock-shell" class="canva-dock-shell">
+      <!-- Đồng hồ thời gian tách biệt, để mờ ở góc dưới bên trái màn hình -->
+      <button
+        type="button"
+        id="pres-timer-btn"
+        class="corner-timer-badge"
+        title="Phím T: Chạy/Dừng đồng hồ • Nhấp đúp: Đặt lại"
+      >
+        <span class="timer-dot"></span>
+        <span id="pres-timer-display">00:00</span>
+      </button>
+
+      <!-- Thanh trạng thái tự động ẩn sau 3,5 giây (hiện lại khi chuyển slide) -->
+      <div id="pres-dock-shell" class="minimal-hud-wrapper is-visible">
         <div
           id="pres-top-bar"
           role="toolbar"
-          aria-label="Thanh điều khiển trình chiếu Canva"
-          class="canva-presenter-dock"
+          aria-label="Thanh trạng thái trình chiếu"
+          class="minimal-hud-pill"
         >
-          <!-- Cụm Trái: Chọn Phòng 1 / 2 / 3 & Dropdown chọn nhanh 20 Slide -->
-          <div class="canva-dock-group canva-dock-left">
-            <div
-              class="canva-room-pills"
-              role="group"
-              aria-label="Chọn phần nội dung"
-            >
-              <button
-                type="button"
-                class="room-btn active"
-                data-room="1"
-              >
-                P.1
-              </button>
-              <button
-                type="button"
-                class="room-btn"
-                data-room="2"
-              >
-                P.2
-              </button>
-              <button
-                type="button"
-                class="room-btn"
-                data-room="3"
-              >
-                P.3
-              </button>
-            </div>
+          <button type="button" id="btn-hud-prev" class="hud-nav-btn" aria-label="Slide trước" title="Slide trước">
+            ‹
+          </button>
 
-            <span id="pres-room-tag" class="canva-room-tag hidden xl:inline-flex">
-              Phòng 1: Tổng quan KTTT ĐHXHCN
-            </span>
+          <span id="slide-counter-badge" class="hud-counter">01 / 11</span>
 
-            <select
-              id="slide-select-dropdown"
-              aria-label="Chọn nhanh Slide thuyết trình"
-              class="canva-slide-select"
-            ></select>
+          <button type="button" id="btn-hud-next" class="hud-nav-btn" aria-label="Slide tiếp theo" title="Slide tiếp theo">
+            ›
+          </button>
+
+          <span class="hud-sep"></span>
+
+          <button type="button" id="btn-hud-drawer" class="hud-drawer-btn" title="Xem dẫn chứng & tài liệu tham khảo (Phím D)">
+            Dẫn chứng
+          </button>
+
+          <div class="hud-shortcuts" aria-label="Phím tắt điều khiển">
+            <span><kbd>←</kbd><kbd>→</kbd> Chuyển</span>
+            <span><kbd>F</kbd> Toàn màn hình</span>
+            <span><kbd>D</kbd> Dẫn chứng</span>
+            <span><kbd>T</kbd> Đồng hồ</span>
           </div>
 
-          <!-- Cụm Giữa: Điều hướng Slide (← Trước | Slide 1 / 20 | Tiếp →) -->
-          <div
-            class="canva-dock-group canva-dock-center"
-            role="group"
-            aria-label="Chuyển trang slide"
-          >
-            <button
-              id="btn-slide-prev"
-              type="button"
-              aria-label="Slide trước"
-              title="Slide trước (←)"
-              class="pres-nav-btn canva-dock-btn canva-dock-btn-ghost"
-            >
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.4"
-                  d="M15 19l-7-7 7-7"
-                ></path>
-              </svg>
-              <span class="hidden sm:inline">Trước</span>
-            </button>
-
-            <span id="slide-counter-badge" class="canva-counter-pill">
-              Slide 1 / 20
-            </span>
-
-            <button
-              id="btn-slide-next"
-              type="button"
-              aria-label="Slide tiếp theo"
-              title="Slide tiếp theo (→)"
-              class="pres-nav-btn canva-dock-btn canva-dock-btn-primary"
-            >
-              <span class="hidden sm:inline">Tiếp</span>
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.4"
-                  d="M9 5l7 7-7 7"
-                ></path>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Cụm Phải: Toàn màn hình -->
-          <div class="canva-dock-group canva-dock-right">
-            <button
-              id="btn-pres-fullscreen"
-              type="button"
-              aria-pressed="false"
-              title="Toàn màn hình trình chiếu (Phím F)"
-              aria-label="Bật hoặc tắt chế độ toàn màn hình"
-              class="pres-ctrl-btn canva-dock-btn canva-dock-btn-primary"
-            >
-              <svg
-                id="icon-pres-fullscreen-enter"
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                ></path>
-              </svg>
-              <svg
-                id="icon-pres-fullscreen-exit"
-                class="w-3.5 h-3.5 hidden"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
-                ></path>
-              </svg>
-              <span id="label-pres-fullscreen" class="hidden md:inline"
-                >Toàn màn hình</span
-              >
-            </button>
-          </div>
+          <span id="pres-room-tag" class="sr-only"></span>
+          <select id="slide-select-dropdown" aria-label="Chọn Slide" class="sr-only"></select>
         </div>
       </div>
 
-      <!-- Thanh tiến độ siêu mảnh sát mép đáy khung chiếu -->
-      <div class="canva-progress-track" aria-hidden="true">
-        <div
-          id="pres-progress-bar"
-          class="canva-progress-fill"
-          style="width: 5%"
-        ></div>
+      <div class="bottom-progress-track" aria-hidden="true">
+        <div id="pres-progress-bar" class="bottom-progress-fill" style="width: 9%"></div>
       </div>
     </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
     <script src="slides-data.js"></script>
     <script src="presentation.js"></script>
   </body>

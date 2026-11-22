@@ -23,48 +23,52 @@
     <!-- ================= HEADER KHÁM PHÁ TỰ DO 3D: CHỌN PHÒNG & ĐIỀU KHIỂN CAMERA ================= -->
     <header
       id="museum-top-bar"
-      class="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-4 sm:right-4 z-30 flex flex-wrap items-center justify-between gap-2 pointer-events-none"
+      class="absolute top-2.5 left-2.5 right-2.5 sm:top-3.5 sm:left-4 sm:right-4 z-30 flex flex-wrap items-center justify-between gap-2 pointer-events-none"
     >
-      <!-- Cụm Trái: Chọn Phòng 3D -->
-      <div
-        class="pointer-events-auto flex items-center space-x-1 sm:space-x-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
+      <!-- Cụm Trái: Thanh Chọn Phòng 3D Dark Glassmorphism -->
+      <nav
+        aria-label="Chọn phòng trưng bày"
+        class="museum-glass-bar pointer-events-auto flex items-center space-x-1 sm:space-x-1.5 p-1 sm:p-1.5 rounded-2xl"
       >
         <button
           type="button"
-          class="room-btn active px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition"
+          class="room-btn active px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-xl transition flex items-center gap-1.5"
           data-room="1"
         >
+          <span class="room-index-pill hidden sm:inline-flex">01</span>
           <span class="museum-room-short sm:hidden">Phòng 1</span>
           <span class="museum-room-full hidden sm:inline">Phòng 1: Tổng Quan</span>
         </button>
         <button
           type="button"
-          class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
+          class="room-btn px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-xl text-slate-300 hover:text-white transition flex items-center gap-1.5"
           data-room="2"
         >
+          <span class="room-index-pill hidden sm:inline-flex">02</span>
           <span class="museum-room-short sm:hidden">Phòng 2</span>
           <span class="museum-room-full hidden sm:inline">Phòng 2: 5 Đặc Trưng</span>
         </button>
         <button
           type="button"
-          class="room-btn px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-slate-300 hover:text-white transition"
+          class="room-btn px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-xl text-slate-300 hover:text-white transition flex items-center gap-1.5"
           data-room="3"
         >
+          <span class="room-index-pill hidden sm:inline-flex">03</span>
           <span class="museum-room-short sm:hidden">Phòng 3</span>
           <span class="museum-room-full hidden sm:inline">Phòng 3: Giới Hạn &amp; Giải Pháp</span>
         </button>
-      </div>
+      </nav>
 
       <!-- Cụm Phải: Trạng thái Shift-Lock -->
       <div
         id="museum-status-controls"
-        class="pointer-events-auto flex items-center gap-1 sm:gap-1.5 bg-slate-900/95 backdrop-blur-md p-1 sm:p-1.5 rounded-xl border border-slate-700/80 shadow-xl"
+        class="museum-glass-bar pointer-events-auto flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-2xl"
       >
         <button
           id="btn-shiftlock-status"
           type="button"
           title="Bấm phím Shift để khóa/mở khóa trỏ chuột xoay góc nhìn (Shift-Lock)"
-          class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-amber-300 border border-amber-500/30 hover:bg-slate-700 transition"
+          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold rounded-xl bg-slate-900/75 text-amber-300 border border-amber-400/30 hover:bg-slate-800/80 transition"
         >
           <svg
             class="w-3.5 h-3.5 shrink-0"
@@ -100,41 +104,63 @@
       ></div>
     </div>
 
-    <!-- ================= MODAL / NGĂN KÉO XEM ĐẦY ĐỦ NỘI DUNG HIỆN VẬT ================= -->
+    <!-- ================= THANH HUD CHỈ DẪN TƯƠNG TÁC HIỆN VẬT ================= -->
+    <div
+      id="exhibit-interact-hud"
+      role="status"
+      aria-live="polite"
+      class="museum-interact-hud hud-hidden fixed z-25 pointer-events-none"
+    >
+      <div class="hud-glass-pill">
+        <span class="hud-dot" aria-hidden="true"></span>
+        <div class="hud-text-group">
+          <span id="hud-exhibit-title" class="hud-title">Hiện vật trưng bày</span>
+          <span id="hud-interact-hint" class="hud-hint"
+            >Nhấn chuột để xem chi tiết hiện vật</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MODAL / NGĂN KÉO XEM ĐẦY ĐỦ NỘI DUNG HIỆN VẬT (DARK GLASSMORPHISM) ================= -->
     <div
       id="detail-drawer-modal"
-      class="hidden fixed inset-0 z-40 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 pointer-events-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="drawer-title"
+      class="hidden fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-6 pointer-events-auto"
     >
       <div
-        class="bg-white border border-slate-300 rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden animate-fade-in text-slate-900"
+        class="museum-glass-modal rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-in text-slate-100"
       >
         <div
-          class="p-4 sm:p-5 bg-slate-100 border-b border-slate-300 flex items-start justify-between gap-3"
+          class="museum-glass-modal-header p-4 sm:p-5 flex items-start justify-between gap-3"
         >
-          <div>
+          <div class="min-w-0">
             <span
               id="drawer-badge"
-              class="text-xs font-bold uppercase tracking-wider text-amber-700 block mb-1"
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/15 border border-amber-400/30 mb-1.5"
               >Chi tiết hiện vật</span
             >
             <h3
               id="drawer-title"
-              class="text-lg sm:text-2xl font-extrabold text-slate-950"
+              class="text-lg sm:text-2xl font-extrabold text-slate-50 leading-snug"
             >
               Tiêu đề hiện vật
             </h3>
             <p
               id="drawer-subtitle"
-              class="text-xs sm:text-sm text-slate-600 italic mt-0.5"
+              class="text-xs sm:text-sm text-slate-300 italic mt-0.5"
             ></p>
           </div>
           <button
             id="btn-close-detail-drawer"
             type="button"
-            class="px-3 py-1.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-bold text-xs sm:text-sm transition shrink-0 flex items-center gap-1"
+            aria-label="Đóng chi tiết hiện vật"
+            class="museum-close-btn px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm transition shrink-0 flex items-center gap-1.5"
           >
             <svg
-              class="w-3.5 h-3.5 shrink-0"
+              class="w-4 h-4 shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -152,7 +178,7 @@
         </div>
         <div
           id="drawer-body"
-          class="p-4 sm:p-6 overflow-y-auto text-sm sm:text-base text-slate-800 leading-relaxed space-y-4 select-text"
+          class="p-4 sm:p-6 overflow-y-auto text-sm sm:text-base text-slate-200 leading-relaxed space-y-4 select-text"
         ></div>
       </div>
     </div>

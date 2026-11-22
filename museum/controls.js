@@ -7,6 +7,97 @@ window.MuseumControls = (() => {
   let currentExhibitData = null;
   let boundKeys = { w: false, a: false, s: false, d: false };
   let drawerRequestToken = 0;
+  let hoveredExhibitData = null;
+  let proximityTimer = null;
+
+  function isDrawerOpen() {
+    const modal = document.getElementById("detail-drawer-modal");
+    return Boolean(modal && modal.classList && !modal.classList.contains("hidden"));
+  }
+
+  function updateInteractHud(exhibitData) {
+    const hud = document.getElementById("exhibit-interact-hud");
+    if (!hud) return;
+    if (!exhibitData || isDrawerOpen()) {
+      hud.classList.remove("hud-visible");
+      hud.classList.add("hud-hidden");
+      return;
+    }
+    const titleEl = document.getElementById("hud-exhibit-title");
+    const hintEl = document.getElementById("hud-interact-hint");
+    if (titleEl) {
+      titleEl.textContent = exhibitData.title || "Hiện vật trưng bày";
+    }
+    if (hintEl) {
+      hintEl.textContent = "Nhấn chuột để xem chi tiết hiện vật";
+    }
+    hud.classList.remove("hud-hidden");
+    hud.classList.add("hud-visible");
+  }
+
+  function findExhibitUserDataFromObject(obj) {
+    let selected = obj;
+    const rootScene =
+      window.MuseumEngine && window.MuseumEngine.getScene
+        ? window.MuseumEngine.getScene()
+        : null;
+    while (
+      selected &&
+      selected.parent &&
+      (!selected.userData || !selected.userData.title) &&
+      selected.parent !== rootScene
+    ) {
+      selected = selected.parent;
+    }
+    if (selected && selected.userData && selected.userData.title) {
+      return selected.userData;
+    }
+    return null;
+  }
+
+  function resolveExhibitEntry(rawData) {
+    if (!rawData) return null;
+    const playlist = getPlaylist();
+    const foundIdx = playlist.findIndex((item) => item.id === rawData.id);
+    return foundIdx !== -1 ? playlist[foundIdx] : rawData;
+  }
+
+  function findNearestExhibitInRoom(maxDist = 3.9) {
+    if (
+      !window.MuseumAvatar ||
+      typeof window.MuseumAvatar.getAvatar !== "function" ||
+      !window.MuseumEngine ||
+      typeof window.MuseumEngine.getCurrentRoom !== "function"
+    ) {
+      return null;
+    }
+    const avatar = window.MuseumAvatar.getAvatar();
+    if (!avatar) return null;
+    const room = window.MuseumEngine.getCurrentRoom();
+    const items = getPlaylist().filter((item) => item.room === room);
+    let nearest = null;
+    let bestDist = maxDist;
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (typeof it.x === "number" && typeof it.z === "number") {
+        const d = Math.hypot(avatar.position.x - it.x, avatar.position.z - it.z);
+        if (d < bestDist) {
+          bestDist = d;
+          nearest = it;
+        }
+      } else if (it.lookPos && typeof it.lookPos.x === "number") {
+        const d = Math.hypot(
+          avatar.position.x - it.lookPos.x,
+          avatar.position.z - it.lookPos.z,
+        );
+        if (d < bestDist) {
+          bestDist = d;
+          nearest = it;
+        }
+      }
+    }
+    return nearest;
+  }
 
   // Ngưỡng chuẩn phân biệt thao tác Chạm (Tap mở hiện vật) và Kéo (Drag xoay góc nhìn) trên Mobile (C4)
   const TAP_MAX_DISTANCE_PX = 12;
@@ -206,18 +297,27 @@ window.MuseumControls = (() => {
     if (title) title.textContent = data.title || "";
     if (subtitle) subtitle.textContent = data.subtitle || "";
     if (body) {
-      // Modal chi tiết chỉ hiển thị thuần nội dung văn bản (text-only), không chèn ảnh, sơ đồ hay biểu đồ
-      body.innerHTML =
+      body.innerHTML = "";
+      const visualShowcase = buildDrawerVisualShowcase(data, drawerRequestToken);
+      if (visualShowcase) {
+        body.appendChild(visualShowcase);
+      }
+      const textSection = document.createElement("div");
+      textSection.className = "drawer-content-section";
+      textSection.innerHTML =
         data.fullHtml ||
-        `<p class="text-slate-800 leading-relaxed">${data.desc || ""}</p>`;
+        `<p class="text-slate-200 leading-relaxed">${data.desc || ""}</p>`;
+      body.appendChild(textSection);
       body.scrollTop = 0;
     }
     if (modal) modal.classList.remove("hidden");
+    updateInteractHud(null);
   }
 
   function closeDetailDrawer() {
     const modal = document.getElementById("detail-drawer-modal");
     if (modal) modal.classList.add("hidden");
+    updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
   }
 
   // Khi bấm chuột / chạm vào tranh trên tường: mở thẳng modal thông tin đầy đủ hiện vật, không làm bay camera khỏi nhân vật
@@ -454,6 +554,23 @@ window.MuseumControls = (() => {
         if (window.MuseumEngine && window.MuseumEngine.rotateCamera) {
           window.MuseumEngine.rotateCamera(dx * 0.0032, -dy * 0.0032);
         }
+        if (raycaster && camera) {
+          mouse.x = 0;
+          mouse.y = 0;
+          raycaster.setFromCamera(mouse, camera);
+          const objects =
+            (window.MuseumEngine && window.MuseumEngine.interactableObjects) ||
+            [];
+          const intersects = raycaster.intersectObjects(objects, true);
+          const hitData =
+            intersects.length > 0
+              ? resolveExhibitEntry(
+                  findExhibitUserDataFromObject(intersects[0].object),
+                )
+              : null;
+          hoveredExhibitData = hitData;
+          updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
+        }
         return;
       }
 
@@ -480,6 +597,14 @@ window.MuseumControls = (() => {
           [];
         const intersects = raycaster.intersectObjects(objects, true);
         domElement.style.cursor = intersects.length > 0 ? "pointer" : "grab";
+        const hitData =
+          intersects.length > 0
+            ? resolveExhibitEntry(
+                findExhibitUserDataFromObject(intersects[0].object),
+              )
+            : null;
+        hoveredExhibitData = hitData;
+        updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
       }
     });
 
@@ -620,6 +745,8 @@ window.MuseumControls = (() => {
     roomButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const room = parseInt(btn.getAttribute("data-room"), 10);
+        hoveredExhibitData = null;
+        updateInteractHud(null);
         syncRoomButtons(room);
         closeDetailDrawer();
         if (window.MuseumEngine) window.MuseumEngine.setRoom(room);
@@ -757,6 +884,20 @@ window.MuseumControls = (() => {
       : 1;
     syncRoomButtons(initialRoom);
     currentExhibitData = getPlaylist()[0] || null;
+
+    if (!proximityTimer) {
+      proximityTimer = setInterval(() => {
+        if (!isActiveState || isDrawerOpen()) return;
+        if (
+          window.MuseumEngine &&
+          typeof window.MuseumEngine.isPaused === "function" &&
+          window.MuseumEngine.isPaused()
+        ) {
+          return;
+        }
+        updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
+      }, 150);
+    }
   }
 
   return {

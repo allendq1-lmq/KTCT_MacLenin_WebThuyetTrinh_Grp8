@@ -1351,28 +1351,21 @@ window.MuseumVisuals = (() => {
     accentColor,
     caption,
   ) {
-    const r = rect || { x: 18, y: 18, w: 988, h: 664 };
+    const r = rect || { x: 0, y: 0, w: 1024, h: 700 };
     ctx.save();
-    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 8);
+    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 2);
     ctx.clip();
-    ctx.fillStyle = "#09101d";
+    ctx.fillStyle = "#161820";
     ctx.fillRect(r.x, r.y, r.w, r.h);
 
     const iw = img.naturalWidth || img.width || 1280;
-    const ih = img.naturalHeight || img.height || 800;
+    const ih = img.naturalHeight || img.height || 850;
     const scale = Math.max(r.w / iw, r.h / ih);
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = r.x + (r.w - dw) / 2;
     const dy = r.y + (r.h - dh) / 2;
     ctx.drawImage(img, dx, dy, dw, dh);
-    ctx.restore();
-
-    ctx.save();
-    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 8);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
     ctx.restore();
   }
 
@@ -1484,7 +1477,7 @@ window.MuseumVisuals = (() => {
     }
 
     const localTimeoutMs =
-      typeof options.localTimeoutMs === "number" ? options.localTimeoutMs : 2500;
+      typeof options.localTimeoutMs === "number" ? options.localTimeoutMs : 8000;
     const remoteTimeoutMs =
       typeof options.remoteTimeoutMs === "number"
         ? options.remoteTimeoutMs

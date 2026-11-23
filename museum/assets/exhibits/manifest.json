@@ -1,224 +1,224 @@
 {
-    "exhibits":  {
-                     "r1-1a":  {
-                                   "id":  "r1-1a",
-                                   "file":  "assets/exhibits/r1-1a.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Ben Thanh, Ciudad Ho Chi Minh, Vietnam, 2013-08-14, DD 01.JPG",
-                                   "license":  "CC-BY-SA-3.0",
-                                   "attribution":  "Diego Delso",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Ben_Thanh,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_01.JPG",
-                                   "width":  1440,
-                                   "height":  1039
-                               },
-                     "r1-1b":  {
-                                   "id":  "r1-1b",
-                                   "file":  "assets/exhibits/r1-1b.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "National Assembly of Vietnam.JPG",
-                                   "license":  "CC-BY-SA-4.0",
-                                   "attribution":  "Grayswoodsurrey",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:National_Assembly_of_Vietnam.JPG",
-                                   "width":  1440,
-                                   "height":  960
-                               },
-                     "r1-2a":  {
-                                   "id":  "r1-2a",
-                                   "file":  "assets/exhibits/r1-2a.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Tem phiếu thời bao cấp.jpg",
-                                   "license":  "CC-BY-SA-3.0",
-                                   "attribution":  "Wikimedia Commons",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Tem_phi%E1%BA%BFu_th%E1%BB%9Di_bao_c%E1%BA%A5p.jpg",
-                                   "width":  1600,
-                                   "height":  1200
-                               },
-                     "r1-2b":  {
-                                   "id":  "r1-2b",
-                                   "file":  "assets/exhibits/r1-2b.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Ho Chi Minh City, City Hall, 2020-01 CN-01.jpg",
-                                   "license":  "CC-BY-SA-4.0",
-                                   "attribution":  "Steffen Schmitz (more photos)",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City,_City_Hall,_2020-01_CN-01.jpg",
-                                   "width":  1440,
-                                   "height":  811
-                               },
-                     "r1-2c":  {
-                                   "id":  "r1-2c",
-                                   "file":  "assets/exhibits/r1-2c.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Keangnam-Hanoi-Landmark-Tower.jpg",
-                                   "license":  "CC0",
-                                   "attribution":  "Pimnl at en.wikipedia) (Uploads",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Keangnam-Hanoi-Landmark-Tower.jpg",
-                                   "width":  1200,
-                                   "height":  900
-                               },
-                     "r1-3":  {
-                                  "id":  "r1-3",
-                                  "file":  "assets/exhibits/r1-3.jpg",
-                                  "source":  "wikimedia",
-                                  "title":  "Container Ship at the Hai Phong International Container Terminal 01.jpg",
-                                  "license":  "CC-BY-SA-4.0",
-                                  "attribution":  "Nathan.cima",
-                                  "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Container_Ship_at_the_Hai_Phong_International_Container_Terminal_01.jpg",
-                                  "width":  1440,
-                                  "height":  960
-                              },
-                     "r1-4a":  {
-                                   "id":  "r1-4a",
-                                   "file":  "assets/exhibits/r1-4a.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Banco Estatal de Vietnam, Hanoi, Vietnam (36733497852).jpg",
-                                   "license":  "CC-BY-2.0",
-                                   "attribution":  "Edgardo W. Olivera from Montevideo, Uruguay",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Banco_Estatal_de_Vietnam,_Hanoi,_Vietnam_(36733497852).jpg",
-                                   "width":  1440,
-                                   "height":  1059
-                               },
-                     "r1-4b":  {
-                                   "id":  "r1-4b",
-                                   "file":  "assets/exhibits/r1-4b.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Ba Dinh Square.jpg",
-                                   "license":  "CC-BY-2.0",
-                                   "attribution":  "shunei1506",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Ba_Dinh_Square.jpg",
-                                   "width":  1200,
-                                   "height":  800
-                               },
-                     "r2-a":  {
-                                  "id":  "r2-a",
-                                  "file":  "assets/exhibits/r2-a.jpg",
-                                  "source":  "wikimedia",
-                                  "title":  "Börse Frankfurt stock exchange - Germany - Luminale 2014 - April 3rd 2014 - 02.jpg",
-                                  "license":  "CC-BY-SA-3.0",
-                                  "attribution":  "Norbert Nagel",
-                                  "sourceUrl":  "https://commons.wikimedia.org/wiki/File:B%C3%B6rse_Frankfurt_stock_exchange_-_Germany_-_Luminale_2014_-_April_3rd_2014_-_02.jpg",
-                                  "width":  1440,
-                                  "height":  1152
-                              },
-                     "r2-b1":  {
-                                   "id":  "r2-b1",
-                                   "file":  "assets/exhibits/r2-b1.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Ho Chi Minh City Skyline.jpg",
-                                   "license":  "CC0",
-                                   "attribution":  "Pimnl",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City_Skyline.jpg",
-                                   "width":  1440,
-                                   "height":  644
-                               },
-                     "r2-b2":  {
-                                   "id":  "r2-b2",
-                                   "file":  "assets/exhibits/r2-b2.jpg",
-                                   "source":  "openverse",
-                                   "title":  "Electronics industry in Viet Nam",
-                                   "license":  "CC-BY-2.0",
-                                   "attribution":  "ILO Asia-Pacific",
-                                   "sourceUrl":  "https://openverse.org/image/7abc7763",
-                                   "width":  1024,
-                                   "height":  683
-                               },
-                     "r2-b3":  {
-                                   "id":  "r2-b3",
-                                   "file":  "assets/exhibits/r2-b3.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Presidential Palace, Hanoi, April 2011.jpg",
-                                   "license":  "CC-BY-2.0",
-                                   "attribution":  "Andrea Schaffer",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Presidential_Palace,_Hanoi,_April_2011.jpg",
-                                   "width":  1440,
-                                   "height":  864
-                               },
-                     "r2-b4":  {
-                                   "id":  "r2-b4",
-                                   "file":  "assets/exhibits/r2-b4.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Cầu Cao Lãnh.jpg",
-                                   "license":  "CC-BY-SA-4.0",
-                                   "attribution":  "Bùi Thụy Đào Nguyên",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:C%E1%BA%A7u_Cao_L%C3%A3nh.jpg",
-                                   "width":  1440,
-                                   "height":  960
-                               },
-                     "r2-b5":  {
-                                   "id":  "r2-b5",
-                                   "file":  "assets/exhibits/r2-b5.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Benh vien Cho Ray -phường 12, Quận 5, TPHCM, Việt Nam - panoramio.jpg",
-                                   "license":  "CC-BY-3.0",
-                                   "attribution":  "trungydang",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12,_Qu%E1%BA%ADn_5,_TPHCM,_Vi%E1%BB%87t_Nam_-_panoramio.jpg",
-                                   "width":  1440,
-                                   "height":  1080
-                               },
-                     "r3-1":  {
-                                  "id":  "r3-1",
-                                  "file":  "assets/exhibits/r3-1.jpg",
-                                  "source":  "wikimedia",
-                                  "title":  "Unemployed men queued outside a depression soup kitchen opened in Chicago by Al Capone, 02-1931 - NARA - 541927.jpg",
-                                  "license":  "PD",
-                                  "attribution":  "Unknown authorUnknown author or not provided",
-                                  "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone,_02-1931_-_NARA_-_541927.jpg",
-                                  "width":  1440,
-                                  "height":  1172
-                              },
-                     "r3-2":  {
-                                  "id":  "r3-2",
-                                  "file":  "assets/exhibits/r3-2.jpg",
-                                  "source":  "wikimedia",
-                                  "title":  "Bạc Liêu windpower farm.jpg",
-                                  "license":  "CC-BY-SA-3.0",
-                                  "attribution":  "[Tycho]  talk , http://shansov.net",
-                                  "sourceUrl":  "https://commons.wikimedia.org/wiki/File:B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg",
-                                  "width":  1440,
-                                  "height":  810
-                              },
-                     "r3-table":  {
-                                      "id":  "r3-table",
-                                      "file":  "assets/exhibits/r3-table.jpg",
-                                      "source":  "wikimedia",
-                                      "title":  "Vista de Ciudad Ho Chi Minh desde Bitexco Financial Tower, Vietnam, 2013-08-14, DD 04.JPG",
-                                      "license":  "CC-BY-SA-3.0",
-                                      "attribution":  "Diego Delso",
-                                      "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Vista_de_Ciudad_Ho_Chi_Minh_desde_Bitexco_Financial_Tower,_Vietnam,_2013-08-14,_DD_04.JPG",
-                                      "width":  1440,
-                                      "height":  822
-                                  },
-                     "r3-3a":  {
-                                   "id":  "r3-3a",
-                                   "file":  "assets/exhibits/r3-3a.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Hanoi Traffic Ba Dinh Dist..jpg",
-                                   "license":  "CC-BY-SA-3.0",
-                                   "attribution":  "Dragfyre",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Hanoi_Traffic_Ba_Dinh_Dist..jpg",
-                                   "width":  1440,
-                                   "height":  1080
-                               },
-                     "r3-3b":  {
-                                   "id":  "r3-3b",
-                                   "file":  "assets/exhibits/r3-3b.jpg",
-                                   "source":  "wikimedia",
-                                   "title":  "Ba Son Bridge, Saigon (20230705 1516).jpg",
-                                   "license":  "CC0",
-                                   "attribution":  "Syced",
-                                   "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Ba_Son_Bridge,_Saigon_(20230705_1516).jpg",
-                                   "width":  1440,
-                                   "height":  1084
-                               },
-                     "r3-verdict":  {
-                                        "id":  "r3-verdict",
-                                        "file":  "assets/exhibits/r3-verdict.jpg",
-                                        "source":  "wikimedia",
-                                        "title":  "Ho Chi Minh City Skyline at Night.jpg",
-                                        "license":  "CC-BY-SA-4.0",
-                                        "attribution":  "Wikimedia Commons",
-                                        "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City_Skyline_at_Night.jpg",
-                                        "width":  1440,
-                                        "height":  757
-                                    }
-                 }
+  "exhibits": {
+    "r1-1a": {
+      "id": "r1-1a",
+      "file": "assets/exhibits/r1-1a.jpg",
+      "source": "wikimedia",
+      "title": "Ben Thanh, Ciudad Ho Chi Minh, Vietnam, 2013-08-14, DD 01.JPG",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "Diego Delso",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ben_Thanh,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_01.JPG",
+      "width": 1280,
+      "height": 850
+    },
+    "r1-1b": {
+      "id": "r1-1b",
+      "file": "assets/exhibits/r1-1b.jpg",
+      "source": "wikimedia",
+      "title": "National Assembly of Vietnam.JPG",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Grayswoodsurrey",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:National_Assembly_of_Vietnam.JPG",
+      "width": 1280,
+      "height": 850
+    },
+    "r1-2a": {
+      "id": "r1-2a",
+      "file": "assets/exhibits/r1-2a.jpg",
+      "source": "wikimedia",
+      "title": "Vietnam National Museum of History, Hanoi, Vietnam.jpg",
+      "license": "PD",
+      "attribution": "Alistair Morrenger",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vietnam_National_Museum_of_History,_Hanoi,_Vietnam.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r1-2b": {
+      "id": "r1-2b",
+      "file": "assets/exhibits/r1-2b.jpg",
+      "source": "wikimedia",
+      "title": "Ayuntamiento, Ciudad Ho Chi Minh, Vietnam, 2013-08-14, DD 09.JPG",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "Diego Delso",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ayuntamiento,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_09.JPG",
+      "width": 1280,
+      "height": 850
+    },
+    "r1-2c": {
+      "id": "r1-2c",
+      "file": "assets/exhibits/r1-2c.jpg",
+      "source": "wikimedia",
+      "title": "Kites in Thu Thiem, Saigon (53175235154).jpg",
+      "license": "CC-BY-2.0",
+      "attribution": "David Ackerman from St. Louis, Missouri, USA",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kites_in_Thu_Thiem,_Saigon_(53175235154).jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r1-3": {
+      "id": "r1-3",
+      "file": "assets/exhibits/r1-3.jpg",
+      "source": "wikimedia",
+      "title": "Chùa Vẽ Terminal, Port of Hải Phòng.JPG",
+      "license": "PD",
+      "attribution": "Phó Nháy",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ch%C3%B9a_V%E1%BA%BD_Terminal,_Port_of_H%E1%BA%A3i_Ph%C3%B2ng.JPG",
+      "width": 1280,
+      "height": 850
+    },
+    "r1-4a": {
+      "id": "r1-4a",
+      "file": "assets/exhibits/r1-4a.jpg",
+      "source": "wikimedia",
+      "title": "Banco Estatal de Vietnam, Hanoi, Vietnam (36733497852).jpg",
+      "license": "CC-BY-2.0",
+      "attribution": "Edgardo W. Olivera from Montevideo, Uruguay",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Banco_Estatal_de_Vietnam,_Hanoi,_Vietnam_(36733497852).jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r1-4b": {
+      "id": "r1-4b",
+      "file": "assets/exhibits/r1-4b.jpg",
+      "source": "wikimedia",
+      "title": "Hanoi Vietnam Mausoleum-of-Ho-Chi-Minh-01.jpg",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "CEphoto, Uwe Aranas",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-01.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r2-a": {
+      "id": "r2-a",
+      "file": "assets/exhibits/r2-a.jpg",
+      "source": "wikimedia",
+      "title": "Frankfurt Stock Exchange (Ank Kumar) 02.jpg",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Ank Kumar",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Frankfurt_Stock_Exchange_(Ank_Kumar)_02.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r2-b1": {
+      "id": "r2-b1",
+      "file": "assets/exhibits/r2-b1.jpg",
+      "source": "wikimedia",
+      "title": "Da Nang Dragon Bridge.jpg",
+      "license": "CC-BY-2.0",
+      "attribution": "Person-with-No Name",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Da_Nang_Dragon_Bridge.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r2-b2": {
+      "id": "r2-b2",
+      "file": "assets/exhibits/r2-b2.jpg",
+      "source": "wikimedia",
+      "title": "Clean room.jpg",
+      "license": "PD",
+      "attribution": "Uploaded by Duk 08:45, 16 Feb 2005 (UTC)",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Clean_room.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r2-b3": {
+      "id": "r2-b3",
+      "file": "assets/exhibits/r2-b3.jpg",
+      "source": "wikimedia",
+      "title": "Presidential Palace, Hanoi, April 2011.jpg",
+      "license": "CC-BY-2.0",
+      "attribution": "Andrea Schaffer",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Presidential_Palace,_Hanoi,_April_2011.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r2-b4": {
+      "id": "r2-b4",
+      "file": "assets/exhibits/r2-b4.jpg",
+      "source": "wikimedia",
+      "title": "Cầu Cao Lãnh.jpg",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Bùi Thụy Đào Nguyên",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:C%E1%BA%A7u_Cao_L%C3%A3nh.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r2-b5": {
+      "id": "r2-b5",
+      "file": "assets/exhibits/r2-b5.jpg",
+      "source": "wikimedia",
+      "title": "Dai Trung gate, Temple of Literature, Hanoi, Vietnam, 20240123 0928 3065.jpg",
+      "license": "CC-BY-4.0",
+      "attribution": "Jakub Hałun",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dai_Trung_gate,_Temple_of_Literature,_Hanoi,_Vietnam,_20240123_0928_3065.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r3-1": {
+      "id": "r3-1",
+      "file": "assets/exhibits/r3-1.jpg",
+      "source": "wikimedia",
+      "title": "Unemployed men queued outside a depression soup kitchen opened in Chicago by Al Capone, 02-1931 - NARA - 541927 (cropped).jpg",
+      "license": "PD",
+      "attribution": "Unknown authorUnknown author or not provided",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone,_02-1931_-_NARA_-_541927_(cropped).jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r3-2": {
+      "id": "r3-2",
+      "file": "assets/exhibits/r3-2.jpg",
+      "source": "wikimedia",
+      "title": "Bạc Liêu windpower farm.jpg",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "[Tycho]  talk , http://shansov.net",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r3-table": {
+      "id": "r3-table",
+      "file": "assets/exhibits/r3-table.jpg",
+      "source": "wikimedia",
+      "title": "Vista de Ciudad Ho Chi Minh desde Bitexco Financial Tower, Vietnam, 2013-08-14, DD 13.JPG",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "Diego Delso",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista_de_Ciudad_Ho_Chi_Minh_desde_Bitexco_Financial_Tower,_Vietnam,_2013-08-14,_DD_13.JPG",
+      "width": 1280,
+      "height": 850
+    },
+    "r3-3a": {
+      "id": "r3-3a",
+      "file": "assets/exhibits/r3-3a.jpg",
+      "source": "wikimedia",
+      "title": "Hanoi Traffic Ba Dinh Dist..jpg",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "Dragfyre",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hanoi_Traffic_Ba_Dinh_Dist..jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r3-3b": {
+      "id": "r3-3b",
+      "file": "assets/exhibits/r3-3b.jpg",
+      "source": "wikimedia",
+      "title": "Ba Son Bridge, Saigon (20230705 1516).jpg",
+      "license": "CC0",
+      "attribution": "Syced",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ba_Son_Bridge,_Saigon_(20230705_1516).jpg",
+      "width": 1280,
+      "height": 850
+    },
+    "r3-verdict": {
+      "id": "r3-verdict",
+      "file": "assets/exhibits/r3-verdict.jpg",
+      "source": "wikimedia",
+      "title": "Ho Chi Minh City Skyline at Night.jpg",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City_Skyline_at_Night.jpg",
+      "width": 1280,
+      "height": 850
+    }
+  }
 }

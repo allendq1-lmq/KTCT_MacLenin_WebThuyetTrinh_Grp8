@@ -192,86 +192,70 @@ window.MuseumControls = (() => {
   }
 
   function buildDrawerVisualShowcase(data, requestToken) {
+    const hasImage = Boolean(data && (data.localImagePath || data.imageUrl));
+    if (!hasImage) return null;
+
     const wrapper = document.createElement("div");
-    wrapper.className = "drawer-visual-showcase";
+    wrapper.className = "drawer-hero-artwork";
 
-    const grid = document.createElement("div");
-    grid.className = "drawer-visual-grid single-panel";
+    const frame = document.createElement("div");
+    frame.className = "drawer-hero-frame";
 
-    // Thẻ 1 (Cách 1): Đồ họa / Infographic Canvas vẽ trực tiếp, luôn hiển thị ngay lập tức
-    const infoUrl =
-      window.MuseumEngine &&
-      typeof window.MuseumEngine.renderInfographicDataUrl === "function"
-        ? window.MuseumEngine.renderInfographicDataUrl(data)
-        : "";
-    if (infoUrl) {
-      const infoCard = document.createElement("div");
-      infoCard.className = "drawer-visual-card is-infographic";
-      const infoHeader = document.createElement("div");
-      infoHeader.className = "drawer-visual-card-label";
-      infoHeader.textContent = "Sơ đồ & Biểu đồ trực quan";
-      const infoImg = document.createElement("img");
-      infoImg.src = infoUrl;
-      infoImg.alt = data.title || "Infographic hiện vật";
-      infoCard.appendChild(infoHeader);
-      infoCard.appendChild(infoImg);
-      grid.appendChild(infoCard);
-    }
+    const heroImg = document.createElement("img");
+    heroImg.alt = data.imageCaption || data.title || "Tư liệu triển lãm";
+    heroImg.loading = "eager";
 
-    wrapper.appendChild(grid);
+    const captionEl = document.createElement("p");
+    captionEl.className = "drawer-hero-caption";
+    captionEl.textContent = data.imageCaption || data.subtitle || "";
 
-    if (data.imageCaption) {
-      const captionEl = document.createElement("p");
-      captionEl.className = "drawer-visual-caption";
-      captionEl.textContent = data.imageCaption;
+    frame.appendChild(heroImg);
+    wrapper.appendChild(frame);
+    if (captionEl.textContent) {
       wrapper.appendChild(captionEl);
     }
 
-    // Thẻ 2 (Cách 2): Nạp ảnh tư liệu local/CORS; thành công -> hiện song song, lỗi/offline -> giữ gọn Infographic
+    const fallbackSrc = data.localImagePath || data.imageUrl || "";
+    if (data.localImagePath) {
+      heroImg.src = data.localImagePath;
+    }
+
     if (
       window.MuseumEngine &&
-      typeof window.MuseumEngine.loadExhibitImageWithFallback === "function" &&
-      (data.localImagePath || data.imageUrl)
+      typeof window.MuseumEngine.loadExhibitImageWithFallback === "function"
     ) {
-      window.MuseumEngine.loadExhibitImageWithFallback(data)
+      window.MuseumEngine.loadExhibitImageWithFallback(data, {
+        tryLocalFirst: true,
+        localTimeoutMs: 8000,
+      })
         .then((res) => {
-          if (requestToken !== drawerRequestToken || !res || !res.ok || !res.src) {
+          if (requestToken !== drawerRequestToken || !wrapper.isConnected) {
             return;
           }
-          if (!wrapper.isConnected) return;
-
-          const photoCard = document.createElement("div");
-          photoCard.className = "drawer-visual-card";
-          const photoHeader = document.createElement("div");
-          photoHeader.className = "drawer-visual-card-label";
-          photoHeader.textContent =
-            res.sourceType === "local"
-              ? "Ảnh tư liệu lưu trữ"
-              : "Tư liệu minh họa (Wikimedia)";
-
-          const photoImg = document.createElement("img");
-          photoImg.alt = data.imageCaption || data.title || "Tư liệu minh họa";
-          if (/\.svg(\.png)?(\?.*)?$/i.test(res.src)) {
-            photoImg.style.objectFit = "contain";
-            photoImg.style.padding = "6px";
-          }
-          photoImg.onerror = () => {
-            photoCard.remove();
-            if (grid.children.length <= 1) {
-              grid.classList.add("single-panel");
+          if (res && res.ok && res.src) {
+            if (heroImg.getAttribute("src") !== res.src) {
+              heroImg.src = res.src;
             }
-          };
-          photoImg.src = res.src;
-
-          photoCard.appendChild(photoHeader);
-          photoCard.appendChild(photoImg);
-          grid.appendChild(photoCard);
-          if (grid.children.length > 1) {
-            grid.classList.remove("single-panel");
+          } else if (!heroImg.getAttribute("src") && fallbackSrc) {
+            heroImg.src = fallbackSrc;
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          if (!heroImg.getAttribute("src") && fallbackSrc) {
+            heroImg.src = fallbackSrc;
+          }
+        });
+    } else if (fallbackSrc) {
+      heroImg.src = fallbackSrc;
     }
+
+    heroImg.onerror = () => {
+      if (data.imageUrl && heroImg.src !== data.imageUrl) {
+        heroImg.src = data.imageUrl;
+      } else {
+        wrapper.remove();
+      }
+    };
 
     return wrapper;
   }

@@ -186,63 +186,40 @@ body {
   background: linear-gradient(135deg, #e88938 0%, #d16d1d 100%);
 }
 
-/* Showcase Infographic + Ảnh tư liệu song song */
-.drawer-visual-showcase {
-  background: rgba(15, 23, 42, 0.65);
-  border: 1px solid rgba(245, 180, 75, 0.24);
+/* Hero Artwork duy nhất ở đầu Modal Chi tiết Hiện vật */
+.drawer-hero-artwork {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(212, 160, 56, 0.28);
   border-radius: 0.9rem;
-  padding: 0.85rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 0.7rem;
+  box-shadow:
+    0 12px 32px rgba(2, 6, 23, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.drawer-visual-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
-}
-
-.drawer-visual-grid.single-panel {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.drawer-visual-card {
-  background: rgba(9, 14, 27, 0.9);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  border-radius: 0.7rem;
+.drawer-hero-frame {
+  border-radius: 0.65rem;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  background: #0a0d15;
+  border: 1px solid rgba(212, 160, 56, 0.22);
 }
 
-.drawer-visual-card img {
+.drawer-hero-frame img {
   width: 100%;
-  height: 215px;
+  max-height: 360px;
   object-fit: cover;
   display: block;
-  background: #070b15;
 }
 
-.drawer-visual-card.is-infographic img {
-  object-fit: contain;
-}
-
-.drawer-visual-card-label {
-  padding: 0.42rem 0.7rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #fde68a;
-  background: rgba(17, 24, 39, 0.95);
-  border-bottom: 1px solid rgba(245, 180, 75, 0.18);
-}
-
-.drawer-visual-caption {
+.drawer-hero-caption {
   margin-top: 0.55rem;
-  font-size: 0.8rem;
+  margin-bottom: 0.1rem;
+  padding: 0 0.25rem;
+  font-size: 0.82rem;
   color: #cbd5e1;
   font-style: italic;
   text-align: center;
+  line-height: 1.45;
 }
 
 /* Chuyển đổi nội dung chi tiết từ data.js sang Dark Glassmorphism tương phản cao */
@@ -453,12 +430,8 @@ body {
     font-size: 0.65rem;
   }
 
-  .drawer-visual-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .drawer-visual-card img {
-    height: 175px;
+  .drawer-hero-frame img {
+    max-height: 220px;
   }
 }
 

@@ -779,8 +779,8 @@ body.reveal-full-page {
   }
 }
 
-/* Giữ khả năng cuộn nội bộ cho tab Quiz trên màn hình nhỏ khi body bị khóa cuộn */
-@media (max-width: 1023px), (max-height: 599px) {
+/* Giữ khả năng cuộn nội bộ cho tab Quiz trên màn hình nhỏ/laptop thấp khi body bị khóa cuộn */
+@media (max-width: 1023px), (max-height: 768px) {
   #section-quiz:not(.hidden) {
     height: calc(100vh - var(--navbar-height));
     height: calc(100dvh - var(--navbar-height));

@@ -167,6 +167,24 @@ dialog::backdrop {
 }
 
 /* ================= CARD & HUD ANIMATIONS ================= */
+/* Giữ chỗ cố định cho banner phản hồi nhằm tránh giật layout ~32px khi xuất hiện */
+#card-feedback-banner {
+  min-height: 2.125rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.18s ease;
+}
+
+#card-feedback-banner.hidden {
+  display: flex !important;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 #reigns-card {
   transition: transform 0.12s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
 }

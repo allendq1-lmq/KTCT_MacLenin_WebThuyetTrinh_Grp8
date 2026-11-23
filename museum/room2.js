@@ -190,8 +190,6 @@ window.MuseumRoom2 = (() => {
       const getMat =
         window.MuseumEngine.getSharedMaterial || ((_, fn) => fn());
 
-      const fluteTex = createFlutedColumnTexture();
-
       const baseGeo = getGeo("room2_pillar_base_geo", () =>
         new THREE.BoxGeometry(1.78, 0.36, 1.78),
       );
@@ -212,13 +210,14 @@ window.MuseumRoom2 = (() => {
           metalness: 0.32,
         }),
       );
-      const shaftMat = getMat("room2_pillar_shaft_mat", () =>
-        new THREE.MeshStandardMaterial({
+      const shaftMat = getMat("room2_pillar_shaft_mat", () => {
+        const fluteTex = createFlutedColumnTexture();
+        return new THREE.MeshStandardMaterial({
           map: fluteTex,
           roughness: 0.56,
           metalness: 0.06,
-        }),
-      );
+        });
+      });
 
       const useInstanced =
         typeof THREE.InstancedMesh === "function" && pCount > 0;

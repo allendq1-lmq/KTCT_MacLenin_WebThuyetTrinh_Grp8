@@ -46,7 +46,7 @@
       id: "q4",
       sectionCode: "Mục 1.1a",
       question:
-        "Nền kinh tế thị trường có ưu thế gì đối với hoạt động sản xuất kinh doanh. Chọn ý trả lời sai?",
+        "Nền kinh tế thị trường có ưu thế gì đối với hoạt động sản xuất kinh doanh? Chọn ý trả lời sai?",
       options: [
         "Khắc phục những hiện tượng phân hóa sâu sắc trong xã hội.",
         "Tạo thị trường tiêu thụ sản phẩm thỏa mãn nhu cầu tối đa của con người.",
@@ -437,7 +437,7 @@
       ],
       correctIndex: 1,
       explanation:
-        "Mô hình kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam đã xây dựng các cơ chế đa dạng hóa sở hữu, Nhà nước quản lý điều tiết, gắn tăng trưởng kinh tế với tiến bộ và công bằng xã hội nhằm khắc phục và hạn chế một phần các giới hạn của chủ nghĩa tư bản. Tuy nhiên, do thực tiễn vẫn còn tồn tại nhiều hạn chế khoảng cách giàu nghèo, bất bình đẳng tiếp cận nguồn lực, hiệu quả sử dụng vốn nhà nước và chất lượng tăng trưởng chưa cao nên mô hình này chưa thể giải quyết hoàn toàn các giới hạn lịch sử đó.",
+        "Mô hình kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam đã xây dựng các cơ chế đa dạng hóa sở hữu, Nhà nước quản lý điều tiết, gắn tăng trưởng kinh tế với tiến bộ và công bằng xã hội nhằm khắc phục và hạn chế một phần các giới hạn của chủ nghĩa tư bản. Tuy nhiên, do thực tiễn vẫn còn tồn tại nhiều hạn chế như khoảng cách giàu nghèo, bất bình đẳng tiếp cận nguồn lực, hiệu quả sử dụng vốn nhà nước và chất lượng tăng trưởng chưa cao nên mô hình này chưa thể giải quyết hoàn toàn các giới hạn lịch sử đó.",
     },
   ];
 

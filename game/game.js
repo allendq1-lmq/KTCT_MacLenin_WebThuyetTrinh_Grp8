@@ -156,14 +156,14 @@ const StandaloneReignsGame = (() => {
       speakerTitle: "Tổng cục Dự trữ Nhà nước",
       speakerName: "Đặng Hữu Tài",
       dialogue:
-        "Mất mùa diện rộng khiến giá gạo trên thị trường nội địa tăng 35%, đồng thời giá gạo xuất khẩu chạm đỉnh lịch sử. Thương lái ráo riết thu gom gạo để gom bán ra nước ngoài nhằm kiếm lời khủng.",
+        "Mất mùa diện rộng khiến giá gạo trên thị trường nội địa tăng 35%, đồng thời giá gạo xuất khẩu chạm đỉnh lịch sử. Thương lái ráo riết thu gom lúa gạo để xuất bán ra nước ngoài nhằm kiếm lời khủng.",
       left: {
         label: "Thả Tự Do Xuất Khẩu Gạo",
         effects: { growth: +20, equity: -25, environment: -10, stability: -20 },
         quality: "wrong",
       },
       right: {
-        label: "Xả Kho Dự Trữ & Hạn Ngạch Xuất",
+        label: "Xả Kho Dự Trữ & Hạn Ngạch Xuất Khẩu",
         effects: { growth: -10, equity: +25, environment: 0, stability: +20 },
         quality: "correct",
       },
@@ -319,7 +319,7 @@ const StandaloneReignsGame = (() => {
         quality: "wrong",
       },
       right: {
-        label: "Đóng Cửa, Đẩy Điện Mái Nhà Và Nhập Điện",
+        label: "Đóng Cửa, Phát Triển Điện Mái Nhà Và Nhập Điện",
         effects: { growth: -15, equity: +5, environment: +20, stability: -10 },
         quality: "correct",
       },
@@ -395,7 +395,7 @@ const StandaloneReignsGame = (() => {
         quality: "wrong",
       },
       right: {
-        label: "Xây Có Điều Kiện, Trích Quỹ Trồng Rừng Bù",
+        label: "Xây Có Điều Kiện, Lập Quỹ Trồng Rừng Thay Thế",
         effects: { growth: +5, equity: +5, environment: -5, stability: -10 },
         quality: "correct",
       },
@@ -475,7 +475,7 @@ const StandaloneReignsGame = (() => {
       right: {
         label: "Hợp Tác Tư Nhân Dẫn Dắt",
         effects: { growth: +15, equity: +10, environment: -5, stability: +15 },
-        quality: "correct",
+        quality: "tradeoff",
       },
     },
     {

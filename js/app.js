@@ -490,9 +490,36 @@ document.addEventListener("DOMContentLoaded", () => {
           "pagedown",
           "home",
           "end",
+          "d",
+          "t",
+          "escape",
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
         ].includes(k)
       ) {
-        e.preventDefault();
+        if (
+          [
+            "arrowleft",
+            "arrowright",
+            "arrowup",
+            "arrowdown",
+            " ",
+            "pageup",
+            "pagedown",
+            "home",
+            "end",
+          ].includes(k)
+        ) {
+          e.preventDefault();
+        }
         forwardKeyToIframe("presentation-frame", "keydown", e.key, e.code);
       }
       return;
@@ -516,6 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "a",
           "s",
           "d",
+          "v",
           "arrowup",
           "arrowdown",
           "arrowleft",

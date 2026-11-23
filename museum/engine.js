@@ -15,6 +15,7 @@ window.MuseumEngine = (() => {
 
   let camYaw = 0; // Góc xoay ngang (radian), 0 = hướng về -Z
   let camPitch = 0.04; // Góc ngẩng/cúi (radian)
+  let cameraMode = "third"; // "third" (qua vai) hoặc "first" (góc nhìn thứ nhất ẩn avatar)
 
   // Giới hạn chống xuyên tường cho Camera trong 4 bức tường từng phòng
   const roomCameraBounds = {
@@ -527,13 +528,19 @@ window.MuseumEngine = (() => {
     const accentColor = tagColor || meta.color || "#d97706";
     const visualType = meta.visualType || meta.id || "r1-1a";
 
+    // Lớp bo giấy mỹ thuật (Archival Passepartout Matboard) màu than ấm sâu 28px quanh tranh
     const bgGrad = ctx.createLinearGradient(0, 0, 1024, 700);
-    bgGrad.addColorStop(0, "#1c1f29");
-    bgGrad.addColorStop(1, "#14161e");
+    bgGrad.addColorStop(0, "#11131a");
+    bgGrad.addColorStop(1, "#14161f");
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, 1024, 700);
 
-    const photoRect = { x: 0, y: 0, w: 1024, h: 700 };
+    const photoRect = { x: 28, y: 28, w: 968, h: 644 };
+    ctx.fillStyle = "#161822";
+    ctx.fillRect(photoRect.x, photoRect.y, photoRect.w, photoRect.h);
+    ctx.strokeStyle = "rgba(212, 160, 56, 0.35)";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(photoRect.x - 1, photoRect.y - 1, photoRect.w + 2, photoRect.h + 2);
 
     const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
     const captureEpoch = sceneEpoch;
@@ -2002,14 +2009,16 @@ window.MuseumEngine = (() => {
     return currentRoom;
   }
 
-  // Cập nhật tọa độ và hướng nhìn Camera Shift-Lock (luôn khóa sau lưng lệch vai phải nhân vật + chống xuyên tường)
+  // Cập nhật tọa độ và hướng nhìn Camera Shift-Lock (hỗ trợ cả Góc nhìn Thứ ba qua vai & Thứ nhất tại mắt người xem)
   function updateShiftLockCamera() {
     if (!camera || !window.MuseumAvatar) return;
     const avatar = window.MuseumAvatar.getAvatar();
     if (!avatar) return;
 
     const bounds = roomCameraBounds[currentRoom] || roomCameraBounds[1];
+    const isFirstPerson = cameraMode === "first";
 
+    avatar.visible = !isFirstPerson;
     // Nhân vật luôn xoay lưng về phía camera và hướng mặt theo góc nhìn ngang (camYaw)
     avatar.rotation.y = -camYaw;
 
@@ -2017,15 +2026,19 @@ window.MuseumEngine = (() => {
     const rightX = Math.cos(camYaw);
     const rightZ = Math.sin(camYaw);
 
-    // Điểm tựa vai phải của sinh viên UIT (lệch phải 0.45 đơn vị, cao 1.62 đơn vị)
+    const activeRightOffset = isFirstPerson ? 0 : CAM_RIGHT_OFFSET;
+    const activePivotY = isFirstPerson ? 1.65 : CAM_PIVOT_Y;
+    const activeDistance = isFirstPerson ? 0.05 : CAM_DISTANCE;
+
+    // Điểm tựa vai phải (Thứ 3) hoặc vị trí mắt người xem (Thứ 1)
     const pivotX = THREE.MathUtils.clamp(
-      avatar.position.x + rightX * CAM_RIGHT_OFFSET,
+      avatar.position.x + rightX * activeRightOffset,
       bounds.minX + 0.2,
       bounds.maxX - 0.2,
     );
-    const pivotY = avatar.position.y + CAM_PIVOT_Y;
+    const pivotY = avatar.position.y + activePivotY;
     const pivotZ = THREE.MathUtils.clamp(
-      avatar.position.z + rightZ * CAM_RIGHT_OFFSET,
+      avatar.position.z + rightZ * activeRightOffset,
       bounds.minZ + 0.2,
       bounds.maxZ - 0.2,
     );
@@ -2036,10 +2049,10 @@ window.MuseumEngine = (() => {
     const lookDirY = Math.sin(camPitch);
     const lookDirZ = -Math.cos(camYaw) * cosPitch;
 
-    // Vị trí mong muốn của camera ở phía sau vai phải 3.2 đơn vị
-    const offsetX = -lookDirX * CAM_DISTANCE;
-    const offsetY = -lookDirY * CAM_DISTANCE;
-    const offsetZ = -lookDirZ * CAM_DISTANCE;
+    // Vị trí mong muốn của camera
+    const offsetX = -lookDirX * activeDistance;
+    const offsetY = -lookDirY * activeDistance;
+    const offsetZ = -lookDirZ * activeDistance;
 
     // Chống xuyên tường: thu ngắn khoảng cách tia camera nếu chạm vào 4 bức tường / sàn / trần
     let maxScale = 1.0;
@@ -2107,6 +2120,20 @@ window.MuseumEngine = (() => {
 
   function getCameraAngles() {
     return { yaw: camYaw, pitch: camPitch };
+  }
+
+  function getCameraMode() {
+    return cameraMode;
+  }
+
+  function setCameraMode(mode) {
+    cameraMode = mode === "first" ? "first" : "third";
+    updateShiftLockCamera();
+    return cameraMode;
+  }
+
+  function toggleCameraMode() {
+    return setCameraMode(cameraMode === "first" ? "third" : "first");
   }
 
   // Đồng bộ vị trí sinh viên UIT và góc nhìn Shift-Lock tới trước một hiện vật
@@ -2179,6 +2206,7 @@ window.MuseumEngine = (() => {
 
     if (window.MuseumAvatar && window.MuseumAvatar.create) {
       const avatar = window.MuseumAvatar.create();
+      avatar.visible = cameraMode !== "first";
       scene.add(avatar);
     }
 
@@ -2401,6 +2429,9 @@ window.MuseumEngine = (() => {
     rotateCamera,
     setCameraAngles,
     getCameraAngles,
+    getCameraMode,
+    setCameraMode,
+    toggleCameraMode,
     cancelTransition,
     onWindowResize,
     setPaused,

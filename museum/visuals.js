@@ -1351,11 +1351,11 @@ window.MuseumVisuals = (() => {
     accentColor,
     caption,
   ) {
-    const r = rect || { x: 0, y: 0, w: 1024, h: 700 };
+    const r = rect || { x: 28, y: 28, w: 968, h: 644 };
     ctx.save();
     roundedRectPath(ctx, r.x, r.y, r.w, r.h, 2);
     ctx.clip();
-    ctx.fillStyle = "#161820";
+    ctx.fillStyle = "#161822";
     ctx.fillRect(r.x, r.y, r.w, r.h);
 
     const iw = img.naturalWidth || img.width || 1280;
@@ -1366,6 +1366,28 @@ window.MuseumVisuals = (() => {
     const dx = r.x + (r.w - dw) / 2;
     const dy = r.y + (r.h - dh) / 2;
     ctx.drawImage(img, dx, dy, dw, dh);
+
+    // Warm Museum Color Grading: phủ lớp cân bằng tông ấm rất nhẹ để 20 bức tranh hài hòa ánh sáng bảo tàng
+    ctx.fillStyle = "rgba(255, 238, 206, 0.045)";
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+
+    // Warm Archival Vignette nhẹ ở 4 góc ảnh
+    const cx = r.x + r.w / 2;
+    const cy = r.y + r.h / 2;
+    const maxR = Math.hypot(r.w / 2, r.h / 2);
+    const vig = ctx.createRadialGradient(cx, cy, maxR * 0.56, cx, cy, maxR);
+    const edgeAlpha = visualType === "r3-table" ? 0.12 : 0.24;
+    vig.addColorStop(0, "rgba(0, 0, 0, 0)");
+    vig.addColorStop(1, `rgba(10, 11, 16, ${edgeAlpha})`);
+    ctx.fillStyle = vig;
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.restore();
+
+    // Đường chỉ vàng đồng mảnh ngăn cách giữa bo giấy mỹ thuật và bức ảnh
+    ctx.save();
+    ctx.strokeStyle = "rgba(212, 160, 56, 0.35)";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(r.x - 0.5, r.y - 0.5, r.w + 1, r.h + 1);
     ctx.restore();
   }
 

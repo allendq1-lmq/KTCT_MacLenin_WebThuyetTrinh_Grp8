@@ -697,10 +697,38 @@ window.MuseumControls = (() => {
       { passive: true },
     );
 
-    // Cập nhật giao diện khi bật/tắt khóa trỏ chuột Shift-Lock
+    // Cập nhật giao diện khi bật/tắt khóa trỏ chuột Shift-Lock và chế độ Góc nhìn Thứ 1 / Thứ 3
     const shiftLockBtn = document.getElementById("btn-shiftlock-status");
     const shiftLockLabel = document.getElementById("shiftlock-state-label");
     const crosshair = document.getElementById("shiftlock-crosshair");
+    const cameraModeBtn = document.getElementById("btn-camera-mode");
+    const cameraModeLabel = document.getElementById("camera-mode-label");
+    const cameraModeShort = document.getElementById("camera-mode-short");
+
+    const syncCameraModeButton = (mode) => {
+      const isFirst = mode === "first";
+      if (cameraModeLabel) {
+        cameraModeLabel.textContent = isFirst ? "Góc nhìn: Thứ 1" : "Góc nhìn: Thứ 3";
+      }
+      if (cameraModeShort) {
+        cameraModeShort.textContent = isFirst ? "Góc 1" : "Góc 3";
+      }
+      if (cameraModeBtn) {
+        cameraModeBtn.classList.toggle("is-first-person", isFirst);
+        cameraModeBtn.setAttribute("aria-pressed", isFirst ? "true" : "false");
+      }
+    };
+
+    if (cameraModeBtn) {
+      cameraModeBtn.addEventListener("click", () => {
+        if (window.MuseumEngine && window.MuseumEngine.toggleCameraMode) {
+          syncCameraModeButton(window.MuseumEngine.toggleCameraMode());
+        }
+      });
+    }
+    if (window.MuseumEngine && window.MuseumEngine.getCameraMode) {
+      syncCameraModeButton(window.MuseumEngine.getCameraMode());
+    }
 
     if (shiftLockBtn) {
       shiftLockBtn.addEventListener("click", () =>
@@ -800,6 +828,24 @@ window.MuseumControls = (() => {
             return;
           }
         }
+      }
+
+      // Phím V chuyển đổi Góc nhìn Thứ 1 / Thứ 3
+      if (k === "v" && !e.ctrlKey && !e.metaKey && !e.altKey && !e.repeat && !isDrawerOpen()) {
+        if (window.MuseumEngine && window.MuseumEngine.toggleCameraMode) {
+          const nextMode = window.MuseumEngine.toggleCameraMode();
+          const modeBtn = document.getElementById("btn-camera-mode");
+          const modeLabel = document.getElementById("camera-mode-label");
+          const modeShort = document.getElementById("camera-mode-short");
+          const isFirst = nextMode === "first";
+          if (modeLabel) modeLabel.textContent = isFirst ? "Góc nhìn: Thứ 1" : "Góc nhìn: Thứ 3";
+          if (modeShort) modeShort.textContent = isFirst ? "Góc 1" : "Góc 3";
+          if (modeBtn) {
+            modeBtn.classList.toggle("is-first-person", isFirst);
+            modeBtn.setAttribute("aria-pressed", isFirst ? "true" : "false");
+          }
+        }
+        return;
       }
 
       // Phím Shift bật/tắt khóa trỏ chuột (Pointer Lock)

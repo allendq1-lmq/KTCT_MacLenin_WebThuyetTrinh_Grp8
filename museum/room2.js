@@ -1,5 +1,45 @@
-// museum/room2.js - Phòng 2: Năm đặc trưng cơ bản của KTTT ĐHXHCN ở Việt Nam (Bệ trung tâm 2.a + 5 Cột trụ 2.b)
+// museum/room2.js - Phòng 2: Năm đặc trưng cơ bản của KTTT ĐHXHCN ở Việt Nam (Đài trưng bày đa tầng tĩnh tại + 5 Cột rãnh đá thanh lịch)
 window.MuseumRoom2 = (() => {
+  function createFlutedColumnTexture() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#dfd9ce";
+    ctx.fillRect(0, 0, 512, 512);
+
+    const flutes = 24;
+    const step = 512 / flutes;
+    for (let i = 0; i < flutes; i++) {
+      const x = i * step;
+      const g = ctx.createLinearGradient(x, 0, x + step, 0);
+      g.addColorStop(0, "#b9b0a1");
+      g.addColorStop(0.25, "#eee9df");
+      g.addColorStop(0.55, "#dfd8cb");
+      g.addColorStop(0.85, "#c2b9aa");
+      g.addColorStop(1, "#ada495");
+      ctx.fillStyle = g;
+      ctx.fillRect(x, 0, step + 0.5, 512);
+    }
+
+    // Dải hoa văn chỉ đồng mảnh trầm ở phần trên & dưới thân cột
+    ctx.fillStyle = "rgba(180, 135, 56, 0.35)";
+    ctx.fillRect(0, 18, 512, 6);
+    ctx.fillRect(0, 488, 512, 6);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    if (THREE.SRGBColorSpace && "colorSpace" in tex) {
+      tex.colorSpace = THREE.SRGBColorSpace;
+    } else if (THREE.sRGBEncoding) {
+      tex.encoding = THREE.sRGBEncoding;
+    }
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.ClampToEdgeWrapping;
+    tex.needsUpdate = true;
+    return tex;
+  }
+
   function build(scene) {
     window.MuseumEngine.createArchitecturalRoom(18, 15, 4.6);
     window.MuseumEngine.createBench(0, 4.2);
@@ -9,31 +49,61 @@ window.MuseumRoom2 = (() => {
         ? window.MuseumData.room2.center
         : null;
 
-    // Bệ trung tâm trình bày phần 2.a) Những đặc điểm chung với các nền kinh tế thị trường
+    // Đài trưng bày đá cẩm thạch đa tầng 2.a tĩnh tại, trang trọng
     const centerGroup = new THREE.Group();
     centerGroup.position.set(0, 0, -0.8);
 
-    const centerPedestalGeo = new THREE.CylinderGeometry(1.35, 1.5, 0.55, 32);
-    const centerPedestalMat = new THREE.MeshStandardMaterial({
-      color: 0x27272a,
+    const marblePedMat = new THREE.MeshStandardMaterial({
+      color: 0x151922,
+      roughness: 0.34,
+      metalness: 0.25,
+    });
+    const brassMat = new THREE.MeshStandardMaterial({
+      color: 0xb8862d,
+      metalness: 0.82,
       roughness: 0.3,
-      metalness: 0.4,
     });
-    const centerPedestal = new THREE.Mesh(centerPedestalGeo, centerPedestalMat);
-    centerPedestal.position.y = 0.275;
-    centerGroup.add(centerPedestal);
 
-    const ringGeo = new THREE.CylinderGeometry(1.05, 1.05, 0.14, 32);
-    const ringMat = new THREE.MeshStandardMaterial({
-      color: 0xf59e0b,
-      metalness: 0.85,
-      roughness: 0.2,
-      emissive: 0xd97706,
-      emissiveIntensity: 0.35,
-    });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.position.y = 0.62;
-    centerGroup.add(ring);
+    const tier1 = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.56, 1.72, 0.2, 36),
+      marblePedMat,
+    );
+    tier1.position.y = 0.1;
+    tier1.castShadow = true;
+    tier1.receiveShadow = true;
+    centerGroup.add(tier1);
+
+    const tier2 = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.28, 1.4, 0.22, 36),
+      marblePedMat,
+    );
+    tier2.position.y = 0.31;
+    tier2.castShadow = true;
+    centerGroup.add(tier2);
+
+    const tier3 = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.02, 1.1, 0.22, 36),
+      marblePedMat,
+    );
+    tier3.position.y = 0.53;
+    tier3.castShadow = true;
+    centerGroup.add(tier3);
+
+    const midBrassRing = new THREE.Mesh(
+      new THREE.TorusGeometry(1.31, 0.022, 12, 48),
+      brassMat,
+    );
+    midBrassRing.rotation.x = Math.PI / 2;
+    midBrassRing.position.y = 0.42;
+    centerGroup.add(midBrassRing);
+
+    const topBrassRing = new THREE.Mesh(
+      new THREE.TorusGeometry(1.03, 0.018, 12, 48),
+      brassMat,
+    );
+    topBrassRing.rotation.x = Math.PI / 2;
+    topBrassRing.position.y = 0.64;
+    centerGroup.add(topBrassRing);
 
     if (centerData) {
       const centerArtTex = window.MuseumEngine.createArtworkTexture(
@@ -74,22 +144,24 @@ window.MuseumRoom2 = (() => {
           lookPos: centerData.lookPos,
         },
       );
-      centerFrame.position.set(0, 2.08, 0);
+      centerFrame.position.set(0, 2.18, 0);
       centerGroup.add(centerFrame);
 
-      centerPedestal.userData = centerFrame.userData;
-      ring.userData = centerFrame.userData;
-      window.MuseumEngine.interactableObjects.push(centerPedestal);
-      window.MuseumEngine.interactableObjects.push(ring);
+      tier1.userData = centerFrame.userData;
+      tier2.userData = centerFrame.userData;
+      tier3.userData = centerFrame.userData;
+      midBrassRing.userData = centerFrame.userData;
+      window.MuseumEngine.interactableObjects.push(tier1);
+      window.MuseumEngine.interactableObjects.push(tier3);
     }
 
     scene.add(centerGroup);
 
-    // Hàng rào cọc chắn bát giác bảo vệ quanh bệ trưng bày trung tâm Phòng 2 (A4)
+    // Hàng rào cọc chắn bát giác bảo vệ quanh bệ trưng bày trung tâm Phòng 2
     if (window.MuseumEngine.createStanchionBarrier) {
       const centerRingSegments = [];
       const sides = 8;
-      const barrierRadius = 1.6;
+      const barrierRadius = 1.85;
       for (let i = 0; i < sides; i++) {
         const a1 = (i * 2 * Math.PI) / sides;
         const a2 = ((i + 1) * 2 * Math.PI) / sides;
@@ -103,19 +175,7 @@ window.MuseumRoom2 = (() => {
       window.MuseumEngine.createStanchionBarrier(centerRingSegments, scene);
     }
 
-    const centerSpot = new THREE.SpotLight(
-      0xfff3d6,
-      1.45,
-      9.5,
-      Math.PI / 3,
-      0.68,
-      1.5,
-    );
-    centerSpot.position.set(0, 4.3, 1.8);
-    centerSpot.target = centerGroup;
-    scene.add(centerSpot);
-
-    // 5 Cột trụ xung quanh trình bày phần 2.b) Năm đặc trưng cơ bản — gom bằng InstancedMesh để giảm Draw Calls (B3)
+    // 5 Cột trụ rãnh đá thanh lịch (InstancedMesh, không vòng neon phát sáng)
     const radius = 5.4;
     if (
       window.MuseumData &&
@@ -130,28 +190,33 @@ window.MuseumRoom2 = (() => {
       const getMat =
         window.MuseumEngine.getSharedMaterial || ((_, fn) => fn());
 
+      const fluteTex = createFlutedColumnTexture();
+
       const baseGeo = getGeo("room2_pillar_base_geo", () =>
-        new THREE.BoxGeometry(1.7, 0.4, 1.7),
+        new THREE.BoxGeometry(1.78, 0.36, 1.78),
+      );
+      const plinthGeo = getGeo("room2_pillar_plinth_geo", () =>
+        new THREE.BoxGeometry(1.48, 0.16, 1.48),
       );
       const shaftGeo = getGeo("room2_pillar_shaft_geo", () =>
-        new THREE.CylinderGeometry(0.58, 0.64, 3.7, 24),
+        new THREE.CylinderGeometry(0.56, 0.64, 3.58, 28),
       );
       const capGeo = getGeo("room2_pillar_cap_geo", () =>
-        new THREE.BoxGeometry(1.6, 0.3, 1.6),
+        new THREE.BoxGeometry(1.66, 0.28, 1.66),
       );
 
       const baseMat = getMat("room2_pillar_base_mat", () =>
         new THREE.MeshStandardMaterial({
-          color: 0x3f3f46,
-          roughness: 0.55,
-          metalness: 0.15,
+          color: 0x161a24,
+          roughness: 0.4,
+          metalness: 0.32,
         }),
       );
       const shaftMat = getMat("room2_pillar_shaft_mat", () =>
         new THREE.MeshStandardMaterial({
-          color: 0xe4e0d8,
-          roughness: 0.65,
-          metalness: 0.05,
+          map: fluteTex,
+          roughness: 0.56,
+          metalness: 0.06,
         }),
       );
 
@@ -159,6 +224,9 @@ window.MuseumRoom2 = (() => {
         typeof THREE.InstancedMesh === "function" && pCount > 0;
       const basesInstanced = useInstanced
         ? new THREE.InstancedMesh(baseGeo, baseMat, pCount)
+        : null;
+      const plinthsInstanced = useInstanced
+        ? new THREE.InstancedMesh(plinthGeo, baseMat, pCount)
         : null;
       const shaftsInstanced = useInstanced
         ? new THREE.InstancedMesh(shaftGeo, shaftMat, pCount)
@@ -178,38 +246,35 @@ window.MuseumRoom2 = (() => {
         pillarGroup.lookAt(0, 0, -0.8);
 
         if (useInstanced) {
-          dummy.position.set(x, 0.2, z);
-          dummy.rotation.copy
-            ? dummy.rotation.copy(pillarGroup.rotation)
-            : dummy.rotation.set(
-                pillarGroup.rotation.x,
-                pillarGroup.rotation.y,
-                pillarGroup.rotation.z,
-              );
+          dummy.rotation.copy(pillarGroup.rotation);
           dummy.scale.set(1, 1, 1);
+
+          dummy.position.set(x, 0.18, z);
           dummy.updateMatrix();
           basesInstanced.setMatrixAt(idx, dummy.matrix);
 
-          dummy.position.set(x, 2.25, z);
+          dummy.position.set(x, 0.44, z);
+          dummy.updateMatrix();
+          plinthsInstanced.setMatrixAt(idx, dummy.matrix);
+
+          dummy.position.set(x, 2.31, z);
           dummy.updateMatrix();
           shaftsInstanced.setMatrixAt(idx, dummy.matrix);
 
-          dummy.position.set(x, 4.25, z);
+          dummy.position.set(x, 4.24, z);
           dummy.updateMatrix();
           capsInstanced.setMatrixAt(idx, dummy.matrix);
         } else {
           const base = new THREE.Mesh(baseGeo, baseMat);
-          base.position.y = 0.2;
-          base.castShadow = true;
+          base.position.y = 0.18;
           pillarGroup.add(base);
 
           const shaft = new THREE.Mesh(shaftGeo, shaftMat);
-          shaft.position.y = 2.25;
-          shaft.castShadow = true;
+          shaft.position.y = 2.31;
           pillarGroup.add(shaft);
 
           const cap = new THREE.Mesh(capGeo, baseMat);
-          cap.position.y = 4.25;
+          cap.position.y = 4.24;
           pillarGroup.add(cap);
         }
 
@@ -252,35 +317,21 @@ window.MuseumRoom2 = (() => {
             lookPos: p.lookPos,
           },
         );
-        frame.position.set(0, 2.2, 0.78);
+        frame.position.set(0, 2.25, 0.78);
         pillarGroup.add(frame);
 
-        const spotTarget = new THREE.Object3D();
-        spotTarget.position.set(0, 2.25, 0);
-        pillarGroup.add(spotTarget);
-
         scene.add(pillarGroup);
-
-        const spot = new THREE.SpotLight(
-          0xfff3d6,
-          1.38,
-          8.5,
-          Math.PI / 3.2,
-          0.68,
-          1.5,
-        );
-        spot.position.set(x * 0.55, 4.3, z * 0.55);
-        spot.target = spotTarget;
-        scene.add(spot);
       });
 
       if (useInstanced) {
         basesInstanced.castShadow = true;
         shaftsInstanced.castShadow = true;
         basesInstanced.instanceMatrix.needsUpdate = true;
+        plinthsInstanced.instanceMatrix.needsUpdate = true;
         shaftsInstanced.instanceMatrix.needsUpdate = true;
         capsInstanced.instanceMatrix.needsUpdate = true;
         scene.add(basesInstanced);
+        scene.add(plinthsInstanced);
         scene.add(shaftsInstanced);
         scene.add(capsInstanced);
       }

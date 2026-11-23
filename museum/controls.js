@@ -7,6 +7,97 @@ window.MuseumControls = (() => {
   let currentExhibitData = null;
   let boundKeys = { w: false, a: false, s: false, d: false };
   let drawerRequestToken = 0;
+  let hoveredExhibitData = null;
+  let proximityTimer = null;
+
+  function isDrawerOpen() {
+    const modal = document.getElementById("detail-drawer-modal");
+    return Boolean(modal && modal.classList && !modal.classList.contains("hidden"));
+  }
+
+  function updateInteractHud(exhibitData) {
+    const hud = document.getElementById("exhibit-interact-hud");
+    if (!hud) return;
+    if (!exhibitData || isDrawerOpen()) {
+      hud.classList.remove("hud-visible");
+      hud.classList.add("hud-hidden");
+      return;
+    }
+    const titleEl = document.getElementById("hud-exhibit-title");
+    const hintEl = document.getElementById("hud-interact-hint");
+    if (titleEl) {
+      titleEl.textContent = exhibitData.title || "Hiện vật trưng bày";
+    }
+    if (hintEl) {
+      hintEl.textContent = "Nhấn chuột để xem chi tiết hiện vật";
+    }
+    hud.classList.remove("hud-hidden");
+    hud.classList.add("hud-visible");
+  }
+
+  function findExhibitUserDataFromObject(obj) {
+    let selected = obj;
+    const rootScene =
+      window.MuseumEngine && window.MuseumEngine.getScene
+        ? window.MuseumEngine.getScene()
+        : null;
+    while (
+      selected &&
+      selected.parent &&
+      (!selected.userData || !selected.userData.title) &&
+      selected.parent !== rootScene
+    ) {
+      selected = selected.parent;
+    }
+    if (selected && selected.userData && selected.userData.title) {
+      return selected.userData;
+    }
+    return null;
+  }
+
+  function resolveExhibitEntry(rawData) {
+    if (!rawData) return null;
+    const playlist = getPlaylist();
+    const foundIdx = playlist.findIndex((item) => item.id === rawData.id);
+    return foundIdx !== -1 ? playlist[foundIdx] : rawData;
+  }
+
+  function findNearestExhibitInRoom(maxDist = 3.9) {
+    if (
+      !window.MuseumAvatar ||
+      typeof window.MuseumAvatar.getAvatar !== "function" ||
+      !window.MuseumEngine ||
+      typeof window.MuseumEngine.getCurrentRoom !== "function"
+    ) {
+      return null;
+    }
+    const avatar = window.MuseumAvatar.getAvatar();
+    if (!avatar) return null;
+    const room = window.MuseumEngine.getCurrentRoom();
+    const items = getPlaylist().filter((item) => item.room === room);
+    let nearest = null;
+    let bestDist = maxDist;
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (typeof it.x === "number" && typeof it.z === "number") {
+        const d = Math.hypot(avatar.position.x - it.x, avatar.position.z - it.z);
+        if (d < bestDist) {
+          bestDist = d;
+          nearest = it;
+        }
+      } else if (it.lookPos && typeof it.lookPos.x === "number") {
+        const d = Math.hypot(
+          avatar.position.x - it.lookPos.x,
+          avatar.position.z - it.lookPos.z,
+        );
+        if (d < bestDist) {
+          bestDist = d;
+          nearest = it;
+        }
+      }
+    }
+    return nearest;
+  }
 
   // Ngưỡng chuẩn phân biệt thao tác Chạm (Tap mở hiện vật) và Kéo (Drag xoay góc nhìn) trên Mobile (C4)
   const TAP_MAX_DISTANCE_PX = 12;
@@ -17,6 +108,7 @@ window.MuseumControls = (() => {
   let isMouseDragging = false;
   let lastMousePos = { x: 0, y: 0 };
   let totalMouseDragDist = 0;
+  let lastHoverRaycastTime = 0;
 
   // Trạng thái xoay góc nhìn đa chạm Mobile (nửa phải màn hình)
   let activeLookTouchId = null;
@@ -101,86 +193,70 @@ window.MuseumControls = (() => {
   }
 
   function buildDrawerVisualShowcase(data, requestToken) {
+    const hasImage = Boolean(data && (data.localImagePath || data.imageUrl));
+    if (!hasImage) return null;
+
     const wrapper = document.createElement("div");
-    wrapper.className = "drawer-visual-showcase";
+    wrapper.className = "drawer-hero-artwork";
 
-    const grid = document.createElement("div");
-    grid.className = "drawer-visual-grid single-panel";
+    const frame = document.createElement("div");
+    frame.className = "drawer-hero-frame";
 
-    // Thẻ 1 (Cách 1): Đồ họa / Infographic Canvas vẽ trực tiếp, luôn hiển thị ngay lập tức
-    const infoUrl =
-      window.MuseumEngine &&
-      typeof window.MuseumEngine.renderInfographicDataUrl === "function"
-        ? window.MuseumEngine.renderInfographicDataUrl(data)
-        : "";
-    if (infoUrl) {
-      const infoCard = document.createElement("div");
-      infoCard.className = "drawer-visual-card is-infographic";
-      const infoHeader = document.createElement("div");
-      infoHeader.className = "drawer-visual-card-label";
-      infoHeader.textContent = "Sơ đồ & Biểu đồ trực quan";
-      const infoImg = document.createElement("img");
-      infoImg.src = infoUrl;
-      infoImg.alt = data.title || "Infographic hiện vật";
-      infoCard.appendChild(infoHeader);
-      infoCard.appendChild(infoImg);
-      grid.appendChild(infoCard);
-    }
+    const heroImg = document.createElement("img");
+    heroImg.alt = data.imageCaption || data.title || "Tư liệu triển lãm";
+    heroImg.loading = "eager";
 
-    wrapper.appendChild(grid);
+    const captionEl = document.createElement("p");
+    captionEl.className = "drawer-hero-caption";
+    captionEl.textContent = data.imageCaption || data.subtitle || "";
 
-    if (data.imageCaption) {
-      const captionEl = document.createElement("p");
-      captionEl.className = "drawer-visual-caption";
-      captionEl.textContent = data.imageCaption;
+    frame.appendChild(heroImg);
+    wrapper.appendChild(frame);
+    if (captionEl.textContent) {
       wrapper.appendChild(captionEl);
     }
 
-    // Thẻ 2 (Cách 2): Nạp ảnh tư liệu local/CORS; thành công -> hiện song song, lỗi/offline -> giữ gọn Infographic
+    const fallbackSrc = data.localImagePath || data.imageUrl || "";
+    if (data.localImagePath) {
+      heroImg.src = data.localImagePath;
+    }
+
     if (
       window.MuseumEngine &&
-      typeof window.MuseumEngine.loadExhibitImageWithFallback === "function" &&
-      (data.localImagePath || data.imageUrl)
+      typeof window.MuseumEngine.loadExhibitImageWithFallback === "function"
     ) {
-      window.MuseumEngine.loadExhibitImageWithFallback(data)
+      window.MuseumEngine.loadExhibitImageWithFallback(data, {
+        tryLocalFirst: true,
+        localTimeoutMs: 8000,
+      })
         .then((res) => {
-          if (requestToken !== drawerRequestToken || !res || !res.ok || !res.src) {
+          if (requestToken !== drawerRequestToken || !wrapper.isConnected) {
             return;
           }
-          if (!wrapper.isConnected) return;
-
-          const photoCard = document.createElement("div");
-          photoCard.className = "drawer-visual-card";
-          const photoHeader = document.createElement("div");
-          photoHeader.className = "drawer-visual-card-label";
-          photoHeader.textContent =
-            res.sourceType === "local"
-              ? "Ảnh tư liệu lưu trữ"
-              : "Tư liệu minh họa (Wikimedia)";
-
-          const photoImg = document.createElement("img");
-          photoImg.alt = data.imageCaption || data.title || "Tư liệu minh họa";
-          if (/\.svg(\.png)?(\?.*)?$/i.test(res.src)) {
-            photoImg.style.objectFit = "contain";
-            photoImg.style.padding = "6px";
-          }
-          photoImg.onerror = () => {
-            photoCard.remove();
-            if (grid.children.length <= 1) {
-              grid.classList.add("single-panel");
+          if (res && res.ok && res.src) {
+            if (heroImg.getAttribute("src") !== res.src) {
+              heroImg.src = res.src;
             }
-          };
-          photoImg.src = res.src;
-
-          photoCard.appendChild(photoHeader);
-          photoCard.appendChild(photoImg);
-          grid.appendChild(photoCard);
-          if (grid.children.length > 1) {
-            grid.classList.remove("single-panel");
+          } else if (!heroImg.getAttribute("src") && fallbackSrc) {
+            heroImg.src = fallbackSrc;
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          if (!heroImg.getAttribute("src") && fallbackSrc) {
+            heroImg.src = fallbackSrc;
+          }
+        });
+    } else if (fallbackSrc) {
+      heroImg.src = fallbackSrc;
     }
+
+    heroImg.onerror = () => {
+      if (data.imageUrl && heroImg.src !== data.imageUrl) {
+        heroImg.src = data.imageUrl;
+      } else {
+        wrapper.remove();
+      }
+    };
 
     return wrapper;
   }
@@ -206,18 +282,27 @@ window.MuseumControls = (() => {
     if (title) title.textContent = data.title || "";
     if (subtitle) subtitle.textContent = data.subtitle || "";
     if (body) {
-      // Modal chi tiết chỉ hiển thị thuần nội dung văn bản (text-only), không chèn ảnh, sơ đồ hay biểu đồ
-      body.innerHTML =
+      body.innerHTML = "";
+      const visualShowcase = buildDrawerVisualShowcase(data, drawerRequestToken);
+      if (visualShowcase) {
+        body.appendChild(visualShowcase);
+      }
+      const textSection = document.createElement("div");
+      textSection.className = "drawer-content-section";
+      textSection.innerHTML =
         data.fullHtml ||
-        `<p class="text-slate-800 leading-relaxed">${data.desc || ""}</p>`;
+        `<p class="text-slate-200 leading-relaxed">${data.desc || ""}</p>`;
+      body.appendChild(textSection);
       body.scrollTop = 0;
     }
     if (modal) modal.classList.remove("hidden");
+    updateInteractHud(null);
   }
 
   function closeDetailDrawer() {
     const modal = document.getElementById("detail-drawer-modal");
     if (modal) modal.classList.add("hidden");
+    updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
   }
 
   // Khi bấm chuột / chạm vào tranh trên tường: mở thẳng modal thông tin đầy đủ hiện vật, không làm bay camera khỏi nhân vật
@@ -454,6 +539,25 @@ window.MuseumControls = (() => {
         if (window.MuseumEngine && window.MuseumEngine.rotateCamera) {
           window.MuseumEngine.rotateCamera(dx * 0.0032, -dy * 0.0032);
         }
+        const now = getNowMs();
+        if (raycaster && camera && now - lastHoverRaycastTime >= 80) {
+          lastHoverRaycastTime = now;
+          mouse.x = 0;
+          mouse.y = 0;
+          raycaster.setFromCamera(mouse, camera);
+          const objects =
+            (window.MuseumEngine && window.MuseumEngine.interactableObjects) ||
+            [];
+          const intersects = raycaster.intersectObjects(objects, true);
+          const hitData =
+            intersects.length > 0
+              ? resolveExhibitEntry(
+                  findExhibitUserDataFromObject(intersects[0].object),
+                )
+              : null;
+          hoveredExhibitData = hitData;
+          updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
+        }
         return;
       }
 
@@ -470,8 +574,13 @@ window.MuseumControls = (() => {
         return;
       }
 
+      const now = getNowMs();
+      if (now - lastHoverRaycastTime < 80) {
+        return;
+      }
       const rect = domElement.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0 && raycaster && camera) {
+        lastHoverRaycastTime = now;
         mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
@@ -480,6 +589,14 @@ window.MuseumControls = (() => {
           [];
         const intersects = raycaster.intersectObjects(objects, true);
         domElement.style.cursor = intersects.length > 0 ? "pointer" : "grab";
+        const hitData =
+          intersects.length > 0
+            ? resolveExhibitEntry(
+                findExhibitUserDataFromObject(intersects[0].object),
+              )
+            : null;
+        hoveredExhibitData = hitData;
+        updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
       }
     });
 
@@ -588,10 +705,38 @@ window.MuseumControls = (() => {
       { passive: true },
     );
 
-    // Cập nhật giao diện khi bật/tắt khóa trỏ chuột Shift-Lock
+    // Cập nhật giao diện khi bật/tắt khóa trỏ chuột Shift-Lock và chế độ Góc nhìn Thứ 1 / Thứ 3
     const shiftLockBtn = document.getElementById("btn-shiftlock-status");
     const shiftLockLabel = document.getElementById("shiftlock-state-label");
     const crosshair = document.getElementById("shiftlock-crosshair");
+    const cameraModeBtn = document.getElementById("btn-camera-mode");
+    const cameraModeLabel = document.getElementById("camera-mode-label");
+    const cameraModeShort = document.getElementById("camera-mode-short");
+
+    const syncCameraModeButton = (mode) => {
+      const isFirst = mode === "first";
+      if (cameraModeLabel) {
+        cameraModeLabel.textContent = isFirst ? "Góc nhìn: Thứ 1" : "Góc nhìn: Thứ 3";
+      }
+      if (cameraModeShort) {
+        cameraModeShort.textContent = isFirst ? "Góc 1" : "Góc 3";
+      }
+      if (cameraModeBtn) {
+        cameraModeBtn.classList.toggle("is-first-person", isFirst);
+        cameraModeBtn.setAttribute("aria-pressed", isFirst ? "true" : "false");
+      }
+    };
+
+    if (cameraModeBtn) {
+      cameraModeBtn.addEventListener("click", () => {
+        if (window.MuseumEngine && window.MuseumEngine.toggleCameraMode) {
+          syncCameraModeButton(window.MuseumEngine.toggleCameraMode());
+        }
+      });
+    }
+    if (window.MuseumEngine && window.MuseumEngine.getCameraMode) {
+      syncCameraModeButton(window.MuseumEngine.getCameraMode());
+    }
 
     if (shiftLockBtn) {
       shiftLockBtn.addEventListener("click", () =>
@@ -620,6 +765,8 @@ window.MuseumControls = (() => {
     roomButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const room = parseInt(btn.getAttribute("data-room"), 10);
+        hoveredExhibitData = null;
+        updateInteractHud(null);
         syncRoomButtons(room);
         closeDetailDrawer();
         if (window.MuseumEngine) window.MuseumEngine.setRoom(room);
@@ -691,6 +838,24 @@ window.MuseumControls = (() => {
         }
       }
 
+      // Phím V chuyển đổi Góc nhìn Thứ 1 / Thứ 3
+      if (k === "v" && !e.ctrlKey && !e.metaKey && !e.altKey && !e.repeat && !isDrawerOpen()) {
+        if (window.MuseumEngine && window.MuseumEngine.toggleCameraMode) {
+          const nextMode = window.MuseumEngine.toggleCameraMode();
+          const modeBtn = document.getElementById("btn-camera-mode");
+          const modeLabel = document.getElementById("camera-mode-label");
+          const modeShort = document.getElementById("camera-mode-short");
+          const isFirst = nextMode === "first";
+          if (modeLabel) modeLabel.textContent = isFirst ? "Góc nhìn: Thứ 1" : "Góc nhìn: Thứ 3";
+          if (modeShort) modeShort.textContent = isFirst ? "Góc 1" : "Góc 3";
+          if (modeBtn) {
+            modeBtn.classList.toggle("is-first-person", isFirst);
+            modeBtn.setAttribute("aria-pressed", isFirst ? "true" : "false");
+          }
+        }
+        return;
+      }
+
       // Phím Shift bật/tắt khóa trỏ chuột (Pointer Lock)
       if (e.key === "Shift" && !e.repeat) {
         togglePointerLock(domElement);
@@ -757,6 +922,20 @@ window.MuseumControls = (() => {
       : 1;
     syncRoomButtons(initialRoom);
     currentExhibitData = getPlaylist()[0] || null;
+
+    if (!proximityTimer) {
+      proximityTimer = setInterval(() => {
+        if (!isActiveState || isDrawerOpen()) return;
+        if (
+          window.MuseumEngine &&
+          typeof window.MuseumEngine.isPaused === "function" &&
+          window.MuseumEngine.isPaused()
+        ) {
+          return;
+        }
+        updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
+      }, 150);
+    }
   }
 
   return {

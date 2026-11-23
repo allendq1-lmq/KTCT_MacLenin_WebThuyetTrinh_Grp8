@@ -1351,28 +1351,43 @@ window.MuseumVisuals = (() => {
     accentColor,
     caption,
   ) {
-    const r = rect || { x: 18, y: 18, w: 988, h: 664 };
+    const r = rect || { x: 28, y: 28, w: 968, h: 644 };
     ctx.save();
-    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 8);
+    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 2);
     ctx.clip();
-    ctx.fillStyle = "#09101d";
+    ctx.fillStyle = "#161822";
     ctx.fillRect(r.x, r.y, r.w, r.h);
 
     const iw = img.naturalWidth || img.width || 1280;
-    const ih = img.naturalHeight || img.height || 800;
+    const ih = img.naturalHeight || img.height || 850;
     const scale = Math.max(r.w / iw, r.h / ih);
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = r.x + (r.w - dw) / 2;
     const dy = r.y + (r.h - dh) / 2;
     ctx.drawImage(img, dx, dy, dw, dh);
+
+    // Warm Museum Color Grading: phủ lớp cân bằng tông ấm rất nhẹ để 20 bức tranh hài hòa ánh sáng bảo tàng
+    ctx.fillStyle = "rgba(255, 238, 206, 0.045)";
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+
+    // Warm Archival Vignette nhẹ ở 4 góc ảnh
+    const cx = r.x + r.w / 2;
+    const cy = r.y + r.h / 2;
+    const maxR = Math.hypot(r.w / 2, r.h / 2);
+    const vig = ctx.createRadialGradient(cx, cy, maxR * 0.56, cx, cy, maxR);
+    const edgeAlpha = visualType === "r3-table" ? 0.12 : 0.24;
+    vig.addColorStop(0, "rgba(0, 0, 0, 0)");
+    vig.addColorStop(1, `rgba(10, 11, 16, ${edgeAlpha})`);
+    ctx.fillStyle = vig;
+    ctx.fillRect(r.x, r.y, r.w, r.h);
     ctx.restore();
 
+    // Đường chỉ vàng đồng mảnh ngăn cách giữa bo giấy mỹ thuật và bức ảnh
     ctx.save();
-    roundedRectPath(ctx, r.x, r.y, r.w, r.h, 8);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.strokeStyle = "rgba(212, 160, 56, 0.35)";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(r.x - 0.5, r.y - 0.5, r.w + 1, r.h + 1);
     ctx.restore();
   }
 
@@ -1432,10 +1447,17 @@ window.MuseumVisuals = (() => {
         if (settled) return;
         settled = true;
         cleanup();
-        if ((img.naturalWidth || img.width) > 0) {
-          resolve({ img, src });
+        const finish = () => {
+          if ((img.naturalWidth || img.width) > 0) {
+            resolve({ img, src });
+          } else {
+            reject(new Error("Loaded image has zero width"));
+          }
+        };
+        if (typeof img.decode === "function") {
+          img.decode().then(finish, finish);
         } else {
-          reject(new Error("Loaded image has zero width"));
+          finish();
         }
       };
 
@@ -1484,26 +1506,15 @@ window.MuseumVisuals = (() => {
     }
 
     const localTimeoutMs =
-      typeof options.localTimeoutMs === "number" ? options.localTimeoutMs : 2500;
+      typeof options.localTimeoutMs === "number" ? options.localTimeoutMs : 8000;
     const remoteTimeoutMs =
       typeof options.remoteTimeoutMs === "number"
         ? options.remoteTimeoutMs
         : 4000;
 
     const promise = (async () => {
-      let shouldTryLocal = Boolean(
-        exhibit.localImagePath &&
-          (exhibit.preferLocal === true ||
-            options.tryLocalFirst === true ||
-            !exhibit.imageUrl),
-      );
-      if (!shouldTryLocal && exhibit.localImagePath) {
-        const manifestSet = await getLocalManifest();
-        shouldTryLocal = manifestContains(manifestSet, exhibit.localImagePath);
-      }
-
-      // Bước 1: Ưu tiên ảnh local trước nếu có khai báo trong manifest/preferLocal hoặc không có ảnh mạng
-      if (shouldTryLocal) {
+      // Bước 1: Ưu tiên nạp thẳng ảnh local ngay lập tức nếu có khai báo localImagePath (không qua hàng đợi & không fetch images/manifest.json)
+      if (exhibit.localImagePath) {
         try {
           const localRes = await tryLoadSingleImage(
             exhibit.localImagePath,
@@ -1517,7 +1528,7 @@ window.MuseumVisuals = (() => {
             src: localRes.src,
           };
         } catch (_) {
-          // Chưa có ảnh local -> chuyển tiếp sang URL Wikimedia CORS-friendly
+          // Fallback sang URL dự phòng từ Wikimedia nếu ảnh local không nạp được
         }
       }
 
@@ -1539,6 +1550,7 @@ window.MuseumVisuals = (() => {
             src: remoteRes.src,
           };
         } catch (err) {
+          remoteUrlCache.delete(exhibit.imageUrl);
           return {
             ok: false,
             reason: err && err.message ? err.message : "load-failed",
@@ -1551,6 +1563,16 @@ window.MuseumVisuals = (() => {
 
     if (cacheKey) {
       imageCache.set(cacheKey, promise);
+      promise.then(
+        (res) => {
+          if (!res || !res.ok) {
+            imageCache.delete(cacheKey);
+          }
+        },
+        () => {
+          imageCache.delete(cacheKey);
+        },
+      );
     }
     return promise;
   }

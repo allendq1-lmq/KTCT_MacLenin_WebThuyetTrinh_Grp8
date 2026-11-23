@@ -46,23 +46,23 @@ window.MuseumData = (() => {
   ];
 
   const comparisonTableHtml = `
-    <div class="overflow-x-auto rounded-xl border border-slate-300 bg-white shadow-sm">
-      <table class="pres-comp-table w-full text-left border-collapse">
+    <div class="editorial-table-wrap">
+      <table class="pres-comp-table text-left">
         <thead>
-          <tr class="bg-slate-900 text-white border-b border-slate-300">
-            <th class="font-extrabold text-amber-400 w-[22%]">Tiêu chí so sánh</th>
-            <th class="font-extrabold text-rose-300 w-[39%] border-l border-slate-700">Kinh tế thị trường Tư bản chủ nghĩa</th>
-            <th class="font-extrabold text-emerald-300 w-[39%] border-l border-slate-700">Kinh tế thị trường định hướng XHCN Việt Nam</th>
+          <tr>
+            <th class="font-extrabold text-amber-300 w-[22%]">Tiêu chí so sánh</th>
+            <th class="font-extrabold text-rose-300 w-[39%] border-l border-slate-700/70">Kinh tế thị trường Tư bản chủ nghĩa</th>
+            <th class="font-extrabold text-emerald-300 w-[39%] border-l border-slate-700/70">Kinh tế thị trường định hướng XHCN Việt Nam</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-200 bg-white text-slate-800">
+        <tbody>
           ${comparisonTableRows
             .map(
               (r) => `
-            <tr class="hover:bg-slate-50 transition-colors">
-              <td class="font-bold text-slate-900 align-top bg-amber-50/40">${r.criteria}</td>
-              <td class="text-slate-700 border-l border-slate-200 align-top bg-rose-50/25">${r.capitalist}</td>
-              <td class="text-slate-900 font-semibold border-l border-slate-200 align-top bg-emerald-50/40">${r.socialist}</td>
+            <tr>
+              <td class="editorial-td-criteria">${r.criteria}</td>
+              <td class="editorial-td-capitalist">${r.capitalist}</td>
+              <td class="editorial-td-socialist">${r.socialist}</td>
             </tr>
           `,
             )
@@ -92,7 +92,7 @@ window.MuseumData = (() => {
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
       imageCaption:
-        "Thương mại & lưu thông hàng hóa theo các quy luật thị trường (Ảnh: Wikimedia Commons)",
+        "Chợ Bến Thành (TP.HCM) — biểu tượng giao thương hàng hóa theo các quy luật thị trường (Ảnh: Diego Delso / Wikimedia Commons)",
       badge: "Mục 1.1a • Khái Niệm Nền Tảng",
       title: "1.1a. Kinh Tế Thị Trường Nói Chung",
       subtitle: "Thành tựu phát triển chung của văn minh nhân loại",
@@ -107,37 +107,37 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">Bản chất của Kinh tế thị trường (KTTT)</h4>
-              <p class="text-slate-800">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">Bản chất của Kinh tế thị trường (KTTT)</h4>
+              <p class="text-slate-200">
                 <strong>Kinh tế thị trường</strong> là nền kinh tế trong đó các quan hệ sản xuất, trao đổi, phân phối và tiêu dùng đều thực hiện qua thị trường. Ba vấn đề cơ bản (<em>sản xuất cái gì, như thế nào, cho ai</em>) do thị trường quyết định qua 4 quy luật: <strong>Giá trị, Cung – cầu, Cạnh tranh, Lưu thông tiền tệ</strong>.
               </p>
             </div>
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">Nguồn gốc & Giá trị văn minh nhân loại</h4>
-              <p class="text-slate-800">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">Nguồn gốc & Giá trị văn minh nhân loại</h4>
+              <p class="text-slate-200">
                 <strong>Nguồn gốc:</strong> Là giai đoạn phát triển cao của kinh tế hàng hóa khi phân công lao động xã hội và tách biệt kinh tế phát triển.<br/>
                 <strong>Thành tựu chung:</strong> KTTT <em>không phải sản phẩm riêng của CNTB</em>; CNTB chỉ là chế độ đã sử dụng và đưa KTTT lên trình độ cao.
               </p>
             </div>
           </div>
-          <div class="pres-subcard bg-slate-50 border border-slate-300">
-            <h4 class="text-slate-900 font-bold">Sự đa dạng các mô hình KTTT trên thế giới:</h4>
+          <div class="editorial-card">
+            <h4 class="text-slate-100 font-bold">Sự đa dạng các mô hình KTTT trên thế giới:</h4>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1.5">
-              <div class="p-2 rounded-lg bg-white border border-slate-200">
-                <span class="text-amber-700 font-bold">1. Hoa Kỳ:</span> Mô hình kinh tế thị trường tự do.
+              <div class="editorial-mini-card">
+                <span class="text-amber-300 font-bold">1. Hoa Kỳ:</span> Mô hình kinh tế thị trường tự do.
               </div>
-              <div class="p-2 rounded-lg bg-white border border-slate-200">
-                <span class="text-amber-700 font-bold">2. CHLB Đức:</span> Mô hình kinh tế thị trường xã hội.
+              <div class="editorial-mini-card">
+                <span class="text-amber-300 font-bold">2. CHLB Đức:</span> Mô hình kinh tế thị trường xã hội.
               </div>
-              <div class="p-2 rounded-lg bg-white border border-slate-200">
-                <span class="text-amber-700 font-bold">3. Nhật Bản, Hàn Quốc:</span> KTTT gắn với vai trò điều phối mạnh của Nhà nước.
+              <div class="editorial-mini-card">
+                <span class="text-amber-300 font-bold">3. Nhật Bản, Hàn Quốc:</span> KTTT gắn với vai trò điều phối mạnh của Nhà nước.
               </div>
-              <div class="p-2 rounded-lg bg-white border border-slate-200">
-                <span class="text-amber-700 font-bold">4. Trung Quốc:</span> KTTT xã hội chủ nghĩa mang đặc sắc Trung Quốc.
+              <div class="editorial-mini-card">
+                <span class="text-amber-300 font-bold">4. Trung Quốc:</span> KTTT xã hội chủ nghĩa mang đặc sắc Trung Quốc.
               </div>
             </div>
-            <p class="mt-1.5 text-slate-600 italic">
+            <p class="mt-1.5 text-slate-300 italic">
               Kết luận: Không có một mô hình KTTT chung cho mọi quốc gia; mỗi nước phải lựa chọn mô hình phù hợp với điều kiện lịch sử và mục tiêu phát triển.
             </p>
           </div>
@@ -160,9 +160,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.1b • KHÁI NIỆM KTTT ĐỊNH HƯỚNG XHCN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_Vietnam.svg/960px-Flag_of_Vietnam.svg.png",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/National_Assembly_of_Vietnam.JPG/1280px-National_Assembly_of_Vietnam.JPG",
       imageCaption:
-        "Định hướng XHCN vì mục tiêu Dân giàu, nước mạnh, dân chủ, công bằng, văn minh",
+        "Tòa nhà Quốc hội Việt Nam (Hà Nội) — cơ quan lập hiến, lập pháp bảo đảm định hướng XHCN (Ảnh: Grayswoodsurrey / Wikimedia Commons)",
       badge: "Mục 1.1b • Mô Hình Tổng Quát",
       title: "1.1b. Khái Niệm KTTT Định Hướng XHCN Việt Nam",
       subtitle: "Văn kiện Đại hội XIII (2021) & Điều 51 Hiến pháp 2013",
@@ -177,22 +177,22 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">Định nghĩa cốt lõi</h4>
-              <p class="text-slate-800">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">Định nghĩa cốt lõi</h4>
+              <p class="text-slate-200">
                 <strong>Kinh tế thị trường định hướng xã hội chủ nghĩa</strong> là mô hình kinh tế tổng quát của Việt Nam trong thời kỳ quá độ lên CNXH. Vận hành tuân theo các quy luật vốn có của KTTT; đồng thời được Nhà nước định hướng, điều tiết dưới sự lãnh đạo của Đảng Cộng sản Việt Nam.
               </p>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">Hiến định tại Điều 51 Hiến pháp 2013</h4>
-              <p class="text-slate-800">
+            <div class="editorial-card editorial-card--emerald">
+              <h4 class="text-emerald-300 font-bold">Hiến định tại Điều 51 Hiến pháp 2013</h4>
+              <p class="text-slate-200">
                 Xác định nền kinh tế Việt Nam là nền KTTT định hướng XHCN với <strong>nhiều hình thức sở hữu và nhiều thành phần kinh tế</strong>; kinh tế nhà nước giữ vai trò chủ đạo. Vừa dựa trên nguyên tắc thị trường, vừa dẫn dắt bởi bản chất ưu việt của CNXH.
               </p>
             </div>
           </div>
-          <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-            <h4 class="text-sky-800 font-bold">Quan niệm chính thức tại Văn kiện Đại hội XIII (2021):</h4>
-            <blockquote class="border-l-4 border-amber-600 pl-3 py-1 mt-1 text-slate-800 italic">
+          <div class="editorial-card editorial-card--sky">
+            <h4 class="text-sky-300 font-bold">Quan niệm chính thức tại Văn kiện Đại hội XIII (2021):</h4>
+            <blockquote class="editorial-quote">
               “Kinh tế thị trường định hướng xã hội chủ nghĩa là nền kinh tế thị trường hiện đại, hội nhập quốc tế, vận hành đầy đủ, đồng bộ theo các quy luật của kinh tế thị trường, có sự quản lý của Nhà nước pháp quyền xã hội chủ nghĩa, do Đảng Cộng sản Việt Nam lãnh đạo; việc phát triển nền kinh tế này phải bảo đảm định hướng xã hội chủ nghĩa vì mục tiêu <strong>‘dân giàu, nước mạnh, dân chủ, công bằng, văn minh’</strong>, phù hợp với từng giai đoạn phát triển của đất nước.”
             </blockquote>
           </div>
@@ -215,9 +215,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.2a • GIAI ĐOẠN TRƯỚC ĐỔI MỚI (1986)",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Agricultural_output_Vietnam.svg/960px-Agricultural_output_Vietnam.svg.png",
+        "https://upload.wikimedia.org/wikipedia/commons/9/99/Tem_phi%E1%BA%BFu_th%E1%BB%9Di_bao_c%E1%BA%A5p.jpg",
       imageCaption:
-        "Chuyển biến sản xuất nông nghiệp từ Khoán 100 (1981) & giai đoạn tiền Đổi mới",
+        "Tem phiếu thực phẩm thời bao cấp Việt Nam (phiếu I–V tiêu chuẩn công nhân viên) — ký ức cơ chế kế hoạch hóa tập trung trước Đổi mới 1986 (Ảnh: Wikimedia Commons)",
       badge: "Mục 1.2a • Trước Năm 1986",
       title: "1.2a. Giai Đoạn Trước Đổi Mới (Trước 1986)",
       subtitle: "Cơ chế kế hoạch hóa tập trung, bao cấp & các bước tìm tòi",
@@ -231,27 +231,27 @@ window.MuseumData = (() => {
       desc: "Trước năm 1986, nền kinh tế vận hành theo cơ chế kế hoạch hóa tập trung, quan liêu, bao cấp. Trước khủng hoảng KT-XH sau năm 1975, Đảng đã có những bước tìm tòi đột phá (HNTW 6 khóa IV năm 1979, Chỉ thị 100 năm 1981, HNTW 8 khóa V năm 1985) chuẩn bị tiền đề cho Đổi mới.",
       fullHtml: `
         <div class="pres-detail-stack">
-          <div class="pres-subcard bg-slate-50 border border-slate-300">
-            <h4 class="text-slate-900 font-bold">Đặc trưng cơ chế kế hoạch hóa tập trung, quan liêu, bao cấp</h4>
-            <ul class="list-disc list-inside space-y-1 text-slate-800 mt-1">
+          <div class="editorial-card">
+            <h4 class="text-slate-100 font-bold">Đặc trưng cơ chế kế hoạch hóa tập trung, quan liêu, bao cấp</h4>
+            <ul class="list-disc list-inside space-y-1 text-slate-200 mt-1">
               <li>Coi KTTT là sản phẩm riêng của CNTB; không thừa nhận sản xuất hàng hóa và cơ chế thị trường tồn tại khách quan trong thời kỳ quá độ.</li>
               <li>Kế hoạch hóa tập trung được xem là đặc trưng tuyệt đối, thị trường chỉ giữ vai trò thứ yếu.</li>
               <li>Từng phát huy tác dụng tập trung nguồn lực trong chiến tranh, nhưng sau 1975 bộc lộ hạn chế nghiêm trọng: <strong>triệt tiêu động lực lao động, sản xuất đình đốn, lạm phát phi mã, khủng hoảng KT-XH</strong>.</li>
             </ul>
           </div>
-          <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-            <h4 class="text-amber-800 font-bold">Ba bước tìm tòi, thử nghiệm tiền đề cho Đổi mới:</h4>
+          <div class="editorial-card editorial-card--amber">
+            <h4 class="text-amber-300 font-bold">Ba bước tìm tòi, thử nghiệm tiền đề cho Đổi mới:</h4>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-1.5">
-              <div class="p-2.5 rounded-lg bg-white border border-amber-200">
-                <strong class="text-amber-800 block">1. HNTW 6 khóa IV (1979):</strong>
+              <div class="editorial-mini-card">
+                <strong class="text-amber-300 block">1. HNTW 6 khóa IV (1979):</strong>
                 Chủ trương khắc phục khuyết điểm quản lý kinh tế, làm cho sản xuất <em>“bung ra”</em>.
               </div>
-              <div class="p-2.5 rounded-lg bg-white border border-amber-200">
-                <strong class="text-amber-800 block">2. Chỉ thị 100-CT/TW (1981):</strong>
+              <div class="editorial-mini-card">
+                <strong class="text-amber-300 block">2. Chỉ thị 100-CT/TW (1981):</strong>
                 Thực hiện <em>khoán sản phẩm</em> cuối cùng đến nhóm và người lao động trong HTX nông nghiệp.
               </div>
-              <div class="p-2.5 rounded-lg bg-white border border-amber-200">
-                <strong class="text-amber-800 block">3. HNTW 8 khóa V (1985):</strong>
+              <div class="editorial-mini-card">
+                <strong class="text-amber-300 block">3. HNTW 8 khóa V (1985):</strong>
                 Dứt khoát xóa bỏ cơ chế tập trung quan liêu, bao cấp, chuyển sang hạch toán kinh doanh XHCN.
               </div>
             </div>
@@ -275,9 +275,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.2b • TƯ DUY ĐỔI MỚI (1986 – 2000)",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Ho_Chi_Minh_City%2C_City_Hall%2C_2020-01_CN-03.jpg/960px-Ho_Chi_Minh_City%2C_City_Hall%2C_2020-01_CN-03.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Ayuntamiento%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_09.JPG/1280px-Ayuntamiento%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_09.JPG",
       imageCaption:
-        "Đổi mới tư duy kinh tế giai đoạn 1986–2000: Kinh tế nhiều thành phần & hội nhập",
+        "Trụ sở UBND TP.HCM về đêm — dấu ấn đổi mới tư duy kinh tế giai đoạn 1986–2000 (Ảnh: Diego Delso / Wikimedia Commons)",
       badge: "Mục 1.2b • Giai Đoạn 1986 – 2000",
       title: "1.2b. Từ Đại Hội VI Đến Đại Hội VIII (1986–2000)",
       subtitle: "Đổi mới tư duy kinh tế & thừa nhận sản xuất hàng hóa",
@@ -292,28 +292,28 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">1. Đại hội VI (12/1986) & HNTW 6 (1989)</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">1. Đại hội VI (12/1986) & HNTW 6 (1989)</h4>
+              <p class="text-slate-200 mt-1">
                 Mở đầu Đổi mới toàn diện, lấy <strong>đổi mới tư duy kinh tế làm trọng tâm</strong>. Khôi phục kinh tế nhiều thành phần, sử dụng quan hệ hàng hóa – tiền tệ, xóa bỏ cơ chế bao cấp, giải phóng mọi năng lực sản xuất.
               </p>
             </div>
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">2. Đại hội VII (1991) – Cương lĩnh</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">2. Đại hội VII (1991) – Cương lĩnh</h4>
+              <p class="text-slate-200 mt-1">
                 Xác định chủ trương chiến lược lâu dài trong suốt thời kỳ quá độ: phát triển <strong>nền kinh tế hàng hóa nhiều thành phần theo định hướng XHCN, vận hành theo cơ chế thị trường có sự quản lý của Nhà nước</strong>.
               </p>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">3. Đại hội VIII (1996) – Nhận thức mới</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--emerald">
+              <h4 class="text-emerald-300 font-bold">3. Đại hội VIII (1996) – Nhận thức mới</h4>
+              <p class="text-slate-200 mt-1">
                 Khẳng định <strong>sản xuất hàng hóa không đối lập với CNXH</strong>, mà là thành tựu của văn minh nhân loại, tồn tại khách quan và cần thiết cho công cuộc xây dựng CNXH.
               </p>
             </div>
           </div>
-          <div class="pres-subcard bg-slate-50 border border-slate-300">
-            <strong class="text-slate-900">Đánh giá tổng kết giai đoạn 1986–2000:</strong>
-            <span class="text-slate-700">Đã thừa nhận kinh tế hàng hóa nhiều thành phần và cơ chế thị trường, nhưng KTTT chủ yếu vẫn được nhìn nhận như một cơ chế/công cụ quản lý, chưa được xác định là mô hình kinh tế tổng quát.</span>
+          <div class="editorial-card">
+            <strong class="text-slate-100">Đánh giá tổng kết giai đoạn 1986–2000:</strong>
+            <span class="text-slate-300">Đã thừa nhận kinh tế hàng hóa nhiều thành phần và cơ chế thị trường, nhưng KTTT chủ yếu vẫn được nhìn nhận như một cơ chế/công cụ quản lý, chưa được xác định là mô hình kinh tế tổng quát.</span>
           </div>
         </div>
       `,
@@ -334,9 +334,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.2c • HOÀN THIỆN THỂ CHẾ (2001 – 2026)",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Hanoi_skyline_with_Ba_Vi_Mountain.jpg/960px-Hanoi_skyline_with_Ba_Vi_Mountain.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Ho_Chi_Minh_City_-_Saigon1324.jpg/1280px-Ho_Chi_Minh_City_-_Saigon1324.jpg",
       imageCaption:
-        "Hoàn thiện đồng bộ thể chế KTTT ĐHXHCN giai đoạn 2001–2026 (NQ 68 & Đại hội XIV)",
+        "Landmark 81 và bờ sông Sài Gòn về đêm — biểu tượng đô thị hiện đại, hội nhập sâu rộng và hoàn thiện thể chế KTTT ĐHXHCN (Ảnh: Wikimedia Commons)",
       badge: "Mục 1.2c • Giai Đoạn 2001 – Nay (ĐH XIV)",
       title: "1.2c. Từ Đại Hội IX (2001) Đến Đại Hội XIV (2026)",
       subtitle: "Xác lập mô hình tổng quát, NQ 68-NQ/TW & Đại hội XIV",
@@ -351,26 +351,26 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div class="pres-subcard bg-white border border-slate-300">
-              <span class="text-amber-700 font-bold block">1. Đại hội IX (2001):</span>
+            <div class="editorial-card">
+              <span class="text-amber-300 font-bold block">1. Đại hội IX (2001):</span>
               Lần đầu tiên chính thức xác định KTTT ĐHXHCN là <strong>mô hình kinh tế tổng quát</strong> của nước ta trong thời kỳ quá độ lên CNXH.
             </div>
-            <div class="pres-subcard bg-white border border-slate-300">
-              <span class="text-amber-700 font-bold block">2. Đại hội X (2006) & XI (2011):</span>
+            <div class="editorial-card">
+              <span class="text-amber-300 font-bold block">2. Đại hội X (2006) & XI (2011):</span>
               Làm rõ mục tiêu dân giàu, nước mạnh, dân chủ, công bằng, văn minh; Cương lĩnh 2011 khẳng định các thành phần kinh tế bình đẳng trước pháp luật.
             </div>
-            <div class="pres-subcard bg-white border border-slate-300">
-              <span class="text-amber-700 font-bold block">3. Đại hội XII (2016) & NQ TW5 (2017):</span>
+            <div class="editorial-card">
+              <span class="text-amber-300 font-bold block">3. Đại hội XII (2016) & NQ TW5 (2017):</span>
               Nêu quan niệm toàn diện về KTTT hiện đại, hội nhập quốc tế; xác định <strong>kinh tế tư nhân là một động lực quan trọng</strong>.
             </div>
-            <div class="pres-subcard bg-white border border-slate-300">
-              <span class="text-amber-700 font-bold block">4. Đại hội XIII (2021):</span>
+            <div class="editorial-card">
+              <span class="text-amber-300 font-bold block">4. Đại hội XIII (2021):</span>
               Xác định rõ vai trò từng thành phần kinh tế; bổ sung <strong>nhân tố xã hội</strong> bên cạnh Nhà nước và thị trường trong vận hành kinh tế.
             </div>
           </div>
-          <div class="pres-subcard bg-amber-50/80 border border-amber-300">
-            <h4 class="text-amber-900 font-bold">Bước ngoặt chiến lược 2024 – 2026:</h4>
-            <p class="text-slate-800 mt-1">
+          <div class="editorial-card editorial-card--amber">
+            <h4 class="text-amber-200 font-bold">Bước ngoặt chiến lược 2024 – 2026:</h4>
+            <p class="text-slate-200 mt-1">
               • <strong>Bốn Nghị quyết chiến lược của Bộ Chính trị (57, 59, 66 và 68-NQ/TW):</strong> Đặc biệt, <strong>Nghị quyết 68-NQ/TW</strong> đặt mục tiêu đến năm 2030 <em>kinh tế tư nhân là một động lực quan trọng nhất của nền kinh tế quốc gia</em>.<br/>
               • <strong>Đại hội XIV của Đảng (tháng 01/2026):</strong> Khẳng định hoàn thiện đồng bộ thể chế KTTT ĐHXHCN, bảo đảm thị trường vận hành thông suốt, giữ vững định hướng XHCN dưới sự quản lý của Nhà nước và lãnh đạo của Đảng.
             </p>
@@ -394,9 +394,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.3 • TÍNH TẤT YẾU KHÁCH QUAN KTTT ĐHXHCN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Ho_Chi_Minh_City_-_DJI_0124-HDR.jpg/960px-Ho_Chi_Minh_City_-_DJI_0124-HDR.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Ch%C3%B9a_V%E1%BA%BD_Terminal%2C_Port_of_H%E1%BA%A3i_Ph%C3%B2ng.JPG/1280px-Ch%C3%B9a_V%E1%BA%BD_Terminal%2C_Port_of_H%E1%BA%A3i_Ph%C3%B2ng.JPG",
       imageCaption:
-        "Thành tựu thực tiễn 2024: Quy mô GDP 476,3 tỷ USD, 17 FTA & 73 quốc gia công nhận",
+        "Cảng container Chùa Vẽ (Hải Phòng) — cửa ngõ giao thương quốc tế và 17 FTA của Việt Nam (Ảnh: Phó Nháy / Wikimedia Commons)",
       badge: "Mục 1.3 • Ba Luận Điểm & Số Liệu 2024",
       title: "1.3. Tính Tất Yếu Khách Quan Của KTTT ĐHXHCN",
       subtitle: "Quy luật lịch sử, thực tiễn GDP 476,3 tỷ USD & mục tiêu XHCN",
@@ -411,37 +411,33 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">1. Phù hợp quy luật và xu thế khách quan</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">1. Phù hợp quy luật và xu thế khách quan</h4>
+              <p class="text-slate-200 mt-1">
                 Chừng nào còn phân công lao động xã hội và sự tách biệt kinh tế thì KTTT còn tồn tại khách quan. Việt Nam quá độ lên CNXH bỏ qua chế độ TBCN nhưng kế thừa thành tựu KTTT nhân loại — bổ sung lý luận về <strong>“khâu trung gian”</strong> phù hợp tiến trình lịch sử – tự nhiên.
               </p>
             </div>
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">3. Phù hợp mục tiêu XHCN & nguyện vọng nhân dân</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">3. Phù hợp mục tiêu XHCN & nguyện vọng nhân dân</h4>
+              <p class="text-slate-200 mt-1">
                 Khắc phục mặt trái tự phát của KTTT TBCN (khủng hoảng, bất bình đẳng, ô nhiễm). Đặt thị trường dưới sự lãnh đạo của Đảng và quản lý của Nhà nước pháp quyền XHCN; lấy con người làm trung tâm, gắn tăng trưởng với công bằng xã hội.
               </p>
             </div>
           </div>
-          <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-            <h4 class="text-emerald-800 font-bold mb-1.5">2. Tính ưu việt thúc đẩy LLSX & Minh chứng thực tiễn năm 2024:</h4>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-              <div class="p-2 rounded-lg bg-white border border-emerald-200 shadow-sm">
-                <span class="text-lg sm:text-xl font-black text-amber-700 block">476,3 tỷ $</span>
-                <span class="text-xs text-slate-600 font-medium">Quy mô GDP 2024 (Hạng 33 TG)</span>
+          <div class="editorial-card editorial-card--emerald">
+            <h4 class="editorial-card-title text-emerald-300">2. Tính ưu việt thúc đẩy LLSX & Minh chứng thực tiễn năm 2024 (~4.700 $/người)</h4>
+            <div class="editorial-stat-strip mt-2">
+              <div class="editorial-stat-card">
+                <span class="editorial-stat-value block">476,3 tỷ $</span>
+                <span class="editorial-stat-label block">Quy mô GDP 2024 (Hạng 33 TG)</span>
               </div>
-              <div class="p-2 rounded-lg bg-white border border-emerald-200 shadow-sm">
-                <span class="text-lg sm:text-xl font-black text-emerald-700 block">~4.700 $</span>
-                <span class="text-xs text-slate-600 font-medium">GDP bình quân đầu người 2024</span>
+              <div class="editorial-stat-card">
+                <span class="editorial-stat-value block">17 FTA</span>
+                <span class="editorial-stat-label block">Với hơn 60 đối tác toàn cầu</span>
               </div>
-              <div class="p-2 rounded-lg bg-white border border-emerald-200 shadow-sm">
-                <span class="text-lg sm:text-xl font-black text-sky-700 block">17 FTA</span>
-                <span class="text-xs text-slate-600 font-medium">Với hơn 60 đối tác toàn cầu</span>
-              </div>
-              <div class="p-2 rounded-lg bg-white border border-emerald-200 shadow-sm">
-                <span class="text-lg sm:text-xl font-black text-slate-900 block">73 Nước</span>
-                <span class="text-xs text-slate-600 font-medium">Công nhận VN là nền KTTT</span>
+              <div class="editorial-stat-card">
+                <span class="editorial-stat-value block">73 Nước</span>
+                <span class="editorial-stat-label block">Công nhận VN là nền KTTT</span>
               </div>
             </div>
           </div>
@@ -464,9 +460,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.4a • VAI TRÒ QUẢN LÝ VĨ MÔ CỦA NHÀ NƯỚC",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg/960px-%E8%B6%8A%E5%8D%97_%E6%B2%B3%E5%86%85_%E5%A4%A7%E4%BC%9A%E5%A0%82_-_panoramio.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Banco_Estatal_de_Vietnam%2C_Hanoi%2C_Vietnam_%2836733497852%29.jpg/1280px-Banco_Estatal_de_Vietnam%2C_Hanoi%2C_Vietnam_%2836733497852%29.jpg",
       imageCaption:
-        "Nhà nước pháp quyền XHCN hoàn thiện pháp luật, điều tiết vĩ mô & bảo đảm an ninh kinh tế",
+        "Trụ sở Ngân hàng Nhà nước Việt Nam (Hà Nội) — điều tiết vĩ mô tiền tệ và giữ vững cân đối lớn (Ảnh: Edgardo W. Olivera / Wikimedia Commons)",
       badge: "Mục 1.4a • Quản Trị Quốc Gia",
       title: "1.4a. Vai Trò Quản Lý Vĩ Mô Của Nhà Nước",
       subtitle: "Kiến tạo phát triển, giữ vững cân đối lớn & an ninh kinh tế",
@@ -481,27 +477,27 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">1. Hoàn thiện pháp luật & ổn định vĩ mô</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">1. Hoàn thiện pháp luật & ổn định vĩ mô</h4>
+              <p class="text-slate-200 mt-1">
                 Chủ động hoàn thiện hệ thống pháp luật phù hợp các cam kết quốc tế; bảo đảm ổn định kinh tế vĩ mô, bảo vệ cạnh tranh lành mạnh, giữ vững các cân đối lớn và an ninh kinh tế.
               </p>
             </div>
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">2. Kiến tạo môi trường & đổi mới sáng tạo</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">2. Kiến tạo môi trường & đổi mới sáng tạo</h4>
+              <p class="text-slate-200 mt-1">
                 Nâng cao chất lượng, hiệu quả quản trị quốc gia; tạo môi trường thuận lợi thúc đẩy doanh nghiệp, khuyến khích khởi nghiệp, đổi mới sáng tạo và các mô hình kinh doanh mới.
               </p>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">3. Phát huy vai trò các tổ chức xã hội</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--emerald">
+              <h4 class="text-emerald-300 font-bold">3. Phát huy vai trò các tổ chức xã hội</h4>
+              <p class="text-slate-200 mt-1">
                 Phát huy vai trò của các tổ chức xã hội, hiệp hội nghề nghiệp trong tham gia hình thành, giám sát và điều tiết các quan hệ kinh tế thị trường minh bạch, lành mạnh.
               </p>
             </div>
-            <div class="pres-subcard bg-slate-50 border border-slate-300">
-              <h4 class="text-slate-900 font-bold">4. Hội nhập chủ động & phòng vệ thương mại</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card">
+              <h4 class="text-slate-100 font-bold">4. Hội nhập chủ động & phòng vệ thương mại</h4>
+              <p class="text-slate-200 mt-1">
                 Đẩy mạnh đa phương hóa, đa dạng hóa kinh tế quốc tế, tránh lệ thuộc vào một thị trường; nâng cao sức chống chịu trước biến động thế giới và hoàn thiện phòng vệ thương mại.
               </p>
             </div>
@@ -525,9 +521,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.4b • BỐN VAI TRÒ LÃNH ĐẠO CỦA ĐẢNG CSVN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Communist_Party_of_Vietnam_flag_logo.svg/960px-Communist_Party_of_Vietnam_flag_logo.svg.png",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-01.jpg/1280px-Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-01.jpg",
       imageCaption:
-        "Sự lãnh đạo toàn diện của Đảng CSVN — Bảo đảm định hướng XHCN",
+        "Lăng Chủ tịch Hồ Chí Minh tại Quảng trường Ba Đình (Hà Nội) — biểu tượng nền tảng tư tưởng lãnh đạo (Ảnh: Uwe Aranas / Wikimedia Commons)",
       badge: "Mục 1.4b • Hạt Nhân Lãnh Đạo",
       title: "1.4b. Bốn Vai Trò Lãnh Đạo Của Đảng CSVN",
       subtitle: "Lãnh đạo toàn diện, định hướng lý luận & kiểm soát quyền lực",
@@ -542,27 +538,27 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">a. Phát triển lý luận & đề ra đường lối</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">a. Phát triển lý luận & đề ra đường lối</h4>
+              <p class="text-slate-200 mt-1">
                 Đảng là lực lượng tiên phong đúc kết thực tiễn, chuyển từ cơ chế mệnh lệnh hành chính sang KTTT ĐHXHCN; đề ra cương lĩnh, chiến lược phát triển KT-XH qua các kỳ Đại hội.
               </p>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">b. Định hướng & giữ vững mục tiêu XHCN</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--emerald">
+              <h4 class="text-emerald-300 font-bold">b. Định hướng & giữ vững mục tiêu XHCN</h4>
+              <p class="text-slate-200 mt-1">
                 Ngăn ngừa tự phát, chệch hướng sang TBCN; bảo đảm tăng trưởng kinh tế luôn đi đôi với tiến bộ, công bằng xã hội, văn hóa, giáo dục, y tế và bảo vệ môi trường.
               </p>
             </div>
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">c. Lãnh đạo xây dựng & hoàn thiện thể chế</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">c. Lãnh đạo xây dựng & hoàn thiện thể chế</h4>
+              <p class="text-slate-200 mt-1">
                 Lãnh đạo Nhà nước thể chế hóa quan điểm chính trị thành pháp luật, chính sách đồng bộ; xác định rõ KT nhà nước chủ đạo, KT tư nhân là động lực quan trọng, cạnh tranh bình đẳng.
               </p>
             </div>
-            <div class="pres-subcard bg-slate-50 border border-slate-300">
-              <h4 class="text-slate-900 font-bold">d. Công tác cán bộ, kiểm tra & giám sát</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card">
+              <h4 class="text-slate-100 font-bold">d. Công tác cán bộ, kiểm tra & giám sát</h4>
+              <p class="text-slate-200 mt-1">
                 Bố trí cán bộ đủ phẩm chất và năng lực vào vị trí trọng yếu; tăng cường kiểm tra, giám sát, phòng chống tham nhũng, lãng phí, tiêu cực trong lĩnh vực kinh tế – tài chính.
               </p>
             </div>
@@ -587,9 +583,9 @@ window.MuseumData = (() => {
     preferLocal: true,
     plaqueTitle: "2.a • ĐẶC ĐIỂM CHUNG CỦA KINH TẾ THỊ TRƯỜNG",
     imageUrl:
-      "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/TR%C3%8AN_S%C3%94NG_S%C3%80I_G%C3%92N_-_panoramio.jpg/960px-TR%C3%8AN_S%C3%94NG_S%C3%80I_G%C3%92N_-_panoramio.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Frankfurt_Stock_Exchange_%28Ank_Kumar%29_02.jpg/1280px-Frankfurt_Stock_Exchange_%28Ank_Kumar%29_02.jpg",
     imageCaption:
-      "Thương mại hàng hải & vận hành đồng bộ các loại thị trường hội nhập quốc tế",
+        "Sàn giao dịch chứng khoán Frankfurt — minh họa cơ chế vận hành chung của kinh tế thị trường hiện đại (Ảnh: Ank Kumar / Wikimedia Commons)",
     badge: "Phòng 2 • Bệ Trung Tâm (Mục 2.a)",
     title: "2.a. Những Đặc Điểm Chung Với Các Nền KTTT",
     subtitle: "Tính phổ biến của kinh tế thị trường và đặc điểm giai đoạn Việt Nam",
@@ -603,26 +599,26 @@ window.MuseumData = (() => {
     desc: "Như mọi nền KTTT hiện đại, nền kinh tế Việt Nam có các chủ thể độc lập tự chủ, giá cả do cung – cầu quyết định, cạnh tranh là động lực, hệ thống thị trường mở hội nhập quốc tế và Nhà nước quản lý vĩ mô. Do xuất phát từ sản xuất nhỏ nên việc tiếp tục hoàn thiện đồng bộ thể chế là yêu cầu tất yếu.",
     fullHtml: `
         <div class="pres-detail-stack">
-          <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-            <h4 class="text-amber-800 font-bold mb-1.5">a) Những đặc điểm chung với các nền kinh tế thị trường thế giới</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-800">
-              <div class="p-2 rounded-lg bg-white border border-amber-200">
+          <div class="editorial-card editorial-card--amber">
+            <h4 class="text-amber-300 font-bold mb-1.5">a) Những đặc điểm chung với các nền kinh tế thị trường thế giới</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-200">
+              <div class="editorial-mini-card">
                 <strong>1. Chủ thể độc lập, tự chủ:</strong> Các chủ thể kinh tế có quyền tự chủ trong quyết định sản xuất, kinh doanh.
               </div>
-              <div class="p-2 rounded-lg bg-white border border-amber-200">
+              <div class="editorial-mini-card">
                 <strong>2. Cơ chế giá cả & cạnh tranh:</strong> Giá cả do cung – cầu quyết định; cạnh tranh thúc đẩy đổi mới công nghệ, năng suất.
               </div>
-              <div class="p-2 rounded-lg bg-white border border-amber-200">
+              <div class="editorial-mini-card">
                 <strong>3. Hệ thống thị trường đồng bộ & mở:</strong> Hàng hóa, dịch vụ, vốn, lao động, KH-CN, bất động sản gắn với hội nhập quốc tế.
               </div>
-              <div class="p-2 rounded-lg bg-white border border-amber-200">
+              <div class="editorial-mini-card">
                 <strong>4. Vai trò điều tiết vĩ mô:</strong> Nhà nước quản lý vĩ mô nhằm khắc phục những khuyết tật tự phát của thị trường.
               </div>
             </div>
           </div>
-          <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-            <h4 class="text-sky-800 font-bold">Đặc điểm mang tính giai đoạn ở Việt Nam:</h4>
-            <p class="text-slate-800 mt-1">
+          <div class="editorial-card editorial-card--sky">
+            <h4 class="text-sky-300 font-bold">Đặc điểm mang tính giai đoạn ở Việt Nam:</h4>
+            <p class="text-slate-200 mt-1">
               Xuất phát từ một nền kinh tế chủ yếu là sản xuất nhỏ, trình độ phát triển còn thấp, một số loại thị trường chưa hình thành đầy đủ, đồng bộ. Đây là đặc điểm mang tính giai đoạn, đặt ra yêu cầu tất yếu phải tiếp tục hoàn thiện thể chế KTTT định hướng XHCN.
             </p>
           </div>
@@ -641,9 +637,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "ĐẶC TRƯNG 1 • VỀ MỤC TIÊU PHÁT TRIỂN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Ho_Chi_Minh_City_panorama_2019_%28cropped%29.jpg/960px-Ho_Chi_Minh_City_panorama_2019_%28cropped%29.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Da_Nang_Dragon_Bridge.jpg/1280px-Da_Nang_Dragon_Bridge.jpg",
       imageCaption:
-        "Phát triển LLSX hiện đại vì mục tiêu Dân giàu, nước mạnh, dân chủ, công bằng, văn minh",
+        "Toàn cảnh cầu Rồng & đô thị Đà Nẵng — hiện thực hóa mục tiêu dân giàu, nước mạnh, văn minh (Ảnh: Wikimedia Commons)",
       badge: "Cột Trụ 01 • Đặc Trưng Mục Tiêu",
       title: "Đặc Trưng 1: Về Mục Tiêu Phát Triển",
       subtitle: "Dân giàu, nước mạnh, dân chủ, công bằng, văn minh",
@@ -657,22 +653,22 @@ window.MuseumData = (() => {
       desc: "Đặc trưng 1 - Về mục tiêu: Hướng tới phát triển lực lượng sản xuất, xây dựng cơ sở vật chất – kỹ thuật của CNXH; nâng cao đời sống nhân dân, thực hiện 'dân giàu, nước mạnh, dân chủ, công bằng, văn minh', gắn liền với xây dựng quan hệ sản xuất tiến bộ, phù hợp.",
       fullHtml: `
         <div class="pres-detail-stack">
-          <div class="pres-subcard bg-amber-50/80 border border-amber-300">
-            <h4 class="text-amber-900 font-bold">1. Về mục tiêu tối thượng của KTTT định hướng XHCN</h4>
-            <p class="text-slate-800 mt-1">
+          <div class="editorial-card editorial-card--amber">
+            <h4 class="text-amber-200 font-bold">1. Về mục tiêu tối thượng của KTTT định hướng XHCN</h4>
+            <p class="text-slate-200 mt-1">
               Kinh tế thị trường định hướng XHCN hướng tới <strong>phát triển lực lượng sản xuất, xây dựng cơ sở vật chất – kỹ thuật của chủ nghĩa xã hội; nâng cao đời sống nhân dân, thực hiện “dân giàu, nước mạnh, dân chủ, công bằng, văn minh”</strong>.
             </p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">Cơ sở chính trị – xã hội</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">Cơ sở chính trị – xã hội</h4>
+              <p class="text-slate-200 mt-1">
                 Mục tiêu đó bắt nguồn từ cơ sở kinh tế – xã hội của thời kỳ quá độ lên CNXH và là sự phản ánh mục tiêu chính trị – xã hội mà nhân dân ta đang phấn đấu dưới sự lãnh đạo của Đảng Cộng sản Việt Nam.
               </p>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">Gắn kết LLSX và QHSX</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--emerald">
+              <h4 class="text-emerald-300 font-bold">Gắn kết LLSX và QHSX</h4>
+              <p class="text-slate-200 mt-1">
                 Đi đôi với phát triển lực lượng sản xuất hiện đại, quá trình phát triển KTTT ở Việt Nam gắn liền với <strong>xây dựng quan hệ sản xuất tiến bộ, phù hợp</strong> nhằm hoàn thiện cơ sở kinh tế – xã hội của CNXH.
               </p>
             </div>
@@ -688,14 +684,14 @@ window.MuseumData = (() => {
       visualType: "r2-b2",
       localImagePath: "assets/exhibits/r2-b2.jpg",
       preferLocal: true,
-      plaqueTitle: "ĐẶC TRƯNG 2 • SỞ HỮU & THÀNH PHẦN KINH TẾ",
+      plaqueTitle: "ĐẶC TRƯNG 2 • QUAN HỆ SỞ HỮU & THÀNH PHẦN KINH TẾ",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Newone_-_Hung_An_-_VinFast_2020.jpg/960px-Newone_-_Hung_An_-_VinFast_2020.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Hoa_Binh_Dam.JPG/1280px-Hoa_Binh_Dam.JPG",
       imageCaption:
-        "Đa dạng sở hữu: KT nhà nước chủ đạo, KT tư nhân là một động lực quan trọng",
-      badge: "Cột Trụ 02 • Sở Hữu & Thành Phần KT",
-      title: "Đặc Trưng 2: Quan Hệ Sở Hữu & Thành Phần KT",
-      subtitle: "Nội dung kinh tế - pháp lý; KT nhà nước chủ đạo, KT tư nhân động lực",
+        "Nhà máy Thủy điện Hòa Bình — công trình hạ tầng năng lượng chiến lược nơi Kinh tế Nhà nước giữ vai trò chủ đạo (Ảnh: Fargo888 / Wikimedia Commons)",
+      badge: "Cột Trụ 02 • Sở Hữu & Thành Phần Kinh Tế",
+      title: "Đặc Trưng 2: Quan Hệ Sở Hữu & Thành Phần Kinh Tế",
+      subtitle: "Nội dung kinh tế - pháp lý; kinh tế nhà nước chủ đạo, kinh tế tư nhân là động lực",
       color: "#0284c7",
       lines: [
         "• Sở hữu gồm hai mặt: Nội dung kinh tế & Nội dung pháp lý.",
@@ -707,19 +703,19 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">a) Bản chất của Sở hữu (Kinh tế & Pháp lý)</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">a) Bản chất của Sở hữu (Kinh tế & Pháp lý)</h4>
+              <p class="text-slate-200 mt-1">
                 <strong>Sở hữu</strong> là quan hệ giữa người với người trong sản xuất và tái sản xuất xã hội trên cơ sở chiếm hữu nguồn lực và kết quả lao động (gồm: <em>chủ thể, đối tượng, lợi ích</em>).
               </p>
-              <ul class="list-disc list-inside space-y-1 text-slate-800 mt-1.5">
-                <li><strong class="text-amber-800">Nội dung kinh tế:</strong> Sở hữu là điều kiện của sản xuất, là lợi ích kinh tế mà chủ thể sở hữu được thụ hưởng.</li>
-                <li><strong class="text-amber-800">Nội dung pháp lý:</strong> Thể hiện những quy định pháp luật về quyền hạn và nghĩa vụ của chủ thể sở hữu.</li>
+              <ul class="list-disc list-inside space-y-1 text-slate-200 mt-1.5">
+                <li><strong class="text-amber-300">Nội dung kinh tế:</strong> Sở hữu là điều kiện của sản xuất, là lợi ích kinh tế mà chủ thể sở hữu được thụ hưởng.</li>
+                <li><strong class="text-amber-300">Nội dung pháp lý:</strong> Thể hiện những quy định pháp luật về quyền hạn và nghĩa vụ của chủ thể sở hữu.</li>
               </ul>
             </div>
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">b) Cơ cấu kinh tế nhiều thành phần ở Việt Nam</h4>
-              <ul class="list-disc list-inside space-y-1.5 text-slate-800 mt-1.5">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">b) Cơ cấu kinh tế nhiều thành phần ở Việt Nam</h4>
+              <ul class="list-disc list-inside space-y-1.5 text-slate-200 mt-1.5">
                 <li><strong>Kinh tế nhà nước</strong> giữ vai trò <strong>chủ đạo</strong>.</li>
                 <li><strong>Kinh tế tư nhân</strong> là một <strong>động lực quan trọng</strong>.</li>
                 <li><strong>Kinh tế nhà nước, kinh tế tập thể cùng với kinh tế tư nhân</strong> là <strong>nòng cốt</strong> để phát triển nền kinh tế độc lập, tự chủ.</li>
@@ -742,7 +738,7 @@ window.MuseumData = (() => {
       imageUrl:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Presidential_Palace%2C_Hanoi%2C_April_2011.jpg/960px-Presidential_Palace%2C_Hanoi%2C_April_2011.jpg",
       imageCaption:
-        "Nhà nước pháp quyền XHCN của nhân dân, do nhân dân, vì nhân dân dưới sự lãnh đạo của Đảng",
+        "Phủ Chủ tịch (Hà Nội) — biểu trưng cho Nhà nước pháp quyền XHCN của nhân dân, do nhân dân, vì nhân dân (Ảnh: Andrea Schaffer / Wikimedia Commons)",
       badge: "Cột Trụ 03 • Quan Hệ Quản Lý",
       title: "Đặc Trưng 3: Quan Hệ Quản Lý Nền Kinh Tế",
       subtitle: "Nhà nước pháp quyền XHCN dưới sự lãnh đạo của Đảng CSVN",
@@ -756,22 +752,22 @@ window.MuseumData = (() => {
       desc: "Đặc trưng 3 - Về quan hệ quản lý: Nhà nước quản lý nền kinh tế là Nhà nước pháp quyền XHCN của nhân dân, do nhân dân, vì nhân dân dưới sự lãnh đạo của Đảng Cộng sản và chịu sự làm chủ, giám sát của nhân dân; quản lý bằng pháp luật, chiến lược, quy hoạch trên cơ sở tôn trọng nguyên tắc thị trường.",
       fullHtml: `
         <div class="pres-detail-stack">
-          <div class="pres-subcard bg-amber-50/80 border border-amber-300">
-            <h4 class="text-amber-900 font-bold">Bản chất đặc trưng trong cơ chế quản lý ở Việt Nam</h4>
-            <p class="text-slate-800 mt-1">
+          <div class="editorial-card editorial-card--amber">
+            <h4 class="text-amber-200 font-bold">Bản chất đặc trưng trong cơ chế quản lý ở Việt Nam</h4>
+            <p class="text-slate-200 mt-1">
               Ở mọi quốc gia hiện đại, nhà nước đều can thiệp để khắc phục khuyết tật thị trường. Đặc trưng riêng của Việt Nam là: <strong>Nhà nước quản lý và thực hành cơ chế quản lý là Nhà nước pháp quyền xã hội chủ nghĩa của nhân dân, do nhân dân, vì nhân dân dưới sự lãnh đạo của Đảng Cộng sản, chịu sự làm chủ và giám sát của nhân dân.</strong>
             </p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">Vai trò của Đảng Cộng sản Việt Nam</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">Vai trò của Đảng Cộng sản Việt Nam</h4>
+              <p class="text-slate-200 mt-1">
                 Lãnh đạo nền KTTT định hướng XHCN thông qua cương lĩnh, đường lối phát triển KT-XH và các chủ trương, quyết sách lớn trong từng thời kỳ phát triển của đất nước.
               </p>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">Vai trò của Nhà nước pháp quyền XHCN</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--emerald">
+              <h4 class="text-emerald-300 font-bold">Vai trò của Nhà nước pháp quyền XHCN</h4>
+              <p class="text-slate-200 mt-1">
                 Quản lý nền kinh tế thông qua pháp luật, chiến lược, kế hoạch, quy hoạch, cơ chế chính sách và các công cụ kinh tế trên cơ sở tôn trọng nguyên tắc thị trường.
               </p>
             </div>
@@ -791,7 +787,7 @@ window.MuseumData = (() => {
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/C%E1%BA%A7u_Cao_L%C3%A3nh.jpg/960px-C%E1%BA%A7u_Cao_L%C3%A3nh.jpg",
       imageCaption:
-        "Công bằng phân phối đầu vào (hạ tầng, cơ hội) & đa dạng phân phối đầu ra theo lao động, an sinh",
+        "Cầu Cao Lãnh (Đồng Tháp) — kết nối hạ tầng liên vùng, bảo đảm cơ hội phát triển công bằng (Ảnh: Bùi Thụy Đào Nguyên / Wikimedia Commons)",
       badge: "Cột Trụ 04 • Quan Hệ Phân Phối",
       title: "Đặc Trưng 4: Quan Hệ Phân Phối (Đầu Vào & Đầu Ra)",
       subtitle: "Công bằng cơ hội tiếp cận nguồn lực & đa dạng hình thức phân phối",
@@ -806,22 +802,22 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <h4 class="text-emerald-800 font-bold">1. Phân phối đầu vào</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--emerald">
+              <h4 class="text-emerald-300 font-bold">1. Phân phối đầu vào</h4>
+              <p class="text-slate-200 mt-1">
                 Thực hiện <strong>phân phối công bằng các yếu tố sản xuất</strong>, bảo đảm quyền tiếp cận và sử dụng các cơ hội, điều kiện phát triển của mọi chủ thể kinh tế để tiến tới xây dựng xã hội mọi người đều giàu có.
               </p>
             </div>
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">2. Phân phối đầu ra</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">2. Phân phối đầu ra</h4>
+              <p class="text-slate-200 mt-1">
                 Phân phối kết quả làm ra chủ yếu theo <strong>kết quả lao động, hiệu quả kinh tế</strong>, đồng thời theo <strong>mức đóng góp vốn cùng các nguồn lực khác</strong> và thông qua <strong>hệ thống an sinh xã hội, phúc lợi xã hội</strong>.
               </p>
             </div>
           </div>
-          <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-            <p class="text-slate-800 font-medium">
-              <strong class="text-sky-800">Điểm cốt lõi:</strong> Trong các hình thức trên, <strong>phân phối theo lao động và hiệu quả kinh tế</strong> cùng <strong>phân phối theo phúc lợi xã hội</strong> là những hình thức phân phối phản ánh rõ nét bản chất định hướng xã hội chủ nghĩa của nền kinh tế thị trường.
+          <div class="editorial-card editorial-card--sky">
+            <p class="text-slate-200 font-medium">
+              <strong class="text-sky-300">Điểm cốt lõi:</strong> Trong các hình thức trên, <strong>phân phối theo lao động và hiệu quả kinh tế</strong> cùng <strong>phân phối theo phúc lợi xã hội</strong> là những hình thức phân phối phản ánh rõ nét bản chất định hướng xã hội chủ nghĩa của nền kinh tế thị trường.
             </p>
           </div>
         </div>
@@ -837,9 +833,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "ĐẶC TRƯNG 5 • TĂNG TRƯỞNG & TIẾN BỘ XÃ HỘI",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12%2C_Qu%E1%BA%ADn_5%2C_TPHCM%2C_Vi%E1%BB%87t_Nam_-_panoramio.jpg/960px-Benh_vien_Cho_Ray_-ph%C6%B0%E1%BB%9Dng_12%2C_Qu%E1%BA%ADn_5%2C_TPHCM%2C_Vi%E1%BB%87t_Nam_-_panoramio.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Constellation_of_Literature_pavilion_-_Temple_of_Literature%2C_Hanoi_-_DSC04557.JPG/1280px-Constellation_of_Literature_pavilion_-_Temple_of_Literature%2C_Hanoi_-_DSC04557.JPG",
       imageCaption:
-        "Gắn tăng trưởng kinh tế với tiến bộ, công bằng xã hội & tiếp cận bình đẳng y tế, giáo dục",
+        "Khuê Văn Các tại Văn Miếu – Quốc Tử Giám (Hà Nội) — biểu trưng di sản văn hóa, giáo dục và phát triển con người làm trung tâm (Ảnh: Daderot / Wikimedia Commons)",
       badge: "Cột Trụ 05 • Tăng Trưởng & Công Bằng",
       title: "Đặc Trưng 5: Gắn Tăng Trưởng Với Công Bằng Xã Hội",
       subtitle: "Thực hiện tiến bộ & công bằng ngay trong từng bước, từng chính sách",
@@ -854,15 +850,15 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-amber-50/70 border border-amber-200">
-              <h4 class="text-amber-800 font-bold">Nguyên tắc xuyên suốt trong phát triển</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--amber">
+              <h4 class="text-amber-300 font-bold">Nguyên tắc xuyên suốt trong phát triển</h4>
+              <p class="text-slate-200 mt-1">
                 Nền KTTT định hướng XHCN ở Việt Nam thực hiện <strong>gắn tăng trưởng kinh tế với công bằng xã hội; phát triển kinh tế đi đôi với phát triển văn hóa – xã hội; thực hiện tiến bộ và công bằng xã hội ngay trong từng chính sách, chiến lược, quy hoạch, kế hoạch và từng giai đoạn phát triển</strong>.
               </p>
             </div>
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">Cơ hội tiếp cận bình đẳng dịch vụ cơ bản</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">Cơ hội tiếp cận bình đẳng dịch vụ cơ bản</h4>
+              <p class="text-slate-200 mt-1">
                 Thực hiện công bằng xã hội không chỉ dựa vào điều tiết thu nhập và an sinh phúc lợi, mà còn tạo điều kiện để mọi người dân đều có <strong>cơ hội bình đẳng tiếp cận các dịch vụ xã hội cơ bản (giáo dục, y tế, việc làm…)</strong> để tự cải thiện đời sống và đóng góp cho đất nước.
               </p>
             </div>
@@ -890,9 +886,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.1 • NĂM GIỚI HẠN LỊCH SỬ CỦA CNTB",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927.jpg/960px-Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927_%28cropped%29.jpg/1280px-Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927_%28cropped%29.jpg",
       imageCaption:
-        "Tư liệu lịch sử: Khủng hoảng chu kỳ & thất nghiệp hàng loạt trong CNTB (Ảnh: NARA/Wikimedia)",
+        "Tư liệu NARA (Chicago, 2/1931): Hàng người thất nghiệp trong Đại Suy Thoái — minh chứng giới hạn lịch sử của CNTB (Ảnh: National Archives / Wikimedia Commons)",
       badge: "Mảng Tối • Mục 3.1 (Giới Hạn CNTB)",
       title: "3.1. Năm Giới Hạn Lịch Sử Của Chủ Nghĩa Tư Bản",
       subtitle: "Những khuyết tật cố hữu từ chế độ chiếm hữu tư nhân TBCN",
@@ -907,24 +903,24 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <strong class="text-rose-800 block">1. Mục đích sản xuất vì thiểu số tư bản:</strong>
+            <div class="editorial-card editorial-card--rose">
+              <strong class="text-rose-300 block">1. Mục đích sản xuất vì thiểu số tư bản:</strong>
               Dựa trên chiếm hữu tư nhân TBCN về TLSX; mục đích tối thượng là tối đa hóa giá trị thặng dư và lợi nhuận độc quyền cho tài phiệt.
             </div>
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <strong class="text-rose-800 block">2. Khủng hoảng chu kỳ & lãng phí nguồn lực:</strong>
+            <div class="editorial-card editorial-card--rose">
+              <strong class="text-rose-300 block">2. Khủng hoảng chu kỳ & lãng phí nguồn lực:</strong>
               Mâu thuẫn cơ bản giữa tính chất xã hội hóa cao của LLSX với chiếm hữu tư nhân TBCN dẫn tới khủng hoảng "thừa" so với sức mua.
             </div>
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <strong class="text-rose-800 block">3. Phân hóa giàu nghèo & bất bình đẳng:</strong>
+            <div class="editorial-card editorial-card--rose">
+              <strong class="text-rose-300 block">3. Phân hóa giàu nghèo & bất bình đẳng:</strong>
               Quy luật giá trị thặng dư và tích lũy tư bản làm tài sản tập trung vào thiểu số tư bản độc quyền, đào sâu hố ngăn cách xã hội.
             </div>
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <strong class="text-rose-800 block">4. Suy thoái môi trường & cạn kiệt tài nguyên:</strong>
+            <div class="editorial-card editorial-card--rose">
+              <strong class="text-rose-300 block">4. Suy thoái môi trường & cạn kiệt tài nguyên:</strong>
               Động cơ lợi nhuận tối đa ngắn hạn dẫn tới khai thác kiệt quệ tài nguyên, không tự giải quyết được "ngoại ứng tiêu cực" sinh thái.
             </div>
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200 md:col-span-2">
-              <strong class="text-rose-800 block">5. Gây chiến tranh, xung đột & tranh giành địa chính trị – kinh tế:</strong>
+            <div class="editorial-card editorial-card--rose md:col-span-2">
+              <strong class="text-rose-300 block">5. Gây chiến tranh, xung đột & tranh giành địa chính trị – kinh tế:</strong>
               Khuynh hướng bành trướng của tư bản độc quyền, tư bản tài chính dẫn đến phân chia thị trường, nguyên liệu, chiến tranh thương mại và áp đặt lệ thuộc.
             </div>
           </div>
@@ -947,9 +943,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.2 • NĂM TRỤ CỘT KHẮC PHỤC CỦA VIỆT NAM",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Windmills_D1-D4_%28Thornton_Bank%29.jpg/960px-Windmills_D1-D4_%28Thornton_Bank%29.jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg/1280px-B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg",
       imageCaption:
-        "Chuyển đổi năng lượng xanh Net Zero 2050, giảm nghèo <3% & BHYT >93% dân số",
+        "Cánh đồng điện gió ngoài khơi Bạc Liêu lúc hoàng hôn — định hướng tăng trưởng xanh và phát triển bền vững (Ảnh: Wikimedia Commons)",
       badge: "Mảng Sáng • Mục 3.2 (Khả Năng Khắc Phục)",
       title: "3.2. Năm Trụ Cột Khắc Phục Của KTTT ĐHXHCN Việt Nam",
       subtitle: "Giải pháp lý luận gắn liền minh chứng thực tiễn sinh động tại Việt Nam",
@@ -963,26 +959,40 @@ window.MuseumData = (() => {
       desc: "Mô hình KTTT ĐHXHCN Việt Nam chủ động khắc phục các giới hạn của CNTB qua 5 trụ cột kèm minh chứng thực tiễn: giảm nghèo từ >58% xuống <3%, phát triển hài hòa DNNN & tập đoàn tư nhân (Vingroup, FPT, Thaco...), bao phủ BHYT >93% dân số và cam kết Net Zero 2050.",
       fullHtml: `
         <div class="pres-detail-stack">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <strong class="text-emerald-800 block">1. Về mục tiêu phát triển vì con người:</strong>
-              Hướng tới "Dân giàu, nước mạnh, dân chủ, công bằng, văn minh". <span class="text-amber-800 font-semibold">Thực tiễn VN:</span> Tỷ lệ hộ nghèo giảm từ <strong>trên 58% (1993) xuống dưới 3% hiện nay</strong>; HDI liên tục tăng.
+          <div class="editorial-stat-strip">
+            <div class="editorial-stat-card">
+              <span class="editorial-stat-value block">&lt;3% Hộ nghèo</span>
+              <span class="editorial-stat-label block">Giảm mạnh từ &gt;58% năm 1993</span>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <strong class="text-emerald-800 block">2. Về sở hữu & thành phần kinh tế:</strong>
-              KTNN chủ đạo, KTTN là động lực quan trọng. <span class="text-amber-800 font-semibold">Thực tiễn VN:</span> DNNN giữ hạ tầng chiến lược; tập đoàn tư nhân (<strong>Vingroup, FPT, Thaco...</strong>) và Viettel lớn mạnh.
+            <div class="editorial-stat-card">
+              <span class="editorial-stat-value block">&gt;93% BHYT</span>
+              <span class="editorial-stat-label block">Bao phủ y tế &amp; an sinh toàn dân</span>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <strong class="text-emerald-800 block">3. Về quản lý & vai trò Nhà nước:</strong>
-              Nhà nước pháp quyền XHCN sửa chữa "thất bại thị trường". <span class="text-amber-800 font-semibold">Thực tiễn VN:</span> Giữ ổn định vĩ mô, kiểm soát lạm phát, bình ổn giá điện, y tế, giáo dục trước khủng hoảng.
+            <div class="editorial-stat-card">
+              <span class="editorial-stat-value block">Net Zero 2050</span>
+              <span class="editorial-stat-label block">Cam kết tăng trưởng xanh COP26</span>
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200">
-              <strong class="text-emerald-800 block">4. Về phân phối & an sinh xã hội:</strong>
-              Kết hợp phân phối theo lao động, vốn và phúc lợi. <span class="text-amber-800 font-semibold">Thực tiễn VN:</span> <strong>BHYT toàn dân bao phủ >93% dân số</strong>, Chương trình Giảm nghèo bền vững & Nông thôn mới.
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div class="editorial-card editorial-card--emerald">
+              <strong class="text-emerald-300 block mb-1">1. Về mục tiêu phát triển vì con người:</strong>
+              Hướng tới "Dân giàu, nước mạnh, dân chủ, công bằng, văn minh". <span class="text-amber-300 font-semibold">Thực tiễn VN:</span> Tỷ lệ hộ nghèo giảm từ <strong>trên 58% (1993) xuống dưới 3% hiện nay</strong>; HDI liên tục tăng.
             </div>
-            <div class="pres-subcard bg-emerald-50/70 border border-emerald-200 md:col-span-2">
-              <strong class="text-emerald-800 block">5. Gắn tăng trưởng với công bằng & bảo vệ môi trường:</strong>
-              Không hy sinh công bằng và môi trường để chạy theo tăng trưởng đơn thuần. <span class="text-amber-800 font-semibold">Thực tiễn VN:</span> Cam kết phát thải ròng bằng "0" (<strong>Net Zero 2050</strong>) tại COP26, Luật Bảo vệ Môi trường 2020, kinh tế tuần hoàn.
+            <div class="editorial-card editorial-card--emerald">
+              <strong class="text-emerald-300 block">2. Về sở hữu & thành phần kinh tế:</strong>
+              KTNN chủ đạo, KTTN là động lực quan trọng. <span class="text-amber-300 font-semibold">Thực tiễn VN:</span> DNNN giữ hạ tầng chiến lược; tập đoàn tư nhân (<strong>Vingroup, FPT, Thaco...</strong>) và Viettel lớn mạnh.
+            </div>
+            <div class="editorial-card editorial-card--emerald">
+              <strong class="text-emerald-300 block">3. Về quản lý & vai trò Nhà nước:</strong>
+              Nhà nước pháp quyền XHCN sửa chữa "thất bại thị trường". <span class="text-amber-300 font-semibold">Thực tiễn VN:</span> Giữ ổn định vĩ mô, kiểm soát lạm phát, bình ổn giá điện, y tế, giáo dục trước khủng hoảng.
+            </div>
+            <div class="editorial-card editorial-card--emerald">
+              <strong class="text-emerald-300 block">4. Về phân phối & an sinh xã hội:</strong>
+              Kết hợp phân phối theo lao động, vốn và phúc lợi. <span class="text-amber-300 font-semibold">Thực tiễn VN:</span> <strong>BHYT toàn dân bao phủ >93% dân số</strong>, Chương trình Giảm nghèo bền vững & Nông thôn mới.
+            </div>
+            <div class="editorial-card editorial-card--emerald md:col-span-2">
+              <strong class="text-emerald-300 block">5. Gắn tăng trưởng với công bằng & bảo vệ môi trường:</strong>
+              Không hy sinh công bằng và môi trường để chạy theo tăng trưởng đơn thuần. <span class="text-amber-300 font-semibold">Thực tiễn VN:</span> Cam kết phát thải ròng bằng "0" (<strong>Net Zero 2050</strong>) tại COP26, Luật Bảo vệ Môi trường 2020, kinh tế tuần hoàn.
             </div>
           </div>
         </div>
@@ -1004,9 +1014,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.BẢNG • ĐỐI CHIẾU KTTT TBCN & KTTT ĐHXHCN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/DJI_0550-HDR-Pano_Bitexco_Financial_Tower.jpg/960px-DJI_0550-HDR-Pano_Bitexco_Financial_Tower.jpg",
+        "assets/exhibits/r3-table.jpg",
       imageCaption:
-        "Đối chiếu 6 tiêu chí bản chất giữa KTTT Tư bản chủ nghĩa và KTTT Định hướng XHCN",
+        "Tác phẩm đối chiếu 6 tiêu chí bản chất giữa KTTT Tư bản chủ nghĩa (Mảng tối) và KTTT Định hướng XHCN Việt Nam (Mảng sáng)",
       badge: "Trung Tâm Phòng 3 • Bảng Đối Chiếu 6 Tiêu Chí",
       title: "Bảng So Sánh Đối Chiếu: KTTT TBCN vs. KTTT ĐHXHCN",
       subtitle: "Đối chiếu trực diện 6 tiêu chí bản chất giữa hai mô hình kinh tế thị trường",
@@ -1040,9 +1050,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.3a • BỐN HẠN CHẾ THỰC TIỄN HIỆN NAY",
       imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Hanoi_Traffic_Ba_Dinh_Dist..jpg/960px-Hanoi_Traffic_Ba_Dinh_Dist..jpg",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Evening_streetscene_%2814424306687%29.jpg/1280px-Evening_streetscene_%2814424306687%29.jpg",
       imageCaption:
-        "Bốn hạn chế thực tiễn: hợp tác xã yếu, thể chế kinh tế số & khoảng cách giàu nghèo",
+        "Đô thị TP.HCM về đêm — sự đối lập giữa áp lực giao thông, ánh đèn thương mại và người lao động bên vỉa hè phản ánh thách thức phân hóa xã hội (Ảnh: Wikimedia Commons)",
       badge: "Mảng Tối • Mục 3.3a (Hạn Chế Hiện Nay)",
       title: "3.3a. Bốn Hạn Chế Còn Đọng Lại Hiện Nay Ở Việt Nam",
       subtitle: "Nhìn thẳng vào sự thật những bất cập trong thực tiễn vận hành",
@@ -1057,27 +1067,27 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <h4 class="text-rose-800 font-bold">1. Yếu tố XHCN chưa phát huy như mong muốn</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--rose">
+              <h4 class="text-rose-300 font-bold">1. Yếu tố XHCN chưa phát huy như mong muốn</h4>
+              <p class="text-slate-200 mt-1">
                 Một số mô hình kinh tế hợp tác xã còn yếu kém, chưa thu hút nông dân. Quản lý Nhà nước còn kẽ hở dẫn tới lũng đoạn thị trường, gian lận thương mại, hàng giả, ô nhiễm môi trường và đa cấp biến tướng.
               </p>
             </div>
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <h4 class="text-rose-800 font-bold">2. Thể chế chưa theo kịp kinh tế số & công nghệ 4.0</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--rose">
+              <h4 class="text-rose-300 font-bold">2. Thể chế chưa theo kịp kinh tế số & công nghệ 4.0</h4>
+              <p class="text-slate-200 mt-1">
                 Sự bùng nổ nhanh của kinh doanh trực tuyến trên mạng xã hội và nền tảng số xuyên biên giới khiến quy định pháp luật và cơ chế quản lý (đặc biệt là quản lý thuế) có thời điểm chưa theo kịp thực tiễn.
               </p>
             </div>
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <h4 class="text-rose-800 font-bold">3. Môi trường kinh doanh chưa thực sự bình đẳng</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--rose">
+              <h4 class="text-rose-300 font-bold">3. Môi trường kinh doanh chưa thực sự bình đẳng</h4>
+              <p class="text-slate-200 mt-1">
                 Doanh nghiệp tư nhân vẫn gặp khó khăn khi tiếp cận vốn, đất đai, thông tin và đấu thầu; trong khi một số DNNN được ưu tiên nguồn lực nhưng sử dụng vốn kém hiệu quả, gây thất thoát, lãng phí.
               </p>
             </div>
-            <div class="pres-subcard bg-rose-50/70 border border-rose-200">
-              <h4 class="text-rose-800 font-bold">4. Khoảng cách giàu nghèo & tệ tham nhũng, lợi ích nhóm</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--rose">
+              <h4 class="text-rose-300 font-bold">4. Khoảng cách giàu nghèo & tệ tham nhũng, lợi ích nhóm</h4>
+              <p class="text-slate-200 mt-1">
                 Khoảng cách giàu nghèo có xu hướng tăng, nhất là giữa thành thị và nông thôn (thu nhập nông dân còn thấp). Tình trạng quan liêu, tham nhũng, lãng phí và "lợi ích nhóm" chưa được ngăn chặn triệt để.
               </p>
             </div>
@@ -1101,9 +1111,9 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.3b • BỐN GIẢI PHÁP HOÀN THIỆN ĐỒNG BỘ",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Khu_trung_t%C3%A2m_th%C3%A0nh_ph%E1%BB%91_H%E1%BB%93_Ch%C3%AD_Minh%2C_nh%C3%ACn_t%E1%BB%AB_ph%C3%ADa_qu%E1%BA%ADn_2.JPG/960px-Khu_trung_t%C3%A2m_th%C3%A0nh_ph%E1%BB%91_H%E1%BB%93_Ch%C3%AD_Minh%2C_nh%C3%ACn_t%E1%BB%AB_ph%C3%ADa_qu%E1%BA%ADn_2.JPG",
+        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Ba_Son_Bridge%2C_Saigon_%2820230705_1516%29.jpg/1280px-Ba_Son_Bridge%2C_Saigon_%2820230705_1516%29.jpg",
       imageCaption:
-        "Bốn giải pháp đồng bộ: hoàn thiện pháp lý kinh tế số, minh bạch DNNN & an sinh nông thôn",
+        "Cầu Ba Son vượt sông Sài Gòn — giải pháp đột phá hạ tầng kết nối và hoàn thiện thể chế đồng bộ (Ảnh: Syced / Wikimedia Commons)",
       badge: "Mảng Sáng • Mục 3.3b (Bốn Giải Pháp)",
       title: "3.3b. Bốn Giải Pháp Khắc Phục Hạn Chế Hiện Nay",
       subtitle: "Phương hướng hoàn thiện đồng bộ thể chế KTTT ĐHXHCN Việt Nam",
@@ -1118,27 +1128,27 @@ window.MuseumData = (() => {
       fullHtml: `
         <div class="pres-detail-stack">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">1. Nâng cao hiệu quả quản lý & phát huy yếu tố XHCN</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">1. Nâng cao hiệu quả quản lý & phát huy yếu tố XHCN</h4>
+              <p class="text-slate-200 mt-1">
                 Tăng cường năng lực giám sát thị trường; xử lý nghiêm gian lận thương mại, hàng giả, đa cấp trái phép. Đổi mới hoạt động hợp tác xã theo hướng hiệu quả, tự chủ, gắn với nhu cầu thực tế của nông dân.
               </p>
             </div>
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">2. Hoàn thiện thể chế theo kịp KH-CN & kinh tế số</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">2. Hoàn thiện thể chế theo kịp KH-CN & kinh tế số</h4>
+              <p class="text-slate-200 mt-1">
                 Chủ động bổ sung quy định pháp luật đối với mô hình kinh doanh mới trên nền tảng số và mạng xã hội; hoàn thiện cơ chế quản lý thuế, kiểm soát giao dịch trực tuyến và bảo vệ người tiêu dùng.
               </p>
             </div>
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">3. Bảo đảm cạnh tranh bình đẳng giữa các thành phần</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">3. Bảo đảm cạnh tranh bình đẳng giữa các thành phần</h4>
+              <p class="text-slate-200 mt-1">
                 Tạo điều kiện để DNTN tiếp cận công bằng vốn, đất đai, thông tin, cơ hội đầu tư. Nâng cao quản trị DNNN, công khai tài chính, kiểm soát vốn và xử lý nghiêm các dự án thất thoát, lãng phí.
               </p>
             </div>
-            <div class="pres-subcard bg-sky-50/70 border border-sky-200">
-              <h4 class="text-sky-800 font-bold">4. Gắn kinh tế với công bằng xã hội & chống tham nhũng</h4>
-              <p class="text-slate-800 mt-1">
+            <div class="editorial-card editorial-card--sky">
+              <h4 class="text-sky-300 font-bold">4. Gắn kinh tế với công bằng xã hội & chống tham nhũng</h4>
+              <p class="text-slate-200 mt-1">
                 Thực hiện tốt an sinh xã hội, giảm nghèo bền vững, nâng cao thu nhập nông thôn. Quyết liệt phòng chống tham nhũng, quan liêu, lãng phí và lợi ích nhóm vì lợi ích chung của nhân dân.
               </p>
             </div>
@@ -1164,7 +1174,7 @@ window.MuseumData = (() => {
       imageUrl:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Ho_Chi_Minh_City_Skyline_at_Night.jpg/960px-Ho_Chi_Minh_City_Skyline_at_Night.jpg",
       imageCaption:
-        "Phán quyết tổng kết: Từng bước khắc phục giới hạn lịch sử của CNTB, tiếp tục kiểm chứng qua thực tiễn",
+        "Toàn cảnh trung tâm TP.HCM rực sáng bên sông Sài Gòn — minh chứng thực tiễn cho phán quyết tổng kết (Ảnh: Wikimedia Commons)",
       badge: "Tổng Kết • Phán Quyết & Tài Liệu Tham Khảo",
       title: "Phán Quyết Cuối Cùng & Nguồn Tài Liệu Tham Khảo",
       subtitle: "KTTT định hướng XHCN có giải quyết được giới hạn lịch sử của CNTB không?",
@@ -1178,17 +1188,17 @@ window.MuseumData = (() => {
       desc: "Phán quyết cuối cùng: KTTT định hướng XHCN ở Việt Nam đã góp phần hạn chế và khắc phục một phần những giới hạn lịch sử của CNTB (qua đa dạng hóa sở hữu, điều tiết của Nhà nước và gắn tăng trưởng với công bằng xã hội), nhưng chưa thể giải quyết hoàn toàn và cần tiếp tục hoàn thiện, kiểm chứng qua thực tiễn phát triển.",
       fullHtml: `
         <div class="pres-detail-stack">
-          <div class="pres-subcard bg-amber-50/80 border-2 border-amber-400">
-            <h4 class="text-amber-900 font-bold">
+          <div class="editorial-card editorial-card--amber">
+            <h4 class="text-amber-200 font-bold">
               Phán quyết cuối cùng: KTTT định hướng XHCN có giải quyết được những giới hạn lịch sử của CNTB không?
             </h4>
-            <p class="text-slate-800 mt-1">
+            <p class="text-slate-200 mt-1">
               <strong>Trả lời:</strong> KTTT định hướng XHCN ở Việt Nam <strong>đã xây dựng những cơ chế nhằm khắc phục và hạn chế một phần những giới hạn lịch sử của CNTB</strong> (đa dạng hóa sở hữu, phát huy vai trò điều tiết của Nhà nước, gắn tăng trưởng với tiến bộ và công bằng xã hội), <strong>nhưng chưa thể giải quyết hoàn toàn</strong> do vẫn còn khoảng cách giàu nghèo, bất bình đẳng tiếp cận nguồn lực và hiệu quả vốn nhà nước chưa cao. Khả năng khắc phục cần tiếp tục được hoàn thiện và kiểm chứng qua thực tiễn phát triển.
             </p>
           </div>
-          <div class="pres-subcard bg-slate-50 border border-slate-300">
-            <h4 class="text-sky-800 font-bold mb-1">Nguồn tài liệu tham khảo chính thống (10 nguồn):</h4>
-            <ol class="list-decimal list-inside grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-slate-700 pres-ref-list">
+          <div class="editorial-card">
+            <h4 class="text-sky-300 font-bold mb-1">Nguồn tài liệu tham khảo chính thống (10 nguồn):</h4>
+            <ol class="list-decimal list-inside grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-slate-300 pres-ref-list">
               <li><strong>Bộ GD&ĐT (2021)</strong>, <em>Giáo trình Kinh tế chính trị Mác – Lênin</em>, NXB CTQG Sự thật (Chương 5, tr. 155–171).</li>
               <li><strong>Đảng CSVN (2016)</strong>, <em>Văn kiện Đại hội đại biểu toàn quốc lần thứ XII</em>, NXB CTQG Sự thật.</li>
               <li><strong>Đảng CSVN (2021)</strong>, <em>Văn kiện Đại hội đại biểu toàn quốc lần thứ XIII</em>, Tập 1, NXB CTQG Sự thật.</li>

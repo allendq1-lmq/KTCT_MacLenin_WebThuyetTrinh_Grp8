@@ -1,11 +1,138 @@
-// museum/room3.js - Phòng 3: Giới hạn CNTB, Khả năng khắc phục, Bảng đối chiếu 6 tiêu chí, Hạn chế/Giải pháp & Phán quyết
+// museum/room3.js - Phòng 3: Không gian trầm tĩnh hài hòa, Đại cảnh Bảng đối chiếu 6 tiêu chí & Đài Phán quyết trung tâm
 window.MuseumRoom3 = (() => {
+  function createWingNiche(ex, isDarkWing, scene) {
+    const niche = new THREE.Group();
+    niche.position.set(ex.x, ex.y, ex.z);
+    niche.rotation.y = ex.rotY;
+
+    const panel = new THREE.Mesh(
+      new THREE.BoxGeometry(4.1, 2.9, 0.04),
+      new THREE.MeshStandardMaterial({
+        color: isDarkWing ? 0x13151d : 0x10151b,
+        roughness: 0.88,
+        metalness: 0.1,
+      }),
+    );
+    panel.position.set(0, -0.08, -0.105);
+    niche.add(panel);
+
+    const trimMat = new THREE.MeshStandardMaterial({
+      color: 0x1b202c,
+      roughness: 0.5,
+      metalness: 0.35,
+    });
+
+    [-2.06, 2.06].forEach((ox) => {
+      const col = new THREE.Mesh(
+        new THREE.BoxGeometry(0.12, 3.05, 0.095),
+        trimMat,
+      );
+      col.position.set(ox, -0.08, -0.065);
+      niche.add(col);
+    });
+
+    scene.add(niche);
+  }
+
+  function buildWingAtmosphere(scene) {
+    // Trục dẫn sàn trung tâm trầm tĩnh hướng về Bảng đối chiếu 6 tiêu chí (dùng hệ 3 đèn tổng chuẩn 60 FPS)
+    const axisMat = new THREE.MeshStandardMaterial({
+      color: 0x161b26,
+      roughness: 0.65,
+      metalness: 0.2,
+    });
+    const centerRunway = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.8, 10.6),
+      axisMat,
+    );
+    centerRunway.rotation.x = -Math.PI / 2;
+    centerRunway.position.set(0, 0.008, -0.5);
+    centerRunway.receiveShadow = true;
+    scene.add(centerRunway);
+
+    const lineMat = new THREE.MeshStandardMaterial({
+      color: 0x7a6030,
+      roughness: 0.45,
+      metalness: 0.65,
+    });
+
+    const centerBrassLineL = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.035, 10.6),
+      lineMat,
+    );
+    centerBrassLineL.rotation.x = -Math.PI / 2;
+    centerBrassLineL.position.set(-0.88, 0.011, -0.5);
+    scene.add(centerBrassLineL);
+
+    const centerBrassLineR = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.035, 10.6),
+      lineMat,
+    );
+    centerBrassLineR.rotation.x = -Math.PI / 2;
+    centerBrassLineR.position.set(0.88, 0.011, -0.5);
+    scene.add(centerBrassLineR);
+  }
+
+  function buildComparisonPortal(ex, scene) {
+    const portal = new THREE.Group();
+    portal.position.set(ex.x, 0, ex.z);
+
+    const darkMarbleMat = new THREE.MeshStandardMaterial({
+      color: 0x121620,
+      roughness: 0.35,
+      metalness: 0.3,
+    });
+    const brassMat = new THREE.MeshStandardMaterial({
+      color: 0xb0863a,
+      roughness: 0.34,
+      metalness: 0.8,
+    });
+
+    // Bậc thềm đá thấp dưới bảng đối chiếu
+    const step = new THREE.Mesh(
+      new THREE.BoxGeometry(7.0, 0.14, 0.72),
+      darkMarbleMat,
+    );
+    step.position.set(0, 0.07, 0.14);
+    step.receiveShadow = true;
+    portal.add(step);
+
+    // 2 trụ đá cẩm thạch đen đối xứng hai bên bảng 6 tiêu chí
+    [-3.22, 3.22].forEach((px) => {
+      const col = new THREE.Mesh(
+        new THREE.BoxGeometry(0.3, 4.3, 0.24),
+        darkMarbleMat,
+      );
+      col.position.set(px, 2.15, -0.02);
+      portal.add(col);
+    });
+
+    // Dầm đỉnh kiến trúc
+    const lintel = new THREE.Mesh(
+      new THREE.BoxGeometry(6.8, 0.2, 0.28),
+      darkMarbleMat,
+    );
+    lintel.position.set(0, 4.3, 0);
+    portal.add(lintel);
+
+    const lintelBrass = new THREE.Mesh(
+      new THREE.BoxGeometry(6.6, 0.028, 0.3),
+      brassMat,
+    );
+    lintelBrass.position.set(0, 4.19, 0.01);
+    portal.add(lintelBrass);
+
+    scene.add(portal);
+  }
+
   function build(scene) {
     window.MuseumEngine.createArchitecturalRoom(20, 14, 4.5);
+    buildWingAtmosphere(scene);
+
     window.MuseumEngine.createBench(-3.2, 0.2);
     window.MuseumEngine.createBench(3.2, 0.2);
 
-    // Hệ thống cọc chắn và dây bảo vệ quanh bảng đối chiếu, tranh tường và bệ tổng kết Phòng 3 (A4)
+    // Hệ thống cọc chắn và dây bảo vệ quanh bảng đối chiếu, tranh tường và Đài Phán quyết
     if (window.MuseumEngine.createStanchionBarrier) {
       const r3Segments = [
         { x1: -8.9, z1: -4.2, x2: -8.9, z2: 0 },
@@ -16,7 +143,7 @@ window.MuseumRoom3 = (() => {
         { x1: 0, z1: -5.85, x2: 3.2, z2: -5.85 },
       ];
       const verdictSides = 8;
-      const verdictRadius = 1.4;
+      const verdictRadius = 1.62;
       for (let i = 0; i < verdictSides; i++) {
         const a1 = (i * 2 * Math.PI) / verdictSides;
         const a2 = ((i + 1) * 2 * Math.PI) / verdictSides;
@@ -33,7 +160,6 @@ window.MuseumRoom3 = (() => {
     if (!window.MuseumData || !window.MuseumData.room3) return;
 
     const exhibits = window.MuseumData.room3.exhibits;
-    const tableRows = window.MuseumData.room3.comparisonTableRows;
 
     exhibits.forEach((ex) => {
       const userData = {
@@ -56,7 +182,8 @@ window.MuseumRoom3 = (() => {
       };
 
       if (ex.id === "r3-table") {
-        // Khung tranh lớn ở chính giữa tường sau Phòng 3 hiển thị ảnh tư liệu toàn khung, bảng chữ đối chiếu mở trong modal
+        buildComparisonPortal(ex, scene);
+
         const boardTex = window.MuseumEngine.createArtworkTexture(
           ex.title,
           ex.subtitle,
@@ -73,40 +200,54 @@ window.MuseumRoom3 = (() => {
         );
         const frame = window.MuseumEngine.createGalleryFrame(
           5.6,
-          3.3,
+          2.95,
           boardTex,
           placardTex,
           userData,
         );
-        frame.position.set(ex.x, ex.y, ex.z);
+        frame.position.set(ex.x, 2.48, ex.z);
         frame.rotation.y = ex.rotY;
         scene.add(frame);
-
-        const spotCenter = new THREE.SpotLight(
-          0xfff3d6,
-          1.52,
-          11.5,
-          Math.PI / 2.8,
-          0.7,
-          1.5,
-        );
-        spotCenter.position.set(0, 4.3, -2.5);
-        spotCenter.target = frame;
-        scene.add(spotCenter);
       } else if (ex.id === "r3-verdict") {
-        // Bệ tổng kết trung tâm: Phán quyết cuối cùng & Nguồn tài liệu tham khảo
+        // Đài Phán quyết trung tâm tĩnh tại, trang nghiêm (không cột đèn cầu và vòng neon)
         const verdictGroup = new THREE.Group();
         verdictGroup.position.set(ex.x, 0, ex.z);
 
-        const pedGeo = new THREE.CylinderGeometry(1.15, 1.3, 0.45, 32);
-        const pedMat = new THREE.MeshStandardMaterial({
-          color: 0x1e293b,
-          roughness: 0.35,
-          metalness: 0.5,
+        const marblePedMat = new THREE.MeshStandardMaterial({
+          color: 0x131722,
+          roughness: 0.34,
+          metalness: 0.3,
         });
-        const ped = new THREE.Mesh(pedGeo, pedMat);
-        ped.position.y = 0.225;
-        verdictGroup.add(ped);
+        const brassMat = new THREE.MeshStandardMaterial({
+          color: 0xb8862d,
+          roughness: 0.3,
+          metalness: 0.82,
+        });
+
+        const step1 = new THREE.Mesh(
+          new THREE.CylinderGeometry(1.36, 1.48, 0.22, 36),
+          marblePedMat,
+        );
+        step1.position.y = 0.11;
+        step1.castShadow = true;
+        step1.receiveShadow = true;
+        verdictGroup.add(step1);
+
+        const step2 = new THREE.Mesh(
+          new THREE.CylinderGeometry(1.06, 1.16, 0.28, 36),
+          marblePedMat,
+        );
+        step2.position.y = 0.36;
+        step2.castShadow = true;
+        verdictGroup.add(step2);
+
+        const brassTrim = new THREE.Mesh(
+          new THREE.TorusGeometry(1.08, 0.02, 12, 48),
+          brassMat,
+        );
+        brassTrim.rotation.x = Math.PI / 2;
+        brassTrim.position.y = 0.505;
+        verdictGroup.add(brassTrim);
 
         const artTex = window.MuseumEngine.createArtworkTexture(
           ex.title,
@@ -129,26 +270,19 @@ window.MuseumRoom3 = (() => {
           placardTex,
           userData,
         );
-        frame.position.set(0, 1.92, 0);
+        frame.position.set(0, 2.06, 0);
         verdictGroup.add(frame);
 
-        ped.userData = userData;
-        window.MuseumEngine.interactableObjects.push(ped);
+        step1.userData = userData;
+        step2.userData = userData;
+        window.MuseumEngine.interactableObjects.push(step1);
+        window.MuseumEngine.interactableObjects.push(step2);
         scene.add(verdictGroup);
-
-        const spotVerdict = new THREE.SpotLight(
-          0xfff3d6,
-          1.38,
-          9.5,
-          Math.PI / 3.2,
-          0.68,
-          1.5,
-        );
-        spotVerdict.position.set(0, 4.2, ex.z + 2.8);
-        spotVerdict.target = verdictGroup;
-        scene.add(spotVerdict);
       } else {
-        // Tranh Mảng tối (Tường trái: 3.1, 3.3a) & Mảng sáng (Tường phải: 3.2, 3.3b)
+        // Tranh hai cánh: ánh sáng rọi bảo tàng ấm tự nhiên
+        const isDarkWing = ex.x < 0;
+        createWingNiche(ex, isDarkWing, scene);
+
         const artTex = window.MuseumEngine.createArtworkTexture(
           ex.title,
           ex.subtitle,
@@ -173,18 +307,6 @@ window.MuseumRoom3 = (() => {
         frame.position.set(ex.x, ex.y, ex.z);
         frame.rotation.y = ex.rotY;
         scene.add(frame);
-
-        const spot = new THREE.SpotLight(
-          0xfff3d6,
-          1.42,
-          10.5,
-          Math.PI / 3.1,
-          0.68,
-          1.5,
-        );
-        spot.position.set(ex.x > 0 ? ex.x - 2.8 : ex.x + 2.8, 4.2, ex.z);
-        spot.target = frame;
-        scene.add(spot);
       }
     });
   }

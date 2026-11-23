@@ -197,9 +197,9 @@ window.MuseumEngine = (() => {
     addPanel(20, 9, 0x2b2824, -10, 2, 0, 0, Math.PI / 2, 0);
     addPanel(20, 9, 0x1e2533, 10, 2, 0, 0, -Math.PI / 2, 0);
 
-    // 2 dải LED hổ phách hai bên tạo điểm nhấn phản xạ trên kim loại đồng
-    addPanel(14, 0.55, 0xf59e0b, -9.6, 4.8, 0, 0, Math.PI / 2, 0);
-    addPanel(14, 0.55, 0xf59e0b, 9.6, 4.8, 0, 0, -Math.PI / 2, 0);
+    // 2 dải sáng kem ấm trầm hai bên tạo phản xạ nhẹ trên kim loại đồng
+    addPanel(14, 0.55, 0x6b5a42, -9.6, 4.8, 0, 0, Math.PI / 2, 0);
+    addPanel(14, 0.55, 0x6b5a42, 9.6, 4.8, 0, 0, -Math.PI / 2, 0);
 
     // 1 sàn tối
     addPanel(22, 22, 0x0a0d14, 0, -4, 0, -Math.PI / 2, 0, 0);
@@ -304,26 +304,19 @@ window.MuseumEngine = (() => {
       }
     }
 
-    // Lưới chỉ đồng thau sắc nét chia ô gạch lớn 2x2 trên mỗi tile
+    // Mạch đá mảnh trầm trên nền đá cẩm thạch đen
     const half = size / 2;
     const drawBrassLine = (x1, y1, x2, y2) => {
       ctx.save();
-      ctx.strokeStyle = "rgba(8, 10, 15, 0.8)";
-      ctx.lineWidth = 8;
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.stroke();
-
-      ctx.strokeStyle = "#c8963e";
+      ctx.strokeStyle = "rgba(8, 10, 15, 0.72)";
       ctx.lineWidth = 4.5;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
       ctx.stroke();
 
-      ctx.strokeStyle = "#e8c468";
-      ctx.lineWidth = 1.4;
+      ctx.strokeStyle = "rgba(180, 145, 75, 0.25)";
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
@@ -342,13 +335,13 @@ window.MuseumEngine = (() => {
     mapTex.repeat.set(5, 4);
     mapTex.userData = { isShared: true };
 
-    // RoughnessMap grayscale 512x512 (không gán sRGB)
+    // RoughnessMap grayscale 512x512 (không gán sRGB, bề mặt đá bán mờ dịu mắt)
     const rSize = 512;
     const rCanvas = document.createElement("canvas");
     rCanvas.width = rSize;
     rCanvas.height = rSize;
     const rCtx = rCanvas.getContext("2d");
-    rCtx.fillStyle = "rgb(42, 42, 42)";
+    rCtx.fillStyle = "rgb(96, 96, 96)";
     rCtx.fillRect(0, 0, rSize, rSize);
 
     let rSeed = 4242;
@@ -535,17 +528,12 @@ window.MuseumEngine = (() => {
     const visualType = meta.visualType || meta.id || "r1-1a";
 
     const bgGrad = ctx.createLinearGradient(0, 0, 1024, 700);
-    bgGrad.addColorStop(0, "#111827");
-    bgGrad.addColorStop(1, "#090d16");
+    bgGrad.addColorStop(0, "#1c1f29");
+    bgGrad.addColorStop(1, "#14161e");
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, 1024, 700);
 
-    const photoRect = { x: 18, y: 18, w: 988, h: 664 };
-    ctx.fillStyle = "#0b111e";
-    ctx.fillRect(photoRect.x, photoRect.y, photoRect.w, photoRect.h);
-    ctx.strokeStyle = "rgba(245, 158, 11, 0.28)";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(photoRect.x, photoRect.y, photoRect.w, photoRect.h);
+    const photoRect = { x: 0, y: 0, w: 1024, h: 700 };
 
     const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
     const captureEpoch = sceneEpoch;
@@ -555,7 +543,10 @@ window.MuseumEngine = (() => {
       typeof window.MuseumVisuals.loadExhibitImageWithFallback === "function" &&
       (meta.localImagePath || meta.imageUrl)
     ) {
-      window.MuseumVisuals.loadExhibitImageWithFallback(meta)
+      window.MuseumVisuals.loadExhibitImageWithFallback(meta, {
+        tryLocalFirst: true,
+        localTimeoutMs: 8000,
+      })
         .then((res) => {
           if (!res || !res.ok || !res.img || captureEpoch !== sceneEpoch) {
             return;
@@ -581,8 +572,8 @@ window.MuseumEngine = (() => {
 
   function getPlacardDimensions(frameWidth) {
     const w = typeof frameWidth === "number" && frameWidth > 0 ? frameWidth : 2.6;
-    const innerH = Math.max(0.36, Math.min(0.56, Number((w * 0.12).toFixed(3))));
-    const outerH = Number((innerH + 0.08).toFixed(3));
+    const innerH = Math.max(0.46, Math.min(0.60, Number((w * 0.185).toFixed(3))));
+    const outerH = Number((innerH + 0.05).toFixed(3));
     return {
       width: w,
       innerH,
@@ -591,8 +582,8 @@ window.MuseumEngine = (() => {
     };
   }
 
-  function formatMuseumTitleCase(text) {
-    const acronyms = new Set([
+  function formatEditorialTitle(text) {
+    const keepUpper = new Set([
       "KTTT",
       "XHCN",
       "ĐHXHCN",
@@ -611,36 +602,114 @@ window.MuseumEngine = (() => {
       "HDI",
       "BHYT",
       "HTX",
+      "NQ",
+      "TW",
     ]);
-    return String(text || "")
-      .trim()
-      .split(/\s+/)
-      .map((word) => {
+    const properNouns = {
+      "việt": "Việt",
+      "nam": "Nam",
+      "đảng": "Đảng",
+      "nhà": "Nhà",
+      "nước": "nước",
+      "đại": "Đại",
+      "hội": "hội",
+      "hiến": "Hiến",
+      "pháp": "pháp",
+      "chủ": "chủ",
+      "nghĩa": "nghĩa",
+      "tư": "tư",
+      "bản": "bản",
+      "đổi": "Đổi",
+      "mới": "mới",
+    };
+    const words = String(text || "").trim().split(/\s+/).filter(Boolean);
+    if (words.length === 0) return "";
+
+    return words
+      .map((word, idx) => {
         const clean = word.replace(/^[(["']+|[,.;:)!?"']+$/g, "");
-        if (acronyms.has(clean.toUpperCase())) {
+        const upper = clean.toUpperCase();
+        if (keepUpper.has(upper) || /^(I|II|III|IV|V|VI|VII|VIII|IX|X|XI|XII|XIII|XIV|XV)$/.test(upper)) {
           return word.toUpperCase();
         }
         if (/^[0-9]+([.,–-][0-9]+)*[a-zA-Z]?$/.test(clean)) {
           return word;
         }
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        const lower = word.toLowerCase();
+        if (idx === 0) {
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }
+        if (lower === "việt" || lower === "nam") {
+          return lower.charAt(0).toUpperCase() + lower.slice(1);
+        }
+        if (lower === "đảng" || lower === "hiến" || lower === "nhà" || lower === "đại" || lower === "đổi") {
+          return lower.charAt(0).toUpperCase() + lower.slice(1);
+        }
+        if (properNouns[lower] && (lower === "việt" || lower === "nam")) {
+          return properNouns[lower];
+        }
+        return lower;
       })
-      .join(" ");
+      .join(" ")
+      .replace(/\bNhà Nước\b/g, "Nhà nước")
+      .replace(/\bHiến Pháp\b/g, "Hiến pháp")
+      .replace(/\bĐại Hội\b/g, "Đại hội")
+      .replace(/\bĐổi Mới\b/g, "Đổi mới")
+      .replace(/\bĐảng csvn\b/gi, "Đảng CSVN")
+      .replace(/\bnq\b/g, "NQ");
   }
 
-  function parsePlacardParts(rawTitle) {
+  function parsePlacardParts(rawTitle, exhibitMeta) {
+    const meta = exhibitMeta && typeof exhibitMeta === "object" ? exhibitMeta : {};
     const raw = String(rawTitle || "").trim();
     const parts = raw.split(/\s*•\s*/);
+    let kicker = "";
+    let mainRaw = raw;
+
     if (parts.length >= 2) {
-      return {
-        kicker: parts[0].trim().toUpperCase(),
-        main: formatMuseumTitleCase(parts.slice(1).join(" • ")),
-      };
+      kicker = parts[0].trim().toUpperCase();
+      mainRaw = parts.slice(1).join(" • ").trim();
+    } else if (meta.badge) {
+      kicker = String(meta.badge).split("•")[0].trim().toUpperCase();
     }
+
+    if (meta.badge && kicker && meta.badge.toUpperCase().includes("•")) {
+      const badgeParts = String(meta.badge).split("•").map((p) => p.trim().toUpperCase());
+      if (badgeParts.length >= 2 && badgeParts[0].includes(kicker)) {
+        kicker = `${badgeParts[0]}  ·  ${badgeParts[1]}`;
+      }
+    }
+
+    const sourceMain = meta.title
+      ? String(meta.title).replace(/^[0-9]+(\.[0-9]+[a-z]?)?[.:]\s*/i, "").replace(/^Đặc\s+Trưng\s+[0-9]+\s*:\s*/i, "").trim()
+      : mainRaw;
+
     return {
-      kicker: "",
-      main: formatMuseumTitleCase(raw),
+      kicker,
+      main: formatEditorialTitle(sourceMain || mainRaw),
     };
+  }
+
+  function drawTrackedText(ctx, text, x, y, letterSpacing = 3) {
+    const chars = Array.from(String(text || ""));
+    let curX = x;
+    for (let i = 0; i < chars.length; i++) {
+      const ch = chars[i];
+      ctx.fillText(ch, curX, y);
+      curX += ctx.measureText(ch).width + letterSpacing;
+    }
+    return curX - x;
+  }
+
+  function truncateSingleLine(ctx, text, maxW) {
+    const clean = String(text || "").trim();
+    if (!clean) return "";
+    if (ctx.measureText(clean).width <= maxW) return clean;
+    let out = clean;
+    while (out.length > 4 && ctx.measureText(out + "…").width > maxW) {
+      out = out.slice(0, -1).trimEnd();
+    }
+    return out + "…";
   }
 
   function splitBalancedTwoLines(ctx, text, maxW) {
@@ -670,7 +739,7 @@ window.MuseumEngine = (() => {
   function drawPlacardCanvas(canvas, title, subtitle, exhibitMeta, frameWidth) {
     const dims = getPlacardDimensions(frameWidth);
     const W = 2048;
-    const H = Math.max(128, Math.round(W / dims.aspectRatio));
+    const H = Math.max(180, Math.round(W / dims.aspectRatio));
     if (canvas.width !== W || canvas.height !== H) {
       canvas.width = W;
       canvas.height = H;
@@ -678,66 +747,64 @@ window.MuseumEngine = (() => {
 
     const ctx = canvas.getContext("2d");
     const meta = resolveExhibitMeta(title, null, exhibitMeta);
-    const { kicker, main } = parsePlacardParts(meta.plaqueTitle || title || "");
+    const { kicker, main } = parsePlacardParts(meta.plaqueTitle || title || "", meta);
+    const subRaw = String(meta.subtitle || subtitle || "").trim();
 
+    // Nền đá phiến / đồng mun tối mịn Editorial Museum Plaque
     const bgGrad = ctx.createLinearGradient(0, 0, W, H);
-    bgGrad.addColorStop(0, "#17130f");
-    bgGrad.addColorStop(0.5, "#110e0b");
-    bgGrad.addColorStop(1, "#0b0907");
+    bgGrad.addColorStop(0, "#15171e");
+    bgGrad.addColorStop(0.55, "#121318");
+    bgGrad.addColorStop(1, "#0d0f14");
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, W, H);
 
-    // Nét xước đồng đen nằm ngang cực mảnh tạo bề mặt kim loại thật
-    ctx.fillStyle = "rgba(255, 224, 150, 0.025)";
-    for (let y = 4; y < H; y += 6) {
-      ctx.fillRect(0, y, W, 1);
-    }
-
-    const outerInset = 10;
-    ctx.strokeStyle = "#d4a038";
-    ctx.lineWidth = 8;
-    ctx.strokeRect(outerInset, outerInset, W - outerInset * 2, H - outerInset * 2);
-
-    const innerInset = 28;
-    const innerBoxWidth = W - innerInset * 2;
-    const innerBoxHeight = H - innerInset * 2;
-    ctx.strokeStyle = "rgba(245, 200, 100, 0.45)";
+    // 1 đường viền mảnh tinh tế (~1.5px tương đương)
+    const borderInset = 14;
+    ctx.strokeStyle = "rgba(212, 160, 56, 0.38)";
     ctx.lineWidth = 3;
-    ctx.strokeRect(innerInset, innerInset, innerBoxWidth, innerBoxHeight);
+    ctx.strokeRect(
+      borderInset,
+      borderInset,
+      W - borderInset * 2,
+      H - borderInset * 2,
+    );
 
-    // 4 đinh tán đồng ở 4 góc bảng tên
-    const rivetOffset = 48;
-    const rivets = [
-      [rivetOffset, rivetOffset],
-      [W - rivetOffset, rivetOffset],
-      [rivetOffset, H - rivetOffset],
-      [W - rivetOffset, H - rivetOffset],
-    ];
-    rivets.forEach(([rx, ry]) => {
-      ctx.beginPath();
-      ctx.arc(rx, ry, 7, 0, Math.PI * 2);
-      ctx.fillStyle = "#d4a038";
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "#5c3d11";
-      ctx.stroke();
-    });
+    // Thanh nhấn vàng kim thanh lịch dọc cạnh trái
+    const padX = 78;
+    const padY = Math.round(H * 0.14);
+    const barW = 10;
+    const barGrad = ctx.createLinearGradient(0, padY, 0, H - padY);
+    barGrad.addColorStop(0, "#f5c451");
+    barGrad.addColorStop(1, "#b87f24");
+    ctx.fillStyle = barGrad;
+    ctx.fillRect(padX, padY, barW, H - padY * 2);
 
-    const safeWidth = innerBoxWidth * 0.86;
-    const safeHeight = innerBoxHeight * 0.80;
-    const centerX = W / 2;
+    const contentX = padX + barW + 46;
+    const safeWidth = W - contentX - 72;
+    const safeHeight = H - padY * 2;
     const centerY = H / 2;
-    const fontFamily = "'Be Vietnam Pro', 'Segoe UI', Tahoma, sans-serif";
 
-    const kickerFontSize = kicker ? Math.max(22, Math.min(34, Math.round(safeHeight * 0.21))) : 0;
-    const kickerGap = kicker ? Math.round(kickerFontSize * 0.42) : 0;
-    const maxMainHeight = kicker ? safeHeight - kickerFontSize - kickerGap : safeHeight;
+    const sansFont = "'Be Vietnam Pro', 'Segoe UI', Tahoma, sans-serif";
+    const serifFont = "'Playfair Display', Georgia, 'Times New Roman', serif";
 
-    let fontSize = Math.max(26, Math.round(safeHeight * (kicker ? 0.36 : 0.48)));
+    const kickerFontSize = kicker
+      ? Math.max(24, Math.min(34, Math.round(safeHeight * 0.135)))
+      : 0;
+    const subFontSize = subRaw
+      ? Math.max(24, Math.min(34, Math.round(safeHeight * 0.135)))
+      : 0;
+    const kickerGap = kicker ? Math.round(kickerFontSize * 0.6) : 0;
+    const subGap = subRaw ? Math.round(subFontSize * 0.65) : 0;
+    const maxMainHeight =
+      safeHeight -
+      (kicker ? kickerFontSize + kickerGap : 0) -
+      (subRaw ? subFontSize + subGap : 0);
+
+    let fontSize = Math.max(32, Math.min(78, Math.round(maxMainHeight * 0.56)));
     let lines = [main];
 
-    while (fontSize >= 22) {
-      ctx.font = `700 ${fontSize}px ${fontFamily}`;
+    while (fontSize >= 28) {
+      ctx.font = `700 ${fontSize}px ${serifFont}`;
       lines = splitBalancedTwoLines(ctx, main, safeWidth);
       const lineHeight = Math.round(fontSize * 1.18);
       const blockHeight = lines.length * lineHeight;
@@ -748,31 +815,45 @@ window.MuseumEngine = (() => {
       fontSize -= 2;
     }
 
-    ctx.font = `700 ${fontSize}px ${fontFamily}`;
+    ctx.font = `700 ${fontSize}px ${serifFont}`;
     const lineHeight = Math.round(fontSize * 1.18);
     const mainBlockHeight = lines.length * lineHeight;
-    const totalBlockHeight = kicker
-      ? kickerFontSize + kickerGap + mainBlockHeight
-      : mainBlockHeight;
+    const totalBlockHeight =
+      (kicker ? kickerFontSize + kickerGap : 0) +
+      mainBlockHeight +
+      (subRaw ? subGap + subFontSize : 0);
 
     let currentY = centerY - totalBlockHeight / 2;
-
-    ctx.textAlign = "center";
+    ctx.textAlign = "left";
     ctx.textBaseline = "middle";
 
+    // Tầng 1: Kicker (Mã mục / Chủ đề) IN HOA tracking rộng
     if (kicker) {
-      ctx.font = `700 ${kickerFontSize}px ${fontFamily}`;
-      ctx.fillStyle = "#f5c451";
-      ctx.fillText(kicker, centerX, currentY + kickerFontSize / 2);
+      ctx.font = `600 ${kickerFontSize}px ${sansFont}`;
+      ctx.fillStyle = "#f59e0b";
+      drawTrackedText(ctx, kicker, contentX, currentY + kickerFontSize / 2, 3.5);
       currentY += kickerFontSize + kickerGap;
     }
 
-    ctx.font = `700 ${fontSize}px ${fontFamily}`;
-    ctx.fillStyle = "#fff6d9";
+    // Tầng 2: Tiêu đề chính bằng Serif nghệ thuật
+    ctx.font = `700 ${fontSize}px ${serifFont}`;
+    ctx.fillStyle = "#fdf8ee";
     lines.forEach((ln, idx) => {
-      ctx.fillText(ln, centerX, currentY + lineHeight / 2 + idx * lineHeight);
+      ctx.fillText(ln, contentX, currentY + lineHeight / 2 + idx * lineHeight);
     });
+    currentY += mainBlockHeight;
 
+    // Tầng 3: Phụ đề gợi mở 1 dòng italic
+    let subLineDrawn = "";
+    if (subRaw) {
+      currentY += subGap;
+      ctx.font = `italic 400 ${subFontSize}px ${sansFont}`;
+      ctx.fillStyle = "#cbd5e1";
+      subLineDrawn = truncateSingleLine(ctx, subRaw, safeWidth);
+      ctx.fillText(subLineDrawn, contentX, currentY + subFontSize / 2);
+    }
+
+    ctx.font = `700 ${fontSize}px ${serifFont}`;
     const maxLineWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
     canvas._placardMetrics = {
       width: W,
@@ -924,7 +1005,7 @@ window.MuseumEngine = (() => {
           map: haloTex,
           color: 0xffd28a,
           transparent: true,
-          opacity: 0.2,
+          opacity: 0.08,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
         }),
@@ -933,7 +1014,7 @@ window.MuseumEngine = (() => {
     wallWashMesh.position.set(0, 0.08, -0.028);
     group.add(wallWashMesh);
 
-    // Tấm đèn hắt lưng tranh (Warm Halo Backlight Strip)
+    // Tấm đèn hắt lưng tranh dịu nhẹ (Warm Halo Backlight Strip)
     const backlightGeo = getSharedGeometry(
       `frame-backlight-${width}-${height}`,
       () => new THREE.PlaneGeometry(width + 0.56, height + 0.56),
@@ -945,7 +1026,7 @@ window.MuseumEngine = (() => {
           map: haloTex,
           color: 0xffb84d,
           transparent: true,
-          opacity: 0.34,
+          opacity: 0.11,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
         }),
@@ -1064,81 +1145,66 @@ window.MuseumEngine = (() => {
     matBoard.position.z = 0.057;
     group.add(matBoard);
 
-    // Bề mặt tranh rõ nét
+    // Bề mặt tranh luôn sáng rõ, có chiều sâu tự nhiên (gỡ bỏ lớp kính gây lóa xám)
     const canvasGeo = getSharedGeometry(
       `frame-canvas-${width}-${height}`,
       () => new THREE.PlaneGeometry(width, height),
     );
     const canvasMat = new THREE.MeshStandardMaterial({
       map: artTexture,
-      roughness: 0.88,
+      emissiveMap: artTexture,
+      emissive: new THREE.Color(0xffffff),
+      emissiveIntensity: 0.22,
+      roughness: 0.85,
       metalness: 0.0,
     });
     const canvasMesh = new THREE.Mesh(canvasGeo, canvasMat);
     canvasMesh.position.z = 0.06;
     group.add(canvasMesh);
 
-    // Lớp kính bảo vệ phía trước có độ phản xạ nhẹ (MeshPhysicalMaterial)
-    const glassMat = getSharedMaterial(
-      "frame-glass-mat",
-      () =>
-        new THREE.MeshPhysicalMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.085,
-          roughness: 0.08,
-          metalness: 0.12,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.06,
-          envMapIntensity: 1.25,
-          depthWrite: false,
-        }),
-    );
-    const glassMesh = new THREE.Mesh(canvasGeo, glassMat);
-    glassMesh.position.z = 0.068;
-    group.add(glassMesh);
-
-    // Đế bảng tên (bottom plaque) bằng đồng đen xước có chiều ngang bằng khung tranh
+    // Đế bảng tên (bottom plaque) bằng đá phiến / đồng mun tối có chiều ngang bằng khung tranh
     const placardDims = getPlacardDimensions(width);
     const placardOuterH = placardDims.outerH;
     const placardInnerH = placardDims.innerH;
-    const placardY = -(height / 2 + 0.12 + placardOuterH / 2 + 0.05);
+    const placardY = -(height / 2 + 0.1 + placardOuterH / 2 + 0.04);
     const placardBaseGeo = getSharedGeometry(
       `placard-base-${width}`,
-      () => new THREE.BoxGeometry(width + 0.22, placardOuterH, 0.044),
+      () => new THREE.BoxGeometry(width + 0.2, placardOuterH, 0.04),
     );
     const placardBaseMat = getSharedMaterial(
       "placard-base-mat",
       () =>
         new THREE.MeshStandardMaterial({
-          color: 0x191612,
-          roughness: 0.38,
-          metalness: 0.65,
+          color: 0x15171e,
+          roughness: 0.52,
+          metalness: 0.35,
         }),
     );
     const placardBase = new THREE.Mesh(placardBaseGeo, placardBaseMat);
-    placardBase.position.set(0, placardY, 0.042);
-    placardBase.rotation.x = -0.05;
+    placardBase.position.set(0, placardY, 0.04);
+    placardBase.rotation.x = -0.04;
     placardBase.castShadow = true;
     group.add(placardBase);
 
-    // Mặt bảng tên 3D sắc nét, khớp 100% chiều rộng lọt lòng khung tranh (width)
+    // Mặt bảng tên Editorial Museum Plaque sắc nét, tương phản cao ở mọi góc nhìn
     const placardGeo = getSharedGeometry(
       `placard-plane-${width}`,
       () => new THREE.PlaneGeometry(width, placardInnerH),
     );
     const placardMat = new THREE.MeshStandardMaterial({
       map: placardTexture,
-      roughness: 0.72,
-      metalness: 0.15,
+      emissiveMap: placardTexture,
+      emissive: new THREE.Color(0xffffff),
+      emissiveIntensity: 0.18,
+      roughness: 0.78,
+      metalness: 0.05,
     });
     const placardMesh = new THREE.Mesh(placardGeo, placardMat);
-    placardMesh.position.set(0, placardY, 0.067);
-    placardMesh.rotation.x = -0.05;
+    placardMesh.position.set(0, placardY, 0.063);
+    placardMesh.rotation.x = -0.04;
     group.add(placardMesh);
 
     canvasMesh.userData = data;
-    glassMesh.userData = data;
     outerFrame.userData = data;
     midFrame.userData = data;
     innerBevel.userData = data;
@@ -1230,25 +1296,6 @@ window.MuseumEngine = (() => {
     leg2.position.set(0.96, 0.195, 0);
     leg2.castShadow = true;
     bench.add(leg2);
-
-    // Dải đèn LED ấm dưới gầm ghế
-    const ledGeo = getSharedGeometry(
-      "bench-led-geo",
-      () => new THREE.PlaneGeometry(1.78, 0.16),
-    );
-    const ledMat = getSharedMaterial(
-      "bench-led-mat",
-      () =>
-        new THREE.MeshBasicMaterial({
-          color: 0xf59e0b,
-          transparent: true,
-          opacity: 0.42,
-        }),
-    );
-    const led = new THREE.Mesh(ledGeo, ledMat);
-    led.position.set(0, 0.382, 0);
-    led.rotation.x = Math.PI / 2;
-    bench.add(led);
 
     scene.add(bench);
     return bench;
@@ -1542,18 +1589,18 @@ window.MuseumEngine = (() => {
         return new THREE.MeshPhysicalMaterial({
           map: marbleTex.map,
           roughnessMap: marbleTex.roughnessMap,
-          roughness: 0.24,
-          metalness: 0.14,
-          clearcoat: 0.72,
-          clearcoatRoughness: 0.14,
-          envMapIntensity: 1.15,
+          roughness: 0.48,
+          metalness: 0.08,
+          clearcoat: 0.18,
+          clearcoatRoughness: 0.35,
+          envMapIntensity: 0.55,
         });
       }
       return new THREE.MeshStandardMaterial({
         map: marbleTex.map,
         roughnessMap: marbleTex.roughnessMap,
-        roughness: 0.26,
-        metalness: 0.16,
+        roughness: 0.5,
+        metalness: 0.08,
       });
     });
     const floor = new THREE.Mesh(floorGeo, floorMat);
@@ -1649,7 +1696,7 @@ window.MuseumEngine = (() => {
       "room-cove-led-mat",
       () =>
         new THREE.MeshBasicMaterial({
-          color: 0xffd591,
+          color: 0xd8c39e,
         }),
     );
 
@@ -1715,23 +1762,19 @@ window.MuseumEngine = (() => {
     addWallMoldings(depth, -width / 2, 0, Math.PI / 2);
     addWallMoldings(depth, width / 2, 0, -Math.PI / 2);
 
-    // Hệ cột trụ kiến trúc âm tường (Architectural Pilasters) dùng InstancedMesh + khe LED ấm
+    // Hệ cột trụ kiến trúc âm tường (Architectural Pilasters) dùng InstancedMesh tinh gọn
     const pilasterH = height - 0.42;
     const pilasterGeo = getSharedGeometry(
       `pilaster-body-${pilasterH.toFixed(2)}`,
       () => new THREE.BoxGeometry(0.24, pilasterH, 0.065),
-    );
-    const pilasterLedGeo = getSharedGeometry(
-      `pilaster-led-${pilasterH.toFixed(2)}`,
-      () => new THREE.BoxGeometry(0.022, pilasterH - 0.18, 0.02),
     );
     const pilasterMat = getSharedMaterial(
       "room-pilaster-mat",
       () =>
         new THREE.MeshStandardMaterial({
           color: 0x1e222d,
-          roughness: 0.48,
-          metalness: 0.28,
+          roughness: 0.55,
+          metalness: 0.22,
         }),
     );
 
@@ -1754,11 +1797,6 @@ window.MuseumEngine = (() => {
         pilasterMat,
         pCount,
       );
-      const pilasterLedInstanced = new THREE.InstancedMesh(
-        pilasterLedGeo,
-        coveLedMat,
-        pCount * 2,
-      );
       const pDummy = new THREE.Object3D();
 
       pilasterSpecs.forEach((spec, idx) => {
@@ -1767,25 +1805,10 @@ window.MuseumEngine = (() => {
         pDummy.scale.set(1, 1, 1);
         pDummy.updateMatrix();
         pilasterInstanced.setMatrixAt(idx, pDummy.matrix);
-
-        const cosR = Math.cos(spec.ry);
-        const sinR = Math.sin(spec.ry);
-        [-0.132, 0.132].forEach((sideOffset, sIdx) => {
-          pDummy.position.set(
-            spec.x + cosR * sideOffset,
-            height / 2 - 0.01,
-            spec.z - sinR * sideOffset,
-          );
-          pDummy.rotation.set(0, spec.ry, 0);
-          pDummy.updateMatrix();
-          pilasterLedInstanced.setMatrixAt(idx * 2 + sIdx, pDummy.matrix);
-        });
       });
 
       pilasterInstanced.instanceMatrix.needsUpdate = true;
-      pilasterLedInstanced.instanceMatrix.needsUpdate = true;
       room.add(pilasterInstanced);
-      room.add(pilasterLedInstanced);
     }
 
     // Giếng trời trung tâm (Architectural Coffered Skylight Atrium)
@@ -1875,13 +1898,16 @@ window.MuseumEngine = (() => {
       "specularMap",
       "envMap",
     ];
+    const disposedTextures = new Set();
     textureSlots.forEach((slot) => {
       const tex = mat[slot];
       if (
         tex &&
+        !disposedTextures.has(tex) &&
         typeof tex.dispose === "function" &&
         (forceShared || !tex.userData || !tex.userData.isShared)
       ) {
+        disposedTextures.add(tex);
         tex.dispose();
       }
     });
@@ -2290,7 +2316,7 @@ window.MuseumEngine = (() => {
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.06;
+    renderer.toneMappingExposure = 0.98;
     if (THREE.SRGBColorSpace && "outputColorSpace" in renderer) {
       renderer.outputColorSpace = THREE.SRGBColorSpace;
     } else if (THREE.sRGBEncoding) {
@@ -2328,8 +2354,17 @@ window.MuseumEngine = (() => {
 
     loadRoom(1);
 
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
+    if (document.fonts) {
+      const fontPromises = [];
+      if (typeof document.fonts.load === "function") {
+        fontPromises.push(document.fonts.load('700 48px "Playfair Display"').catch(() => {}));
+        fontPromises.push(document.fonts.load('600 28px "Be Vietnam Pro"').catch(() => {}));
+        fontPromises.push(document.fonts.load('italic 400 28px "Be Vietnam Pro"').catch(() => {}));
+      }
+      if (document.fonts.ready) {
+        fontPromises.push(document.fonts.ready);
+      }
+      Promise.all(fontPromises).then(() => {
         redrawAllPlacards();
       });
     }

@@ -1,4 +1,4 @@
-// museum/room2.js - Phòng 2: Năm đặc trưng cơ bản của KTTT ĐHXHCN ở Việt Nam (Đài trưng bày đa tầng + Khối cầu xoay + 5 Cột rãnh phát sáng)
+// museum/room2.js - Phòng 2: Năm đặc trưng cơ bản của KTTT ĐHXHCN ở Việt Nam (Đài trưng bày đa tầng tĩnh tại + 5 Cột rãnh đá thanh lịch)
 window.MuseumRoom2 = (() => {
   function createFlutedColumnTexture() {
     const canvas = document.createElement("canvas");
@@ -23,10 +23,10 @@ window.MuseumRoom2 = (() => {
       ctx.fillRect(x, 0, step + 0.5, 512);
     }
 
-    // Dải hoa văn chỉ đồng mảnh ở phần trên & dưới thân cột
-    ctx.fillStyle = "rgba(180, 130, 48, 0.45)";
-    ctx.fillRect(0, 18, 512, 8);
-    ctx.fillRect(0, 486, 512, 8);
+    // Dải hoa văn chỉ đồng mảnh trầm ở phần trên & dưới thân cột
+    ctx.fillStyle = "rgba(180, 135, 56, 0.35)";
+    ctx.fillRect(0, 18, 512, 6);
+    ctx.fillRect(0, 488, 512, 6);
 
     const tex = new THREE.CanvasTexture(canvas);
     if (THREE.SRGBColorSpace && "colorSpace" in tex) {
@@ -49,19 +49,19 @@ window.MuseumRoom2 = (() => {
         ? window.MuseumData.room2.center
         : null;
 
-    // Đài trưng bày đá cẩm thạch đa tầng 2.a kèm vòng hào quang đồng vàng & khối cầu/nhẫn xoay
+    // Đài trưng bày đá cẩm thạch đa tầng 2.a tĩnh tại, trang trọng
     const centerGroup = new THREE.Group();
     centerGroup.position.set(0, 0, -0.8);
 
     const marblePedMat = new THREE.MeshStandardMaterial({
       color: 0x151922,
-      roughness: 0.22,
-      metalness: 0.35,
+      roughness: 0.34,
+      metalness: 0.25,
     });
     const brassMat = new THREE.MeshStandardMaterial({
-      color: 0xd9a03b,
-      metalness: 0.88,
-      roughness: 0.2,
+      color: 0xb8862d,
+      metalness: 0.82,
+      roughness: 0.3,
     });
 
     const tier1 = new THREE.Mesh(
@@ -89,71 +89,21 @@ window.MuseumRoom2 = (() => {
     tier3.castShadow = true;
     centerGroup.add(tier3);
 
-    // Vòng hào quang đồng vàng quanh chân bệ & mặt bệ
-    const floorHalo = new THREE.Mesh(
-      new THREE.TorusGeometry(1.62, 0.024, 12, 48),
-      new THREE.MeshBasicMaterial({ color: 0xfbbf24 }),
-    );
-    floorHalo.rotation.x = Math.PI / 2;
-    floorHalo.position.y = 0.02;
-    centerGroup.add(floorHalo);
-
     const midBrassRing = new THREE.Mesh(
-      new THREE.TorusGeometry(1.31, 0.028, 12, 48),
+      new THREE.TorusGeometry(1.31, 0.022, 12, 48),
       brassMat,
     );
     midBrassRing.rotation.x = Math.PI / 2;
     midBrassRing.position.y = 0.42;
     centerGroup.add(midBrassRing);
 
-    const topHalo = new THREE.Mesh(
-      new THREE.TorusGeometry(1.04, 0.022, 12, 48),
-      new THREE.MeshBasicMaterial({ color: 0xf59e0b }),
-    );
-    topHalo.rotation.x = Math.PI / 2;
-    topHalo.position.y = 0.65;
-    centerGroup.add(topHalo);
-
-    // Cụm khối cầu & nhẫn kiến trúc xoay mượt phía trên đỉnh bệ 2.a
-    const crownSculpture = new THREE.Group();
-    crownSculpture.position.set(0, 3.48, 0);
-
-    const ringOuter = new THREE.Mesh(
-      new THREE.TorusGeometry(0.46, 0.024, 14, 48),
+    const topBrassRing = new THREE.Mesh(
+      new THREE.TorusGeometry(1.03, 0.018, 12, 48),
       brassMat,
     );
-    crownSculpture.add(ringOuter);
-
-    const ringInner = new THREE.Mesh(
-      new THREE.TorusGeometry(0.34, 0.02, 14, 48),
-      brassMat,
-    );
-    ringInner.rotation.x = Math.PI / 3;
-    crownSculpture.add(ringInner);
-
-    const coreOrb = new THREE.Mesh(
-      new THREE.SphereGeometry(0.14, 24, 24),
-      new THREE.MeshStandardMaterial({
-        color: 0xfbbf24,
-        emissive: 0xd97706,
-        emissiveIntensity: 0.65,
-        metalness: 0.75,
-        roughness: 0.15,
-      }),
-    );
-    crownSculpture.add(coreOrb);
-    centerGroup.add(crownSculpture);
-
-    if (window.MuseumEngine && window.MuseumEngine.registerRoomUpdater) {
-      window.MuseumEngine.registerRoomUpdater((dt, elapsed) => {
-        ringOuter.rotation.y += dt * 0.55;
-        ringOuter.rotation.x = Math.sin(elapsed * 0.5) * 0.24;
-        ringInner.rotation.y -= dt * 0.78;
-        ringInner.rotation.z += dt * 0.42;
-        coreOrb.position.y = Math.sin(elapsed * 1.8) * 0.035;
-        floorHalo.rotation.z += dt * 0.15;
-      });
-    }
+    topBrassRing.rotation.x = Math.PI / 2;
+    topBrassRing.position.y = 0.64;
+    centerGroup.add(topBrassRing);
 
     if (centerData) {
       const centerArtTex = window.MuseumEngine.createArtworkTexture(
@@ -194,7 +144,7 @@ window.MuseumRoom2 = (() => {
           lookPos: centerData.lookPos,
         },
       );
-      centerFrame.position.set(0, 2.08, 0);
+      centerFrame.position.set(0, 2.18, 0);
       centerGroup.add(centerFrame);
 
       tier1.userData = centerFrame.userData;
@@ -226,18 +176,18 @@ window.MuseumRoom2 = (() => {
     }
 
     const centerSpot = new THREE.SpotLight(
-      0xfff3d6,
-      1.55,
+      0xfff2dc,
+      1.45,
       10.2,
       Math.PI / 2.9,
-      0.68,
+      0.72,
       1.5,
     );
     centerSpot.position.set(0, 4.35, 1.9);
     centerSpot.target = centerGroup;
     scene.add(centerSpot);
 
-    // 5 Cột trụ kiến trúc có rãnh dọc + vòng sáng ở chân cột & đầu cột (InstancedMesh)
+    // 5 Cột trụ rãnh đá thanh lịch (InstancedMesh, không vòng neon phát sáng)
     const radius = 5.4;
     if (
       window.MuseumData &&
@@ -266,30 +216,19 @@ window.MuseumRoom2 = (() => {
       const capGeo = getGeo("room2_pillar_cap_geo", () =>
         new THREE.BoxGeometry(1.66, 0.28, 1.66),
       );
-      const glowRingGeo = getGeo("room2_pillar_glow_ring_geo", () =>
-        new THREE.TorusGeometry(0.65, 0.022, 10, 32),
-      );
-      const topGlowRingGeo = getGeo("room2_pillar_top_glow_ring_geo", () =>
-        new THREE.TorusGeometry(0.6, 0.02, 10, 32),
-      );
 
       const baseMat = getMat("room2_pillar_base_mat", () =>
         new THREE.MeshStandardMaterial({
           color: 0x161a24,
-          roughness: 0.32,
-          metalness: 0.45,
+          roughness: 0.4,
+          metalness: 0.32,
         }),
       );
       const shaftMat = getMat("room2_pillar_shaft_mat", () =>
         new THREE.MeshStandardMaterial({
           map: fluteTex,
-          roughness: 0.48,
-          metalness: 0.1,
-        }),
-      );
-      const glowRingMat = getMat("room2_pillar_glow_mat", () =>
-        new THREE.MeshBasicMaterial({
-          color: 0xfbbf24,
+          roughness: 0.56,
+          metalness: 0.06,
         }),
       );
 
@@ -306,12 +245,6 @@ window.MuseumRoom2 = (() => {
         : null;
       const capsInstanced = useInstanced
         ? new THREE.InstancedMesh(capGeo, baseMat, pCount)
-        : null;
-      const baseRingsInstanced = useInstanced
-        ? new THREE.InstancedMesh(glowRingGeo, glowRingMat, pCount)
-        : null;
-      const topRingsInstanced = useInstanced
-        ? new THREE.InstancedMesh(topGlowRingGeo, glowRingMat, pCount)
         : null;
       const dummy = new THREE.Object3D();
 
@@ -343,15 +276,6 @@ window.MuseumRoom2 = (() => {
           dummy.position.set(x, 4.24, z);
           dummy.updateMatrix();
           capsInstanced.setMatrixAt(idx, dummy.matrix);
-
-          dummy.rotation.set(Math.PI / 2, 0, 0);
-          dummy.position.set(x, 0.54, z);
-          dummy.updateMatrix();
-          baseRingsInstanced.setMatrixAt(idx, dummy.matrix);
-
-          dummy.position.set(x, 4.08, z);
-          dummy.updateMatrix();
-          topRingsInstanced.setMatrixAt(idx, dummy.matrix);
         } else {
           const base = new THREE.Mesh(baseGeo, baseMat);
           base.position.y = 0.18;
@@ -415,11 +339,11 @@ window.MuseumRoom2 = (() => {
         scene.add(pillarGroup);
 
         const spot = new THREE.SpotLight(
-          0xfff1d0,
-          1.42,
+          0xfff2dc,
+          1.38,
           8.8,
           Math.PI / 3.1,
-          0.68,
+          0.72,
           1.5,
         );
         spot.position.set(x * 0.55, 4.3, z * 0.55);
@@ -434,14 +358,10 @@ window.MuseumRoom2 = (() => {
         plinthsInstanced.instanceMatrix.needsUpdate = true;
         shaftsInstanced.instanceMatrix.needsUpdate = true;
         capsInstanced.instanceMatrix.needsUpdate = true;
-        baseRingsInstanced.instanceMatrix.needsUpdate = true;
-        topRingsInstanced.instanceMatrix.needsUpdate = true;
         scene.add(basesInstanced);
         scene.add(plinthsInstanced);
         scene.add(shaftsInstanced);
         scene.add(capsInstanced);
-        scene.add(baseRingsInstanced);
-        scene.add(topRingsInstanced);
       }
     }
   }

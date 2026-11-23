@@ -1,4 +1,4 @@
-// js/app.js - Điều hướng chuyển đổi 4 Tabs chính (Nội Dung, Bảo Tàng 3D, Game Thể Chế, Nhóm Tác Giả), Fullscreen & Cầu nối phím tắt
+// js/app.js - Điều hướng chuyển đổi 4 Tabs chính (Nội Dung, Bảo Tàng 3D, Trắc Nghiệm, Nhóm Tác Giả), Fullscreen & Cầu nối phím tắt
 document.addEventListener("DOMContentLoaded", () => {
   const tabButtons = document.querySelectorAll(".nav-tab");
   const tabContents = document.querySelectorAll(".tab-content");
@@ -182,16 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
         content.classList.remove("block");
       }
     });
-
-    if (targetTab !== "game" && window.ReignsGame) {
-      if (window.ReignsGame.stopConfetti) window.ReignsGame.stopConfetti();
-    } else if (
-      targetTab === "game" &&
-      window.ReignsGame &&
-      typeof window.ReignsGame.onTabActivated === "function"
-    ) {
-      window.ReignsGame.onTabActivated();
-    }
 
     if (targetTab !== "quiz" && window.InteractiveQuiz) {
       if (window.InteractiveQuiz.stopConfetti)
@@ -473,7 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (currentActiveTab === "quiz" || currentActiveTab === "game" || currentActiveTab === "members") {
+    if (currentActiveTab === "quiz" || currentActiveTab === "members") {
       return;
     }
 
@@ -618,11 +608,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Mặc định mở tab Nội Dung (content)
   switchTab("content");
 
-  // Khởi động module Game Thể Chế & Trắc Nghiệm Tương Tác
-  const gameModule = window.ReignsGame || (typeof ReignsGame !== "undefined" ? ReignsGame : null);
-  if (gameModule && gameModule.init) {
-    gameModule.init();
-  }
+  // Khởi động module Trắc Nghiệm Tương Tác
   const quizModule = window.InteractiveQuiz || (typeof InteractiveQuiz !== "undefined" ? InteractiveQuiz : null);
   if (quizModule && quizModule.init) {
     quizModule.init();

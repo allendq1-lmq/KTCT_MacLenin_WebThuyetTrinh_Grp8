@@ -175,18 +175,6 @@ window.MuseumRoom2 = (() => {
       window.MuseumEngine.createStanchionBarrier(centerRingSegments, scene);
     }
 
-    const centerSpot = new THREE.SpotLight(
-      0xfff2dc,
-      1.45,
-      10.2,
-      Math.PI / 2.9,
-      0.72,
-      1.5,
-    );
-    centerSpot.position.set(0, 4.35, 1.9);
-    centerSpot.target = centerGroup;
-    scene.add(centerSpot);
-
     // 5 Cột trụ rãnh đá thanh lịch (InstancedMesh, không vòng neon phát sáng)
     const radius = 5.4;
     if (
@@ -332,23 +320,7 @@ window.MuseumRoom2 = (() => {
         frame.position.set(0, 2.25, 0.78);
         pillarGroup.add(frame);
 
-        const spotTarget = new THREE.Object3D();
-        spotTarget.position.set(0, 2.25, 0);
-        pillarGroup.add(spotTarget);
-
         scene.add(pillarGroup);
-
-        const spot = new THREE.SpotLight(
-          0xfff2dc,
-          1.38,
-          8.8,
-          Math.PI / 3.1,
-          0.72,
-          1.5,
-        );
-        spot.position.set(x * 0.55, 4.3, z * 0.55);
-        spot.target = spotTarget;
-        scene.add(spot);
       });
 
       if (useInstanced) {

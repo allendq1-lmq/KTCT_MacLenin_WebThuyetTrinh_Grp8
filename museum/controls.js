@@ -108,6 +108,7 @@ window.MuseumControls = (() => {
   let isMouseDragging = false;
   let lastMousePos = { x: 0, y: 0 };
   let totalMouseDragDist = 0;
+  let lastHoverRaycastTime = 0;
 
   // Trạng thái xoay góc nhìn đa chạm Mobile (nửa phải màn hình)
   let activeLookTouchId = null;
@@ -538,7 +539,9 @@ window.MuseumControls = (() => {
         if (window.MuseumEngine && window.MuseumEngine.rotateCamera) {
           window.MuseumEngine.rotateCamera(dx * 0.0032, -dy * 0.0032);
         }
-        if (raycaster && camera) {
+        const now = getNowMs();
+        if (raycaster && camera && now - lastHoverRaycastTime >= 80) {
+          lastHoverRaycastTime = now;
           mouse.x = 0;
           mouse.y = 0;
           raycaster.setFromCamera(mouse, camera);
@@ -571,8 +574,13 @@ window.MuseumControls = (() => {
         return;
       }
 
+      const now = getNowMs();
+      if (now - lastHoverRaycastTime < 80) {
+        return;
+      }
       const rect = domElement.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0 && raycaster && camera) {
+        lastHoverRaycastTime = now;
         mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);

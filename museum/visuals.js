@@ -1447,10 +1447,17 @@ window.MuseumVisuals = (() => {
         if (settled) return;
         settled = true;
         cleanup();
-        if ((img.naturalWidth || img.width) > 0) {
-          resolve({ img, src });
+        const finish = () => {
+          if ((img.naturalWidth || img.width) > 0) {
+            resolve({ img, src });
+          } else {
+            reject(new Error("Loaded image has zero width"));
+          }
+        };
+        if (typeof img.decode === "function") {
+          img.decode().then(finish, finish);
         } else {
-          reject(new Error("Loaded image has zero width"));
+          finish();
         }
       };
 
@@ -1506,19 +1513,8 @@ window.MuseumVisuals = (() => {
         : 4000;
 
     const promise = (async () => {
-      let shouldTryLocal = Boolean(
-        exhibit.localImagePath &&
-          (exhibit.preferLocal === true ||
-            options.tryLocalFirst === true ||
-            !exhibit.imageUrl),
-      );
-      if (!shouldTryLocal && exhibit.localImagePath) {
-        const manifestSet = await getLocalManifest();
-        shouldTryLocal = manifestContains(manifestSet, exhibit.localImagePath);
-      }
-
-      // Bước 1: Ưu tiên ảnh local trước nếu có khai báo trong manifest/preferLocal hoặc không có ảnh mạng
-      if (shouldTryLocal) {
+      // Bước 1: Ưu tiên nạp thẳng ảnh local ngay lập tức nếu có khai báo localImagePath (không qua hàng đợi & không fetch images/manifest.json)
+      if (exhibit.localImagePath) {
         try {
           const localRes = await tryLoadSingleImage(
             exhibit.localImagePath,
@@ -1532,7 +1528,7 @@ window.MuseumVisuals = (() => {
             src: localRes.src,
           };
         } catch (_) {
-          // Chưa có ảnh local -> chuyển tiếp sang URL Wikimedia CORS-friendly
+          // Fallback sang URL dự phòng từ Wikimedia nếu ảnh local không nạp được
         }
       }
 
@@ -1554,6 +1550,7 @@ window.MuseumVisuals = (() => {
             src: remoteRes.src,
           };
         } catch (err) {
+          remoteUrlCache.delete(exhibit.imageUrl);
           return {
             ok: false,
             reason: err && err.message ? err.message : "load-failed",
@@ -1566,6 +1563,16 @@ window.MuseumVisuals = (() => {
 
     if (cacheKey) {
       imageCache.set(cacheKey, promise);
+      promise.then(
+        (res) => {
+          if (!res || !res.ok) {
+            imageCache.delete(cacheKey);
+          }
+        },
+        () => {
+          imageCache.delete(cacheKey);
+        },
+      );
     }
     return promise;
   }

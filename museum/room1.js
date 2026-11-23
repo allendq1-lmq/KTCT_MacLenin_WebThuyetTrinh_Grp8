@@ -204,25 +204,6 @@ window.MuseumRoom1 = (() => {
         frame.position.set(ex.x, ex.y, ex.z);
         frame.rotation.y = ex.rotY;
         scene.add(frame);
-
-        // Đèn rọi tranh ấm áp, dịu mắt
-        const spot = new THREE.SpotLight(
-          0xfff2dc,
-          1.35,
-          9.8,
-          Math.PI / 3.1,
-          0.72,
-          1.5,
-        );
-        if (ex.wall === "back") {
-          spot.position.set(ex.x, 4.15, ex.z + 2.6);
-        } else if (ex.wall === "left") {
-          spot.position.set(ex.x + 2.6, 4.15, ex.z);
-        } else {
-          spot.position.set(ex.x - 2.6, 4.15, ex.z);
-        }
-        spot.target = frame;
-        scene.add(spot);
       });
     }
   }

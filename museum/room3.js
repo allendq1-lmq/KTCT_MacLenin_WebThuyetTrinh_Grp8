@@ -35,16 +35,7 @@ window.MuseumRoom3 = (() => {
   }
 
   function buildWingAtmosphere(scene) {
-    // Ánh sáng bổ trợ dịu nhẹ cho hai cánh (loại bỏ hoàn toàn ánh sáng đỏ/xanh neon gắt gây ám màu tường)
-    const leftWarmLight = new THREE.PointLight(0xd4a373, 0.38, 13.0, 1.8);
-    leftWarmLight.position.set(-6.2, 3.1, 0);
-    scene.add(leftWarmLight);
-
-    const rightSoftLight = new THREE.PointLight(0xdfece6, 0.38, 13.0, 1.8);
-    rightSoftLight.position.set(6.2, 3.1, 0);
-    scene.add(rightSoftLight);
-
-    // Trục dẫn sàn trung tâm trầm tĩnh hướng về Bảng đối chiếu 6 tiêu chí
+    // Trục dẫn sàn trung tâm trầm tĩnh hướng về Bảng đối chiếu 6 tiêu chí (dùng hệ 3 đèn tổng chuẩn 60 FPS)
     const axisMat = new THREE.MeshStandardMaterial({
       color: 0x161b26,
       roughness: 0.65,
@@ -217,18 +208,6 @@ window.MuseumRoom3 = (() => {
         frame.position.set(ex.x, 2.48, ex.z);
         frame.rotation.y = ex.rotY;
         scene.add(frame);
-
-        const spotCenter = new THREE.SpotLight(
-          0xfff2dc,
-          1.48,
-          12.0,
-          Math.PI / 2.8,
-          0.72,
-          1.5,
-        );
-        spotCenter.position.set(0, 4.3, -2.5);
-        spotCenter.target = frame;
-        scene.add(spotCenter);
       } else if (ex.id === "r3-verdict") {
         // Đài Phán quyết trung tâm tĩnh tại, trang nghiêm (không cột đèn cầu và vòng neon)
         const verdictGroup = new THREE.Group();
@@ -299,18 +278,6 @@ window.MuseumRoom3 = (() => {
         window.MuseumEngine.interactableObjects.push(step1);
         window.MuseumEngine.interactableObjects.push(step2);
         scene.add(verdictGroup);
-
-        const spotVerdict = new THREE.SpotLight(
-          0xfff2dc,
-          1.38,
-          9.8,
-          Math.PI / 3.1,
-          0.72,
-          1.5,
-        );
-        spotVerdict.position.set(0, 4.25, ex.z + 2.8);
-        spotVerdict.target = verdictGroup;
-        scene.add(spotVerdict);
       } else {
         // Tranh hai cánh: ánh sáng rọi bảo tàng ấm tự nhiên
         const isDarkWing = ex.x < 0;
@@ -340,18 +307,6 @@ window.MuseumRoom3 = (() => {
         frame.position.set(ex.x, ex.y, ex.z);
         frame.rotation.y = ex.rotY;
         scene.add(frame);
-
-        const spot = new THREE.SpotLight(
-          0xfff2dc,
-          1.4,
-          10.8,
-          Math.PI / 3.0,
-          0.72,
-          1.5,
-        );
-        spot.position.set(ex.x > 0 ? ex.x - 2.8 : ex.x + 2.8, 4.2, ex.z);
-        spot.target = frame;
-        scene.add(spot);
       }
     });
   }

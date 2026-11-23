@@ -71,6 +71,7 @@ window.MuseumEngine = (() => {
     materials: new Map(),
     textures: new Map(),
   };
+  const artworkTextureCache = new Map();
 
   function getSharedGeometry(key, factory) {
     if (!sharedResources.geometries.has(key)) {
@@ -104,10 +105,10 @@ window.MuseumEngine = (() => {
     );
   }
 
-  // Giới hạn PixelRatio tối đa 1.5 trên Desktop và 1.25 trên Mobile (B1)
+  // Giới hạn PixelRatio tối đa 1.25 trên Desktop và 1.0 trên Mobile để giữ 60 FPS ổn định
   function getOptimalPixelRatio() {
     const dpr = window.devicePixelRatio || 1;
-    const maxDpr = isMobileDevice() ? 1.25 : 1.5;
+    const maxDpr = isMobileDevice() ? 1.0 : 1.25;
     return Math.min(dpr, maxDpr);
   }
 
@@ -519,23 +520,34 @@ window.MuseumEngine = (() => {
     descLines,
     exhibitMeta,
   ) {
-    // Khung tranh lớn chỉ hiển thị duy nhất bức ảnh tư liệu/minh họa phủ kín (cover), tuyệt đối không vẽ chữ hay biểu đồ
-    const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 700;
-    const ctx = canvas.getContext("2d");
     const meta = resolveExhibitMeta(title, badgeText, exhibitMeta);
     const accentColor = tagColor || meta.color || "#d97706";
     const visualType = meta.visualType || meta.id || "r1-1a";
+    const cacheKey = meta.id || meta.localImagePath || visualType;
 
-    // Lớp bo giấy mỹ thuật (Archival Passepartout Matboard) màu than ấm sâu 28px quanh tranh
-    const bgGrad = ctx.createLinearGradient(0, 0, 1024, 700);
+    if (artworkTextureCache.has(cacheKey)) {
+      return artworkTextureCache.get(cacheKey).tex;
+    }
+
+    const isComparisonBoard = visualType === "r3-table";
+    const W = isComparisonBoard ? 1024 : 768;
+    const H = isComparisonBoard ? 700 : 525;
+    const margin = isComparisonBoard ? 28 : 21;
+
+    // Khung tranh lớn chỉ hiển thị duy nhất bức ảnh tư liệu/minh họa phủ kín (cover) kèm bo giấy mỹ thuật
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+
+    // Lớp bo giấy mỹ thuật (Archival Passepartout Matboard) màu than ấm sâu quanh tranh
+    const bgGrad = ctx.createLinearGradient(0, 0, W, H);
     bgGrad.addColorStop(0, "#11131a");
     bgGrad.addColorStop(1, "#14161f");
     ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, 1024, 700);
+    ctx.fillRect(0, 0, W, H);
 
-    const photoRect = { x: 28, y: 28, w: 968, h: 644 };
+    const photoRect = { x: margin, y: margin, w: W - margin * 2, h: H - margin * 2 };
     ctx.fillStyle = "#161822";
     ctx.fillRect(photoRect.x, photoRect.y, photoRect.w, photoRect.h);
     ctx.strokeStyle = "rgba(212, 160, 56, 0.35)";
@@ -543,7 +555,12 @@ window.MuseumEngine = (() => {
     ctx.strokeRect(photoRect.x - 1, photoRect.y - 1, photoRect.w + 2, photoRect.h + 2);
 
     const tex = configureCanvasTexture(new THREE.CanvasTexture(canvas), 4);
-    const captureEpoch = sceneEpoch;
+    tex.userData = tex.userData || {};
+    tex.userData.isShared = true;
+    tex.userData.isCachedArtwork = true;
+
+    const entry = { id: cacheKey, tex, canvas, ctx, drawn: false };
+    artworkTextureCache.set(cacheKey, entry);
 
     if (
       window.MuseumVisuals &&
@@ -555,7 +572,10 @@ window.MuseumEngine = (() => {
         localTimeoutMs: 8000,
       })
         .then((res) => {
-          if (!res || !res.ok || !res.img || captureEpoch !== sceneEpoch) {
+          if (!res || !res.ok || !res.img) {
+            if (!entry.drawn) {
+              artworkTextureCache.delete(cacheKey);
+            }
             return;
           }
           window.MuseumVisuals.drawLoadedPhotoInFrame(
@@ -567,9 +587,14 @@ window.MuseumEngine = (() => {
             accentColor,
             "",
           );
+          entry.drawn = true;
           tex.needsUpdate = true;
         })
-        .catch(() => {});
+        .catch(() => {
+          if (!entry.drawn) {
+            artworkTextureCache.delete(cacheKey);
+          }
+        });
     }
 
     return tex;
@@ -591,6 +616,7 @@ window.MuseumEngine = (() => {
 
   function formatEditorialTitle(text) {
     const keepUpper = new Set([
+      "KT",
       "KTTT",
       "XHCN",
       "ĐHXHCN",
@@ -674,30 +700,59 @@ window.MuseumEngine = (() => {
     let mainRaw = raw;
 
     if (parts.length >= 2) {
-      kicker = parts[0].trim().toUpperCase();
+      kicker = parts[0].trim();
       mainRaw = parts.slice(1).join(" • ").trim();
+    } else if (meta.sectionCode) {
+      kicker = String(meta.sectionCode).trim();
     } else if (meta.badge) {
-      kicker = String(meta.badge).split("•")[0].trim().toUpperCase();
+      kicker = String(meta.badge).split("•")[0].trim();
     }
 
-    if (meta.badge && kicker && meta.badge.toUpperCase().includes("•")) {
-      const badgeParts = String(meta.badge).split("•").map((p) => p.trim().toUpperCase());
-      if (badgeParts.length >= 2 && badgeParts[0].includes(kicker)) {
-        kicker = `${badgeParts[0]}  ·  ${badgeParts[1]}`;
+    const secUpper = String(meta.sectionCode || "").trim().toUpperCase();
+    if (meta.id === "r3-table" || secUpper === "3.BẢNG") {
+      kicker = "BẢNG ĐỐI CHIẾU";
+    } else if (meta.id === "r3-verdict" || secUpper === "3.KẾT") {
+      kicker = "PHÁN QUYẾT TỔNG KẾT";
+    } else {
+      const cleanCode = String(kicker || "")
+        .replace(/\s*\([^)]*\)/g, "")
+        .trim()
+        .toUpperCase();
+      if (/^ĐẶC\s+TRƯNG\s+[0-9]+$/i.test(cleanCode)) {
+        kicker = cleanCode.replace(/\s+/g, " ");
+      } else if (/^[0-9]+(\.[0-9a-z]+)*$/i.test(cleanCode)) {
+        kicker = `MỤC ${cleanCode}`;
+      } else {
+        kicker = cleanCode;
       }
     }
 
-    const sourceMain = meta.title
-      ? String(meta.title).replace(/^[0-9]+(\.[0-9]+[a-z]?)?[.:]\s*/i, "").replace(/^Đặc\s+Trưng\s+[0-9]+\s*:\s*/i, "").trim()
-      : mainRaw;
+    const fallbackTitle = meta.title
+      ? String(meta.title)
+          .replace(/^[0-9]+(\.[0-9]+[a-z]?)?[.:]\s*/i, "")
+          .replace(/^Đặc\s+Trưng\s+[0-9]+\s*:\s*/i, "")
+          .trim()
+      : "";
+    const chosenMain = parts.length >= 2 && mainRaw ? mainRaw : fallbackTitle || mainRaw;
 
     return {
       kicker,
-      main: formatEditorialTitle(sourceMain || mainRaw),
+      main: formatEditorialTitle(chosenMain),
     };
   }
 
-  function drawTrackedText(ctx, text, x, y, letterSpacing = 3) {
+  function measureTrackedWidth(ctx, text, letterSpacing = 1.5) {
+    const chars = Array.from(String(text || ""));
+    if (chars.length === 0) return 0;
+    let total = 0;
+    for (let i = 0; i < chars.length; i++) {
+      total += ctx.measureText(chars[i]).width;
+      if (i < chars.length - 1) total += letterSpacing;
+    }
+    return total;
+  }
+
+  function drawTrackedText(ctx, text, x, y, letterSpacing = 1.5) {
     const chars = Array.from(String(text || ""));
     let curX = x;
     for (let i = 0; i < chars.length; i++) {
@@ -745,8 +800,8 @@ window.MuseumEngine = (() => {
 
   function drawPlacardCanvas(canvas, title, subtitle, exhibitMeta, frameWidth) {
     const dims = getPlacardDimensions(frameWidth);
-    const W = 2048;
-    const H = Math.max(180, Math.round(W / dims.aspectRatio));
+    const W = 1024;
+    const H = Math.max(120, Math.round(W / dims.aspectRatio));
     if (canvas.width !== W || canvas.height !== H) {
       canvas.width = W;
       canvas.height = H;
@@ -765,10 +820,10 @@ window.MuseumEngine = (() => {
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, W, H);
 
-    // 1 đường viền mảnh tinh tế (~1.5px tương đương)
-    const borderInset = 14;
+    // 1 đường viền mảnh tinh tế
+    const borderInset = 7;
     ctx.strokeStyle = "rgba(212, 160, 56, 0.38)";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 1.5;
     ctx.strokeRect(
       borderInset,
       borderInset,
@@ -777,17 +832,17 @@ window.MuseumEngine = (() => {
     );
 
     // Thanh nhấn vàng kim thanh lịch dọc cạnh trái
-    const padX = 78;
-    const padY = Math.round(H * 0.14);
-    const barW = 10;
+    const padX = 38;
+    const padY = Math.round(H * 0.13);
+    const barW = 5;
     const barGrad = ctx.createLinearGradient(0, padY, 0, H - padY);
     barGrad.addColorStop(0, "#f5c451");
     barGrad.addColorStop(1, "#b87f24");
     ctx.fillStyle = barGrad;
     ctx.fillRect(padX, padY, barW, H - padY * 2);
 
-    const contentX = padX + barW + 46;
-    const safeWidth = W - contentX - 72;
+    const contentX = padX + barW + 22;
+    const safeWidth = W - contentX - 36;
     const safeHeight = H - padY * 2;
     const centerY = H / 2;
 
@@ -795,22 +850,22 @@ window.MuseumEngine = (() => {
     const serifFont = "'Playfair Display', Georgia, 'Times New Roman', serif";
 
     const kickerFontSize = kicker
-      ? Math.max(24, Math.min(34, Math.round(safeHeight * 0.135)))
+      ? Math.max(12, Math.min(17, Math.round(safeHeight * 0.14)))
       : 0;
     const subFontSize = subRaw
-      ? Math.max(24, Math.min(34, Math.round(safeHeight * 0.135)))
+      ? Math.max(11, Math.min(16, Math.round(safeHeight * 0.135)))
       : 0;
-    const kickerGap = kicker ? Math.round(kickerFontSize * 0.6) : 0;
-    const subGap = subRaw ? Math.round(subFontSize * 0.65) : 0;
+    const kickerGap = kicker ? Math.max(6, Math.round(kickerFontSize * 0.55)) : 0;
+    const subGap = subRaw ? Math.max(6, Math.round(subFontSize * 0.55)) : 0;
     const maxMainHeight =
       safeHeight -
       (kicker ? kickerFontSize + kickerGap : 0) -
       (subRaw ? subFontSize + subGap : 0);
 
-    let fontSize = Math.max(32, Math.min(78, Math.round(maxMainHeight * 0.56)));
+    let fontSize = Math.max(16, Math.min(38, Math.round(maxMainHeight * 0.54)));
     let lines = [main];
 
-    while (fontSize >= 28) {
+    while (fontSize >= 12) {
       ctx.font = `700 ${fontSize}px ${serifFont}`;
       lines = splitBalancedTwoLines(ctx, main, safeWidth);
       const lineHeight = Math.round(fontSize * 1.18);
@@ -819,10 +874,13 @@ window.MuseumEngine = (() => {
       if (maxLineWidth <= safeWidth && blockHeight <= maxMainHeight) {
         break;
       }
-      fontSize -= 2;
+      fontSize -= 1;
     }
 
     ctx.font = `700 ${fontSize}px ${serifFont}`;
+    lines = lines.map((ln) =>
+      ctx.measureText(ln).width <= safeWidth ? ln : truncateSingleLine(ctx, ln, safeWidth),
+    );
     const lineHeight = Math.round(fontSize * 1.18);
     const mainBlockHeight = lines.length * lineHeight;
     const totalBlockHeight =
@@ -834,11 +892,20 @@ window.MuseumEngine = (() => {
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
 
-    // Tầng 1: Kicker (Mã mục / Chủ đề) IN HOA tracking rộng
+    // Tầng 1: Kicker (Mã mục / Số thứ tự ngắn gọn) IN HOA tracking thoáng, không tràn
+    let drawnKicker = kicker;
     if (kicker) {
       ctx.font = `600 ${kickerFontSize}px ${sansFont}`;
+      let letterSpacing = 1.6;
+      if (measureTrackedWidth(ctx, drawnKicker, letterSpacing) > safeWidth) {
+        letterSpacing = 0.6;
+      }
+      if (measureTrackedWidth(ctx, drawnKicker, letterSpacing) > safeWidth) {
+        drawnKicker = truncateSingleLine(ctx, drawnKicker, safeWidth);
+        letterSpacing = 0.2;
+      }
       ctx.fillStyle = "#f59e0b";
-      drawTrackedText(ctx, kicker, contentX, currentY + kickerFontSize / 2, 3.5);
+      drawTrackedText(ctx, drawnKicker, contentX, currentY + kickerFontSize / 2, letterSpacing);
       currentY += kickerFontSize + kickerGap;
     }
 
@@ -863,12 +930,17 @@ window.MuseumEngine = (() => {
     ctx.font = `700 ${fontSize}px ${serifFont}`;
     const maxLineWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
     canvas._placardMetrics = {
+      id: meta.id || "",
       width: W,
       height: H,
       aspectRatio: W / H,
       meshAspectRatio: dims.aspectRatio,
       safeWidth,
       safeHeight,
+      kicker: drawnKicker,
+      main,
+      lines,
+      fontSize,
       maxLineWidth,
       totalBlockHeight,
       fits: maxLineWidth <= safeWidth + 0.5 && totalBlockHeight <= safeHeight + 0.5,
@@ -1057,7 +1129,7 @@ window.MuseumEngine = (() => {
         }),
     );
     const outerFrame = new THREE.Mesh(outerFrameGeo, outerFrameMat);
-    outerFrame.castShadow = true;
+    outerFrame.castShadow = false;
     outerFrame.receiveShadow = true;
     group.add(outerFrame);
 
@@ -1152,18 +1224,13 @@ window.MuseumEngine = (() => {
     matBoard.position.z = 0.057;
     group.add(matBoard);
 
-    // Bề mặt tranh luôn sáng rõ, có chiều sâu tự nhiên (gỡ bỏ lớp kính gây lóa xám)
+    // Bề mặt tranh hiển thị đúng 100% màu sắc tự nhiên bằng MeshBasicMaterial, cập nhật tức thì khi ảnh decode xong
     const canvasGeo = getSharedGeometry(
       `frame-canvas-${width}-${height}`,
       () => new THREE.PlaneGeometry(width, height),
     );
-    const canvasMat = new THREE.MeshStandardMaterial({
+    const canvasMat = new THREE.MeshBasicMaterial({
       map: artTexture,
-      emissiveMap: artTexture,
-      emissive: new THREE.Color(0xffffff),
-      emissiveIntensity: 0.22,
-      roughness: 0.85,
-      metalness: 0.0,
     });
     const canvasMesh = new THREE.Mesh(canvasGeo, canvasMat);
     canvasMesh.position.z = 0.06;
@@ -1190,7 +1257,7 @@ window.MuseumEngine = (() => {
     const placardBase = new THREE.Mesh(placardBaseGeo, placardBaseMat);
     placardBase.position.set(0, placardY, 0.04);
     placardBase.rotation.x = -0.04;
-    placardBase.castShadow = true;
+    placardBase.castShadow = false;
     group.add(placardBase);
 
     // Mặt bảng tên Editorial Museum Plaque sắc nét, tương phản cao ở mọi góc nhìn
@@ -1198,13 +1265,8 @@ window.MuseumEngine = (() => {
       `placard-plane-${width}`,
       () => new THREE.PlaneGeometry(width, placardInnerH),
     );
-    const placardMat = new THREE.MeshStandardMaterial({
+    const placardMat = new THREE.MeshBasicMaterial({
       map: placardTexture,
-      emissiveMap: placardTexture,
-      emissive: new THREE.Color(0xffffff),
-      emissiveIntensity: 0.18,
-      roughness: 0.78,
-      metalness: 0.05,
     });
     const placardMesh = new THREE.Mesh(placardGeo, placardMat);
     placardMesh.position.set(0, placardY, 0.063);
@@ -1976,6 +2038,13 @@ window.MuseumEngine = (() => {
     });
     sharedResources.textures.clear();
 
+    artworkTextureCache.forEach((entry) => {
+      if (entry && entry.tex && typeof entry.tex.dispose === "function") {
+        entry.tex.dispose();
+      }
+    });
+    artworkTextureCache.clear();
+
     if (
       window.MuseumAvatar &&
       typeof window.MuseumAvatar.dispose === "function"
@@ -2193,14 +2262,14 @@ window.MuseumEngine = (() => {
 
   function loadRoom(roomNumber) {
     placardRegistry.length = 0;
-    // Hệ ánh sáng phòng trưng bày PBR có chiều sâu, tôn vật liệu đá & đồng thau
-    const hemiLight = new THREE.HemisphereLight(0xf6ebd6, 0x151924, 0.48);
+    // Hệ 3 đèn tổng phòng trưng bày PBR có chiều sâu, tôn vật liệu đá & đồng thau (tối ưu shader 60 FPS)
+    const hemiLight = new THREE.HemisphereLight(0xf6ebd6, 0x1a2030, 0.65);
     scene.add(hemiLight);
 
-    const ambLight = new THREE.AmbientLight(0xfff1dc, 0.22);
+    const ambLight = new THREE.AmbientLight(0xfff1dc, 0.34);
     scene.add(ambLight);
 
-    const dirLight = new THREE.DirectionalLight(0xfff4e0, 0.42);
+    const dirLight = new THREE.DirectionalLight(0xfff4e0, 0.58);
     dirLight.position.set(3.5, 6.5, 4.0);
     scene.add(dirLight);
 
@@ -2215,6 +2284,10 @@ window.MuseumEngine = (() => {
       window.MuseumRoom2.build(scene);
     else if (roomNumber === 3 && window.MuseumRoom3)
       window.MuseumRoom3.build(scene);
+
+    if (renderer && renderer.shadowMap) {
+      renderer.shadowMap.needsUpdate = true;
+    }
 
     resetCamera();
   }
@@ -2342,6 +2415,7 @@ window.MuseumEngine = (() => {
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.autoUpdate = false;
 
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.98;
@@ -2450,6 +2524,11 @@ window.MuseumEngine = (() => {
       placardRegistry.map((entry) =>
         entry && entry.canvas ? entry.canvas._placardMetrics : null,
       ),
+    getArtworkCacheStatus: () =>
+      Array.from(artworkTextureCache.values()).map((entry) => ({
+        id: entry.id,
+        drawn: Boolean(entry.drawn),
+      })),
     createComparisonBoardTexture,
     createGalleryFrame,
     createBench,

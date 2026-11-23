@@ -684,14 +684,14 @@ window.MuseumData = (() => {
       visualType: "r2-b2",
       localImagePath: "assets/exhibits/r2-b2.jpg",
       preferLocal: true,
-      plaqueTitle: "ĐẶC TRƯNG 2 • SỞ HỮU & THÀNH PHẦN KINH TẾ",
+      plaqueTitle: "ĐẶC TRƯNG 2 • QUAN HỆ SỞ HỮU & THÀNH PHẦN KINH TẾ",
       imageUrl:
         "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Hoa_Binh_Dam.JPG/1280px-Hoa_Binh_Dam.JPG",
       imageCaption:
         "Nhà máy Thủy điện Hòa Bình — công trình hạ tầng năng lượng chiến lược nơi Kinh tế Nhà nước giữ vai trò chủ đạo (Ảnh: Fargo888 / Wikimedia Commons)",
-      badge: "Cột Trụ 02 • Sở Hữu & Thành Phần KT",
-      title: "Đặc Trưng 2: Quan Hệ Sở Hữu & Thành Phần KT",
-      subtitle: "Nội dung kinh tế - pháp lý; KT nhà nước chủ đạo, KT tư nhân động lực",
+      badge: "Cột Trụ 02 • Sở Hữu & Thành Phần Kinh Tế",
+      title: "Đặc Trưng 2: Quan Hệ Sở Hữu & Thành Phần Kinh Tế",
+      subtitle: "Nội dung kinh tế - pháp lý; kinh tế nhà nước chủ đạo, kinh tế tư nhân là động lực",
       color: "#0284c7",
       lines: [
         "• Sở hữu gồm hai mặt: Nội dung kinh tế & Nội dung pháp lý.",

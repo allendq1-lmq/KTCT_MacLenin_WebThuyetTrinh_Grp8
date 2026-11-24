@@ -843,7 +843,7 @@ const StandaloneReignsGame = (() => {
     }
   }
 
-  async function fetchJsonWithTimeout(url, options, timeoutMs, fetchImpl) {
+  async function fetchWithMeta(url, options, timeoutMs, fetchImpl) {
     if (!url || typeof fetchImpl !== "function") {
       throw new Error("Fetch unavailable");
     }
@@ -858,13 +858,33 @@ const StandaloneReignsGame = (() => {
         ? { ...(options || {}), signal: controller.signal }
         : { ...(options || {}) };
       const response = await fetchImpl(url, fetchOpts);
-      if (!response || !response.ok) {
-        throw new Error(`HTTP ${response ? response.status : "ERR"}`);
+      const etag =
+        response && response.headers && typeof response.headers.get === "function"
+          ? response.headers.get("etag")
+          : null;
+      let data = null;
+      if (response && typeof response.json === "function") {
+        try {
+          data = await response.json();
+        } catch (_) {}
       }
-      return await response.json();
+      return {
+        ok: Boolean(response && response.ok),
+        status: response ? response.status : 0,
+        data,
+        etag,
+      };
     } finally {
       if (timer !== null) clearTimeout(timer);
     }
+  }
+
+  async function fetchJsonWithTimeout(url, options, timeoutMs, fetchImpl) {
+    const res = await fetchWithMeta(url, options, timeoutMs, fetchImpl);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status || "ERR"}`);
+    }
+    return res.data;
   }
 
   function createLeaderboardClient(options = {}) {
@@ -875,6 +895,7 @@ const StandaloneReignsGame = (() => {
       Number(cfg.requestTimeoutMs) > 0 ? Number(cfg.requestTimeoutMs) : 7000;
     const playerKey = cfg.storageKeys.player;
     const localLbKey = cfg.storageKeys.localLeaderboard;
+    const pendingKey = `${localLbKey}_pending_v1`;
     const fetcher =
       options.fetchImpl ||
       (typeof fetch === "function" ? fetch.bind(globalThis) : null);
@@ -944,6 +965,22 @@ const StandaloneReignsGame = (() => {
       }
     }
 
+    function readPendingQueue() {
+      const parsed = readJsonStorage(localStore, pendingKey);
+      return Array.isArray(parsed) ? parsed : [];
+    }
+
+    function writePendingQueue(queue) {
+      writeJsonStorage(localStore, pendingKey, Array.isArray(queue) ? queue : []);
+    }
+
+    function enqueuePendingSubmission(candidate) {
+      if (!candidate || !MSSV_REGEX.test(String(candidate.mssv || ""))) return;
+      const queue = readPendingQueue();
+      queue.push({ ...candidate, queuedAt: Date.now() });
+      writePendingQueue(queue.slice(-20));
+    }
+
     function savePlayer(player) {
       const check = validatePlayerIdentity(
         player && player.name,
@@ -987,6 +1024,17 @@ const StandaloneReignsGame = (() => {
               if (entry) cleanRemoteMap[entry.mssv] = entry;
             });
           }
+          // Bảo toàn các bản ghi đang chờ đồng bộ offline để không bị ghi đè mất
+          const prevLocalMap = readLocalMap();
+          const pendingMssvs = new Set(readPendingQueue().map((item) => item && item.mssv));
+          pendingMssvs.forEach((m) => {
+            if (prevLocalMap[m]) {
+              const remoteM = cleanRemoteMap[m];
+              if (!remoteM || prevLocalMap[m].plays > remoteM.plays || prevLocalMap[m].score > remoteM.score) {
+                cleanRemoteMap[m] = prevLocalMap[m];
+              }
+            }
+          });
           writeLocalMap(cleanRemoteMap);
           const allEntries = sortLeaderboardEntries(cleanRemoteMap, Infinity);
           return {
@@ -1090,59 +1138,77 @@ const StandaloneReignsGame = (() => {
 
       const urls = buildLeaderboardUrls(cfg.firebaseDbUrl, check.mssv);
       if (urls.entryUrl && fetcher) {
-        try {
-          const remoteRaw = await fetchJsonWithTimeout(
-            urls.entryUrl,
-            { method: "GET" },
-            timeoutMs,
-            fetcher,
-          );
-          const remoteEntry = remoteRaw
-            ? normalizeLeaderboardEntry(remoteRaw, check.mssv)
-            : null;
-          const merged = mergeLeaderboardSubmission(
-            remoteEntry,
-            candidate,
-            maxScoredPlays,
-          );
+        const maxRetries = 2;
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+          try {
+            const getRes = await fetchWithMeta(
+              urls.entryUrl,
+              { method: "GET", headers: { "X-Firebase-ETag": "true" } },
+              timeoutMs,
+              fetcher,
+            );
+            if (!getRes.ok) {
+              throw new Error(`HTTP ${getRes.status || "ERR"}`);
+            }
+            const remoteEntry = getRes.data
+              ? normalizeLeaderboardEntry(getRes.data, check.mssv)
+              : null;
+            const merged = mergeLeaderboardSubmission(
+              remoteEntry,
+              candidate,
+              maxScoredPlays,
+            );
 
-          if (!merged.shouldSubmit) {
-            if (remoteEntry) setLocalEntry(remoteEntry);
+            if (!merged.shouldSubmit) {
+              if (remoteEntry) setLocalEntry(remoteEntry);
+              return {
+                submitted: false,
+                isPractice: true,
+                isNewBest: false,
+                mode: "online",
+                entry: remoteEntry,
+                playsUsed: maxScoredPlays,
+                maxScoredPlays,
+                runScore,
+              };
+            }
+
+            const putHeaders = { "Content-Type": "application/json" };
+            if (getRes.etag) {
+              putHeaders["If-Match"] = getRes.etag;
+            }
+            const putRes = await fetchWithMeta(
+              urls.entryUrl,
+              {
+                method: "PUT",
+                headers: putHeaders,
+                body: JSON.stringify(merged.entry),
+              },
+              timeoutMs,
+              fetcher,
+            );
+            if (putRes.status === 412 && attempt < maxRetries) {
+              continue;
+            }
+            if (!putRes.ok) {
+              throw new Error(`HTTP ${putRes.status || "ERR"}`);
+            }
+
+            setLocalEntry(merged.entry);
             return {
-              submitted: false,
-              isPractice: true,
-              isNewBest: false,
+              submitted: true,
+              isPractice: false,
+              isNewBest: merged.isNewBest,
               mode: "online",
-              entry: remoteEntry,
-              playsUsed: maxScoredPlays,
+              entry: merged.entry,
+              playsUsed: merged.entry.plays,
               maxScoredPlays,
               runScore,
             };
+          } catch (_) {
+            break;
           }
-
-          await fetchJsonWithTimeout(
-            urls.entryUrl,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(merged.entry),
-            },
-            timeoutMs,
-            fetcher,
-          );
-
-          setLocalEntry(merged.entry);
-          return {
-            submitted: true,
-            isPractice: false,
-            isNewBest: merged.isNewBest,
-            mode: "online",
-            entry: merged.entry,
-            playsUsed: merged.entry.plays,
-            maxScoredPlays,
-            runScore,
-          };
-        } catch (_) {}
+        }
       }
 
       const localEntry = getLocalEntry(check.mssv);
@@ -1165,6 +1231,7 @@ const StandaloneReignsGame = (() => {
       }
 
       setLocalEntry(offlineMerged.entry);
+      enqueuePendingSubmission(candidate);
       return {
         submitted: true,
         isPractice: false,
@@ -1177,30 +1244,55 @@ const StandaloneReignsGame = (() => {
       };
     }
 
-    async function deletePlayerRecord(mssv) {
-      const cleanMssv = sanitizeMssvInput(mssv);
-      let remoteDeleted = false;
-      let mode = "offline";
-
-      if (MSSV_REGEX.test(cleanMssv)) {
-        const urls = buildLeaderboardUrls(cfg.firebaseDbUrl, cleanMssv);
-        if (urls.entryUrl && fetcher) {
-          try {
-            await fetchJsonWithTimeout(
+    async function syncPendingSubmissions() {
+      const queue = readPendingQueue();
+      if (!queue.length) return { synced: 0, remaining: 0 };
+      const remaining = [];
+      let synced = 0;
+      for (let i = 0; i < queue.length; i++) {
+        const item = queue[i];
+        const urls = buildLeaderboardUrls(cfg.firebaseDbUrl, item && item.mssv);
+        if (!urls.entryUrl || !fetcher) {
+          remaining.push(item);
+          continue;
+        }
+        try {
+          const getRes = await fetchWithMeta(
+            urls.entryUrl,
+            { method: "GET", headers: { "X-Firebase-ETag": "true" } },
+            timeoutMs,
+            fetcher,
+          );
+          if (!getRes.ok) throw new Error("GET_FAIL");
+          const remoteEntry = getRes.data
+            ? normalizeLeaderboardEntry(getRes.data, item.mssv)
+            : null;
+          const merged = mergeLeaderboardSubmission(remoteEntry, item, maxScoredPlays);
+          if (merged.shouldSubmit) {
+            const headers = { "Content-Type": "application/json" };
+            if (getRes.etag) headers["If-Match"] = getRes.etag;
+            const putRes = await fetchWithMeta(
               urls.entryUrl,
-              { method: "DELETE" },
+              { method: "PUT", headers, body: JSON.stringify(merged.entry) },
               timeoutMs,
               fetcher,
             );
-            remoteDeleted = true;
-            mode = "online";
-          } catch (_) {}
+            if (!putRes.ok) throw new Error("PUT_FAIL");
+            setLocalEntry(merged.entry);
+          }
+          synced++;
+        } catch (_) {
+          remaining.push(item);
         }
-        removeLocalEntry(cleanMssv);
       }
+      writePendingQueue(remaining);
+      return { synced, remaining: remaining.length };
+    }
 
+    async function deletePlayerRecord(_mssv) {
+      // Bảo vệ dữ liệu BXH: Đăng xuất chỉ xóa session trên máy hiện tại, không xóa record Firebase
       clearSavedPlayer();
-      return { deleted: true, remoteDeleted, mode };
+      return { deleted: false, remoteDeleted: false, mode: "local" };
     }
 
     return {
@@ -1208,17 +1300,26 @@ const StandaloneReignsGame = (() => {
       fetchPlayerRecord,
       updatePlayerDisplayName,
       submitPlayResult,
+      syncPendingSubmissions,
       deletePlayerRecord,
       loadSavedPlayer,
       savePlayer,
       clearSavedPlayer,
       getLocalEntry,
+      hasPendingSubmissions: () => readPendingQueue().length > 0,
     };
   }
 
   // ================= AUDIO ENGINE =================
+  const SOUND_MUTE_KEY = "ktct_game_muted_v1";
   let audioCtx = null;
   let isMuted = false;
+  try {
+    const store = getSafeBrowserStorage("localStorage");
+    if (store && store.getItem(SOUND_MUTE_KEY) === "1") {
+      isMuted = true;
+    }
+  } catch (_) {}
 
   function playSound(type) {
     if (isMuted || typeof window === "undefined") return;
@@ -1226,15 +1327,18 @@ const StandaloneReignsGame = (() => {
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return;
       if (!audioCtx) audioCtx = new Ctx();
-      if (audioCtx.state === "suspended") audioCtx.resume();
+      if (audioCtx.state !== "running" && typeof audioCtx.resume === "function") {
+        const res = audioCtx.resume();
+        if (res && typeof res.catch === "function") res.catch(() => {});
+      }
 
       const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
 
       if (type === "correct") {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
         osc.type = "sine";
         osc.frequency.setValueAtTime(523.25, now);
         osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.12);
@@ -1243,6 +1347,10 @@ const StandaloneReignsGame = (() => {
         osc.start(now);
         osc.stop(now + 0.22);
       } else if (type === "wrong") {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
         osc.type = "triangle";
         osc.frequency.setValueAtTime(220, now);
         osc.frequency.exponentialRampToValueAtTime(146.83, now + 0.18);
@@ -1264,6 +1372,10 @@ const StandaloneReignsGame = (() => {
           o.stop(now + idx * 0.09 + 0.35);
         });
       } else if (type === "gameover") {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
         osc.type = "sawtooth";
         osc.frequency.setValueAtTime(196, now);
         osc.frequency.exponentialRampToValueAtTime(98, now + 0.45);
@@ -1277,9 +1389,17 @@ const StandaloneReignsGame = (() => {
 
   // ================= CONFETTI =================
   let confettiAnimId = null;
+  let confettiStopTimer = null;
   let confettiParticles = [];
 
   function startConfetti() {
+    if (
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
     const canvas = document.getElementById("confetti-canvas");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -1320,9 +1440,14 @@ const StandaloneReignsGame = (() => {
     }
     stopConfetti();
     confettiAnimId = requestAnimationFrame(renderFrame);
+    confettiStopTimer = setTimeout(stopConfetti, 6000);
   }
 
   function stopConfetti() {
+    if (confettiStopTimer) {
+      clearTimeout(confettiStopTimer);
+      confettiStopTimer = null;
+    }
     if (confettiAnimId) {
       cancelAnimationFrame(confettiAnimId);
       confettiAnimId = null;
@@ -1342,6 +1467,9 @@ const StandaloneReignsGame = (() => {
   let isGameOver = false;
   let deck = [];
   let cardAnimTimer = null;
+  let isChoosing = false;
+  let currentRunToken = 0;
+  let leaderboardFetchSeq = 0;
 
   let client = null;
   let activePlayer = null;
@@ -1383,6 +1511,17 @@ const StandaloneReignsGame = (() => {
     }
     if (practiceBanner) {
       practiceBanner.classList.toggle("hidden", playerPlaysUsed < maxPlays);
+    }
+
+    const resetBtn = document.getElementById("btn-reigns-reset");
+    if (resetBtn) {
+      const lockMidRun = playerPlaysUsed < maxPlays && currentYear > 1 && !isGameOver;
+      resetBtn.disabled = lockMidRun;
+      resetBtn.classList.toggle("opacity-50", lockMidRun);
+      resetBtn.classList.toggle("cursor-not-allowed", lockMidRun);
+      resetBtn.title = lockMidRun
+        ? "Không thể chơi lại giữa ván khi đang trong lượt tính điểm"
+        : "Chơi lại ván mới";
     }
   }
 
@@ -1514,6 +1653,8 @@ const StandaloneReignsGame = (() => {
     if (!activePlayer || !client) return;
     const kind = isVictory ? "victory" : "gameover";
     const noteEl = document.getElementById(`${kind}-submit-note`);
+    const runToken = currentRunToken;
+    const submittedMssv = activePlayer.mssv;
 
     const result = await client.submitPlayResult({
       name: activePlayer.name,
@@ -1524,6 +1665,14 @@ const StandaloneReignsGame = (() => {
       isVictory,
     });
 
+    if (
+      runToken !== currentRunToken ||
+      !activePlayer ||
+      activePlayer.mssv !== submittedMssv
+    ) {
+      return;
+    }
+
     if (result.entry) {
       playerPlaysUsed = result.entry.plays;
       playerBestScore = result.entry.score;
@@ -1531,9 +1680,38 @@ const StandaloneReignsGame = (() => {
     updatePlayerBadges();
 
     if (noteEl) {
+      noteEl.innerHTML = "";
       if (result.isPractice) {
         noteEl.textContent =
           "Đã hết 5 lượt tính điểm — lượt này chơi tự do, không ghi lên BXH.";
+      } else if (result.mode === "offline") {
+        const msg = document.createElement("span");
+        msg.textContent = `Đang mất mạng — Điểm (${result.runScore} điểm) mới lưu tạm trên máy, chưa lên BXH online. `;
+        const retrySyncBtn = document.createElement("button");
+        retrySyncBtn.type = "button";
+        retrySyncBtn.className =
+          "ml-1 inline-flex items-center px-2.5 py-1 rounded-lg bg-[#df7a28] hover:bg-[#c4661b] text-white text-xs font-bold cursor-pointer";
+        retrySyncBtn.textContent = "↻ Thử đồng bộ lại";
+        retrySyncBtn.addEventListener("click", async () => {
+          retrySyncBtn.disabled = true;
+          retrySyncBtn.textContent = "Đang đồng bộ...";
+          const syncRes = await client.syncPendingSubmissions();
+          if (syncRes.remaining === 0) {
+            const rec = await client.fetchPlayerRecord(submittedMssv);
+            if (rec.entry && activePlayer && activePlayer.mssv === submittedMssv) {
+              playerPlaysUsed = rec.entry.plays;
+              playerBestScore = rec.entry.score;
+              updatePlayerBadges();
+            }
+            noteEl.textContent = "Đã đồng bộ thành công kết quả lên Bảng Xếp Hạng!";
+            refreshLeaderboard();
+          } else {
+            retrySyncBtn.disabled = false;
+            retrySyncBtn.textContent = "↻ Thử đồng bộ lại";
+          }
+        });
+        noteEl.appendChild(msg);
+        noteEl.appendChild(retrySyncBtn);
       } else if (result.isNewBest) {
         noteEl.textContent = `Đã lưu kỷ lục mới (${result.entry.score} điểm) — Lượt ${result.playsUsed}/${result.maxScoredPlays}.`;
       } else {
@@ -1626,7 +1804,12 @@ const StandaloneReignsGame = (() => {
   }
 
   function applyChoice(side) {
-    if (!activePlayer || isGameOver || !deck.length) return;
+    if (!activePlayer || isGameOver || !deck.length || isChoosing) return;
+    isChoosing = true;
+    setTimeout(() => {
+      isChoosing = false;
+    }, 250);
+
     const cardData = deck[currentCardIndex];
     const decision = side === "left" ? cardData.left : cardData.right;
 
@@ -1647,10 +1830,22 @@ const StandaloneReignsGame = (() => {
         currentCardIndex = 0;
       }
       renderCard();
+      updatePlayerBadges();
     }
   }
 
   function resetGame() {
+    currentRunToken++;
+    isChoosing = false;
+    if (cardAnimTimer) {
+      clearTimeout(cardAnimTimer);
+      cardAnimTimer = null;
+    }
+    const cardEl = document.getElementById("reigns-card");
+    if (cardEl) {
+      cardEl.classList.remove("card-correct-glow", "card-wrong-shake");
+    }
+
     currentYear = 1;
     reignsStats = { growth: 50, equity: 50, environment: 50, stability: 50 };
     currentCardIndex = 0;
@@ -1743,14 +1938,30 @@ const StandaloneReignsGame = (() => {
 
   async function refreshLeaderboard() {
     if (!client) return;
-    latestLeaderboard = await client.fetchLeaderboard();
-    const searchInput = document.getElementById("leaderboard-search");
-    renderLeaderboardTable(searchInput ? searchInput.value : "");
+    const seq = ++leaderboardFetchSeq;
+    const refreshBtn = document.getElementById("btn-leaderboard-refresh");
+    if (refreshBtn) {
+      refreshBtn.disabled = true;
+    }
+    try {
+      const data = await client.fetchLeaderboard();
+      if (seq !== leaderboardFetchSeq) return;
+      latestLeaderboard = data;
+      const searchInput = document.getElementById("leaderboard-search");
+      renderLeaderboardTable(searchInput ? searchInput.value : "");
+    } finally {
+      if (refreshBtn && seq === leaderboardFetchSeq) {
+        refreshBtn.disabled = false;
+      }
+    }
   }
 
   // ================= TAB NAVIGATION =================
   function switchTab(tabName) {
     currentTab = tabName;
+    if (tabName !== "play") {
+      stopConfetti();
+    }
     const tabs = document.querySelectorAll('[role="tab"][data-tab]');
     const panels = document.querySelectorAll('[role="tabpanel"][data-panel]');
 
@@ -1799,7 +2010,7 @@ const StandaloneReignsGame = (() => {
     }
   }
 
-  async function completeLogin(player, syncNameToDb = true) {
+  async function completeLogin(player, _syncNameToDb = true) {
     activePlayer = player;
     client.savePlayer(player);
     updatePlayerBadges();
@@ -1808,12 +2019,13 @@ const StandaloneReignsGame = (() => {
     resetGame();
 
     const rec = await client.fetchPlayerRecord(player.mssv);
+    if (!activePlayer || activePlayer.mssv !== player.mssv) {
+      return;
+    }
     if (rec.entry) {
-      playerPlaysUsed = rec.entry.plays;
+      playerPlaysUsed = Math.max(playerPlaysUsed, rec.entry.plays);
       playerBestScore = rec.entry.score;
-      if (syncNameToDb && rec.entry.name !== player.name) {
-        await client.updatePlayerDisplayName(player.mssv, player.name);
-      }
+      // Giữ nguyên tên gốc đã đăng ký trên BXH để tránh ghi đè nhầm tên sinh viên khác cùng MSSV
     } else {
       playerPlaysUsed = 0;
       playerBestScore = null;
@@ -1833,12 +2045,14 @@ const StandaloneReignsGame = (() => {
     const pillRight = document.getElementById("choice-pill-right");
 
     card.addEventListener("pointerdown", (e) => {
-      if (!activePlayer || isGameOver) return;
+      if (!e.isPrimary || !activePlayer || isGameOver) return;
       isDragging = true;
       startX = e.clientX;
       currentX = 0;
       card.classList.add("swiping");
-      card.setPointerCapture(e.pointerId);
+      try {
+        card.setPointerCapture(e.pointerId);
+      } catch (_) {}
     });
 
     card.addEventListener("pointermove", (e) => {
@@ -1863,6 +2077,15 @@ const StandaloneReignsGame = (() => {
       }
     });
 
+    const resetCardPosition = () => {
+      card.classList.add("reset-anim");
+      card.style.transform = "translate(0px, 0px) rotate(0deg)";
+      pillLeft.style.opacity = "0";
+      pillRight.style.opacity = "0";
+      clearStatDots();
+      setTimeout(() => card.classList.remove("reset-anim"), 250);
+    };
+
     const endDrag = () => {
       if (!isDragging) return;
       isDragging = false;
@@ -1872,17 +2095,19 @@ const StandaloneReignsGame = (() => {
       } else if (currentX > 85) {
         applyChoice("right");
       } else {
-        card.classList.add("reset-anim");
-        card.style.transform = "translate(0px, 0px) rotate(0deg)";
-        pillLeft.style.opacity = "0";
-        pillRight.style.opacity = "0";
-        clearStatDots();
-        setTimeout(() => card.classList.remove("reset-anim"), 250);
+        resetCardPosition();
       }
     };
 
+    const cancelDrag = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      card.classList.remove("swiping");
+      resetCardPosition();
+    };
+
     card.addEventListener("pointerup", endDrag);
-    card.addEventListener("pointercancel", endDrag);
+    card.addEventListener("pointercancel", cancelDrag);
   }
 
   function init() {
@@ -1895,10 +2120,14 @@ const StandaloneReignsGame = (() => {
       btn.addEventListener("click", () => switchTab(btn.dataset.tab));
       btn.addEventListener("keydown", (e) => {
         if (e.key === "ArrowRight") {
+          e.preventDefault();
+          e.stopPropagation();
           const next = tabButtons[(idx + 1) % tabButtons.length];
           next.focus();
           switchTab(next.dataset.tab);
         } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          e.stopPropagation();
           const prev = tabButtons[(idx - 1 + tabButtons.length) % tabButtons.length];
           prev.focus();
           switchTab(prev.dataset.tab);
@@ -1984,10 +2213,18 @@ const StandaloneReignsGame = (() => {
 
     const soundBtn = document.getElementById("btn-sound-toggle");
     if (soundBtn) {
-      soundBtn.addEventListener("click", () => {
-        isMuted = !isMuted;
+      const syncSoundButton = () => {
         soundBtn.setAttribute("aria-pressed", String(isMuted));
         soundBtn.textContent = isMuted ? "🔇 Tắt tiếng" : "🔊 Âm thanh";
+      };
+      syncSoundButton();
+      soundBtn.addEventListener("click", () => {
+        isMuted = !isMuted;
+        try {
+          const store = getSafeBrowserStorage("localStorage");
+          if (store) store.setItem(SOUND_MUTE_KEY, isMuted ? "1" : "0");
+        } catch (_) {}
+        syncSoundButton();
       });
     }
 
@@ -2022,29 +2259,32 @@ const StandaloneReignsGame = (() => {
       logoutCancelBtn.addEventListener("click", () => logoutDialog.close("cancel"));
     }
     if (logoutConfirmBtn && logoutDialog) {
-      logoutConfirmBtn.addEventListener("click", async () => {
+      logoutConfirmBtn.addEventListener("click", () => {
         if (!activePlayer) {
           logoutDialog.close();
           return;
         }
-        const mssvToDelete = activePlayer.mssv;
-        logoutConfirmBtn.disabled = true;
-        logoutConfirmBtn.textContent = "Đang xóa dữ liệu...";
-        try {
-          await client.deletePlayerRecord(mssvToDelete);
-          activePlayer = null;
-          playerPlaysUsed = 0;
-          playerBestScore = null;
-          latestLeaderboard.allEntries = latestLeaderboard.allEntries.filter(
-            (e) => e.mssv !== mssvToDelete,
-          );
-          if (nameInput) nameInput.value = "";
-          if (mssvInput) mssvInput.value = "";
-          logoutDialog.close("confirm");
-          showLoginGate();
-        } finally {
-          logoutConfirmBtn.disabled = false;
-          logoutConfirmBtn.textContent = "Xác nhận đăng xuất & Xóa dữ liệu";
+        currentRunToken++;
+        stopConfetti();
+        client.clearSavedPlayer();
+        activePlayer = null;
+        playerPlaysUsed = 0;
+        playerBestScore = null;
+        if (nameInput) nameInput.value = "";
+        if (mssvInput) mssvInput.value = "";
+        logoutDialog.close("confirm");
+        showLoginGate();
+      });
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", () => {
+        if (client && client.hasPendingSubmissions()) {
+          client.syncPendingSubmissions().then((res) => {
+            if (res && res.synced > 0) {
+              refreshLeaderboard();
+            }
+          });
         }
       });
     }
@@ -2099,6 +2339,7 @@ const StandaloneReignsGame = (() => {
 
   function setupGlobalShortcuts() {
     document.addEventListener("keydown", (e) => {
+      if (e.repeat) return;
       const action = resolveKeyboardShortcutAction(e, {
         isLoggedIn: Boolean(activePlayer),
         currentTab,
@@ -2152,17 +2393,22 @@ const StandaloneReignsGame = (() => {
       if (qrContainer) {
         qrContainer.setAttribute("aria-label", `Mã QR dẫn tới ${targetUrl}`);
       }
-      if (qrRendered || !qrContainer || typeof QRCode === "undefined") return;
-      qrContainer.innerHTML = "";
-      new QRCode(qrContainer, {
-        text: targetUrl,
-        width: 600,
-        height: 600,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H,
-      });
-      qrRendered = true;
+      if (qrRendered || !qrContainer) return;
+      if (typeof QRCode !== "undefined") {
+        qrContainer.innerHTML = "";
+        new QRCode(qrContainer, {
+          text: targetUrl,
+          width: 600,
+          height: 600,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+        qrRendered = true;
+      } else {
+        qrContainer.innerHTML =
+          '<div class="p-4 text-center text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">Không tải được thư viện tạo mã QR do mạng chậm. Vui lòng dùng đường dẫn hoặc nút Sao chép link bên dưới.</div>';
+      }
     }
 
     function openQr(triggerEl) {
@@ -2188,7 +2434,10 @@ const StandaloneReignsGame = (() => {
     });
 
     // Light-dismiss fallback for browsers without <dialog closedby="any">
-    if (!("closedBy" in HTMLDialogElement.prototype)) {
+    if (
+      typeof HTMLDialogElement !== "undefined" &&
+      !("closedBy" in HTMLDialogElement.prototype)
+    ) {
       let pressedOutside = false;
       const isOutside = (e) => {
         const r = qrModal.getBoundingClientRect();
@@ -2208,6 +2457,8 @@ const StandaloneReignsGame = (() => {
     }
 
     if (btnCopyQr) {
+      const DEFAULT_COPY_LABEL = "Sao chép link";
+      let copyResetTimer = null;
       btnCopyQr.addEventListener("click", async () => {
         const url = getTargetUrl();
         try {
@@ -2224,10 +2475,13 @@ const StandaloneReignsGame = (() => {
             document.execCommand("copy");
             document.body.removeChild(tmp);
           }
-          const orig = btnCopyQr.textContent;
+          if (copyResetTimer) {
+            clearTimeout(copyResetTimer);
+          }
           btnCopyQr.textContent = "✓ Đã sao chép liên kết!";
-          setTimeout(() => {
-            btnCopyQr.textContent = orig;
+          copyResetTimer = setTimeout(() => {
+            btnCopyQr.textContent = DEFAULT_COPY_LABEL;
+            copyResetTimer = null;
           }, 2000);
         } catch (_) {}
       });

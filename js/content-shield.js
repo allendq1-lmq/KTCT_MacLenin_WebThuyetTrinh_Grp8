@@ -512,7 +512,7 @@
       }
       .cs-frag-piece {
         display: inline-block;
-        white-space: pre-wrap;
+        white-space: normal;
       }
       .cs-decoy {
         position: absolute !important;
@@ -737,6 +737,11 @@
     if (shieldMode === "passive") {
       verified = true;
       flushVerifiedCallbacks();
+      return;
+    }
+
+    if (shieldMode === "auto-human" && !isLikelyAutomatedBrowser()) {
+      unlock("auto-human");
       return;
     }
 

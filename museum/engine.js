@@ -2767,6 +2767,9 @@ window.MuseumEngine = (() => {
 })();
 
 function bootstrapMuseumApp() {
+  if (typeof window.hydrateMuseumShell === "function") {
+    window.hydrateMuseumShell();
+  }
   if (typeof window.hydrateMuseumData === "function") {
     window.hydrateMuseumData();
   }

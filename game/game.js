@@ -2549,8 +2549,31 @@ const StandaloneReignsGame = (() => {
     }
   }
 
+  function bootstrapGameApp() {
+    if (typeof window !== "undefined" && typeof window.hydrateGameShell === "function") {
+      window.hydrateGameShell();
+    }
+    init();
+  }
+
+  function scheduleGameBootstrap() {
+    if (
+      typeof window !== "undefined" &&
+      window.ContentShield &&
+      typeof window.ContentShield.onHumanVerified === "function"
+    ) {
+      window.ContentShield.onHumanVerified(bootstrapGameApp);
+    } else {
+      bootstrapGameApp();
+    }
+  }
+
   if (typeof document !== "undefined") {
-    document.addEventListener("DOMContentLoaded", init);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", scheduleGameBootstrap);
+    } else {
+      scheduleGameBootstrap();
+    }
   }
 
   return {

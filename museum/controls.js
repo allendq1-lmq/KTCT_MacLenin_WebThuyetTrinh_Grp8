@@ -1046,11 +1046,28 @@ window.MuseumControls = (() => {
 })();
 
 if (typeof window.THREE === "undefined") {
+  const bootFallbackControls = () => {
+    if (typeof window.hydrateMuseumShell === "function") {
+      window.hydrateMuseumShell();
+    }
+    if (typeof window.hydrateMuseumData === "function") {
+      window.hydrateMuseumData();
+    }
+    if (window.MuseumControls) window.MuseumControls.init();
+  };
+  const scheduleFallbackControls = () => {
+    if (
+      window.ContentShield &&
+      typeof window.ContentShield.onHumanVerified === "function"
+    ) {
+      window.ContentShield.onHumanVerified(bootFallbackControls);
+    } else {
+      bootFallbackControls();
+    }
+  };
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.MuseumControls) window.MuseumControls.init();
-    });
-  } else if (window.MuseumControls) {
-    window.MuseumControls.init();
+    document.addEventListener("DOMContentLoaded", scheduleFallbackControls);
+  } else {
+    scheduleFallbackControls();
   }
 }

@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const iconFullscreenExit = document.getElementById("icon-fullscreen-exit");
   const appHeader = document.getElementById("app-header");
   let currentActiveTab = "content";
+  let tabFocusTimer = null;
+  let fsFocusTimer = null;
 
   function isDesktopViewport() {
     return window.innerWidth >= 768 && window.innerHeight > 520;
@@ -37,7 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function isFullscreenSupported() {
     const rootEl = document.documentElement;
+    const fsEnabled =
+      document.fullscreenEnabled !== false &&
+      document.webkitFullscreenEnabled !== false;
     return !!(
+      fsEnabled &&
       rootEl &&
       (rootEl.requestFullscreen || rootEl.webkitRequestFullscreen)
     );
@@ -98,6 +104,9 @@ document.addEventListener("DOMContentLoaded", () => {
         correctLevel: QRCode.CorrectLevel.H,
       });
       qrRendered = true;
+    } else {
+      qrContainer.innerHTML =
+        '<div class="p-4 text-center text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">Không tải được thư viện tạo mã QR do mạng chậm. Vui lòng truy cập trực tiếp đường dẫn bên dưới.</div>';
     }
   }
 
@@ -107,6 +116,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function openQrModal() {
     if (!qrModal) return;
+
+    if (fsFocusTimer) {
+      clearTimeout(fsFocusTimer);
+      fsFocusTimer = null;
+    }
 
     // Nếu đang bật Fullscreen của phần tử con, tự động thoát trước để không che khuất bảng QR
     if (document.fullscreenElement && document.exitFullscreen) {
@@ -122,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (_) {}
     }
 
+    setMuseumActive(false);
     renderQrCodeIfNeeded();
     qrModal.classList.remove("hidden");
     qrModal.classList.add("flex");
@@ -139,6 +154,9 @@ document.addEventListener("DOMContentLoaded", () => {
     qrModal.classList.add("hidden");
     qrModal.classList.remove("flex");
     document.body.style.overflow = "";
+    if (currentActiveTab === "idea2") {
+      setMuseumActive(true);
+    }
     if (btnQrModal) {
       btnQrModal.setAttribute("aria-expanded", "false");
       btnQrModal.focus();
@@ -202,14 +220,31 @@ document.addEventListener("DOMContentLoaded", () => {
     updateFullscreenButtonVisibility();
     syncNavbarHeightVar();
 
+    if (tabFocusTimer) {
+      clearTimeout(tabFocusTimer);
+      tabFocusTimer = null;
+    }
+
+    if (targetTab === "idea2") {
+      const museumFrame = document.getElementById("museum-frame");
+      if (
+        museumFrame &&
+        !museumFrame.getAttribute("src") &&
+        museumFrame.dataset.src
+      ) {
+        museumFrame.src = museumFrame.dataset.src;
+      }
+    }
+
     // Tạm dừng vòng lặp render WebGL của Bảo tàng 3D khi người dùng đang ở tab khác để tiết kiệm GPU/CPU (B4)
-    setMuseumActive(targetTab === "idea2");
+    setMuseumActive(targetTab === "idea2" && !isQrModalOpen());
 
     // Đồng bộ kích hoạt / cô lập phím tắt trình chiếu Reveal.js theo tab đang mở
     setPresentationActive(targetTab === "content");
 
     if (targetTab === "content") {
-      setTimeout(() => {
+      tabFocusTimer = setTimeout(() => {
+        if (isQrModalOpen() || currentActiveTab !== "content") return;
         const iframe = document.getElementById("presentation-frame");
         if (iframe && iframe.contentWindow) {
           try {
@@ -221,7 +256,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }, 60);
     } else if (targetTab === "idea2") {
-      setTimeout(() => {
+      tabFocusTimer = setTimeout(() => {
+        if (isQrModalOpen() || currentActiveTab !== "idea2") return;
         const iframe = document.getElementById("museum-frame");
         if (iframe && iframe.contentWindow) {
           try {
@@ -255,6 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const presIframe = document.getElementById("presentation-frame");
     if (presIframe && presIframe.contentWindow) {
+      let handledDirect = false;
       try {
         if (
           presIframe.contentWindow.PresentationApp &&
@@ -262,14 +299,17 @@ document.addEventListener("DOMContentLoaded", () => {
             "function"
         ) {
           presIframe.contentWindow.PresentationApp.setFullscreenState(isPresFs);
+          handledDirect = true;
         }
       } catch (_) {}
-      try {
-        presIframe.contentWindow.postMessage(
-          { type: "FULLSCREEN_CHANGED", isFullscreen: isPresFs },
-          "*",
-        );
-      } catch (_) {}
+      if (!handledDirect) {
+        try {
+          presIframe.contentWindow.postMessage(
+            { type: "FULLSCREEN_CHANGED", isFullscreen: isPresFs },
+            "*",
+          );
+        } catch (_) {}
+      }
     }
   }
 
@@ -317,7 +357,8 @@ document.addEventListener("DOMContentLoaded", () => {
       museumIframe.blur();
     }
 
-    if (!museumIframe.contentWindow) return;
+    if (!museumIframe.contentWindow || !museumIframe.getAttribute("src")) return;
+    let handledControls = false;
     try {
       if (
         museumIframe.contentWindow.MuseumEngine &&
@@ -333,14 +374,17 @@ document.addEventListener("DOMContentLoaded", () => {
           "function"
       ) {
         museumIframe.contentWindow.MuseumControls.setActive(Boolean(isActive));
+        handledControls = true;
       }
     } catch (_) {}
-    try {
-      museumIframe.contentWindow.postMessage(
-        { type: "MUSEUM_SET_ACTIVE", active: Boolean(isActive) },
-        "*",
-      );
-    } catch (_) {}
+    if (!handledControls) {
+      try {
+        museumIframe.contentWindow.postMessage(
+          { type: "MUSEUM_SET_ACTIVE", active: Boolean(isActive) },
+          "*",
+        );
+      } catch (_) {}
+    }
     if (!isActive) {
       notifyMuseumResetKeys();
     }
@@ -355,20 +399,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!presIframe.contentWindow) return;
+    let handledDirect = false;
     try {
       if (
         presIframe.contentWindow.PresentationApp &&
         typeof presIframe.contentWindow.PresentationApp.setActive === "function"
       ) {
         presIframe.contentWindow.PresentationApp.setActive(Boolean(isActive));
+        handledDirect = true;
       }
     } catch (_) {}
-    try {
-      presIframe.contentWindow.postMessage(
-        { type: "PRESENTATION_SET_ACTIVE", active: Boolean(isActive) },
-        "*",
-      );
-    } catch (_) {}
+    if (!handledDirect) {
+      try {
+        presIframe.contentWindow.postMessage(
+          { type: "PRESENTATION_SET_ACTIVE", active: Boolean(isActive) },
+          "*",
+        );
+      } catch (_) {}
+    }
   }
 
   function handleFullscreenChange() {
@@ -377,13 +425,23 @@ document.addEventListener("DOMContentLoaded", () => {
     updateFullscreenButtonVisibility();
     syncNavbarHeightVar();
 
+    if (fsFocusTimer) {
+      clearTimeout(fsFocusTimer);
+      fsFocusTimer = null;
+    }
+
+    if (isQrModalOpen()) return;
+    if (currentActiveTab !== "content" && currentActiveTab !== "idea2") return;
+
+    const expectedTab = currentActiveTab;
     const activeIframe =
-      currentActiveTab === "content"
+      expectedTab === "content"
         ? document.getElementById("presentation-frame")
         : document.getElementById("museum-frame");
 
     if (activeIframe && activeIframe.contentWindow) {
-      setTimeout(() => {
+      fsFocusTimer = setTimeout(() => {
+        if (isQrModalOpen() || currentActiveTab !== expectedTab) return;
         try {
           if (
             activeIframe.contentWindow.MuseumEngine &&
@@ -428,17 +486,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function forwardKeyToIframe(iframeId, eventType, key, code) {
+  function forwardKeyToIframe(iframeId, eventType, key, code, repeat) {
     const iframe = document.getElementById(iframeId);
     if (!iframe || !iframe.contentWindow) return;
     try {
       iframe.contentWindow.dispatchEvent(
-        new KeyboardEvent(eventType, { key, code }),
+        new KeyboardEvent(eventType, { key, code, repeat: Boolean(repeat) }),
       );
     } catch (_) {
       try {
         iframe.contentWindow.postMessage(
-          { type: "PARENT_KEY_EVENT", eventType, key, code },
+          { type: "PARENT_KEY_EVENT", eventType, key, code, repeat: Boolean(repeat) },
           "*",
         );
       } catch (__) {}
@@ -467,6 +525,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (e.ctrlKey || e.metaKey || e.altKey) {
+      return;
+    }
+
     const sectionContent = document.getElementById("section-content");
     if (
       currentActiveTab === "content" &&
@@ -474,7 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
       !sectionContent.classList.contains("hidden")
     ) {
       const k = (e.key || "").toLowerCase();
-      if (k === "f" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (k === "f") {
         e.preventDefault();
         toggleMuseumFullscreen();
         return;
@@ -520,7 +582,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           e.preventDefault();
         }
-        forwardKeyToIframe("presentation-frame", "keydown", e.key, e.code);
+        forwardKeyToIframe("presentation-frame", "keydown", e.key, e.code, e.repeat);
       }
       return;
     }
@@ -532,7 +594,7 @@ document.addEventListener("DOMContentLoaded", () => {
       !sectionIdea2.classList.contains("hidden")
     ) {
       const k = (e.key || "").toLowerCase();
-      if (k === "f" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (k === "f") {
         e.preventDefault();
         toggleMuseumFullscreen();
         return;
@@ -558,12 +620,15 @@ document.addEventListener("DOMContentLoaded", () => {
         ) {
           e.preventDefault();
         }
-        forwardKeyToIframe("museum-frame", "keydown", e.key, e.code);
+        forwardKeyToIframe("museum-frame", "keydown", e.key, e.code, e.repeat);
       }
     }
   });
 
   window.addEventListener("keyup", (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) {
+      return;
+    }
     const sectionIdea2 = document.getElementById("section-idea2");
     if (
       currentActiveTab === "idea2" &&
@@ -585,7 +650,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "shift",
         ].includes(k)
       ) {
-        forwardKeyToIframe("museum-frame", "keyup", e.key, e.code);
+        forwardKeyToIframe("museum-frame", "keyup", e.key, e.code, false);
       }
     }
   });
@@ -593,18 +658,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Reset phím di chuyển trong Bảo Tàng 3D khi cửa sổ ngoài mất focus hoặc chuyển tab trình duyệt (C1)
   function notifyMuseumResetKeys() {
     const iframe = document.getElementById("museum-frame");
-    if (!iframe || !iframe.contentWindow) return;
+    if (!iframe || !iframe.contentWindow || !iframe.getAttribute("src")) return;
+    let handledDirect = false;
     try {
       if (
         iframe.contentWindow.MuseumControls &&
         typeof iframe.contentWindow.MuseumControls.resetAllKeys === "function"
       ) {
         iframe.contentWindow.MuseumControls.resetAllKeys();
+        handledDirect = true;
       }
     } catch (_) {}
-    try {
-      iframe.contentWindow.postMessage({ type: "RESET_KEYS" }, "*");
-    } catch (_) {}
+    if (!handledDirect) {
+      try {
+        iframe.contentWindow.postMessage({ type: "RESET_KEYS" }, "*");
+      } catch (_) {}
+    }
   }
 
   window.addEventListener("blur", notifyMuseumResetKeys);

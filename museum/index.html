@@ -15,10 +15,10 @@
     <!-- Tailwind CSS & Three.js CDN (Hệ thống Camera 3D Shift-Lock góc nhìn thứ ba qua vai) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link rel="stylesheet" href="museum.css" />
+    <link rel="stylesheet" href="museum.css?v=20261124-1" />
   </head>
   <body
-    class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden select-none m-0 p-0 font-sans"
+    class="bg-slate-950 text-slate-100 h-[100dvh] w-screen overflow-hidden select-none m-0 p-0 font-sans"
   >
     <!-- ================= HEADER KHÁM PHÁ TỰ DO 3D: CHỌN PHÒNG & ĐIỀU KHIỂN CAMERA ================= -->
     <header
@@ -139,7 +139,7 @@
       id="exhibit-interact-hud"
       role="status"
       aria-live="polite"
-      class="museum-interact-hud hud-hidden fixed z-25 pointer-events-none"
+      class="museum-interact-hud hud-hidden fixed z-[26] pointer-events-none"
     >
       <div class="hud-glass-pill">
         <span class="hud-dot" aria-hidden="true"></span>
@@ -161,7 +161,7 @@
       class="hidden fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2.5 sm:p-6 pointer-events-auto"
     >
       <div
-        class="museum-glass-modal rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fade-in text-slate-100"
+        class="museum-glass-modal rounded-2xl max-w-5xl w-full max-h-[90dvh] flex flex-col overflow-hidden animate-fade-in text-slate-100"
       >
         <div
           class="museum-glass-modal-header p-4 sm:p-5 flex items-start justify-between gap-3"
@@ -174,7 +174,7 @@
             >
             <h3
               id="drawer-title"
-              class="text-lg sm:text-2xl font-extrabold text-slate-50 leading-snug"
+              class="text-lg sm:text-2xl font-extrabold text-slate-50 leading-snug text-balance"
             >
               Tiêu đề hiện vật
             </h3>
@@ -214,13 +214,13 @@
     </div>
 
     <!-- Bộ scripts thành phần của Bảo tàng 3D -->
-    <script src="data.js"></script>
-    <script src="visuals.js"></script>
-    <script src="avatar.js"></script>
-    <script src="room1.js"></script>
-    <script src="room2.js"></script>
-    <script src="room3.js"></script>
-    <script src="controls.js"></script>
-    <script src="engine.js"></script>
+    <script src="data.js?v=20261124-1"></script>
+    <script src="visuals.js?v=20261124-1"></script>
+    <script src="avatar.js?v=20261124-1"></script>
+    <script src="room1.js?v=20261124-1"></script>
+    <script src="room2.js?v=20261124-1"></script>
+    <script src="room3.js?v=20261124-1"></script>
+    <script src="controls.js?v=20261124-1"></script>
+    <script src="engine.js?v=20261124-1"></script>
   </body>
 </html>

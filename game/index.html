@@ -6,7 +6,7 @@
     <title>Game Thể Chế — Kinh tế chính trị Mác - Lênin Nhóm 8</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=20261124-1" />
   </head>
   <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans overflow-x-hidden">
     <!-- ================= CỔNG ĐĂNG NHẬP BẮT BUỘC (TÊN + MSSV 8 SỐ) ================= -->
@@ -157,9 +157,9 @@
                 role="tab"
                 data-tab="rules"
                 aria-selected="false"
-                class="game-tab flex-1 lg:flex-none px-3.5 py-2 rounded-xl font-bold text-slate-300 hover:text-white transition flex items-center justify-center gap-1.5 whitespace-nowrap"
+                class="game-tab flex-1 lg:flex-none px-2.5 sm:px-3.5 py-2 rounded-xl font-bold text-slate-300 hover:text-white transition flex items-center justify-center gap-1.5 whitespace-nowrap"
               >
-                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="w-4 h-4 shrink-0 hidden min-[390px]:inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                 </svg>
                 <span>Luật chơi</span>
@@ -171,13 +171,14 @@
                 data-tab="play"
                 aria-selected="true"
                 focusgroupstart
-                class="game-tab flex-1 lg:flex-none px-3.5 py-2 rounded-xl font-bold text-slate-300 hover:text-white transition flex items-center justify-center gap-1.5 whitespace-nowrap"
+                class="game-tab flex-1 lg:flex-none px-2.5 sm:px-3.5 py-2 rounded-xl font-bold text-slate-300 hover:text-white transition flex items-center justify-center gap-1.5 whitespace-nowrap"
               >
-                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="w-4 h-4 shrink-0 hidden min-[390px]:inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span>Chơi Game Thể Chế</span>
+                <span class="hidden sm:inline">Chơi Game Thể Chế</span>
+                <span class="sm:hidden">Chơi Game</span>
               </button>
               <button
                 id="tab-leaderboard"
@@ -185,9 +186,9 @@
                 role="tab"
                 data-tab="leaderboard"
                 aria-selected="false"
-                class="game-tab flex-1 lg:flex-none px-3.5 py-2 rounded-xl font-bold text-slate-300 hover:text-white transition flex items-center justify-center gap-1.5 whitespace-nowrap"
+                class="game-tab flex-1 lg:flex-none px-2.5 sm:px-3.5 py-2 rounded-xl font-bold text-slate-300 hover:text-white transition flex items-center justify-center gap-1.5 whitespace-nowrap"
               >
-                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="w-4 h-4 shrink-0 hidden min-[390px]:inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                 </svg>
                 <span>BXH Toàn Lớp</span>
@@ -229,7 +230,7 @@
             <button
               id="btn-logout"
               type="button"
-              aria-label="Đăng xuất và xóa dữ liệu"
+              aria-label="Đăng xuất khỏi thiết bị"
               title="Đăng xuất"
               class="w-11 h-11 rounded-xl bg-slate-800 hover:bg-rose-600/90 border border-slate-700 hover:border-rose-400 text-amber-300 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0"
             >
@@ -390,7 +391,7 @@
             </div>
 
             <!-- 4 Chỉ số Vĩ mô HUD -->
-            <div class="grid grid-cols-4 gap-2.5 sm:gap-4 bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200">
+            <div class="grid grid-cols-2 min-[420px]:grid-cols-4 gap-2.5 sm:gap-4 bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200">
               <div class="flex flex-col items-center min-w-0 stat-hud" data-stat="growth">
                 <span class="stat-dot w-2.5 h-2.5 rounded-full bg-[#df7a28] opacity-0 mb-0.5"></span>
                 <span class="hud-label font-bold text-slate-700 uppercase truncate max-w-full">Tăng Trưởng</span>
@@ -686,11 +687,11 @@
         </div>
 
         <div class="w-full max-w-5xl flex flex-col items-center justify-center text-center gap-3 sm:gap-5 my-auto">
-          <div class="space-y-1.5 sm:space-y-2 max-w-3xl px-2">
+          <div class="space-y-1.5 sm:space-y-2 w-full max-w-5xl px-2">
             <span class="inline-block text-[11px] sm:text-sm font-black uppercase tracking-widest text-[#9a3412] bg-[#fff7ed] border-2 border-[#fed7aa] px-3.5 py-1 rounded-full">
               Kinh tế chính trị Mác - Lênin Nhóm 8
             </span>
-            <h2 id="qr-modal-title" class="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight">
+            <h2 id="qr-modal-title" class="font-black text-slate-950 tracking-tight sm:whitespace-nowrap">
               Quét Mã QR Để Chơi Game Thể Chế
             </h2>
           </div>
@@ -724,21 +725,21 @@
       </div>
     </dialog>
 
-    <!-- ================= MODAL CẢNH BÁO ĐĂNG XUẤT & XÓA DỮ LIỆU ================= -->
+    <!-- ================= MODAL XÁC NHẬN ĐĂNG XUẤT ================= -->
     <dialog
       id="logout-confirm-dialog"
       aria-labelledby="logout-dialog-title"
-      class="w-[min(92vw,440px)] rounded-3xl border-2 border-rose-300 bg-white p-6 shadow-2xl m-auto"
+      class="w-[min(92vw,440px)] rounded-3xl border-2 border-amber-300 bg-white p-6 shadow-2xl m-auto"
     >
       <div class="flex flex-col gap-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 text-[#c4661b] flex items-center justify-center shrink-0">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
               ></path>
             </svg>
           </div>
@@ -748,9 +749,9 @@
         </div>
 
         <p class="text-sm text-slate-700 leading-relaxed">
-          Cảnh báo: Khi đăng xuất, toàn bộ dữ liệu lượt chơi và điểm số của MSSV
-          <strong id="logout-dialog-mssv" class="font-mono text-rose-700">--------</strong>
-          sẽ bị <strong>XÓA VĨNH VIỄN</strong> khỏi cơ sở dữ liệu và Bảng Xếp Hạng toàn lớp. Bạn có chắc chắn muốn đăng xuất?
+          Bạn có chắc muốn đăng xuất tài khoản MSSV
+          <strong id="logout-dialog-mssv" class="font-mono text-[#c4661b]">--------</strong>
+          khỏi thiết bị này? Thành tích và số lượt chơi đã ghi nhận trên Bảng Xếp Hạng vẫn được giữ nguyên.
         </p>
 
         <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 pt-1">
@@ -758,22 +759,22 @@
             id="btn-logout-cancel"
             type="button"
             autofocus
-            class="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-sm font-bold cursor-pointer"
+            class="min-h-[44px] px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-sm font-bold cursor-pointer whitespace-nowrap"
           >
             Hủy
           </button>
           <button
             id="btn-logout-confirm"
             type="button"
-            class="min-h-[44px] px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-extrabold cursor-pointer"
+            class="min-h-[44px] px-4 py-2.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white text-sm font-extrabold cursor-pointer whitespace-nowrap"
           >
-            Xác nhận đăng xuất &amp; Xóa dữ liệu
+            Xác nhận đăng xuất
           </button>
         </div>
       </div>
     </dialog>
 
-    <script src="config.js"></script>
-    <script src="game.js"></script>
+    <script src="config.js?v=20261124-1"></script>
+    <script src="game.js?v=20261124-1"></script>
   </body>
 </html>

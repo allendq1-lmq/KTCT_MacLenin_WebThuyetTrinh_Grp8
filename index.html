@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- QRCode.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <link rel="stylesheet" href="style.css?v=20261120-2" />
+    <link rel="stylesheet" href="style.css?v=20261124-1" />
   </head>
   <body
     class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans"
@@ -198,7 +198,7 @@
                 d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
               ></path>
             </svg>
-            <span class="hidden lg:inline whitespace-nowrap" id="label-fullscreen-btn"
+            <span class="hidden xl:inline whitespace-nowrap" id="label-fullscreen-btn"
               >Toàn Màn Hình</span
             >
           </button>
@@ -212,7 +212,7 @@
       <section id="section-content" class="tab-content block w-full h-full">
         <div
           id="presentation-wrapper"
-          class="relative w-full h-[calc(100vh-5rem)] bg-slate-50 overflow-hidden"
+          class="relative w-full h-[calc(100dvh-var(--navbar-height))] bg-slate-50 overflow-hidden"
         >
           <iframe
             id="presentation-frame"
@@ -229,11 +229,11 @@
       <section id="section-idea2" class="tab-content hidden w-full h-full">
         <div
           id="museum-wrapper"
-          class="relative w-full h-[calc(100vh-5rem)] bg-slate-950 overflow-hidden"
+          class="relative w-full h-[calc(100dvh-var(--navbar-height))] bg-slate-950 overflow-hidden"
         >
           <iframe
             id="museum-frame"
-            src="museum/index.html"
+            data-src="museum/index.html"
             title="Bảo Tàng 3D Kinh Tế Chính Trị Mác - Lênin"
             class="w-full h-full border-0 block bg-slate-950"
             allow="fullscreen"
@@ -382,7 +382,7 @@
             </div>
             <h3
               id="quiz-summary-title"
-              class="text-lg sm:text-xl font-extrabold text-slate-900"
+              class="text-lg sm:text-xl font-extrabold text-slate-900 text-balance"
             >
               Hoàn Thành Bài Trắc Nghiệm
             </h3>
@@ -404,14 +404,14 @@
             <button
               id="btn-quiz-restart"
               type="button"
-              class="min-h-[44px] px-4 sm:px-6 py-2.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-xs sm:text-base transition shadow-sm cursor-pointer"
+              class="min-h-[44px] px-4 sm:px-6 py-2.5 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white font-extrabold text-xs sm:text-base transition shadow-sm cursor-pointer whitespace-nowrap"
             >
               Làm lại bộ 5 câu mới
             </button>
             <button
               id="btn-quiz-back-museum"
               type="button"
-              class="min-h-[44px] px-4 sm:px-6 py-2.5 rounded-xl bg-[#fff7ed] hover:bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa] font-bold text-xs sm:text-base transition shadow-sm cursor-pointer"
+              class="min-h-[44px] px-4 sm:px-6 py-2.5 rounded-xl bg-[#fff7ed] hover:bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa] font-bold text-xs sm:text-base transition shadow-sm cursor-pointer whitespace-nowrap"
             >
               Quay lại Bảo Tàng 3D
             </button>
@@ -860,7 +860,7 @@
       <div
         class="w-full max-w-5xl flex flex-col items-center justify-center text-center gap-2.5 sm:gap-5 my-auto"
       >
-        <div class="space-y-1 sm:space-y-2 max-w-3xl px-2">
+        <div class="space-y-1.5 sm:space-y-2 w-full max-w-5xl px-2">
           <span
             class="inline-block text-[11px] sm:text-sm font-black uppercase tracking-widest text-[#9a3412] bg-[#fff7ed] border-2 border-[#fed7aa] px-3.5 py-1 rounded-full"
           >
@@ -868,7 +868,7 @@
           </span>
           <h2
             id="qr-modal-title"
-            class="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-tight"
+            class="font-black text-slate-950 tracking-tight sm:whitespace-nowrap"
           >
             Quét Mã QR Để Trải Nghiệm Trực Tiếp
           </h2>
@@ -899,8 +899,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="js/quiz-data.js"></script>
-    <script src="js/quiz.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/quiz-data.js?v=20261124-1"></script>
+    <script src="js/quiz.js?v=20261124-1"></script>
+    <script src="js/app.js?v=20261124-1"></script>
   </body>
 </html>

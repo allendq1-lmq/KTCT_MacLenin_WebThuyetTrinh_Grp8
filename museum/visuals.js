@@ -1567,6 +1567,21 @@ window.MuseumVisuals = (() => {
         (res) => {
           if (!res || !res.ok) {
             imageCache.delete(cacheKey);
+            return;
+          }
+          const isMobileHint =
+            window.innerWidth < 768 ||
+            Boolean(
+              window.matchMedia &&
+                window.matchMedia("(pointer: coarse)").matches,
+            );
+          // Trên thiết bị di động hạn chế RAM, không giữ vĩnh viễn HTMLImageElement local đã decode trong cache
+          if (isMobileHint && res.sourceType === "local") {
+            setTimeout(() => {
+              if (imageCache.get(cacheKey) === promise) {
+                imageCache.delete(cacheKey);
+              }
+            }, 0);
           }
         },
         () => {

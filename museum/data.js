@@ -90,7 +90,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.1a • KINH TẾ THỊ TRƯỜNG NÓI CHUNG",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Ben_Thanh%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
       imageCaption:
         "Chợ Bến Thành (TP.HCM) — biểu tượng giao thương hàng hóa theo các quy luật thị trường (Ảnh: Diego Delso / Wikimedia Commons)",
       badge: "Mục 1.1a • Khái Niệm Nền Tảng",
@@ -160,7 +160,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.1b • KHÁI NIỆM KTTT ĐỊNH HƯỚNG XHCN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/National_Assembly_of_Vietnam.JPG/1280px-National_Assembly_of_Vietnam.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/National_Assembly_of_Vietnam.JPG/1280px-National_Assembly_of_Vietnam.JPG",
       imageCaption:
         "Tòa nhà Quốc hội Việt Nam (Hà Nội) — cơ quan lập hiến, lập pháp bảo đảm định hướng XHCN (Ảnh: Grayswoodsurrey / Wikimedia Commons)",
       badge: "Mục 1.1b • Mô Hình Tổng Quát",
@@ -275,7 +275,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.2b • TƯ DUY ĐỔI MỚI (1986 – 2000)",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Ayuntamiento%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_09.JPG/1280px-Ayuntamiento%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_09.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Ayuntamiento%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_09.JPG/1280px-Ayuntamiento%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_09.JPG",
       imageCaption:
         "Trụ sở UBND TP.HCM về đêm — dấu ấn đổi mới tư duy kinh tế giai đoạn 1986–2000 (Ảnh: Diego Delso / Wikimedia Commons)",
       badge: "Mục 1.2b • Giai Đoạn 1986 – 2000",
@@ -334,7 +334,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.2c • HOÀN THIỆN THỂ CHẾ (2001 – 2026)",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Ho_Chi_Minh_City_-_Saigon1324.jpg/1280px-Ho_Chi_Minh_City_-_Saigon1324.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Ho_Chi_Minh_City_-_Saigon1324.jpg/1280px-Ho_Chi_Minh_City_-_Saigon1324.jpg",
       imageCaption:
         "Landmark 81 và bờ sông Sài Gòn về đêm — biểu tượng đô thị hiện đại, hội nhập sâu rộng và hoàn thiện thể chế KTTT ĐHXHCN (Ảnh: Wikimedia Commons)",
       badge: "Mục 1.2c • Giai Đoạn 2001 – Nay (ĐH XIV)",
@@ -394,7 +394,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.3 • TÍNH TẤT YẾU KHÁCH QUAN KTTT ĐHXHCN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Ch%C3%B9a_V%E1%BA%BD_Terminal%2C_Port_of_H%E1%BA%A3i_Ph%C3%B2ng.JPG/1280px-Ch%C3%B9a_V%E1%BA%BD_Terminal%2C_Port_of_H%E1%BA%A3i_Ph%C3%B2ng.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Ch%C3%B9a_V%E1%BA%BD_Terminal%2C_Port_of_H%E1%BA%A3i_Ph%C3%B2ng.JPG/1280px-Ch%C3%B9a_V%E1%BA%BD_Terminal%2C_Port_of_H%E1%BA%A3i_Ph%C3%B2ng.JPG",
       imageCaption:
         "Cảng container Chùa Vẽ (Hải Phòng) — cửa ngõ giao thương quốc tế và 17 FTA của Việt Nam (Ảnh: Phó Nháy / Wikimedia Commons)",
       badge: "Mục 1.3 • Ba Luận Điểm & Số Liệu 2024",
@@ -460,7 +460,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.4a • VAI TRÒ QUẢN LÝ VĨ MÔ CỦA NHÀ NƯỚC",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Banco_Estatal_de_Vietnam%2C_Hanoi%2C_Vietnam_%2836733497852%29.jpg/1280px-Banco_Estatal_de_Vietnam%2C_Hanoi%2C_Vietnam_%2836733497852%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Banco_Estatal_de_Vietnam%2C_Hanoi%2C_Vietnam_%2836733497852%29.jpg/1280px-Banco_Estatal_de_Vietnam%2C_Hanoi%2C_Vietnam_%2836733497852%29.jpg",
       imageCaption:
         "Trụ sở Ngân hàng Nhà nước Việt Nam (Hà Nội) — điều tiết vĩ mô tiền tệ và giữ vững cân đối lớn (Ảnh: Edgardo W. Olivera / Wikimedia Commons)",
       badge: "Mục 1.4a • Quản Trị Quốc Gia",
@@ -521,7 +521,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "1.4b • BỐN VAI TRÒ LÃNH ĐẠO CỦA ĐẢNG CSVN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-01.jpg/1280px-Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-01.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-01.jpg/1280px-Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-01.jpg",
       imageCaption:
         "Lăng Chủ tịch Hồ Chí Minh tại Quảng trường Ba Đình (Hà Nội) — biểu tượng nền tảng tư tưởng lãnh đạo (Ảnh: Uwe Aranas / Wikimedia Commons)",
       badge: "Mục 1.4b • Hạt Nhân Lãnh Đạo",
@@ -583,7 +583,7 @@ window.MuseumData = (() => {
     preferLocal: true,
     plaqueTitle: "2.a • ĐẶC ĐIỂM CHUNG CỦA KINH TẾ THỊ TRƯỜNG",
     imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Frankfurt_Stock_Exchange_%28Ank_Kumar%29_02.jpg/1280px-Frankfurt_Stock_Exchange_%28Ank_Kumar%29_02.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Frankfurt_Stock_Exchange_%28Ank_Kumar%29_02.jpg/1280px-Frankfurt_Stock_Exchange_%28Ank_Kumar%29_02.jpg",
     imageCaption:
         "Sàn giao dịch chứng khoán Frankfurt — minh họa cơ chế vận hành chung của kinh tế thị trường hiện đại (Ảnh: Ank Kumar / Wikimedia Commons)",
     badge: "Phòng 2 • Bệ Trung Tâm (Mục 2.a)",
@@ -637,7 +637,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "ĐẶC TRƯNG 1 • VỀ MỤC TIÊU PHÁT TRIỂN",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Da_Nang_Dragon_Bridge.jpg/1280px-Da_Nang_Dragon_Bridge.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Da_Nang_Dragon_Bridge.jpg/1280px-Da_Nang_Dragon_Bridge.jpg",
       imageCaption:
         "Toàn cảnh cầu Rồng & đô thị Đà Nẵng — hiện thực hóa mục tiêu dân giàu, nước mạnh, văn minh (Ảnh: Wikimedia Commons)",
       badge: "Cột Trụ 01 • Đặc Trưng Mục Tiêu",
@@ -686,7 +686,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "ĐẶC TRƯNG 2 • QUAN HỆ SỞ HỮU & THÀNH PHẦN KINH TẾ",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Hoa_Binh_Dam.JPG/1280px-Hoa_Binh_Dam.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Hoa_Binh_Dam.JPG/1280px-Hoa_Binh_Dam.JPG",
       imageCaption:
         "Nhà máy Thủy điện Hòa Bình — công trình hạ tầng năng lượng chiến lược nơi Kinh tế Nhà nước giữ vai trò chủ đạo (Ảnh: Fargo888 / Wikimedia Commons)",
       badge: "Cột Trụ 02 • Sở Hữu & Thành Phần Kinh Tế",
@@ -785,7 +785,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "ĐẶC TRƯNG 4 • QUAN HỆ PHÂN PHỐI CÔNG BẰNG",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/C%E1%BA%A7u_Cao_L%C3%A3nh.jpg/960px-C%E1%BA%A7u_Cao_L%C3%A3nh.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/C%E1%BA%A7u_Cao_L%C3%A3nh.jpg/960px-C%E1%BA%A7u_Cao_L%C3%A3nh.jpg",
       imageCaption:
         "Cầu Cao Lãnh (Đồng Tháp) — kết nối hạ tầng liên vùng, bảo đảm cơ hội phát triển công bằng (Ảnh: Bùi Thụy Đào Nguyên / Wikimedia Commons)",
       badge: "Cột Trụ 04 • Quan Hệ Phân Phối",
@@ -833,7 +833,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "ĐẶC TRƯNG 5 • TĂNG TRƯỞNG & TIẾN BỘ XÃ HỘI",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Constellation_of_Literature_pavilion_-_Temple_of_Literature%2C_Hanoi_-_DSC04557.JPG/1280px-Constellation_of_Literature_pavilion_-_Temple_of_Literature%2C_Hanoi_-_DSC04557.JPG",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Constellation_of_Literature_pavilion_-_Temple_of_Literature%2C_Hanoi_-_DSC04557.JPG/1280px-Constellation_of_Literature_pavilion_-_Temple_of_Literature%2C_Hanoi_-_DSC04557.JPG",
       imageCaption:
         "Khuê Văn Các tại Văn Miếu – Quốc Tử Giám (Hà Nội) — biểu trưng di sản văn hóa, giáo dục và phát triển con người làm trung tâm (Ảnh: Daderot / Wikimedia Commons)",
       badge: "Cột Trụ 05 • Tăng Trưởng & Công Bằng",
@@ -886,7 +886,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.1 • NĂM GIỚI HẠN LỊCH SỬ CỦA CNTB",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927_%28cropped%29.jpg/1280px-Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927_%28cropped%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927_%28cropped%29.jpg/1280px-Unemployed_men_queued_outside_a_depression_soup_kitchen_opened_in_Chicago_by_Al_Capone%2C_02-1931_-_NARA_-_541927_%28cropped%29.jpg",
       imageCaption:
         "Tư liệu NARA (Chicago, 2/1931): Hàng người thất nghiệp trong Đại Suy Thoái — minh chứng giới hạn lịch sử của CNTB (Ảnh: National Archives / Wikimedia Commons)",
       badge: "Mảng Tối • Mục 3.1 (Giới Hạn CNTB)",
@@ -943,7 +943,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.2 • NĂM TRỤ CỘT KHẮC PHỤC CỦA VIỆT NAM",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg/1280px-B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg/1280px-B%E1%BA%A1c_Li%C3%AAu_windpower_farm.jpg",
       imageCaption:
         "Cánh đồng điện gió ngoài khơi Bạc Liêu lúc hoàng hôn — định hướng tăng trưởng xanh và phát triển bền vững (Ảnh: Wikimedia Commons)",
       badge: "Mảng Sáng • Mục 3.2 (Khả Năng Khắc Phục)",
@@ -1050,7 +1050,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.3a • BỐN HẠN CHẾ THỰC TIỄN HIỆN NAY",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Evening_streetscene_%2814424306687%29.jpg/1280px-Evening_streetscene_%2814424306687%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Evening_streetscene_%2814424306687%29.jpg/1280px-Evening_streetscene_%2814424306687%29.jpg",
       imageCaption:
         "Đô thị TP.HCM về đêm — sự đối lập giữa áp lực giao thông, ánh đèn thương mại và người lao động bên vỉa hè phản ánh thách thức phân hóa xã hội (Ảnh: Wikimedia Commons)",
       badge: "Mảng Tối • Mục 3.3a (Hạn Chế Hiện Nay)",
@@ -1111,7 +1111,7 @@ window.MuseumData = (() => {
       preferLocal: true,
       plaqueTitle: "3.3b • BỐN GIẢI PHÁP HOÀN THIỆN ĐỒNG BỘ",
       imageUrl:
-        "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6a/Ba_Son_Bridge%2C_Saigon_%2820230705_1516%29.jpg/1280px-Ba_Son_Bridge%2C_Saigon_%2820230705_1516%29.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Ba_Son_Bridge%2C_Saigon_%2820230705_1516%29.jpg/1280px-Ba_Son_Bridge%2C_Saigon_%2820230705_1516%29.jpg",
       imageCaption:
         "Cầu Ba Son vượt sông Sài Gòn — giải pháp đột phá hạ tầng kết nối và hoàn thiện thể chế đồng bộ (Ảnh: Syced / Wikimedia Commons)",
       badge: "Mảng Sáng • Mục 3.3b (Bốn Giải Pháp)",

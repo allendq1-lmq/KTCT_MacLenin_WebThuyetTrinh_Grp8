@@ -10,8 +10,8 @@ window.MuseumEngine = (() => {
   const CAM_DISTANCE = 3.2; // Khoảng cách cố định phía sau nhân vật (3.2 đơn vị)
   const CAM_RIGHT_OFFSET = 0.45; // Lệch sang vai phải nhân vật (0.45 đơn vị)
   const CAM_PIVOT_Y = 1.62; // Độ cao ngang vai/đầu sinh viên UIT
-  const MIN_PITCH = THREE.MathUtils.degToRad(-35); // Giới hạn góc cúi/ngẩng (-35 độ)
-  const MAX_PITCH = THREE.MathUtils.degToRad(55); // Giới hạn góc ngẩng/cúi (+55 độ)
+  const MIN_PITCH = (-35 * Math.PI) / 180; // Giới hạn góc cúi/ngẩng (-35 độ)
+  const MAX_PITCH = (55 * Math.PI) / 180; // Giới hạn góc ngẩng/cúi (+55 độ)
 
   let camYaw = 0; // Góc xoay ngang (radian), 0 = hướng về -Z
   let camPitch = 0.04; // Góc ngẩng/cúi (radian)
@@ -53,6 +53,10 @@ window.MuseumEngine = (() => {
   };
 
   let isManualPaused = false;
+  let isContextLost = false;
+  let isDisposed = false;
+  let threeRetryCount = 0;
+  let pagehideBound = false;
   let lastFrameTime = 0;
   let sceneEpoch = 0;
   let pmremRenderTarget = null;
@@ -93,6 +97,18 @@ window.MuseumEngine = (() => {
     return sharedResources.materials.get(key);
   }
 
+  function getSharedTexture(key, factory) {
+    if (!sharedResources.textures.has(key)) {
+      const tex = factory();
+      if (tex) {
+        tex.userData = tex.userData || {};
+        tex.userData.isShared = true;
+        sharedResources.textures.set(key, tex);
+      }
+    }
+    return sharedResources.textures.get(key);
+  }
+
   function isMobileDevice() {
     return (
       window.innerWidth < 768 ||
@@ -113,14 +129,24 @@ window.MuseumEngine = (() => {
   }
 
   function configureCanvasTexture(tex, maxAnisotropy = 4) {
-    tex.generateMipmaps = true;
+    const isWebGL2 = Boolean(
+      renderer && renderer.capabilities && renderer.capabilities.isWebGL2,
+    );
     if (THREE.SRGBColorSpace && "colorSpace" in tex) {
       tex.colorSpace = THREE.SRGBColorSpace;
     } else if (THREE.sRGBEncoding) {
       tex.encoding = THREE.sRGBEncoding;
     }
-    if (THREE.LinearMipmapLinearFilter) {
-      tex.minFilter = THREE.LinearMipmapLinearFilter;
+    if (isWebGL2) {
+      tex.generateMipmaps = true;
+      if (THREE.LinearMipmapLinearFilter) {
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+      }
+    } else {
+      tex.generateMipmaps = false;
+      if (THREE.LinearFilter) {
+        tex.minFilter = THREE.LinearFilter;
+      }
     }
     if (THREE.LinearFilter) {
       tex.magFilter = THREE.LinearFilter;
@@ -530,9 +556,10 @@ window.MuseumEngine = (() => {
     }
 
     const isComparisonBoard = visualType === "r3-table";
-    const W = isComparisonBoard ? 1024 : 768;
-    const H = isComparisonBoard ? 700 : 525;
-    const margin = isComparisonBoard ? 28 : 21;
+    const mobileCap = isMobileDevice();
+    const W = mobileCap ? (isComparisonBoard ? 768 : 512) : (isComparisonBoard ? 1024 : 768);
+    const H = mobileCap ? (isComparisonBoard ? 525 : 350) : (isComparisonBoard ? 700 : 525);
+    const margin = mobileCap ? (isComparisonBoard ? 20 : 14) : (isComparisonBoard ? 28 : 21);
 
     // Khung tranh lớn chỉ hiển thị duy nhất bức ảnh tư liệu/minh họa phủ kín (cover) kèm bo giấy mỹ thuật
     const canvas = document.createElement("canvas");
@@ -572,6 +599,9 @@ window.MuseumEngine = (() => {
         localTimeoutMs: 8000,
       })
         .then((res) => {
+          if (isDisposed || artworkTextureCache.get(cacheKey) !== entry) {
+            return;
+          }
           if (!res || !res.ok || !res.img) {
             if (!entry.drawn) {
               artworkTextureCache.delete(cacheKey);
@@ -591,7 +621,7 @@ window.MuseumEngine = (() => {
           tex.needsUpdate = true;
         })
         .catch(() => {
-          if (!entry.drawn) {
+          if (!isDisposed && !entry.drawn && artworkTextureCache.get(cacheKey) === entry) {
             artworkTextureCache.delete(cacheKey);
           }
         });
@@ -2021,6 +2051,7 @@ window.MuseumEngine = (() => {
 
   // Giải phóng toàn bộ bộ nhớ WebGL (bao gồm cả bộ nhớ đệm dùng chung và WebGLRenderer) khi thoát (B2)
   function dispose() {
+    isDisposed = true;
     pauseRenderLoop();
     clearScene(true);
     sharedResources.geometries.forEach((geo) => {
@@ -2065,12 +2096,46 @@ window.MuseumEngine = (() => {
     }
   }
 
+  function releaseInactiveArtworkTextures(activeRoomNumber) {
+    if (!window.MuseumData) return;
+    const activeIds = new Set();
+    const roomKey = `room${activeRoomNumber}`;
+    const roomData = window.MuseumData[roomKey];
+    if (roomData && Array.isArray(roomData.exhibits)) {
+      roomData.exhibits.forEach((ex) => {
+        if (ex && ex.id) activeIds.add(ex.id);
+      });
+    }
+    if (roomData && roomData.center && roomData.center.id) {
+      activeIds.add(roomData.center.id);
+    }
+    if (roomData && Array.isArray(roomData.pillars)) {
+      roomData.pillars.forEach((p) => {
+        if (p && p.id) activeIds.add(p.id);
+      });
+    }
+    if (roomData && roomData.verdict && roomData.verdict.id) {
+      activeIds.add(roomData.verdict.id);
+    }
+    artworkTextureCache.forEach((entry, key) => {
+      if (!activeIds.has(key)) {
+        if (entry && entry.tex && typeof entry.tex.dispose === "function") {
+          entry.tex.dispose();
+        }
+        artworkTextureCache.delete(key);
+      }
+    });
+  }
+
   function setRoom(roomNumber) {
     if (currentRoom === roomNumber && scene && scene.children.length > 0) {
       return;
     }
     currentRoom = roomNumber;
     clearScene();
+    if (isMobileDevice()) {
+      releaseInactiveArtworkTextures(roomNumber);
+    }
     loadRoom(roomNumber);
   }
 
@@ -2307,7 +2372,7 @@ window.MuseumEngine = (() => {
   }
 
   function shouldPauseRender() {
-    return Boolean((document && document.hidden) || isManualPaused);
+    return Boolean((document && document.hidden) || isManualPaused || isContextLost);
   }
 
   function pauseRenderLoop() {
@@ -2379,20 +2444,84 @@ window.MuseumEngine = (() => {
     renderer.render(scene, camera);
   }
 
+  function renderWebGLFallback(targetContainer, reasonText) {
+    if (!targetContainer) return;
+    const playlist =
+      window.MuseumData && Array.isArray(window.MuseumData.playlist)
+        ? window.MuseumData.playlist
+        : [];
+    targetContainer.innerHTML = "";
+    const wrap = document.createElement("div");
+    wrap.className =
+      "w-full h-full overflow-y-auto bg-slate-950 text-slate-100 pt-20 pb-8 px-4 sm:px-8";
+
+    const inner = document.createElement("div");
+    inner.className = "max-w-5xl mx-auto space-y-4";
+
+    const alertBox = document.createElement("div");
+    alertBox.className =
+      "rounded-2xl border border-amber-400/40 bg-slate-900/90 p-4 sm:p-5 text-sm text-amber-100";
+    alertBox.textContent =
+      reasonText ||
+      "Thiết bị hiện không khởi tạo được đồ họa 3D WebGL. Bạn vẫn có thể xem đầy đủ 20 hiện vật triển lãm bên dưới.";
+    inner.appendChild(alertBox);
+
+    const grid = document.createElement("div");
+    grid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3";
+    playlist.forEach((item, idx) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className =
+        "text-left rounded-2xl border border-slate-700/80 bg-slate-900/80 hover:border-amber-400/60 p-4 transition cursor-pointer flex flex-col gap-1.5";
+      const badge = document.createElement("span");
+      badge.className =
+        "text-[11px] font-bold uppercase tracking-wider text-amber-300";
+      badge.textContent = `Hiện vật ${idx + 1} • Phòng ${item.room || 1}`;
+      const title = document.createElement("span");
+      title.className = "text-sm font-bold text-white leading-snug";
+      title.textContent = item.title || "Hiện vật";
+      const sub = document.createElement("span");
+      sub.className = "text-xs text-slate-400 line-clamp-2";
+      sub.textContent = item.subtitle || "";
+      card.appendChild(badge);
+      card.appendChild(title);
+      if (sub.textContent) card.appendChild(sub);
+      card.addEventListener("click", () => {
+        if (window.MuseumControls && window.MuseumControls.openDetailDrawer) {
+          window.MuseumControls.openDetailDrawer(item);
+        }
+      });
+      grid.appendChild(card);
+    });
+    inner.appendChild(grid);
+    wrap.appendChild(inner);
+    targetContainer.appendChild(wrap);
+  }
+
   function init() {
     if (renderer) {
       onWindowResize();
       return;
     }
 
-    if (typeof THREE === "undefined") {
-      setTimeout(init, 50);
-      return;
-    }
-
     container = document.getElementById("webgl-container");
     if (!container) return;
 
+    if (typeof THREE === "undefined") {
+      if (threeRetryCount < 40) {
+        threeRetryCount++;
+        setTimeout(init, 50);
+      } else {
+        renderWebGLFallback(
+          container,
+          "Không tải được thư viện 3D (Three.js) do kết nối mạng gián đoạn. Bạn có thể bấm từng thẻ bên dưới để xem nội dung các hiện vật.",
+        );
+      }
+      return;
+    }
+
+    isDisposed = false;
+    isContextLost = false;
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x12161f);
     // Sương mù nhẹ tạo chiều sâu không gian bảo tàng (A4)
@@ -2400,22 +2529,34 @@ window.MuseumEngine = (() => {
       scene.fog = new THREE.FogExp2(0x12161f, 0.018);
     }
 
-    const width =
-      container.clientWidth > 0 ? container.clientWidth : window.innerWidth;
-    const height =
-      container.clientHeight > 0 ? container.clientHeight : window.innerHeight;
+    const width = Math.max(
+      container.clientWidth > 0 ? container.clientWidth : window.innerWidth || 1,
+      1,
+    );
+    const height = Math.max(
+      container.clientHeight > 0 ? container.clientHeight : window.innerHeight || 1,
+      1,
+    );
 
     camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 100);
 
-    renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      powerPreference: "high-performance",
-    });
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+    } catch (_) {
+      renderer = null;
+      renderWebGLFallback(
+        container,
+        "Trình duyệt hoặc GPU hiện không hỗ trợ WebGL. Bạn vẫn có thể xem toàn bộ nội dung 20 hiện vật triển lãm bên dưới.",
+      );
+      return;
+    }
+
     renderer.setPixelRatio(getOptimalPixelRatio());
     renderer.setSize(width, height);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.shadowMap.autoUpdate = false;
+    renderer.shadowMap.enabled = false;
 
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.98;
@@ -2432,6 +2573,41 @@ window.MuseumEngine = (() => {
 
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
+
+    const showContextLostBanner = (visible) => {
+      let banner = document.getElementById("webgl-context-lost-banner");
+      if (!banner && visible) {
+        banner = document.createElement("div");
+        banner.id = "webgl-context-lost-banner";
+        banner.className =
+          "fixed inset-0 z-30 flex items-center justify-center bg-slate-950/90 text-amber-200 text-sm font-semibold p-6 text-center";
+        banner.textContent =
+          "Đang khôi phục đồ họa 3D sau khi trình duyệt tạm thu hồi bộ nhớ GPU...";
+        document.body.appendChild(banner);
+      }
+      if (banner) {
+        banner.classList.toggle("hidden", !visible);
+      }
+    };
+
+    renderer.domElement.addEventListener("webglcontextlost", (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      isContextLost = true;
+      pauseRenderLoop();
+      showContextLostBanner(true);
+    });
+
+    renderer.domElement.addEventListener("webglcontextrestored", () => {
+      isContextLost = false;
+      showContextLostBanner(false);
+      onWindowResize();
+      resumeRenderLoop();
+    });
+
+    if (!pagehideBound) {
+      pagehideBound = true;
+      window.addEventListener("pagehide", dispose);
+    }
 
     window.addEventListener("resize", onWindowResize);
 
@@ -2514,6 +2690,7 @@ window.MuseumEngine = (() => {
     getOptimalPixelRatio,
     getSharedGeometry,
     getSharedMaterial,
+    getSharedTexture,
     getScene: () => scene,
     getRenderer: () => renderer,
     interactableObjects,

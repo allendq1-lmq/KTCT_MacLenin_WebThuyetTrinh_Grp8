@@ -29,7 +29,13 @@ window.MuseumControls = (() => {
       titleEl.textContent = exhibitData.title || "Hiện vật trưng bày";
     }
     if (hintEl) {
-      hintEl.textContent = "Nhấn chuột để xem chi tiết hiện vật";
+      const isTouch = Boolean(
+        (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ||
+          "ontouchstart" in window,
+      );
+      hintEl.textContent = isTouch
+        ? "Chạm để xem chi tiết hiện vật"
+        : "Nhấn chuột để xem chi tiết hiện vật";
     }
     hud.classList.remove("hud-hidden");
     hud.classList.add("hud-visible");
@@ -150,13 +156,6 @@ window.MuseumControls = (() => {
         if (btn.classList) btn.classList.remove("dpad-active");
       });
     }
-
-    if (
-      window.MuseumAvatar &&
-      typeof window.MuseumAvatar.stopFootsteps === "function"
-    ) {
-      window.MuseumAvatar.stopFootsteps();
-    }
   }
 
   function getKeysState() {
@@ -251,7 +250,8 @@ window.MuseumControls = (() => {
     }
 
     heroImg.onerror = () => {
-      if (data.imageUrl && heroImg.src !== data.imageUrl) {
+      if (data.imageUrl && !heroImg.dataset.fallbackTried) {
+        heroImg.dataset.fallbackTried = "1";
         heroImg.src = data.imageUrl;
       } else {
         wrapper.remove();
@@ -319,6 +319,7 @@ window.MuseumControls = (() => {
       mouse.x = 0;
       mouse.y = 0;
     } else {
+      if (rect.width <= 0 || rect.height <= 0) return;
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     }
@@ -441,10 +442,7 @@ window.MuseumControls = (() => {
         (e) => {
           if (e.preventDefault) e.preventDefault();
           if (e.stopPropagation) e.stopPropagation();
-          setKeyState(btn, k, false);
-          if (e.touches && e.touches.length > 0) {
-            syncDpadActiveTouches(e.touches);
-          }
+          syncDpadActiveTouches(e.touches);
         },
         { passive: false },
       );
@@ -453,7 +451,7 @@ window.MuseumControls = (() => {
         (e) => {
           if (e.preventDefault) e.preventDefault();
           if (e.stopPropagation) e.stopPropagation();
-          setKeyState(btn, k, false);
+          syncDpadActiveTouches(e.touches);
         },
         { passive: false },
       );
@@ -533,6 +531,7 @@ window.MuseumControls = (() => {
     });
 
     window.addEventListener("mousemove", (e) => {
+      if (!isActiveState || isDrawerOpen()) return;
       if (document.pointerLockElement === domElement) {
         const dx = e.movementX || 0;
         const dy = e.movementY || 0;
@@ -760,6 +759,31 @@ window.MuseumControls = (() => {
       }
     });
 
+    document.addEventListener("pointerlockerror", () => {
+      if (shiftLockLabel) {
+        shiftLockLabel.textContent = "Nhấp khung 3D để khóa chuột";
+        setTimeout(() => {
+          if (
+            document.pointerLockElement !== domElement &&
+            shiftLockLabel.textContent === "Nhấp khung 3D để khóa chuột"
+          ) {
+            shiftLockLabel.textContent = "Giữ chuột / Phím Shift";
+          }
+        }, 2500);
+      }
+    });
+
+    const hudPill = document.querySelector("#exhibit-interact-hud .hud-glass-pill");
+    if (hudPill) {
+      hudPill.addEventListener("click", (e) => {
+        if (e.stopPropagation) e.stopPropagation();
+        const targetExhibit = hoveredExhibitData || findNearestExhibitInRoom() || currentExhibitData;
+        if (targetExhibit) {
+          openDetailDrawer(targetExhibit);
+        }
+      });
+    }
+
     // Chuyển phòng trên Header
     const roomButtons = document.querySelectorAll(".room-btn");
     roomButtons.forEach((btn) => {
@@ -796,7 +820,13 @@ window.MuseumControls = (() => {
 
     // Chống tự trôi nhân vật khi mất focus cửa sổ, ẩn tab hoặc chuyển trang (C1)
     window.addEventListener("blur", resetAllKeys);
-    window.addEventListener("pagehide", resetAllKeys);
+    window.addEventListener("pagehide", () => {
+      resetAllKeys();
+      if (proximityTimer) {
+        clearInterval(proximityTimer);
+        proximityTimer = null;
+      }
+    });
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         resetAllKeys();
@@ -818,7 +848,15 @@ window.MuseumControls = (() => {
         return;
       }
 
-      if (k === "f" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (isDrawerOpen()) {
+        return;
+      }
+
+      if (e.ctrlKey || e.metaKey || e.altKey) {
+        return;
+      }
+
+      if (k === "f") {
         try {
           if (
             window.parent &&
@@ -839,7 +877,7 @@ window.MuseumControls = (() => {
       }
 
       // Phím V chuyển đổi Góc nhìn Thứ 1 / Thứ 3
-      if (k === "v" && !e.ctrlKey && !e.metaKey && !e.altKey && !e.repeat && !isDrawerOpen()) {
+      if (k === "v" && !e.repeat) {
         if (window.MuseumEngine && window.MuseumEngine.toggleCameraMode) {
           const nextMode = window.MuseumEngine.toggleCameraMode();
           const modeBtn = document.getElementById("btn-camera-mode");
@@ -894,22 +932,31 @@ window.MuseumControls = (() => {
         if (!isActiveState) return;
         const evtType = e.data.eventType || "keydown";
         const keyVal = (e.data.key || "").toLowerCase();
-        if (evtType === "keydown") {
-          if (keyVal === "w" || keyVal === "arrowup") keys.w = true;
-          if (keyVal === "a" || keyVal === "arrowleft") keys.a = true;
-          if (keyVal === "s" || keyVal === "arrowdown") keys.s = true;
-          if (keyVal === "d" || keyVal === "arrowright") keys.d = true;
-        } else if (evtType === "keyup") {
-          if (keyVal === "w" || keyVal === "arrowup") keys.w = false;
-          if (keyVal === "a" || keyVal === "arrowleft") keys.a = false;
-          if (keyVal === "s" || keyVal === "arrowdown") keys.s = false;
-          if (keyVal === "d" || keyVal === "arrowright") keys.d = false;
+        const isMoveKey = [
+          "w",
+          "a",
+          "s",
+          "d",
+          "arrowup",
+          "arrowleft",
+          "arrowdown",
+          "arrowright",
+        ].includes(keyVal);
+        if (isMoveKey) {
+          if (isDrawerOpen() && evtType === "keydown") return;
+          const pressed = evtType === "keydown";
+          if (keyVal === "w" || keyVal === "arrowup") keys.w = pressed;
+          if (keyVal === "a" || keyVal === "arrowleft") keys.a = pressed;
+          if (keyVal === "s" || keyVal === "arrowdown") keys.s = pressed;
+          if (keyVal === "d" || keyVal === "arrowright") keys.d = pressed;
+          return;
         }
         try {
           window.dispatchEvent(
             new KeyboardEvent(evtType, {
               key: e.data.key,
               code: e.data.code,
+              repeat: Boolean(e.data.repeat),
             }),
           );
         } catch (_) {}

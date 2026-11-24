@@ -124,7 +124,12 @@ window.MuseumRoom1 = (() => {
     window.MuseumEngine.createArchitecturalRoom(18, 14, 4.4);
 
     // Thảm dẫn hướng trung tâm thoáng đãng (Exhibition Runner)
-    const runnerTex = createExhibitionRunnerTexture();
+    const runnerTex = window.MuseumEngine.getSharedTexture
+      ? window.MuseumEngine.getSharedTexture(
+          "r1-runner-tex",
+          createExhibitionRunnerTexture,
+        )
+      : createExhibitionRunnerTexture();
     const runnerMat = new THREE.MeshStandardMaterial({
       map: runnerTex,
       roughness: 0.9,

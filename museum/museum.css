@@ -2,9 +2,15 @@
   box-sizing: border-box;
 }
 
+.hidden {
+  display: none !important;
+}
+
 body {
   margin: 0;
   padding: 0;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
@@ -534,6 +540,27 @@ body {
 
   .drawer-hero-frame img {
     max-height: 220px;
+  }
+}
+
+.hud-glass-pill {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+#drawer-title {
+  text-wrap: balance;
+}
+
+@media (max-width: 1180px) {
+  .museum-shiftlock-detail {
+    display: none !important;
+  }
+}
+
+@media (pointer: coarse), (max-width: 639px) {
+  #btn-shiftlock-status {
+    display: none !important;
   }
 }
 

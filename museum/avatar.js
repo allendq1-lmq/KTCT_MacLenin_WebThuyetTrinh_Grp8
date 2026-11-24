@@ -583,23 +583,42 @@ window.MuseumAvatar = (() => {
           bounds.maxZ,
         );
 
-        // Tránh đi xuyên bệ trưng bày trung tâm ở Phòng 2 và Phòng 3
-        if (currentRoom === 2) {
-          const dx = nextX - 0;
-          const dz = nextZ - -0.8;
+        // Tránh đi xuyên ghế nghỉ và bệ trưng bày/cột đá ở từng phòng
+        const pushOutCircle = (cx, cz, minDist) => {
+          const dx = nextX - cx;
+          const dz = nextZ - cz;
           const dist = Math.hypot(dx, dz);
-          if (dist < 1.65 && dist > 0.001) {
-            nextX = (dx / dist) * 1.65;
-            nextZ = -0.8 + (dz / dist) * 1.65;
+          if (dist < minDist && dist > 0.001) {
+            nextX = cx + (dx / dist) * minDist;
+            nextZ = cz + (dz / dist) * minDist;
+          }
+        };
+
+        if (currentRoom === 1) {
+          pushOutCircle(-2.8, 0.8, 0.95);
+          pushOutCircle(2.8, 0.8, 0.95);
+        } else if (currentRoom === 2) {
+          pushOutCircle(0, -0.8, 2.05);
+          pushOutCircle(0, 4.2, 0.95);
+          const pillars =
+            window.MuseumData &&
+            window.MuseumData.room2 &&
+            Array.isArray(window.MuseumData.room2.pillars)
+              ? window.MuseumData.room2.pillars
+              : [];
+          const pillarOrbit = 5.4;
+          for (let i = 0; i < pillars.length; i++) {
+            const p = pillars[i];
+            if (typeof p.angle === "number") {
+              const px = Math.sin(p.angle) * pillarOrbit;
+              const pz = -0.8 - Math.cos(p.angle) * pillarOrbit;
+              pushOutCircle(px, pz, 1.12);
+            }
           }
         } else if (currentRoom === 3) {
-          const dx = nextX - 0;
-          const dz = nextZ - 1.6;
-          const dist = Math.hypot(dx, dz);
-          if (dist < 1.45 && dist > 0.001) {
-            nextX = (dx / dist) * 1.45;
-            nextZ = 1.6 + (dz / dist) * 1.45;
-          }
+          pushOutCircle(0, 1.6, 1.82);
+          pushOutCircle(-3.2, 0.2, 0.95);
+          pushOutCircle(3.2, 0.2, 0.95);
         }
 
         avatarGroup.position.x = THREE.MathUtils.clamp(

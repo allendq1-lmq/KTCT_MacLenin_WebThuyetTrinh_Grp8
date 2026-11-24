@@ -573,7 +573,7 @@ window.PresentationApp = (() => {
               </div>
               <div>
                 <span class="meta-card-kicker">Giảng viên hướng dẫn</span>
-                <div class="meta-card-value">Thầy Nguyễn Anh Khoa</div>
+                <div class="meta-card-value">ThS. Nguyễn Anh Khoa</div>
               </div>
             </div>
           </div>

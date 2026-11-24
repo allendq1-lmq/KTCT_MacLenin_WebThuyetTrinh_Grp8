@@ -872,16 +872,44 @@ window.PresentationApp = (() => {
       }
 
       host.insertAdjacentHTML("beforeend", buildSceneMarkup(slide, enterClass));
+
+      const currentScene = host.querySelector(".slide-scene.is-current");
+      if (
+        currentScene &&
+        window.ContentShield &&
+        typeof window.ContentShield.protectElementTexts === "function"
+      ) {
+        window.ContentShield.protectElementTexts(
+          currentScene,
+          ".scene-title, .kw-label, .thesis-line, .verdict-answer-text",
+        );
+      }
     }
 
     const drawerTitle = document.getElementById("drawer-title");
     const drawerBody = document.getElementById("drawer-body");
-    if (drawerTitle) drawerTitle.textContent = slide.title || "Chi tiết luận điểm";
+    if (drawerTitle) {
+      const titleText = slide.title || "Chi tiết luận điểm";
+      if (
+        window.ContentShield &&
+        typeof window.ContentShield.renderProtectedText === "function"
+      ) {
+        window.ContentShield.renderProtectedText(drawerTitle, titleText);
+      } else {
+        drawerTitle.textContent = titleText;
+      }
+    }
     if (drawerBody) {
       drawerBody.innerHTML = `
         <div class="drawer-full-desc"><strong>Tóm tắt lập luận:</strong> ${slide.desc || ""}</div>
         ${slide.fullHtml || ""}
       `;
+      if (
+        window.ContentShield &&
+        typeof window.ContentShield.protectElementTexts === "function"
+      ) {
+        window.ContentShield.protectElementTexts(drawerBody, "h4, p, li");
+      }
     }
 
     const activeStage = getStageFromIndex(clampedIdx);
@@ -1273,8 +1301,26 @@ window.addEventListener("resize", syncOrientationLayout);
   };
 })();
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => window.PresentationApp.init());
-} else {
+function bootstrapPresentationApp() {
+  if (typeof window.hydratePresentationData === "function") {
+    window.hydratePresentationData();
+  }
   window.PresentationApp.init();
+}
+
+function schedulePresentationBootstrap() {
+  if (
+    window.ContentShield &&
+    typeof window.ContentShield.onHumanVerified === "function"
+  ) {
+    window.ContentShield.onHumanVerified(bootstrapPresentationApp);
+  } else {
+    bootstrapPresentationApp();
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", schedulePresentationBootstrap);
+} else {
+  schedulePresentationBootstrap();
 }

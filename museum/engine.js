@@ -2766,10 +2766,26 @@ window.MuseumEngine = (() => {
   };
 })();
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () =>
-    window.MuseumEngine.init(),
-  );
-} else {
+function bootstrapMuseumApp() {
+  if (typeof window.hydrateMuseumData === "function") {
+    window.hydrateMuseumData();
+  }
   window.MuseumEngine.init();
+}
+
+function scheduleMuseumBootstrap() {
+  if (
+    window.ContentShield &&
+    typeof window.ContentShield.onHumanVerified === "function"
+  ) {
+    window.ContentShield.onHumanVerified(bootstrapMuseumApp);
+  } else {
+    bootstrapMuseumApp();
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", scheduleMuseumBootstrap);
+} else {
+  scheduleMuseumBootstrap();
 }

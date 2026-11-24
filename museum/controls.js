@@ -279,7 +279,17 @@ window.MuseumControls = (() => {
     const body = document.getElementById("drawer-body");
 
     if (badge) badge.textContent = data.badge || roomNames[data.room] || "";
-    if (title) title.textContent = data.title || "";
+    if (title) {
+      const exhibitTitle = data.title || "";
+      if (
+        window.ContentShield &&
+        typeof window.ContentShield.renderProtectedText === "function"
+      ) {
+        window.ContentShield.renderProtectedText(title, exhibitTitle);
+      } else {
+        title.textContent = exhibitTitle;
+      }
+    }
     if (subtitle) subtitle.textContent = data.subtitle || "";
     if (body) {
       body.innerHTML = "";
@@ -293,6 +303,12 @@ window.MuseumControls = (() => {
         data.fullHtml ||
         `<p class="text-slate-200 leading-relaxed">${data.desc || ""}</p>`;
       body.appendChild(textSection);
+      if (
+        window.ContentShield &&
+        typeof window.ContentShield.protectElementTexts === "function"
+      ) {
+        window.ContentShield.protectElementTexts(textSection, "h3, h4, p, li");
+      }
       body.scrollTop = 0;
     }
     if (modal) modal.classList.remove("hidden");

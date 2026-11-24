@@ -319,7 +319,15 @@ window.InteractiveQuiz = (() => {
     }
 
     if (explanationText) {
-      explanationText.textContent = question.explanation || "";
+      const expStr = question.explanation || "";
+      if (
+        window.ContentShield &&
+        typeof window.ContentShield.renderProtectedText === "function"
+      ) {
+        window.ContentShield.renderProtectedText(explanationText, expStr);
+      } else {
+        explanationText.textContent = expStr;
+      }
     }
     if (explanationPlaceholder) {
       explanationPlaceholder.classList.add("hidden");
@@ -402,7 +410,15 @@ window.InteractiveQuiz = (() => {
       sectionBadge.textContent = question.sectionCode || `Câu ${currentIndex + 1}`;
     }
     if (questionText) {
-      questionText.textContent = question.question || "";
+      const qStr = question.question || "";
+      if (
+        window.ContentShield &&
+        typeof window.ContentShield.renderProtectedText === "function"
+      ) {
+        window.ContentShield.renderProtectedText(questionText, qStr);
+      } else {
+        questionText.textContent = qStr;
+      }
     }
     if (feedbackDock && !existingAnswer) {
       feedbackDock.classList.add("hidden");

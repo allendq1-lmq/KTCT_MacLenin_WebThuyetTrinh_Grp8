@@ -216,6 +216,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    if (
+      window.ContentShield &&
+      typeof window.ContentShield.setOverlaySuspended === "function"
+    ) {
+      window.ContentShield.setOverlaySuspended(isFullBleedTab);
+    }
+
     syncPresentationFullscreenMode();
     updateFullscreenButtonVisibility();
     syncNavbarHeightVar();
@@ -683,9 +690,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  function syncFrameContentShield(iframe) {
+    if (
+      !iframe ||
+      !iframe.contentWindow ||
+      !window.ContentShield ||
+      typeof window.ContentShield.isVerified !== "function" ||
+      !window.ContentShield.isVerified()
+    ) {
+      return;
+    }
+    try {
+      iframe.contentWindow.postMessage({ type: "CONTENT_SHIELD_UNLOCK" }, "*");
+    } catch (_) {}
+  }
+
   const presentationFrameEl = document.getElementById("presentation-frame");
   if (presentationFrameEl) {
     presentationFrameEl.addEventListener("load", () => {
+      syncFrameContentShield(presentationFrameEl);
       setPresentationActive(currentActiveTab === "content");
       syncPresentationFullscreenMode();
     });
@@ -694,6 +717,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const museumFrameEl = document.getElementById("museum-frame");
   if (museumFrameEl) {
     museumFrameEl.addEventListener("load", () => {
+      syncFrameContentShield(museumFrameEl);
       setMuseumActive(currentActiveTab === "idea2");
     });
   }
@@ -705,9 +729,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Mặc định mở tab Nội Dung (content)
   switchTab("content");
 
-  // Khởi động module Trắc Nghiệm Tương Tác
+  // Khởi động module Trắc Nghiệm Tương Tác sau khi xác thực tương tác người thật
   const quizModule = window.InteractiveQuiz || (typeof InteractiveQuiz !== "undefined" ? InteractiveQuiz : null);
-  if (quizModule && quizModule.init) {
-    quizModule.init();
+  const startQuiz = () => {
+    if (typeof window.hydrateQuizData === "function") {
+      window.hydrateQuizData();
+    }
+    if (quizModule && quizModule.init) {
+      quizModule.init();
+    }
+  };
+  if (
+    window.ContentShield &&
+    typeof window.ContentShield.onHumanVerified === "function"
+  ) {
+    window.ContentShield.onHumanVerified(startQuiz);
+  } else {
+    startQuiz();
   }
 });

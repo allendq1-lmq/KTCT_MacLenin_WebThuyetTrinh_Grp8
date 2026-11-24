@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noai, noimageai" />
     <title>Bảo Tàng 3D Kinh Tế Chính Trị Mác - Lênin</title>
     <link rel="icon" href="data:," />
     <!-- Google Font tiếng Việt sắc nét chuẩn bảo tàng triển lãm (Playfair Display + Be Vietnam Pro) -->
@@ -208,19 +209,24 @@
         </div>
         <div
           id="drawer-body"
-          class="p-4 sm:p-6 overflow-y-auto text-sm sm:text-base text-slate-200 leading-relaxed space-y-4 select-text"
+          class="p-4 sm:p-6 overflow-y-auto text-sm sm:text-base text-slate-200 leading-relaxed space-y-4 select-none"
         ></div>
       </div>
     </div>
 
     <!-- Bộ scripts thành phần của Bảo tàng 3D -->
-    <script src="data.js?v=20261124-1"></script>
+    <script
+      src="../js/content-shield.js?v=20261124-4"
+      data-shield-mode="gate"
+      data-shield-button-label="Mở Bảo Tàng 3D"
+    ></script>
+    <script src="data.js?v=20261124-4"></script>
     <script src="visuals.js?v=20261124-1"></script>
     <script src="avatar.js?v=20261124-1"></script>
     <script src="room1.js?v=20261124-1"></script>
     <script src="room2.js?v=20261124-1"></script>
     <script src="room3.js?v=20261124-1"></script>
-    <script src="controls.js?v=20261124-3"></script>
-    <script src="engine.js?v=20261124-3"></script>
+    <script src="controls.js?v=20261124-4"></script>
+    <script src="engine.js?v=20261124-4"></script>
   </body>
 </html>

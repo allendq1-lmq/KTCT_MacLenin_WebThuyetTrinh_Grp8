@@ -573,7 +573,7 @@ window.PresentationApp = (() => {
               </div>
               <div>
                 <span class="meta-card-kicker">Giảng viên hướng dẫn</span>
-                <div class="meta-card-value">Nguyễn Anh Khoa</div>
+                <div class="meta-card-value">Thầy Nguyễn Anh Khoa</div>
               </div>
             </div>
           </div>
@@ -586,7 +586,7 @@ window.PresentationApp = (() => {
             <span class="roadmap-connector" aria-hidden="true"></span>
             <button type="button" class="roadmap-node is-amber" onclick="window.PresentationApp.goToSlide(2)">
               <span class="rm-step">02</span>
-              <span class="rm-text">Đường lối ĐHQG</span>
+              <span class="rm-text">Đường lối ĐCSVN</span>
             </button>
             <span class="roadmap-connector" aria-hidden="true"></span>
             <button type="button" class="roadmap-node is-emerald" onclick="window.PresentationApp.goToSlide(4)">

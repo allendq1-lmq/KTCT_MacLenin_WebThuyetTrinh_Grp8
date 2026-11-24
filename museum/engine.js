@@ -55,9 +55,19 @@ window.MuseumEngine = (() => {
   let isManualPaused = false;
   let isContextLost = false;
   let isDisposed = false;
+  let needsRender = true;
+  let idleFramesRemaining = 24;
   let threeRetryCount = 0;
   let pagehideBound = false;
   let lastFrameTime = 0;
+
+  function requestRender(frames = 2) {
+    needsRender = true;
+    const f = typeof frames === "number" && frames > 0 ? frames : 2;
+    if (f > idleFramesRemaining) {
+      idleFramesRemaining = f;
+    }
+  }
   let sceneEpoch = 0;
   let pmremRenderTarget = null;
   const roomUpdaters = [];
@@ -619,6 +629,7 @@ window.MuseumEngine = (() => {
           );
           entry.drawn = true;
           tex.needsUpdate = true;
+          requestRender(4);
         })
         .catch(() => {
           if (!isDisposed && !entry.drawn && artworkTextureCache.get(cacheKey) === entry) {
@@ -991,6 +1002,7 @@ window.MuseumEngine = (() => {
       );
       entry.tex.needsUpdate = true;
     }
+    requestRender(4);
   }
 
   function createPlacardTexture(title, subtitle, exhibitMeta, frameWidth = 2.6) {
@@ -2242,6 +2254,7 @@ window.MuseumEngine = (() => {
       MAX_PITCH,
     );
     updateShiftLockCamera();
+    requestRender(4);
   }
 
   function setCameraAngles(yaw, pitch) {
@@ -2250,6 +2263,7 @@ window.MuseumEngine = (() => {
       camPitch = THREE.MathUtils.clamp(pitch, MIN_PITCH, MAX_PITCH);
     }
     updateShiftLockCamera();
+    requestRender(4);
   }
 
   function getCameraAngles() {
@@ -2263,6 +2277,7 @@ window.MuseumEngine = (() => {
   function setCameraMode(mode) {
     cameraMode = mode === "first" ? "first" : "third";
     updateShiftLockCamera();
+    requestRender(4);
     return cameraMode;
   }
 
@@ -2301,6 +2316,7 @@ window.MuseumEngine = (() => {
     camYaw = Math.atan2(unitDirX, -unitDirZ);
     camPitch = 0.05;
     updateShiftLockCamera();
+    requestRender(6);
   }
 
   // Giữ tương thích hàm focusTarget: đồng bộ trực tiếp nhân vật & camera Shift-Lock
@@ -2323,6 +2339,7 @@ window.MuseumEngine = (() => {
     camYaw = preset.yaw;
     camPitch = preset.pitch;
     updateShiftLockCamera();
+    requestRender(6);
   }
 
   function loadRoom(roomNumber) {
@@ -2369,6 +2386,7 @@ window.MuseumEngine = (() => {
     camera.updateProjectionMatrix();
     renderer.setPixelRatio(getOptimalPixelRatio());
     renderer.setSize(width, height);
+    requestRender(4);
   }
 
   function shouldPauseRender() {
@@ -2427,6 +2445,24 @@ window.MuseumEngine = (() => {
     const rawDt =
       lastFrameTime > 0 ? (currentTime - lastFrameTime) / 1000 : 1 / 60;
     lastFrameTime = currentTime;
+
+    const isMovingKey = Boolean(keys.w || keys.a || keys.s || keys.d);
+    if (isMovingKey) {
+      idleFramesRemaining = 24;
+      needsRender = true;
+    } else if (roomUpdaters.length > 0) {
+      needsRender = true;
+    }
+
+    if (!needsRender && idleFramesRemaining <= 0) {
+      return;
+    }
+
+    needsRender = false;
+    if (idleFramesRemaining > 0) {
+      idleFramesRemaining--;
+    }
+
     const clampedDt = Math.min(Math.max(rawDt, 0), 0.05);
     elapsedClock += clampedDt;
 
@@ -2601,6 +2637,7 @@ window.MuseumEngine = (() => {
       isContextLost = false;
       showContextLostBanner(false);
       onWindowResize();
+      requestRender(8);
       resumeRenderLoop();
     });
 
@@ -2684,6 +2721,7 @@ window.MuseumEngine = (() => {
     toggleCameraMode,
     cancelTransition,
     onWindowResize,
+    requestRender,
     setPaused,
     isPaused,
     dispose,

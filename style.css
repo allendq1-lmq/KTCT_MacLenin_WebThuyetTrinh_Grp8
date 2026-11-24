@@ -12,8 +12,8 @@
   box-sizing: border-box;
 }
 
-.hidden {
-  display: none !important;
+:where(.hidden) {
+  display: none;
 }
 
 html {
@@ -757,14 +757,14 @@ body.reveal-full-page {
   }
 }
 
-/* Thẻ trang trí đặc biệt Nhóm 8 (ô cuối hàng 5) - khác biệt hoàn toàn với 16 thẻ thành viên */
+/* Thẻ trang trí đặc biệt Nhóm 8 (ô cuối hàng 5) - tone sáng ấm hài hòa với toàn trang */
 .group8-showcase-card {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #3b1d08 100%);
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 55%, #fed7aa 100%);
   border: 1.5px solid #df7a28;
-  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.55), inset 0 1px 0 rgba(245, 158, 11, 0.28);
-  color: #f8fafc;
+  box-shadow: 0 8px 20px -10px rgba(223, 122, 40, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  color: #1e293b;
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 240ms ease,
     border-color 240ms ease;
@@ -772,8 +772,8 @@ body.reveal-full-page {
 
 .group8-showcase-card:hover {
   transform: translateY(-2px);
-  border-color: #f59e0b;
-  box-shadow: 0 14px 30px -8px rgba(223, 122, 40, 0.5), 0 0 0 1px rgba(245, 158, 11, 0.45);
+  border-color: #c4661b;
+  box-shadow: 0 12px 24px -8px rgba(223, 122, 40, 0.38), 0 0 0 1px rgba(223, 122, 40, 0.25);
 }
 
 .group8-showcase-shimmer {
@@ -782,7 +782,7 @@ body.reveal-full-page {
   background: linear-gradient(
     115deg,
     transparent 35%,
-    rgba(253, 186, 116, 0.22) 50%,
+    rgba(255, 255, 255, 0.45) 50%,
     transparent 65%
   );
   transform: translateX(-55%);
@@ -809,15 +809,15 @@ body.reveal-full-page {
   width: clamp(1.9rem, 3.2dvh, 2.4rem);
   height: clamp(1.9rem, 3.2dvh, 2.4rem);
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(135deg, #df7a28, #c4661b);
   color: #ffffff;
   font-weight: 900;
   font-size: clamp(0.95rem, 1.5dvh, 1.15rem);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.45);
-  border: 1px solid rgba(255, 237, 213, 0.4);
+  box-shadow: 0 4px 10px rgba(223, 122, 40, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 .group8-pill {
@@ -827,9 +827,9 @@ body.reveal-full-page {
   text-transform: uppercase;
   padding: 0.22rem 0.6rem;
   border-radius: 9999px;
-  color: #fed7aa;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(253, 186, 116, 0.35);
+  color: #9a3412;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(223, 122, 40, 0.32);
 }
 
 .group8-kicker {
@@ -837,16 +837,16 @@ body.reveal-full-page {
   font-size: clamp(0.85rem, 1.05vw, 1rem);
   font-weight: 800;
   letter-spacing: 0.04em;
-  color: #fdba74;
+  color: #9a3412;
   text-wrap: balance;
 }
 
 .group8-motto {
   margin: 0.25rem 0 0;
   font-size: clamp(0.75rem, 0.95vw, 0.875rem);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.35;
-  color: #e2e8f0;
+  color: #475569;
   text-wrap: balance;
 }
 

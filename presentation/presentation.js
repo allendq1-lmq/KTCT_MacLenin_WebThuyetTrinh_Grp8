@@ -976,6 +976,11 @@ window.PresentationApp = (() => {
     updateTimerUI();
   }
 
+  function isDrawerOpen() {
+    const drawer = document.getElementById("pres-detail-drawer");
+    return Boolean(drawer && drawer.classList.contains("is-open"));
+  }
+
   function toggleDrawer(forceState) {
     const drawer = document.getElementById("pres-detail-drawer");
     if (!drawer) return;
@@ -1086,6 +1091,9 @@ window.PresentationApp = (() => {
       toggleDrawer();
       return;
     }
+    if (isDrawerOpen()) {
+      return;
+    }
     if (k === "t" && !e.ctrlKey && !e.metaKey) {
       e.preventDefault();
       toggleTimer();
@@ -1135,6 +1143,18 @@ window.PresentationApp = (() => {
     const stage = getStageFromIndex(currentSlideIndex);
     requestAnimationFrame(() => updateStepperGlider(stage));
     setTimeout(() => updateStepperGlider(stage), 140);
+  }
+
+  function applyActiveState(active) {
+    isActiveState = Boolean(active);
+    const panel = document.getElementById("presentation-panel");
+    if (panel) {
+      panel.classList.toggle("is-paused", !isActiveState);
+    }
+    if (isActiveState) {
+      requestAnimationFrame(() => updateStepperGlider(getStageFromIndex(currentSlideIndex)));
+      wakeHudBriefly();
+    }
   }
 
   function init() {
@@ -1196,7 +1216,8 @@ window.PresentationApp = (() => {
       panel.addEventListener(
         "touchend",
         (e) => {
-          if (!isActiveState || !e.changedTouches.length) return;
+          if (!isActiveState || isDrawerOpen() || !e.changedTouches.length) return;
+          if (e.target && e.target.closest && e.target.closest("#pres-detail-drawer")) return;
           const dx = e.changedTouches[0].clientX - touchStartX;
           const dy = e.changedTouches[0].clientY - touchStartY;
           if (Math.abs(dx) >= 42 && Math.abs(dx) > Math.abs(dy)) {
@@ -1219,11 +1240,7 @@ window.addEventListener("resize", syncOrientationLayout);
     window.addEventListener("message", (e) => {
       if (!e || !e.data) return;
       if (e.data.type === "PRESENTATION_SET_ACTIVE") {
-        isActiveState = Boolean(e.data.active);
-        if (isActiveState) {
-          requestAnimationFrame(() => updateStepperGlider(getStageFromIndex(currentSlideIndex)));
-          wakeHudBriefly();
-        }
+        applyActiveState(Boolean(e.data.active));
       } else if (e.data.type === "FULLSCREEN_CHANGED") {
         syncFullscreenButtonState(Boolean(e.data.isFullscreen));
       } else if (e.data.type === "PARENT_KEY_EVENT" && isActiveState) {
@@ -1246,7 +1263,7 @@ window.addEventListener("resize", syncOrientationLayout);
     nextSlide,
     prevSlide,
     toggleDrawer,
-    setActive: (active) => { isActiveState = Boolean(active); },
+    setActive: applyActiveState,
     isActive: () => isActiveState,
     toggleFullscreen,
     exitFullscreen: exitFullscreenMode,

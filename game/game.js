@@ -1,6 +1,7 @@
 // game/game.js - Ứng dụng Web Game Thể Chế Độc Lập (Reigns - 30 thẻ bài, 3 tab, Firebase RTDB)
 const StandaloneReignsGame = (() => {
   const MAX_YEARS = 10;
+  const MAX_ALLOWED_TAB_SWITCHES = 6;
   const MSSV_REGEX = /^\d{8}$/;
 
   const categoryLabels = {
@@ -1460,7 +1461,7 @@ const StandaloneReignsGame = (() => {
   }
 
   // ================= BROWSER STATE & UI CONTROLLERS =================
-  let currentTab = "play";
+  let currentTab = "rules";
   let currentYear = 1;
   let reignsStats = { growth: 50, equity: 50, environment: 50, stability: 50 };
   let currentCardIndex = 0;
@@ -1470,6 +1471,8 @@ const StandaloneReignsGame = (() => {
   let isChoosing = false;
   let currentRunToken = 0;
   let leaderboardFetchSeq = 0;
+  let tabSwitchTracker = null;
+  let tabSwitchListenersBound = false;
 
   let client = null;
   let activePlayer = null;
@@ -1854,9 +1857,131 @@ const StandaloneReignsGame = (() => {
     }
   }
 
+  function createTabSwitchTracker(options = {}) {
+    const maxAllowed =
+      typeof options.maxAllowed === "number" && options.maxAllowed >= 0
+        ? options.maxAllowed
+        : MAX_ALLOWED_TAB_SWITCHES;
+    const debounceMs =
+      typeof options.debounceMs === "number" && options.debounceMs >= 0
+        ? options.debounceMs
+        : 1200;
+    let count = 0;
+    let lastAt = -Infinity;
+
+    return {
+      recordSwitch(nowMs = Date.now()) {
+        if (nowMs - lastAt < debounceMs) {
+          return {
+            counted: false,
+            count,
+            forfeited: count > maxAllowed,
+          };
+        }
+        lastAt = nowMs;
+        count += 1;
+        return {
+          counted: true,
+          count,
+          forfeited: count > maxAllowed,
+        };
+      },
+      reset() {
+        count = 0;
+        lastAt = -Infinity;
+      },
+      getCount() {
+        return count;
+      },
+    };
+  }
+
+  function isActivelyPlayingRun() {
+    if (!activePlayer || currentTab !== "play") return false;
+    if (isGameOver || hasSubmittedCurrentRun) return false;
+    if (typeof document !== "undefined" && document.querySelector("dialog[open]")) {
+      return false;
+    }
+    return true;
+  }
+
+  function forfeitCurrentRunForTabSwitching() {
+    if (!activePlayer || isGameOver || hasSubmittedCurrentRun) return false;
+    isGameOver = true;
+    hasSubmittedCurrentRun = true;
+    hideFeedbackBanner();
+
+    const scoreInfo = {
+      yearScore: 0,
+      balanceScore: 0,
+      victoryBonus: 0,
+      totalScore: 0,
+    };
+
+    const playArea = document.getElementById("game-play-area");
+    if (playArea) playArea.classList.add("hidden");
+
+    const causeEl = document.getElementById("gameover-cause");
+    const yearsEl = document.getElementById("gameover-years");
+    const totalEl = document.getElementById("gameover-total-score");
+    const breakdownEl = document.getElementById("gameover-score-breakdown");
+    const noteEl = document.getElementById("gameover-submit-note");
+
+    if (causeEl) {
+      causeEl.textContent =
+        "Lượt chơi đã bị hủy (0 điểm, mất 1 lượt) do thoát hoặc chuyển tab quá nhiều lần trong lúc đang chơi.";
+    }
+    if (yearsEl) {
+      yearsEl.textContent = `0 / ${MAX_YEARS} năm (Bị hủy lượt)`;
+    }
+    if (totalEl) {
+      totalEl.textContent = "0 điểm";
+    }
+    if (breakdownEl) {
+      breakdownEl.textContent =
+        "Vi phạm quy chế thoát/chuyển tab quá nhiều lần — Bấm Chơi lại để qua lượt mới";
+    }
+    if (noteEl) {
+      noteEl.textContent = "Đang đồng bộ kết quả lên Bảng Xếp Hạng...";
+    }
+
+    const gameoverModal = document.getElementById("reigns-gameover-modal");
+    if (gameoverModal) gameoverModal.classList.remove("hidden");
+
+    const flash = document.getElementById("game-red-flash-overlay");
+    if (flash) {
+      flash.classList.remove("active-red-flash");
+      void flash.offsetWidth;
+      flash.classList.add("active-red-flash");
+    }
+    playSound("gameover");
+
+    handleRunFinished({
+      yearsSurvived: 0,
+      isVictory: false,
+      scoreInfo,
+    });
+    return true;
+  }
+
+  function recordTabSwitchAway() {
+    if (!isActivelyPlayingRun()) return;
+    if (!tabSwitchTracker) {
+      tabSwitchTracker = createTabSwitchTracker();
+    }
+    const res = tabSwitchTracker.recordSwitch(Date.now());
+    if (res.forfeited) {
+      forfeitCurrentRunForTabSwitching();
+    }
+  }
+
   function resetGame() {
     currentRunToken++;
     isChoosing = false;
+    if (!tabSwitchTracker) {
+      tabSwitchTracker = createTabSwitchTracker();
+    }
+    tabSwitchTracker.reset();
     if (cardAnimTimer) {
       clearTimeout(cardAnimTimer);
       cardAnimTimer = null;
@@ -2009,6 +2134,9 @@ const StandaloneReignsGame = (() => {
 
   // ================= LOGIN GATE & LOGOUT =================
   function showLoginGate() {
+    if (tabSwitchTracker) {
+      tabSwitchTracker.reset();
+    }
     const gate = document.getElementById("login-gate");
     const shell = document.getElementById("app-shell");
     if (gate) gate.classList.remove("hidden");
@@ -2035,7 +2163,7 @@ const StandaloneReignsGame = (() => {
     client.savePlayer(player);
     updatePlayerBadges();
     showAppShell();
-    switchTab("play");
+    switchTab("rules");
     resetGame();
 
     const rec = await client.fetchPlayerRecord(player.mssv);
@@ -2354,6 +2482,20 @@ const StandaloneReignsGame = (() => {
     setupQrModal();
     setupGlobalShortcuts();
 
+    if (!tabSwitchListenersBound && typeof document !== "undefined") {
+      tabSwitchListenersBound = true;
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          recordTabSwitchAway();
+        }
+      });
+      if (typeof window !== "undefined") {
+        window.addEventListener("blur", () => {
+          recordTabSwitchAway();
+        });
+      }
+    }
+
     // Auto-restore session if saved
     const saved = client.loadSavedPlayer();
     if (saved) {
@@ -2594,6 +2736,7 @@ const StandaloneReignsGame = (() => {
       createLeaderboardClient,
       resolveGameQrUrl,
       resolveKeyboardShortcutAction,
+      createTabSwitchTracker,
     },
   };
 })();

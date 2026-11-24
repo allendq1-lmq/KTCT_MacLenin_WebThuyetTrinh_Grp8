@@ -161,8 +161,7 @@ dialog:modal {
 }
 
 dialog::backdrop {
-  background-color: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(3px);
+  background-color: rgba(15, 23, 42, 0.72);
   overflow: hidden;
   overscroll-behavior: contain;
 }
@@ -216,6 +215,7 @@ dialog::backdrop {
 #reigns-card.swiping {
   transition: none;
   cursor: grabbing;
+  will-change: transform;
 }
 
 #reigns-card.reset-anim {

@@ -1145,6 +1145,18 @@ window.PresentationApp = (() => {
     setTimeout(() => updateStepperGlider(stage), 140);
   }
 
+  function applyActiveState(active) {
+    isActiveState = Boolean(active);
+    const panel = document.getElementById("presentation-panel");
+    if (panel) {
+      panel.classList.toggle("is-paused", !isActiveState);
+    }
+    if (isActiveState) {
+      requestAnimationFrame(() => updateStepperGlider(getStageFromIndex(currentSlideIndex)));
+      wakeHudBriefly();
+    }
+  }
+
   function init() {
     if (isInitialized) return;
     isInitialized = true;
@@ -1228,11 +1240,7 @@ window.addEventListener("resize", syncOrientationLayout);
     window.addEventListener("message", (e) => {
       if (!e || !e.data) return;
       if (e.data.type === "PRESENTATION_SET_ACTIVE") {
-        isActiveState = Boolean(e.data.active);
-        if (isActiveState) {
-          requestAnimationFrame(() => updateStepperGlider(getStageFromIndex(currentSlideIndex)));
-          wakeHudBriefly();
-        }
+        applyActiveState(Boolean(e.data.active));
       } else if (e.data.type === "FULLSCREEN_CHANGED") {
         syncFullscreenButtonState(Boolean(e.data.isFullscreen));
       } else if (e.data.type === "PARENT_KEY_EVENT" && isActiveState) {
@@ -1255,7 +1263,7 @@ window.addEventListener("resize", syncOrientationLayout);
     nextSlide,
     prevSlide,
     toggleDrawer,
-    setActive: (active) => { isActiveState = Boolean(active); },
+    setActive: applyActiveState,
     isActive: () => isActiveState,
     toggleFullscreen,
     exitFullscreen: exitFullscreenMode,

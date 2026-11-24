@@ -66,8 +66,11 @@ body {
   border-radius: 9999px;
   opacity: 0.65;
   transition: background 0.6s ease;
-  animation: orbDrift 11s ease-in-out infinite alternate;
-  will-change: transform;
+}
+
+#presentation-panel.is-paused,
+#presentation-panel.is-paused * {
+  animation-play-state: paused !important;
 }
 
 .orb-primary {
@@ -119,9 +122,8 @@ body {
   gap: 0.2rem;
   padding: 0.24rem;
   border-radius: 9999px;
-  background: rgba(15, 23, 42, 0.84);
+  background: rgba(15, 23, 42, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(12px);
   max-width: 98vw;
 }
 
@@ -302,10 +304,9 @@ body {
   width: 100%;
   padding: clamp(1.25rem, 3vh, 2.25rem) clamp(1.3rem, 3.4vw, 2.8rem);
   border-radius: 1.45rem;
-  background: linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.74));
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
   border: 1px solid rgba(245, 158, 11, 0.44);
   box-shadow: 0 22px 48px -16px rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(12px);
 }
 
 .intro-cq-tag {
@@ -396,9 +397,8 @@ body {
   gap: 0.45rem;
   padding: clamp(0.72rem, 1.5vh, 1.05rem) 1.15rem;
   border-radius: 1.15rem;
-  background: rgba(15, 23, 42, 0.82);
+  background: rgba(15, 23, 42, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
 }
 
 .roadmap-node {
@@ -501,9 +501,8 @@ body {
 .verdict-pillar-card {
   padding: clamp(1rem, 2.2vh, 1.55rem) 1.25rem;
   border-radius: 1.2rem;
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -885,8 +884,7 @@ body {
 .drawer-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(2, 6, 23, 0.72);
-  backdrop-filter: blur(4px);
+  background: rgba(2, 6, 23, 0.8);
 }
 
 .drawer-panel {
@@ -1037,8 +1035,7 @@ body {
   padding: 0.22rem 0.62rem;
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(6px);
+  background: rgba(15, 23, 42, 0.72);
   color: #cbd5e1;
   font-family: "JetBrains Mono", monospace;
   font-size: 0.78rem;
@@ -1095,9 +1092,8 @@ body {
   gap: 0.5rem;
   padding: 0.28rem 0.78rem;
   border-radius: 9999px;
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(15, 23, 42, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(12px);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
   font-size: 0.78rem;
 }

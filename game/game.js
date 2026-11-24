@@ -1543,16 +1543,36 @@ const StandaloneReignsGame = (() => {
     });
   }
 
+  let statDotsCache = null;
+
+  function getStatDotsMap() {
+    if (statDotsCache) return statDotsCache;
+    if (typeof document === "undefined") return {};
+    const map = {};
+    ["growth", "equity", "environment", "stability"].forEach((key) => {
+      const el = document.querySelector(`.stat-hud[data-stat="${key}"] .stat-dot`);
+      if (el) map[key] = el;
+    });
+    if (Object.keys(map).length > 0) {
+      statDotsCache = map;
+    }
+    return map;
+  }
+
   function clearStatDots() {
-    document.querySelectorAll(".stat-dot").forEach((d) => d.classList.remove("active"));
+    const map = getStatDotsMap();
+    Object.values(map).forEach((d) => d.classList.remove("active"));
   }
 
   function showStatDots(effects) {
-    clearStatDots();
+    const map = getStatDotsMap();
     ["growth", "equity", "environment", "stability"].forEach((key) => {
+      const dot = map[key];
+      if (!dot) return;
       if (effects && effects[key]) {
-        const dot = document.querySelector(`.stat-hud[data-stat="${key}"] .stat-dot`);
-        if (dot) dot.classList.add("active");
+        dot.classList.add("active");
+      } else {
+        dot.classList.remove("active");
       }
     });
   }
@@ -2040,15 +2060,49 @@ const StandaloneReignsGame = (() => {
     let startX = 0;
     let currentX = 0;
     let isDragging = false;
+    let dragRafId = null;
+    let activeDragDir = "none";
 
     const pillLeft = document.getElementById("choice-pill-left");
     const pillRight = document.getElementById("choice-pill-right");
+
+    const flushDragVisuals = () => {
+      dragRafId = null;
+      if (!isDragging) return;
+      const rot = Math.max(-12, Math.min(12, currentX * 0.05));
+      card.style.transform = `translate3d(${currentX}px, 0px, 0px) rotate(${rot}deg)`;
+
+      const ratio = Math.min(1, Math.abs(currentX) / 80);
+      if (currentX < -15) {
+        pillLeft.style.opacity = String(ratio);
+        pillRight.style.opacity = "0";
+        if (activeDragDir !== "left") {
+          activeDragDir = "left";
+          showStatDots(deck[currentCardIndex]?.left?.effects);
+        }
+      } else if (currentX > 15) {
+        pillRight.style.opacity = String(ratio);
+        pillLeft.style.opacity = "0";
+        if (activeDragDir !== "right") {
+          activeDragDir = "right";
+          showStatDots(deck[currentCardIndex]?.right?.effects);
+        }
+      } else {
+        pillLeft.style.opacity = "0";
+        pillRight.style.opacity = "0";
+        if (activeDragDir !== "none") {
+          activeDragDir = "none";
+          clearStatDots();
+        }
+      }
+    };
 
     card.addEventListener("pointerdown", (e) => {
       if (!e.isPrimary || !activePlayer || isGameOver) return;
       isDragging = true;
       startX = e.clientX;
       currentX = 0;
+      activeDragDir = "none";
       card.classList.add("swiping");
       try {
         card.setPointerCapture(e.pointerId);
@@ -2058,41 +2112,40 @@ const StandaloneReignsGame = (() => {
     card.addEventListener("pointermove", (e) => {
       if (!isDragging) return;
       currentX = e.clientX - startX;
-      const rot = Math.max(-12, Math.min(12, currentX * 0.05));
-      card.style.transform = `translate(${currentX}px, 0px) rotate(${rot}deg)`;
-
-      const ratio = Math.min(1, Math.abs(currentX) / 80);
-      if (currentX < -15) {
-        pillLeft.style.opacity = String(ratio);
-        pillRight.style.opacity = "0";
-        showStatDots(deck[currentCardIndex]?.left?.effects);
-      } else if (currentX > 15) {
-        pillRight.style.opacity = String(ratio);
-        pillLeft.style.opacity = "0";
-        showStatDots(deck[currentCardIndex]?.right?.effects);
-      } else {
-        pillLeft.style.opacity = "0";
-        pillRight.style.opacity = "0";
-        clearStatDots();
+      if (dragRafId === null && typeof requestAnimationFrame === "function") {
+        dragRafId = requestAnimationFrame(flushDragVisuals);
+      } else if (typeof requestAnimationFrame !== "function") {
+        flushDragVisuals();
       }
     });
 
     const resetCardPosition = () => {
       card.classList.add("reset-anim");
-      card.style.transform = "translate(0px, 0px) rotate(0deg)";
+      card.style.transform = "translate3d(0px, 0px, 0px) rotate(0deg)";
       pillLeft.style.opacity = "0";
       pillRight.style.opacity = "0";
+      activeDragDir = "none";
       clearStatDots();
       setTimeout(() => card.classList.remove("reset-anim"), 250);
+    };
+
+    const stopPendingDragFrame = () => {
+      if (dragRafId !== null && typeof cancelAnimationFrame === "function") {
+        cancelAnimationFrame(dragRafId);
+        dragRafId = null;
+      }
     };
 
     const endDrag = () => {
       if (!isDragging) return;
       isDragging = false;
+      stopPendingDragFrame();
       card.classList.remove("swiping");
       if (currentX < -85) {
+        activeDragDir = "none";
         applyChoice("left");
       } else if (currentX > 85) {
+        activeDragDir = "none";
         applyChoice("right");
       } else {
         resetCardPosition();
@@ -2102,6 +2155,7 @@ const StandaloneReignsGame = (() => {
     const cancelDrag = () => {
       if (!isDragging) return;
       isDragging = false;
+      stopPendingDragFrame();
       card.classList.remove("swiping");
       resetCardPosition();
     };
@@ -2232,9 +2286,16 @@ const StandaloneReignsGame = (() => {
     const searchInput = document.getElementById("leaderboard-search");
     const refreshBtn = document.getElementById("btn-leaderboard-refresh");
     if (searchInput) {
-      searchInput.addEventListener("input", () =>
-        renderLeaderboardTable(searchInput.value),
-      );
+      let searchDebounceTimer = null;
+      searchInput.addEventListener("input", () => {
+        if (searchDebounceTimer) {
+          clearTimeout(searchDebounceTimer);
+        }
+        searchDebounceTimer = setTimeout(() => {
+          searchDebounceTimer = null;
+          renderLeaderboardTable(searchInput.value);
+        }, 120);
+      });
     }
     if (refreshBtn) {
       refreshBtn.addEventListener("click", refreshLeaderboard);

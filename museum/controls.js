@@ -971,6 +971,10 @@ window.MuseumControls = (() => {
     currentExhibitData = getPlaylist()[0] || null;
 
     if (!proximityTimer) {
+      let lastProxX = null;
+      let lastProxZ = null;
+      let lastProxRoom = null;
+      let lastHoveredRef = null;
       proximityTimer = setInterval(() => {
         if (!isActiveState || isDrawerOpen()) return;
         if (
@@ -980,8 +984,30 @@ window.MuseumControls = (() => {
         ) {
           return;
         }
+        const avatar =
+          window.MuseumAvatar && typeof window.MuseumAvatar.getAvatar === "function"
+            ? window.MuseumAvatar.getAvatar()
+            : null;
+        const room =
+          window.MuseumEngine && typeof window.MuseumEngine.getCurrentRoom === "function"
+            ? window.MuseumEngine.getCurrentRoom()
+            : null;
+        const ax = avatar ? Math.round(avatar.position.x * 20) : null;
+        const az = avatar ? Math.round(avatar.position.z * 20) : null;
+        if (
+          ax === lastProxX &&
+          az === lastProxZ &&
+          room === lastProxRoom &&
+          hoveredExhibitData === lastHoveredRef
+        ) {
+          return;
+        }
+        lastProxX = ax;
+        lastProxZ = az;
+        lastProxRoom = room;
+        lastHoveredRef = hoveredExhibitData;
         updateInteractHud(hoveredExhibitData || findNearestExhibitInRoom());
-      }, 150);
+      }, 250);
     }
   }
 

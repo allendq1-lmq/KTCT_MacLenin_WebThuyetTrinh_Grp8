@@ -606,10 +606,8 @@ body.reveal-full-page {
 
 @media (min-width: 1024px) {
   #section-members:not(.hidden) {
-    --members-gap: clamp(0.45rem, 0.9dvh, 0.85rem);
-    overflow: hidden;
-    overscroll-behavior: none;
-    padding-block: clamp(0.45rem, 1.1dvh, 1rem);
+    --members-gap: 0.75rem;
+    padding-bottom: 1.5rem;
   }
 
   .members-header {
@@ -622,6 +620,23 @@ body.reveal-full-page {
     line-height: 1.2;
   }
 
+  .members-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .member-card-chief {
+    width: calc((100% - 3 * var(--members-gap)) / 4);
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 860px) {
+  #section-members:not(.hidden) {
+    --members-gap: clamp(0.45rem, 0.9dvh, 0.85rem);
+    overflow: hidden;
+    overscroll-behavior: none;
+    padding-block: clamp(0.45rem, 1.1dvh, 1rem);
+  }
+
   .members-hierarchy {
     flex: 1 1 0%;
     min-height: 0;
@@ -632,7 +647,6 @@ body.reveal-full-page {
   }
 
   .members-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
     min-height: 0;
   }
 
@@ -641,7 +655,6 @@ body.reveal-full-page {
   }
 
   .member-card-chief {
-    width: calc((100% - 3 * var(--members-gap)) / 4);
     height: 100%;
   }
 
@@ -659,6 +672,14 @@ body.reveal-full-page {
     width: clamp(1.45rem, 2.5dvh, 2.1rem);
     height: clamp(1.45rem, 2.5dvh, 2.1rem);
     font-size: clamp(0.7rem, 1.15dvh, 0.875rem);
+  }
+
+  #section-members .member-name {
+    font-size: clamp(0.92rem, min(1.15vw, 1.85dvh), 1.15rem);
+  }
+
+  #section-members .member-mssv {
+    font-size: clamp(0.78rem, min(0.95vw, 1.55dvh), 0.98rem);
   }
 
   #section-members .member-task {

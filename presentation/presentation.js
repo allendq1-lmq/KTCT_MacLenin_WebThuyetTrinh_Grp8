@@ -1302,6 +1302,9 @@ window.addEventListener("resize", syncOrientationLayout);
 })();
 
 function bootstrapPresentationApp() {
+  if (typeof window.hydratePresShell === "function") {
+    window.hydratePresShell();
+  }
   if (typeof window.hydratePresentationData === "function") {
     window.hydratePresentationData();
   }

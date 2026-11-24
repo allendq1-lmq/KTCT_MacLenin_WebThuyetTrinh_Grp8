@@ -1,5 +1,10 @@
 // js/app.js - Điều hướng chuyển đổi 4 Tabs chính (Nội Dung, Bảo Tàng 3D, Trắc Nghiệm, Nhóm Tác Giả), Fullscreen & Cầu nối phím tắt
-document.addEventListener("DOMContentLoaded", () => {
+let mainAppInitialized = false;
+
+function initMainApp() {
+  if (mainAppInitialized) return;
+  mainAppInitialized = true;
+
   const tabButtons = document.querySelectorAll(".nav-tab");
   const tabContents = document.querySelectorAll(".tab-content");
   const mainContainer = document.getElementById("main-container");
@@ -729,22 +734,36 @@ document.addEventListener("DOMContentLoaded", () => {
   // Mặc định mở tab Nội Dung (content)
   switchTab("content");
 
-  // Khởi động module Trắc Nghiệm Tương Tác sau khi xác thực tương tác người thật
+  // Khởi động module Trắc Nghiệm Tương Tác
   const quizModule = window.InteractiveQuiz || (typeof InteractiveQuiz !== "undefined" ? InteractiveQuiz : null);
-  const startQuiz = () => {
-    if (typeof window.hydrateQuizData === "function") {
-      window.hydrateQuizData();
-    }
-    if (quizModule && quizModule.init) {
-      quizModule.init();
-    }
-  };
+  if (quizModule && quizModule.init) {
+    quizModule.init();
+  }
+}
+
+function bootstrapMainShellAndApp() {
+  if (typeof window.hydrateMainShell === "function") {
+    window.hydrateMainShell();
+  }
+  if (typeof window.hydrateQuizData === "function") {
+    window.hydrateQuizData();
+  }
+  initMainApp();
+}
+
+function scheduleMainBootstrap() {
   if (
     window.ContentShield &&
     typeof window.ContentShield.onHumanVerified === "function"
   ) {
-    window.ContentShield.onHumanVerified(startQuiz);
+    window.ContentShield.onHumanVerified(bootstrapMainShellAndApp);
   } else {
-    startQuiz();
+    bootstrapMainShellAndApp();
   }
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", scheduleMainBootstrap);
+} else {
+  scheduleMainBootstrap();
+}

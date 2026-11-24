@@ -2,7 +2,7 @@
  * js/content-shield.js — Hệ thống Bảo vệ Nội dung 3 Lớp (Nhóm 8 - UIT - KTCT Mác - Lênin)
  * - Lớp 1: Kiểm tra môi trường tự động/bot & Giải mã dữ liệu theo tương tác người thật (Human-Interaction Hydration)
  * - Lớp 2: Phân mảnh văn bản DOM bằng CSS order + thẻ nhiễu ẩn, chặn sao chép & Inspect nhẹ nhàng
- * - Lớp 3: Lớp phủ SVG Micro-Grid siêu mảnh & Watermark chìm (pointer-events: none) chống OCR
+ * - Lớp 3: Lớp phủ SVG Micro-Grid siêu mảnh (pointer-events: none) chống OCR
  */
 (function (root, factory) {
   const api = factory();
@@ -454,7 +454,7 @@
     );
   }
 
-  // ================= LỚP 3: CSS, MICRO-GRID, WATERMARK & GATE UI =================
+  // ================= LỚP 3: CSS, MICRO-GRID & GATE UI =================
 
   function buildMicroGridSvgDataUri() {
     const svg =
@@ -466,23 +466,10 @@
     return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
   }
 
-  function buildWatermarkSvgDataUri() {
-    const svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="380" height="220" viewBox="0 0 380 220">' +
-      '<g transform="rotate(-24 190 110)">' +
-      '<text x="190" y="114" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="800" letter-spacing="1.8" fill="#94a3b8">' +
-      "NHÓM 8 • UIT • KTCT MÁC - LÊNIN" +
-      "</text>" +
-      "</g>" +
-      "</svg>";
-    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-  }
-
   function injectShieldStylesAndOverlays() {
     if (!hasWindow || document.getElementById("cs-shield-styles")) return;
 
     const gridUri = buildMicroGridSvgDataUri();
-    const watermarkUri = buildWatermarkSvgDataUri();
 
     const style = document.createElement("style");
     style.id = "cs-shield-styles";
@@ -512,7 +499,7 @@
       }
       .cs-frag-piece {
         display: inline-block;
-        white-space: pre-wrap;
+        white-space: normal;
       }
       .cs-decoy {
         position: absolute !important;
@@ -536,18 +523,7 @@
         background-repeat: repeat;
         background-size: 16px 16px;
       }
-      #cs-watermark-layer {
-        position: fixed;
-        inset: 0;
-        z-index: 9991;
-        pointer-events: none;
-        opacity: 0.04;
-        background-image: ${watermarkUri};
-        background-repeat: repeat;
-        background-size: 380px 220px;
-      }
-      body.cs-overlay-suspended #cs-micro-grid,
-      body.cs-overlay-suspended #cs-watermark-layer {
+      body.cs-overlay-suspended #cs-micro-grid {
         display: none;
       }
       #cs-toast {
@@ -660,12 +636,6 @@
         grid.setAttribute("aria-hidden", "true");
         document.body.appendChild(grid);
       }
-      if (!document.getElementById("cs-watermark-layer")) {
-        const wm = document.createElement("div");
-        wm.id = "cs-watermark-layer";
-        wm.setAttribute("aria-hidden", "true");
-        document.body.appendChild(wm);
-      }
       if (!verified && shieldMode !== "passive" && !isInIframe()) {
         mountHumanGateOverlay();
       }
@@ -737,6 +707,11 @@
     if (shieldMode === "passive") {
       verified = true;
       flushVerifiedCallbacks();
+      return;
+    }
+
+    if (shieldMode === "auto-human" && !isLikelyAutomatedBrowser()) {
+      unlock("auto-human");
       return;
     }
 

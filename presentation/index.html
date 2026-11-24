@@ -4,151 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noai, noimageai" />
-    <title>Thuyết Trình Kinh Tế Chính Trị Mác - Lênin | Nhóm 8 - SS008.R12</title>
+    <title>Nhóm 8 — UIT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&family=JetBrains+Mono:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="presentation.css?v=20261124-3" />
+    <link rel="stylesheet" href="presentation.css?v=20261124-5" />
   </head>
   <body class="projector-dark-body">
-    <section
-      id="presentation-panel"
-      aria-label="Giao diện Trình chiếu Máy chiếu Cao cấp"
-      class="obsidian-stage is-intro-active"
-    >
-      <div class="ambient-backdrop" aria-hidden="true">
-        <div class="ambient-orb orb-primary"></div>
-        <div class="ambient-orb orb-secondary"></div>
-        <div class="ambient-grid"></div>
-      </div>
-
-      <!-- Thanh tiến trình 6 bước: Bỏ chữ "Mở", chỉ giữ lại "Đặt Vấn Đề" -->
-      <header id="stage-topbar" class="stage-topbar" aria-label="Tiến trình thuyết trình">
-        <div id="stage-stepper" class="stepper-track">
-          <div id="stepper-glider" class="stepper-glider" aria-hidden="true"></div>
-          <button type="button" class="step-pill is-intro-pill" data-step-stage="0" data-target-slide="0" title="Trang bìa Đặt vấn đề (Phím 0)">
-            <span class="step-label">Đặt Vấn Đề</span>
-          </button>
-          <button type="button" class="step-pill" data-step-stage="1" data-target-slide="1">
-            <span class="step-num">01</span>
-            <span class="step-label">Bối Cảnh</span>
-          </button>
-          <button type="button" class="step-pill" data-step-stage="2" data-target-slide="2">
-            <span class="step-num">02</span>
-            <span class="step-label">Đường Lối</span>
-          </button>
-          <button type="button" class="step-pill" data-step-stage="3" data-target-slide="4">
-            <span class="step-num">03</span>
-            <span class="step-label">Thực Hiện</span>
-          </button>
-          <button type="button" class="step-pill" data-step-stage="4" data-target-slide="8">
-            <span class="step-num">04</span>
-            <span class="step-label">Kết Quả</span>
-          </button>
-          <button type="button" class="step-pill" data-step-stage="5" data-target-slide="10" title="Phán quyết cuối cùng">
-            <span class="step-num">05</span>
-            <span class="step-label">Phán Quyết</span>
-          </button>
-        </div>
-      </header>
-
-      <main id="pres-main-scroll" class="stage-viewport">
-        <div id="pres-slides-host" class="slides-host"></div>
-      </main>
-
-      <!-- Ngăn kéo Phản biện & Tài liệu tham khảo (Mở bằng phím D hoặc nút Dẫn chứng) -->
-      <aside
-        id="pres-detail-drawer"
-        class="rebuttal-drawer"
-        aria-hidden="true"
-        aria-label="Tài liệu chi tiết phục vụ phản biện"
-      >
-        <div class="drawer-backdrop" id="drawer-backdrop"></div>
-        <div class="drawer-panel">
-          <div class="drawer-header">
-            <div>
-              <span class="drawer-tag">TƯ LIỆU PHẢN BIỆN &amp; TÀI LIỆU THAM KHẢO</span>
-              <h3 id="drawer-title" class="drawer-title">Chi tiết luận điểm</h3>
-            </div>
-            <button type="button" id="btn-close-drawer" class="drawer-close-btn" aria-label="Đóng">
-              ✕
-            </button>
-          </div>
-          <div id="drawer-body" class="drawer-body"></div>
-        </div>
-      </aside>
-
-      <button
-        id="btn-exit-pres-fullscreen"
-        type="button"
-        aria-label="Thoát toàn màn hình"
-        title="Thoát toàn màn hình (F / Esc)"
-        class="exit-fs-floating hidden"
-      >
-        ✕
-      </button>
-
-      <!-- Đồng hồ thời gian tách biệt, để mờ ở góc dưới bên trái màn hình -->
-      <button
-        type="button"
-        id="pres-timer-btn"
-        class="corner-timer-badge"
-        title="Phím T: Chạy/Dừng đồng hồ • Nhấp đúp: Đặt lại"
-      >
-        <span class="timer-dot"></span>
-        <span id="pres-timer-display">00:00</span>
-      </button>
-
-      <!-- Thanh trạng thái tự động ẩn sau 3,5 giây (hiện lại khi chuyển slide) -->
-      <div id="pres-dock-shell" class="minimal-hud-wrapper is-visible">
-        <div
-          id="pres-top-bar"
-          role="toolbar"
-          aria-label="Thanh trạng thái trình chiếu"
-          class="minimal-hud-pill"
-        >
-          <button type="button" id="btn-hud-prev" class="hud-nav-btn" aria-label="Slide trước" title="Slide trước">
-            ‹
-          </button>
-
-          <span id="slide-counter-badge" class="hud-counter">01 / 11</span>
-
-          <button type="button" id="btn-hud-next" class="hud-nav-btn" aria-label="Slide tiếp theo" title="Slide tiếp theo">
-            ›
-          </button>
-
-          <span class="hud-sep"></span>
-
-          <button type="button" id="btn-hud-drawer" class="hud-drawer-btn" title="Xem dẫn chứng & tài liệu tham khảo (Phím D)">
-            Dẫn chứng
-          </button>
-
-          <div class="hud-shortcuts" aria-label="Phím tắt điều khiển">
-            <span><kbd>←</kbd><kbd>→</kbd> Chuyển</span>
-            <span><kbd>F</kbd> Toàn màn hình</span>
-            <span><kbd>D</kbd> Dẫn chứng</span>
-            <span><kbd>T</kbd> Đồng hồ</span>
-          </div>
-
-          <span id="pres-room-tag" class="sr-only"></span>
-          <select id="slide-select-dropdown" aria-label="Chọn Slide" class="sr-only"></select>
-        </div>
-      </div>
-
-      <div class="bottom-progress-track" aria-hidden="true">
-        <div id="pres-progress-bar" class="bottom-progress-fill" style="width: 9%"></div>
-      </div>
-    </section>
-
+    <noscript>Vui lòng bật JavaScript để truy cập nội dung.</noscript>
     <script
-      src="../js/content-shield.js?v=20261124-4"
+      src="../js/content-shield.js?v=20261124-5"
       data-shield-mode="gate"
       data-shield-button-label="Mở nội dung thuyết trình"
     ></script>
-    <script src="slides-data.js?v=20261124-4"></script>
-    <script src="presentation.js?v=20261124-4"></script>
+    <script src="shell-pres.js?v=20261124-5"></script>
+    <script src="slides-data.js?v=20261124-5"></script>
+    <script src="presentation.js?v=20261124-5"></script>
   </body>
 </html>

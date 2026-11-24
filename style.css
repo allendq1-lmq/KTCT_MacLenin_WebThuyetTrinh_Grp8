@@ -1,4 +1,5 @@
 :root {
+  --header-target-height: 5rem;
   --navbar-height: 5rem;
   --warm-orange: #df7a28;
   --warm-orange-hover: #c4661b;
@@ -9,6 +10,10 @@
 
 * {
   box-sizing: border-box;
+}
+
+.hidden {
+  display: none !important;
 }
 
 html {
@@ -51,7 +56,7 @@ svg {
 
 /* ================= HEADER CỐ ĐỊNH & RESPONSIVE ĐA MÀN HÌNH ================= */
 #app-header {
-  min-height: var(--navbar-height);
+  min-height: var(--header-target-height);
 }
 
 #header-inner {
@@ -62,9 +67,18 @@ svg {
 
 #header-brand {
   margin-right: auto;
-  flex: 0 0 210px;
-  width: 210px;
-  max-width: 210px;
+  flex: 1 1 180px;
+  min-width: 0;
+  max-width: 220px;
+}
+
+#header-brand-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+  text-wrap: balance;
 }
 
 #header-nav {
@@ -85,46 +99,41 @@ svg {
   white-space: nowrap;
 }
 
-/* Cố định chiều rộng khối thương hiệu tại từng breakpoint desktop để không nhảy dòng khi nút Fullscreen ẩn/hiện */
+/* Cho phép khối thương hiệu co giãn mượt ở các breakpoint desktop để không đẩy tràn nút bên phải */
 @media (min-width: 768px) and (min-height: 521px) {
   #app-header {
-    height: var(--navbar-height);
+    height: var(--header-target-height);
   }
   #header-brand {
-    flex: 0 0 200px;
-    width: 200px;
-    max-width: 200px;
+    flex: 1 1 150px;
+    max-width: 240px;
   }
 }
 
 @media (min-width: 1024px) and (min-height: 521px) {
   #header-brand {
-    flex: 0 0 260px;
-    width: 260px;
-    max-width: 260px;
+    flex: 1 1 220px;
+    max-width: 300px;
   }
 }
 
 @media (min-width: 1280px) and (min-height: 521px) {
   #header-brand {
-    flex: 0 0 345px;
-    width: 345px;
-    max-width: 345px;
+    flex: 1 1 280px;
+    max-width: 380px;
   }
 }
 
 @media (min-width: 1440px) and (min-height: 521px) {
   #header-brand {
-    flex: 0 0 500px;
-    width: 500px;
+    flex: 1 1 380px;
     max-width: 500px;
   }
 }
 
 @media (min-width: 1600px) and (min-height: 521px) {
   #header-brand {
-    flex: 0 0 590px;
-    width: 590px;
+    flex: 1 1 460px;
     max-width: 590px;
   }
 }
@@ -132,12 +141,12 @@ svg {
 /* Mobile Portrait (< 768px, chiều cao bình thường): 2 hàng gọn gàng, 4 tab trải đều vừa khít 100% */
 @media (max-width: 767px) and (min-height: 521px) {
   :root {
-    --navbar-height: 6.25rem;
+    --header-target-height: 6.25rem;
   }
 
   #app-header {
     height: auto;
-    min-height: var(--navbar-height);
+    min-height: var(--header-target-height);
     padding-block: 0.4rem;
   }
 
@@ -198,12 +207,12 @@ svg {
 /* Mobile Landscape (chiều cao thấp <= 520px, ví dụ 812x375, 844x390): thu gọn 1 hàng siêu tiết kiệm chiều dọc */
 @media (max-height: 520px) {
   :root {
-    --navbar-height: 3.35rem;
+    --header-target-height: 3.35rem;
   }
 
   #app-header {
-    height: var(--navbar-height);
-    min-height: var(--navbar-height);
+    height: var(--header-target-height);
+    min-height: var(--header-target-height);
     padding-block: 0.2rem;
   }
 
@@ -222,9 +231,9 @@ svg {
   }
 
   #header-brand {
-    flex: 0 0 180px;
-    width: 180px;
-    max-width: 180px;
+    flex: 1 1 130px;
+    min-width: 0;
+    max-width: 185px;
   }
 
   #header-brand .header-logo-badge {
@@ -394,6 +403,18 @@ body.reveal-full-page {
 }
 
 /* Khung Mã QR trình chiếu toàn màn hình: render 600x600px, co giãn vừa khít cả desktop lẫn mobile đứng/ngang */
+#qr-modal-title {
+  font-size: clamp(1.15rem, 3.05vw, 2.75rem);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+@media (min-width: 640px) {
+  #qr-modal-title {
+    white-space: nowrap;
+  }
+}
+
 #qr-code-container {
   width: clamp(180px, 42vmin, 500px);
   height: clamp(180px, 42vmin, 500px);
@@ -426,9 +447,10 @@ body.reveal-full-page {
   }
 }
 
-/* ================= TRẮC NGHIỆM TƯƠNG TÁC (QUIZ - FIT CONTENT & MOBILE SCROLL) ================= */
+/* ================= TRẮC NGHIỆM TƯƠNG TÁC (QUIZ - FIT CONTENT & SCROLL AN TOÀN MỌI MÀN HÌNH) ================= */
 #section-quiz:not(.hidden) {
-  height: auto;
+  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -436,6 +458,7 @@ body.reveal-full-page {
   padding-block: clamp(0.65rem, 1.8dvh, 1.5rem);
   padding-inline: clamp(0.55rem, 1.8vw, 1.5rem);
   overflow-y: auto;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
 }
@@ -539,6 +562,37 @@ body.reveal-full-page {
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
 }
 
+@keyframes cardBounceCorrect {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-4px) scale(1.01);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cardShakeWrong {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .quiz-card-correct-bounce {
     animation: cardBounceCorrect 0.48s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -587,11 +641,16 @@ body.reveal-full-page {
 .member-name {
   font-size: clamp(0.98rem, 1.15vw, 1.2rem);
   line-height: 1.22;
+  text-wrap: balance;
 }
 
 .member-mssv {
   font-size: clamp(0.85rem, 0.98vw, 1.02rem);
   line-height: 1.25;
+}
+
+.member-task-value {
+  text-wrap: balance;
 }
 
 @media (min-width: 768px) {
@@ -629,11 +688,11 @@ body.reveal-full-page {
   }
 }
 
-@media (min-width: 1024px) and (min-height: 860px) {
+@media (min-width: 1024px) and (min-height: 920px) {
   #section-members:not(.hidden) {
     --members-gap: clamp(0.45rem, 0.9dvh, 0.85rem);
-    overflow: hidden;
-    overscroll-behavior: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding-block: clamp(0.45rem, 1.1dvh, 1rem);
   }
 
@@ -779,6 +838,7 @@ body.reveal-full-page {
   font-weight: 800;
   letter-spacing: 0.04em;
   color: #fdba74;
+  text-wrap: balance;
 }
 
 .group8-motto {
@@ -787,6 +847,7 @@ body.reveal-full-page {
   font-weight: 500;
   line-height: 1.35;
   color: #e2e8f0;
+  text-wrap: balance;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -797,16 +858,5 @@ body.reveal-full-page {
 
   .group8-showcase-card:hover {
     transform: none;
-  }
-}
-
-/* Giữ khả năng cuộn nội bộ cho tab Quiz trên màn hình nhỏ/laptop thấp khi body bị khóa cuộn */
-@media (max-width: 1023px), (max-height: 768px) {
-  #section-quiz:not(.hidden) {
-    height: calc(100vh - var(--navbar-height));
-    height: calc(100dvh - var(--navbar-height));
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
   }
 }

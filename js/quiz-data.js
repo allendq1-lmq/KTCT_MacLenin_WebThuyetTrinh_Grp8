@@ -262,18 +262,18 @@
     },
     {
       id: "q19",
-      sectionCode: "Mục 2",
+      sectionCode: "Mục 2 • Phân phối",
       question:
-        "Chọn phương án ĐÚNG về mô hình kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam?",
+        "Trong nền kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam, việc phân phối thu nhập được thực hiện chủ yếu dựa trên nguyên tắc nào?",
       options: [
-        "Là mô hình kinh tế có đầy đủ các đặc trưng của nền kinh tế thị trường tư bản chủ nghĩa hiện nay",
-        "Vừa bao hàm đầy đủ các đặc trưng vốn có của nền kinh tế thị trường nói chung vừa có những đặc trưng riêng của Việt Nam",
-        "Là mô hình kinh tế có những đặc trưng riêng của Việt Nam, phù hợp với sự phát triển của lực lượng sản xuất đồng đều giữa các khu vực",
-        "Vừa bao hàm các yếu tố tích cực, vừa bao hàm các yếu tố tiêu cực do tác động của độc quyền và cạnh tranh.",
+        "Phân phối bình quân đồng đều cho mọi công dân không phân biệt năng suất lao động",
+        "Chủ yếu theo kết quả lao động, hiệu quả kinh tế, đồng thời theo mức đóng góp vốn cùng các nguồn lực khác và thông qua hệ thống an sinh, phúc lợi xã hội",
+        "Chỉ phân phối theo tỷ lệ sở hữu cổ phần và tư liệu sản xuất tư nhân",
+        "Phân phối hoàn toàn theo nhu cầu thông qua chế độ tem phiếu bao cấp của Nhà nước",
       ],
       correctIndex: 1,
       explanation:
-        "Kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam vừa mang những đặc điểm chung của mọi nền kinh tế thị trường, vừa có những đặc trưng riêng. Các đặc trưng riêng thể hiện ở năm mặt: mục tiêu, quan hệ sở hữu và thành phần kinh tế, quan hệ quản lý, quan hệ phân phối, quan hệ giữa tăng trưởng kinh tế với công bằng xã hội.",
+        "Quan hệ phân phối trong kinh tế thị trường định hướng xã hội chủ nghĩa ở Việt Nam thực hiện nhiều hình thức phân phối, trong đó phân phối theo lao động và hiệu quả kinh tế giữ vai trò chủ đạo, kết hợp với phân phối theo mức đóng góp vốn, các nguồn lực khác và thông qua hệ thống an sinh xã hội, phúc lợi xã hội.",
     },
     {
       id: "q20",
@@ -396,33 +396,33 @@
     },
     {
       id: "q28",
-      sectionCode: "Mục 1.2c",
+      sectionCode: "Mục 1.1a • Khuyết tật",
       question:
-        "Đại hội IX của Đảng Cộng sản Việt Nam (2001) đã có sự phát triển nhận thức về kinh tế thị trường như thế nào?",
+        "Những khuyết tật cố hữu nào của cơ chế thị trường đòi hỏi phải có sự quản lý, điều tiết của Nhà nước?",
       options: [
-        "Kinh tế thị trường là sản phẩm riêng có của chủ nghĩa tư bản, do vậy, nước ta không phát triển kinh tế thị trường",
-        "Nền kinh tế thị trường là nền kinh tế hàng hóa phát triển ở trình độ cao, do vậy, chỉ phát triển kinh tế thị trường ở khu vực thành thị",
-        "Kinh tế thị trường định hướng xã hội chủ nghĩa là mô hình kinh tế tổng quát của thời kì quá độ lên chủ nghĩa xã hội ở nước ta",
-        "Kinh tế thị trường chỉ tồn tại ở các cường quốc đế quốc tư bản chủ nghĩa, không phù hợp với nền kinh tế Việt Nam",
+        "Triệt tiêu hoàn toàn động lực cạnh tranh và kìm hãm đổi mới công nghệ của doanh nghiệp",
+        "Tự phát hình thành độc quyền, phân hóa giàu nghèo sâu sắc, suy thoái môi trường và tiềm ẩn khủng hoảng kinh tế",
+        "Không cho phép các chủ thể sản xuất tự do lựa chọn ngành nghề và quy mô kinh doanh",
+        "Luôn duy trì mức cung hàng hóa vượt quá cầu ở mọi lĩnh vực thiết yếu",
       ],
-      correctIndex: 2,
+      correctIndex: 1,
       explanation:
-        "Đại hội IX của Đảng (năm 2001) đánh dấu bước phát triển quan trọng trong nhận thức về kinh tế thị trường. Lần đầu tiên, Đảng chính thức xác định kinh tế thị trường định hướng xã hội chủ nghĩa là mô hình kinh tế tổng quát trong thời kỳ quá độ lên chủ nghĩa xã hội ở Việt Nam. Qua đó, kinh tế thị trường không còn chỉ được xem là một công cụ hay cơ chế quản lý kinh tế mà được xác định là mô hình kinh tế tổng quát của nước ta.",
+        "Bên cạnh những ưu thế to lớn trong phân bổ nguồn lực và kích thích sáng tạo, cơ chế thị trường luôn tồn tại những khuyết tật cố hữu như xu hướng hình thành độc quyền, phân hóa giàu nghèo, ô nhiễm môi trường, cạn kiệt tài nguyên và bất ổn, khủng hoảng chu kỳ. Do đó cần có sự quản lý và điều tiết của Nhà nước.",
     },
     {
       id: "q29",
-      sectionCode: "Mục 3.1",
+      sectionCode: "Mục 3.2 • CNTB hiện đại",
       question:
-        "Mâu thuẫn cơ bản nào của chủ nghĩa tư bản là nguyên nhân dẫn đến khủng hoảng kinh tế chu kỳ và lãng phí nguồn lực xã hội?",
+        "Vì sao chủ nghĩa tư bản hiện đại dù đã có nhiều điều chỉnh về sở hữu cổ phần, phúc lợi xã hội và sự điều tiết của Nhà nước nhưng vẫn không thể tự vượt qua giới hạn lịch sử của mình?",
       options: [
-        "Giữa tính chất xã hội hóa ngày càng cao của lực lượng sản xuất với quan hệ chiếm hữu tư nhân tư bản chủ nghĩa về tư liệu sản xuất.",
-        "Giữa vai trò chủ đạo của kinh tế nhà nước với sự phát triển tự phát của kinh tế tập thể và kinh tế tư nhân.",
-        "Giữa cung và cầu trên thị trường lao động do xu hướng tập trung hóa tư bản vào các tập đoàn tài phiệt độc quyền.",
-        "Giữa tốc độ phát triển chậm của sản xuất nông nghiệp với yêu cầu mở rộng quy mô của sản xuất công nghiệp hiện đại.",
+        "Vì mọi quốc gia tư bản hiện đại đều đã xóa bỏ hoàn toàn vai trò điều tiết kinh tế của Nhà nước",
+        "Vì các nước tư bản ngừng ứng dụng thành tựu khoa học – công nghệ vào sản xuất",
+        "Vì những điều chỉnh đó vẫn nằm trong khuôn khổ chế độ chiếm hữu tư nhân tư bản chủ nghĩa, không xóa bỏ được mâu thuẫn cơ bản giữa tư bản và lao động",
+        "Vì hệ thống doanh nghiệp tư nhân không còn tồn tại trong nền kinh tế hiện đại",
       ],
-      correctIndex: 0,
+      correctIndex: 2,
       explanation:
-        "Trong chủ nghĩa tư bản, lực lượng sản xuất ngày càng phát triển và mang tính xã hội hóa cao, tức là quá trình sản xuất có sự tham gia và phối hợp của nhiều người, nhiều tổ chức. Tuy nhiên, tư liệu sản xuất chủ yếu vẫn thuộc quyền chiếm hữu tư nhân của các nhà tư bản. Mâu thuẫn này là nguyên nhân sâu xa dẫn đến các cuộc khủng hoảng kinh tế chu kỳ và tình trạng lãng phí nguồn lực xã hội.",
+        "Chủ nghĩa tư bản hiện đại có những bước điều chỉnh thích nghi như phát triển kinh tế cổ phần, mở rộng phúc lợi và tăng cường điều tiết của nhà nước tư sản. Tuy nhiên, mọi sự điều chỉnh đó đều nhằm duy trì và bảo vệ lợi ích của giai cấp tư sản, không làm thay đổi bản chất chế độ chiếm hữu tư nhân tư bản chủ nghĩa nên vẫn tồn tại giới hạn lịch sử tất yếu.",
     },
     {
       id: "q30",

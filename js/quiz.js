@@ -62,6 +62,13 @@ window.InteractiveQuiz = (() => {
     }
   }
 
+  function isReducedMotionPreferred() {
+    return (
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
   function runConfettiLoop(continuous) {
     const canvas = document.getElementById("quiz-confetti-canvas");
     if (!canvas) return;
@@ -72,6 +79,12 @@ window.InteractiveQuiz = (() => {
     if (!ctx) return;
 
     function frame() {
+      const targetW = window.innerWidth || 1024;
+      const targetH = window.innerHeight || 768;
+      if (canvas.width !== targetW || canvas.height !== targetH) {
+        canvas.width = targetW;
+        canvas.height = targetH;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       let aliveCount = 0;
 
@@ -109,6 +122,7 @@ window.InteractiveQuiz = (() => {
   }
 
   function triggerMiniConfetti() {
+    if (isReducedMotionPreferred()) return;
     stopConfetti();
     const w = window.innerWidth || 1024;
     const h = window.innerHeight || 768;
@@ -138,6 +152,7 @@ window.InteractiveQuiz = (() => {
   }
 
   function startFullConfetti() {
+    if (isReducedMotionPreferred()) return;
     stopConfetti();
     const w = window.innerWidth || 1024;
     const h = window.innerHeight || 768;
@@ -165,6 +180,7 @@ window.InteractiveQuiz = (() => {
     }));
 
     runConfettiLoop(true);
+    confettiTimerId = setTimeout(stopConfetti, 6000);
   }
 
   // Nhận xét phân tầng theo tỷ lệ % điểm số
@@ -258,12 +274,6 @@ window.InteractiveQuiz = (() => {
       dot.className = cls;
       dot.textContent = String(idx + 1);
       container.appendChild(dot);
-
-      if (idx === currentIndex && typeof dot.scrollIntoView === "function") {
-        try {
-          dot.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-        } catch (_) {}
-      }
     });
   }
 
@@ -332,7 +342,26 @@ window.InteractiveQuiz = (() => {
 
   function renderQuestion() {
     const questions = getQuestions();
-    if (!questions.length) return;
+    if (!questions.length) {
+      const questionText = document.getElementById("quiz-question-text");
+      const optionsList = document.getElementById("quiz-options-list");
+      if (questionText) {
+        questionText.textContent =
+          "Không thể tải dữ liệu câu hỏi trắc nghiệm do kết nối mạng gián đoạn.";
+      }
+      if (optionsList) {
+        optionsList.className = "w-full flex justify-start";
+        optionsList.innerHTML = "";
+        const reloadBtn = document.createElement("button");
+        reloadBtn.type = "button";
+        reloadBtn.className =
+          "min-h-[44px] px-4 py-2 rounded-xl bg-[#df7a28] hover:bg-[#c4661b] text-white text-sm font-bold cursor-pointer";
+        reloadBtn.textContent = "Tải lại trang";
+        reloadBtn.addEventListener("click", () => window.location.reload());
+        optionsList.appendChild(reloadBtn);
+      }
+      return;
+    }
 
     const question = questions[currentIndex];
     const total = questions.length;

@@ -2,8 +2,8 @@
   box-sizing: border-box;
 }
 
-.hidden {
-  display: none !important;
+:where(.hidden) {
+  display: none;
 }
 
 body {

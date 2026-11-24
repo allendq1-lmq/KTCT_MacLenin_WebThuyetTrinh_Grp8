@@ -976,6 +976,11 @@ window.PresentationApp = (() => {
     updateTimerUI();
   }
 
+  function isDrawerOpen() {
+    const drawer = document.getElementById("pres-detail-drawer");
+    return Boolean(drawer && drawer.classList.contains("is-open"));
+  }
+
   function toggleDrawer(forceState) {
     const drawer = document.getElementById("pres-detail-drawer");
     if (!drawer) return;
@@ -1084,6 +1089,9 @@ window.PresentationApp = (() => {
     if (k === "d" && !e.ctrlKey && !e.metaKey) {
       e.preventDefault();
       toggleDrawer();
+      return;
+    }
+    if (isDrawerOpen()) {
       return;
     }
     if (k === "t" && !e.ctrlKey && !e.metaKey) {
@@ -1196,7 +1204,8 @@ window.PresentationApp = (() => {
       panel.addEventListener(
         "touchend",
         (e) => {
-          if (!isActiveState || !e.changedTouches.length) return;
+          if (!isActiveState || isDrawerOpen() || !e.changedTouches.length) return;
+          if (e.target && e.target.closest && e.target.closest("#pres-detail-drawer")) return;
           const dx = e.changedTouches[0].clientX - touchStartX;
           const dy = e.changedTouches[0].clientY - touchStartY;
           if (Math.abs(dx) >= 42 && Math.abs(dx) > Math.abs(dy)) {

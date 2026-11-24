@@ -92,7 +92,7 @@ window.PresentationData = (() => {
         "Học phần: Kinh tế chính trị Mác - Lênin",
         "Lớp học phần: SS008.R12",
         "Nhóm thực hiện: Nhóm 8",
-        "Giảng viên hướng dẫn: Nguyễn Anh Khoa",
+        "Giảng viên hướng dẫn: Thầy Nguyễn Anh Khoa",
       ],
       desc: "Mạch lập luận của bài thuyết trình đi qua 5 chặng: Bối cảnh (năm giới hạn lịch sử của chủ nghĩa tư bản) → Đường lối (khái niệm và vai trò lãnh đạo của Đảng, quản lý của Nhà nước) → Thực hiện (năm trụ cột và bảng đối chiếu) → Kết quả (bốn hạn chế và bốn giải pháp) → Phán quyết cuối cùng.",
       fullHtml: `
@@ -100,7 +100,7 @@ window.PresentationData = (() => {
           <div class="pres-subcard is-sky">
             <h4>Thông tin Nhóm thực hiện &amp; Câu hỏi trọng tâm</h4>
             <p>
-              <strong>Nhóm thực hiện:</strong> Nhóm 8 — Lớp <strong>SS008.R12</strong> — Giảng viên hướng dẫn: <strong>Nguyễn Anh Khoa</strong>.<br/>
+              <strong>Nhóm thực hiện:</strong> Nhóm 8 — Lớp <strong>SS008.R12</strong> — Giảng viên hướng dẫn: <strong>Thầy Nguyễn Anh Khoa</strong>.<br/>
               <strong>Câu hỏi trọng tâm (CQ):</strong> “Kinh tế thị trường định hướng xã hội chủ nghĩa có giải quyết được những giới hạn lịch sử của chủ nghĩa tư bản không?”
             </p>
           </div>
@@ -129,7 +129,7 @@ window.PresentationData = (() => {
       lines: [
         "Mục tiêu phát triển: Tối đa hóa lợi nhuận cho thiểu số tư bản; gây xung đột, chiến tranh.",
         "Quan hệ sở hữu: Chiếm hữu tư nhân tư bản chủ nghĩa mâu thuẫn với lực lượng sản xuất xã hội hóa.",
-        "Quản lý kinh tế: Khủng hoảng chu kỳ ('sản xuất thừa') và ngoại ứng tiêu cực lên môi trường.",
+        "Quản lý kinh tế: Khủng hoảng chu kỳ (“sản xuất thừa”) và ngoại ứng tiêu cực lên môi trường.",
         "Quan hệ phân phối: Tập trung tài sản vào nhóm độc quyền, làm sâu sắc phân hóa giàu nghèo.",
         "Tăng trưởng và công bằng: Khai thác cạn kiệt tài nguyên thiên nhiên, xử lý công bằng xã hội bị động.",
       ],
@@ -252,7 +252,7 @@ window.PresentationData = (() => {
         "Mục tiêu phát triển: Phát triển lực lượng sản xuất đi đôi với quan hệ sản xuất tiến bộ.",
         "Quan hệ sở hữu: Đa dạng hình thức sở hữu, nhiều thành phần kinh tế bình đẳng.",
         "Kinh tế nhà nước giữ vai trò chủ đạo; kinh tế tư nhân là một động lực quan trọng.",
-        "Thực tiễn Việt Nam: Giảm nghèo từ trên 58% xuống dưới 3%; phát triển hạ tầng chiến lược.",
+        "Thực tiễn Việt Nam: Giảm nghèo từ trên 58% (1993) xuống dưới 3% (2023–2024); phát triển hạ tầng chiến lược.",
       ],
       desc: "Khắc phục chế độ độc tôn chiếm hữu tư nhân tư bản chủ nghĩa, Việt Nam phát triển kinh tế nhiều thành phần với kinh tế nhà nước giữ vai trò chủ đạo và kinh tế tư nhân là động lực quan trọng để phục vụ số đông nhân dân.",
       fullHtml: `
@@ -261,13 +261,13 @@ window.PresentationData = (() => {
             <h4>Về mục tiêu phát triển vì con người</h4>
             <p>
               Hướng tới mục tiêu “Dân giàu, nước mạnh, dân chủ, công bằng, văn minh”; phát triển lực lượng sản xuất hiện đại đi đôi với quan hệ sản xuất tiến bộ.
-              <strong>Thực tiễn Việt Nam:</strong> Tỷ lệ hộ nghèo giảm từ <strong>trên 58% (năm 1993) xuống còn dưới 3% hiện nay</strong>; chỉ số phát triển con người liên tục được cải thiện.
+              <strong>Thực tiễn Việt Nam:</strong> Tỷ lệ hộ nghèo giảm từ <strong>trên 58% (năm 1993) xuống còn dưới 3% (giai đoạn 2023–2024, theo chuẩn nghèo đa chiều)</strong>; chỉ số phát triển con người liên tục được cải thiện.
             </p>
           </div>
           <div class="pres-subcard is-sky">
             <h4>Về quan hệ sở hữu và các thành phần kinh tế</h4>
             <p>
-              Đa dạng hóa hình thức sở hữu; <strong>kinh tế nhà nước</strong> giữ vai trò chủ đạo nắm giữ ngành then chốt; <strong>kinh tế tập thể</strong> củng cố làm nền tảng; <strong>kinh tế tư nhân</strong> là một động lực quan trọng.
+              Đa dạng hóa hình thức sở hữu với các thành phần kinh tế bình đẳng trước pháp luật: <strong>kinh tế nhà nước</strong> giữ vai trò chủ đạo nắm giữ ngành then chốt; <strong>kinh tế tập thể</strong> củng cố làm nền tảng; <strong>kinh tế tư nhân</strong> là một động lực quan trọng; và <strong>kinh tế có vốn đầu tư nước ngoài (FDI)</strong> được khuyến khích phát triển hợp tác, chuyển giao công nghệ.
               <strong>Thực tiễn Việt Nam:</strong> Doanh nghiệp nhà nước đảm nhận hạ tầng chiến lược (năng lượng, viễn thông, giao thông trọng điểm); các tập đoàn tư nhân lớn như <strong>Vingroup, FPT, Thaco</strong> đóng góp lớn vào ngân sách và tạo việc làm.
             </p>
           </div>
@@ -287,7 +287,7 @@ window.PresentationData = (() => {
         "Quản lý kinh tế: Nhà nước pháp quyền xã hội chủ nghĩa điều tiết vĩ mô, chống độc quyền.",
         "Phân phối đầu vào: Bảo đảm công bằng cơ hội tiếp cận nguồn lực phát triển.",
         "Phân phối đầu ra: Theo lao động, hiệu quả kinh tế, vốn đóng góp và phúc lợi xã hội.",
-        "Thực tiễn Việt Nam: Kiểm soát lạm phát, bình ổn giá; Bảo hiểm y tế bao phủ hơn 93% dân số.",
+        "Thực tiễn Việt Nam: Kiểm soát lạm phát, bình ổn giá; Bảo hiểm y tế bao phủ hơn 93% dân số (2023–2024).",
       ],
       desc: "Nhà nước pháp quyền xã hội chủ nghĩa sửa chữa thất bại thị trường, ngăn chặn độc quyền bất chính và phân phối lại thành quả tăng trưởng thông qua lao động và mạng lưới an sinh toàn dân.",
       fullHtml: `
@@ -303,7 +303,7 @@ window.PresentationData = (() => {
             <h4>Về quan hệ phân phối</h4>
             <p>
               Phân phối công bằng yếu tố đầu vào; phân phối đầu ra chủ yếu theo kết quả lao động, hiệu quả kinh tế, mức đóng góp vốn và thông qua hệ thống an sinh, phúc lợi xã hội.
-              <strong>Thực tiễn Việt Nam:</strong> <strong>Bảo hiểm y tế toàn dân bao phủ hơn 93% dân số</strong>, mở rộng bảo hiểm xã hội, triển khai Chương trình giảm nghèo bền vững và xây dựng nông thôn mới.
+              <strong>Thực tiễn Việt Nam:</strong> <strong>Bảo hiểm y tế toàn dân bao phủ hơn 93% dân số (2023–2024)</strong>, mở rộng bảo hiểm xã hội, triển khai Chương trình giảm nghèo bền vững và xây dựng nông thôn mới.
             </p>
           </div>
         </div>
